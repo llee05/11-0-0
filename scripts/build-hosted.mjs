@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, cpSync, mkdirSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, cpSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { buildSeed, CATALOGUE_FORMAT } from '../server/catalog.mjs';
@@ -14,6 +14,7 @@ writeFileSync(new URL('catalogue-seed.json',backend),JSON.stringify({release,dat
 const manifest=JSON.parse(readFileSync(new URL('.openai/hosting.json',root),'utf8'));
 delete manifest.static;manifest.d1='DB';manifest.r2=null;
 writeFileSync(new URL('.openai/hosting.json',backend),JSON.stringify(manifest,null,2)+'\n');
+rmSync(new URL('public/',backend),{recursive:true,force:true});
 mkdirSync(new URL('public/',backend),{recursive:true});
 for(const entry of readdirSync(new URL('dist/',root),{withFileTypes:true})){
   if(['server','client','.openai','index.html'].includes(entry.name))continue;
@@ -21,6 +22,9 @@ for(const entry of readdirSync(new URL('dist/',root),{withFileTypes:true})){
 }
 const result=spawnSync(process.execPath,['scripts/run-framework.mjs','build'],{cwd:backend,stdio:'inherit'});
 if(result.status!==0)process.exit(result.status??1);
-for(const name of ['server','client','.openai'])cpSync(new URL(`dist/${name}`,backend),new URL(`dist/${name}`,root),{recursive:true});
+for(const name of ['server','client','.openai']){
+  rmSync(new URL(`dist/${name}`,root),{recursive:true,force:true});
+  cpSync(new URL(`dist/${name}`,backend),new URL(`dist/${name}`,root),{recursive:true});
+}
 cpSync(new URL('drizzle/',root),new URL('dist/.openai/drizzle/',root),{recursive:true});
 console.log('Hosted build complete. Maintained browser source preserved.');
