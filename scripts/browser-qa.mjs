@@ -21,6 +21,7 @@ try {
   await page.keyboard.press('Escape');
   assert.equal(await page.getByRole('dialog').isVisible(),false);
   await page.getByRole('button',{name:'COUNTRIES & YEARS'}).click();
+  assert.equal(await page.locator('#archive-year option').count(),26);
   await page.locator('[data-id="USA-2026"][data-action="archive-country"]').click();
   assert.equal(await page.locator('.source-roster>div').count(),5);
   assert.ok((await page.locator('.source-roster').textContent()).includes('Hikaru Nakamura'));
@@ -36,6 +37,13 @@ try {
   assert.equal(await page.locator('.source-roster>div').count(),5);
   assert.ok((await page.locator('.source-roster').textContent()).includes('Peter Romanovsky'));
   assert.equal(await page.locator('.source-roster small').first().textContent(),'ESTIMATE');
+  for(const [year,country,name] of [['1930','USA','Frank Marshall'],['1938','HUN','Lajos Steiner'],['1942','USA','Reuben Fine']]){
+    await page.getByRole('button',{name:'Explore other years'}).click();
+    await page.getByLabel('EXPLORE A SNAPSHOT YEAR').selectOption(year);
+    await page.locator(`[data-id="${country}-${year}"][data-action="archive-country"]`).click();
+    assert.equal(await page.locator('.source-roster>div').count(),5);
+    assert.ok((await page.locator('.source-roster').textContent()).includes(name));
+  }
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Rename team'}).click();
   await page.getByLabel('TEAM NAME',{exact:true}).fill('Queensland Knights');

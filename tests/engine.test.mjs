@@ -22,7 +22,7 @@ function draft(seed=1) {
 }
 
 test('the entire player pool has unique identities and valid nations',()=>{
-  assert.equal(PLAYERS.length,7790);
+  assert.equal(PLAYERS.length,7845);
   assert.equal(new Set(PLAYERS.map(p=>p.id)).size,PLAYERS.length);
   assert.ok(PLAYERS.every(p=>NATIONS.some(n=>n.id===p.nation)&&p.cost>0));
 });
@@ -61,6 +61,16 @@ test('country-year rolls always reveal the complete top five in source order',()
   }
 });
 
+test('early estimates and modern country-year versions are independently rollable',()=>{
+  for(const id of ['URS-1927','USA-1930','HUN-1938','USA-2022','USA-2026']){
+    const index=NATIONS.findIndex(n=>n.id===id);
+    assert.ok(index>=0);
+    const offer=createOffer([null,null,null,null,null],()=> (index+0.5)/NATIONS.length);
+    assert.equal(offer.nation,id);
+    assert.deepEqual(offer.players,NATIONS[index].players);
+  }
+});
+
 test('the same person cannot be drafted from two different years',()=>{
   const caruana=PLAYERS.filter(p=>p.fideId==='2020009');
   assert.ok(caruana.some(p=>p.year===2022)&&caruana.some(p=>p.year===2026));
@@ -69,6 +79,18 @@ test('the same person cannot be drafted from two different years',()=>{
   assert.equal(canAfford(other,squad),false);
   const state={...initialState(),squad,offer:{nation:other.nation,players:NATIONS.find(n=>n.id===other.nation).players}};
   assert.strictEqual(selectPlayer(state,other.id,1),state);
+});
+
+test('historical identity links prevent duplicate former champions without merging later namesakes',()=>{
+  const early=PLAYERS.find(p=>p.nation==='URS-1970'&&p.name.includes('Korchnoi'));
+  const later=PLAYERS.find(p=>p.year===2002&&p.name.includes('Korchnoi'));
+  assert.ok(early&&later);
+  assert.equal(early.personId,later.personId);
+  assert.equal(canAfford(later,[early.id,null,null,null,null]),false);
+  const champion=PLAYERS.find(p=>p.nation==='URS-1954'&&p.name.includes('Petrosian'));
+  const namesake=PLAYERS.find(p=>p.fideId==='13301616');
+  assert.ok(champion&&namesake);
+  assert.notEqual(champion.personId,namesake.personId);
 });
 
 test('saved offers retain disabled top-five players and reject altered rankings or catalogue releases',()=>{

@@ -3,6 +3,50 @@
     {
       "year": 1927,
       "countryCode": "URS"
+    },
+    {
+      "year": 1930,
+      "countryCode": "USA"
+    },
+    {
+      "year": 1934,
+      "countryCode": "USA"
+    },
+    {
+      "year": 1938,
+      "countryCode": "HUN"
+    },
+    {
+      "year": 1942,
+      "countryCode": "USA"
+    },
+    {
+      "year": 1946,
+      "countryCode": "URS"
+    },
+    {
+      "year": 1950,
+      "countryCode": "URS"
+    },
+    {
+      "year": 1954,
+      "countryCode": "URS"
+    },
+    {
+      "year": 1958,
+      "countryCode": "URS"
+    },
+    {
+      "year": 1962,
+      "countryCode": "URS"
+    },
+    {
+      "year": 1966,
+      "countryCode": "URS"
+    },
+    {
+      "year": 1970,
+      "countryCode": "URS"
     }
   ],
   "affiliations": [
@@ -528,12 +572,2687 @@
           "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
         }
       ]
+    },
+    {
+      "year": 1946,
+      "sourcePlayerId": "chessmetrics:15154",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/mikhail_botvinnik/",
+          "note": "Russian federation biography identifies Botvinnik as the Soviet chess leader from 1931 for three decades. Jan 1946 affiliation is an explicit continuous-career inference within that period, not a claim of a January FIDE registration."
+        }
+      ]
+    },
+    {
+      "year": 1946,
+      "sourcePlayerId": "chessmetrics:63804",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/keres/",
+          "note": "Russian federation biography distinguishes his wartime participation in occupied Europe from his postwar representation of the USSR and Soviet championships 1947,1950,1951. Jan 1946 Soviet affiliation is an explicit postwar-career inference; his absence from the 1945 USA match does not remove him from the rating selection."
+        }
+      ]
+    },
+    {
+      "year": 1946,
+      "sourcePlayerId": "chessmetrics:2138",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/alexander_alekhine/",
+          "note": "Russian federation biography records emigration west in 1921, his Paris/VichyFrance wartime career and death in Lisbon inMarch 1946. Exclusion from USSR at Jan 1946 is a surrounding-career inference; no other country assignment is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "URS"
+      ]
+    },
+    {
+      "year": 1946,
+      "sourcePlayerId": "chessmetrics:91045",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/najdorf_pd/",
+          "note": "Russian federation biography records that after the 1939 Olympiad Najdorf remained in Argentina and became its chess leader. Exclusion from USSR at Jan 1946 is a continuous Argentine-career inference, without an exact citizenship/FIDE-transfer claim."
+        }
+      ],
+      "excludedCountryCodes": [
+        "URS"
+      ]
+    },
+    {
+      "year": 1946,
+      "sourcePlayerId": "chessmetrics:123392",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/smyslov/",
+          "note": "Russian federation biography records USSR championship appearances 1940/1941, Moscow champion 1942, Moscow 1943/1944 runner-up, and his subsequent Soviet career. Jan 1946 affiliation is an explicit surrounding-career inference."
+        }
+      ]
+    },
+    {
+      "year": 1946,
+      "sourcePlayerId": "chessmetrics:14127",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/boleslavsky/",
+          "note": "Russian federation biography places him second in USSR championship 1945 and identifies his Soviet-team participation in the US radio match. Jan 1946 retains that immediately preceding Soviet affiliation; selection comes from Chessmetrics rank 6, not team membership."
+        }
+      ]
+    },
+    {
+      "year": 1946,
+      "sourcePlayerId": "chessmetrics:79869",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/makogonov/",
+          "note": "Russian federation biography explicitly identifies Makogonov as a member of the Soviet team in the 1945 USA radio match. Jan 1946 retains that immediately preceding Soviet affiliation; selection comes from Chessmetrics rank 7, not team membership."
+        }
+      ]
+    },
+    {
+      "year": 1950,
+      "sourcePlayerId": "chessmetrics:15154",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/mikhail_botvinnik/",
+          "note": "Federation biography describes his leadership of Soviet chess from the 1930s through his 1948-1963 world-title career. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1950,
+      "sourcePlayerId": "chessmetrics:123392",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/smyslov/",
+          "note": "Federation biography records the 1949 USSR title and Soviet Olympiad teams in 1952, 1954, 1956, 1958, 1968 and 1970. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1950,
+      "sourcePlayerId": "chessmetrics:16711",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/bronstein/",
+          "note": "Federation biography records USSR championships in 1948-1949, his 1951 title match and Soviet national-team representation. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1950,
+      "sourcePlayerId": "chessmetrics:68293",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/kotov/",
+          "note": "Federation biography records his 1948 USSR championship and Soviet national-team membership in 1952 and 1954. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1950,
+      "sourcePlayerId": "chessmetrics:37943",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/fine_pd/",
+          "note": "Federation biography identifies Fine as American in his final 1948-1951 competitive period, including the United States-Yugoslavia match. January continuity is inferred from that documented career; only exclusion from the Soviet pool is asserted."
+        }
+      ]
+    },
+    {
+      "year": 1950,
+      "sourcePlayerId": "chessmetrics:91045",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/najdorf_pd/",
+          "note": "Federation biography documents his post-1939 Argentine chess career and Argentine national-team leadership, distinct from Soviet teams. January continuity is inferred; only Soviet-pool exclusion is asserted."
+        }
+      ]
+    },
+    {
+      "year": 1950,
+      "sourcePlayerId": "chessmetrics:125321",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/stahlber/",
+          "note": "Federation biography explicitly identifies him as Swedish and records Swedish national-team representation from 1928 to 1964. January continuity is inferred; only Soviet-pool exclusion is asserted."
+        }
+      ]
+    },
+    {
+      "year": 1950,
+      "sourcePlayerId": "chessmetrics:14127",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/boleslavsky/",
+          "note": "Federation biography records USSR championships in the 1940s, the Soviet side of the 1945 radio match and the Soviet 1952 Olympiad team. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1954,
+      "sourcePlayerId": "chessmetrics:123392",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/smyslov/",
+          "note": "Federation biography records the 1949 USSR title and Soviet Olympiad teams in 1952, 1954, 1956, 1958, 1968 and 1970. January affiliation is a continuity inference from this career, not an exact-month registration."
+        },
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1953/CR1953_10.pdf#page=4",
+          "note": "Contemporary October 1953 Chess Review, printed page 290, explicitly identifies Smyslov as Soviet."
+        }
+      ]
+    },
+    {
+      "year": 1954,
+      "sourcePlayerId": "chessmetrics:108065",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1953/CR1953_10.pdf#page=4",
+          "note": "Contemporary October 1953 Chess Review, printed page 290, explicitly identifies Samuel Reshevsky as representing the United States. January 1954 continuity is inferred; only Soviet-pool exclusion is asserted."
+        }
+      ]
+    },
+    {
+      "year": 1954,
+      "sourcePlayerId": "chessmetrics:15154",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/mikhail_botvinnik/",
+          "note": "Federation biography describes his leadership of Soviet chess from the 1930s through his 1948-1963 world-title career. January affiliation is a continuity inference from this career, not an exact-month registration."
+        },
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1953/CR1953_10.pdf#page=4",
+          "note": "Contemporary October 1953 Chess Review, printed page 290, identifies the reigning world champion Botvinnik as Soviet."
+        }
+      ]
+    },
+    {
+      "year": 1954,
+      "sourcePlayerId": "chessmetrics:91045",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/najdorf_pd/",
+          "note": "Federation biography documents his post-1939 Argentine chess career and Argentine national-team leadership, distinct from Soviet teams. January continuity is inferred; only Soviet-pool exclusion is asserted."
+        },
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1953/CR1953_10.pdf#page=4",
+          "note": "Contemporary October 1953 Chess Review, printed page 290, explicitly identifies Najdorf as Argentina's grandmaster."
+        }
+      ]
+    },
+    {
+      "year": 1954,
+      "sourcePlayerId": "chessmetrics:16711",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/bronstein/",
+          "note": "Federation biography records USSR championships in 1948-1949, his 1951 title match and Soviet national-team representation. January affiliation is a continuity inference from this career, not an exact-month registration."
+        },
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1953/CR1953_10.pdf#page=4",
+          "note": "Contemporary October 1953 Chess Review, printed page 290, explicitly identifies Bronstein as Soviet."
+        }
+      ]
+    },
+    {
+      "year": 1954,
+      "sourcePlayerId": "chessmetrics:100509",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/petrosian/",
+          "note": "Federation biography records his Moscow career, USSR championship podium before 1953, USSR titles in 1959 and 1961, and 1963-1969 world-title career. January affiliation is a continuity inference from this career, not an exact-month registration."
+        },
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1953/CR1953_10.pdf#page=4",
+          "note": "Contemporary October 1953 Chess Review, printed page 290, includes Petrosian among the five Soviet interzonal qualifiers."
+        }
+      ]
+    },
+    {
+      "year": 1954,
+      "sourcePlayerId": "chessmetrics:43054",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/geller/",
+          "note": "Federation biography places his rise in the 1949 USSR championship and continued Soviet championship career. January affiliation is a continuity inference from this career, not an exact-month registration."
+        },
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1953/CR1953_10.pdf#page=4",
+          "note": "Contemporary October 1953 Chess Review, printed page 290, includes Geller among the five Soviet interzonal qualifiers."
+        }
+      ]
+    },
+    {
+      "year": 1958,
+      "sourcePlayerId": "chessmetrics:123392",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/smyslov/",
+          "note": "Federation biography records the 1949 USSR title and Soviet Olympiad teams in 1952, 1954, 1956, 1958, 1968 and 1970. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1958,
+      "sourcePlayerId": "chessmetrics:63804",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/keres/",
+          "note": "Federation biography dates his USSR titles to 1947, 1950 and 1951 and expressly documents his postwar Soviet international representation. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1958,
+      "sourcePlayerId": "chessmetrics:16711",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/bronstein/",
+          "note": "Federation biography records USSR championships in 1948-1949, his 1951 title match and Soviet national-team representation. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1958,
+      "sourcePlayerId": "chessmetrics:15154",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/mikhail_botvinnik/",
+          "note": "Federation biography describes his leadership of Soviet chess from the 1930s through his 1948-1963 world-title career. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1958,
+      "sourcePlayerId": "chessmetrics:100509",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/petrosian/",
+          "note": "Federation biography records his Moscow career, USSR championship podium before 1953, USSR titles in 1959 and 1961, and 1963-1969 world-title career. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1962,
+      "sourcePlayerId": "chessmetrics:100509",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/petrosian/",
+          "note": "Federation biography records his Moscow career, USSR championship podium before 1953, USSR titles in 1959 and 1961, and 1963-1969 world-title career. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1962,
+      "sourcePlayerId": "chessmetrics:67916",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/kortchnoi/",
+          "note": "Federation biography records his Soviet championship career from 1952, the 1960 title and 1961 runner-up result; departure from the USSR occurred in 1976. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1962,
+      "sourcePlayerId": "chessmetrics:15154",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/mikhail_botvinnik/",
+          "note": "Federation biography describes his leadership of Soviet chess from the 1930s through his 1948-1963 world-title career. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1962,
+      "sourcePlayerId": "chessmetrics:129382",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/mikhail_tal/",
+          "note": "Federation biography records USSR titles in 1957-1958, the 1960-1961 world-title matches and subsequent Soviet national-team career. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1962,
+      "sourcePlayerId": "chessmetrics:124734",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/spassky/",
+          "note": "Federation biography records his Soviet junior and national championship career, 1966 and 1969 world-title matches, and relocation abroad only in 1976. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1966,
+      "sourcePlayerId": "chessmetrics:124734",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/spassky/",
+          "note": "Federation biography records his Soviet junior and national championship career, 1966 and 1969 world-title matches, and relocation abroad only in 1976. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1966,
+      "sourcePlayerId": "chessmetrics:129382",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/mikhail_tal/",
+          "note": "Federation biography records USSR titles in 1957-1958, the 1960-1961 world-title matches and subsequent Soviet national-team career. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1966,
+      "sourcePlayerId": "chessmetrics:67916",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/kortchnoi/",
+          "note": "Federation biography records his Soviet championship career from 1952, the 1960 title and 1961 runner-up result; departure from the USSR occurred in 1976. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1966,
+      "sourcePlayerId": "chessmetrics:125989",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CL-ALL/1966/1966_01.pdf#page=10",
+          "note": "Andrei Lilienthal's contemporary article in January 1966 Chess Life, printed page 10, reports Stein winning the Soviet championship on Christmas Eve 1965, directly preceding this cutoff."
+        },
+        {
+          "url": "https://ruchess.ru/persons_of_day/stein_pd/",
+          "note": "Federation biography records his USSR national-team career and Soviet championship wins in the mid-1960s. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1966,
+      "sourcePlayerId": "chessmetrics:38178",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CL-ALL/1966/1966_01.pdf#page=3",
+          "note": "Contemporary January 1966 Chess Life, printed page 3, reports Fischer's seventh United States championship, completed December 1965. This documents American chess affiliation at the cutoff; only Soviet-pool exclusion is asserted."
+        }
+      ]
+    },
+    {
+      "year": 1966,
+      "sourcePlayerId": "chessmetrics:102867",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://www.ruchess.ru/news/all/20_nojabria_80_let_ispolnilos_by_lvu_polugaevskomu/",
+          "note": "Federation biography dates his Soviet master title to 1953 and Soviet grandmaster title to 1960; his continuing Soviet career supports January 1966 affiliation. This is a temporal continuity inference."
+        },
+        {
+          "url": "https://ruchess.ru/persons_of_day/leo_polugaevsky/",
+          "note": "Federation biography records USSR championships in 1967-1969 and Soviet representation in the 1970 USSR-versus-world match. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1970,
+      "sourcePlayerId": "chessmetrics:38178",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://old.fide.com/component/content/article/4-tournaments/2842-1333-a-look-back-at-the-1970-ussr-vs-rest-of-the-world.html",
+          "note": "FIDE's historical account explicitly identifies Robert Fischer, USA, on the world side in the 1970 match against the USSR. January continuity is inferred from this same-year record; only Soviet-pool exclusion is asserted."
+        }
+      ]
+    },
+    {
+      "year": 1970,
+      "sourcePlayerId": "chessmetrics:67916",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/kortchnoi/",
+          "note": "Federation biography records his Soviet championship career from 1952, the 1960 title and 1961 runner-up result; departure from the USSR occurred in 1976. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1970,
+      "sourcePlayerId": "chessmetrics:124734",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/spassky/",
+          "note": "Federation biography records his Soviet junior and national championship career, 1966 and 1969 world-title matches, and relocation abroad only in 1976. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1970,
+      "sourcePlayerId": "chessmetrics:102867",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/leo_polugaevsky/",
+          "note": "Federation biography records USSR championships in 1967-1969 and Soviet representation in the 1970 USSR-versus-world match. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1970,
+      "sourcePlayerId": "chessmetrics:100509",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/petrosian/",
+          "note": "Federation biography records his Moscow career, USSR championship podium before 1953, USSR titles in 1959 and 1961, and 1963-1969 world-title career. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1970,
+      "sourcePlayerId": "chessmetrics:123392",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/smyslov/",
+          "note": "Federation biography records the 1949 USSR title and Soviet Olympiad teams in 1952, 1954, 1956, 1958, 1968 and 1970. January affiliation is a continuity inference from this career, not an exact-month registration."
+        }
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:2138",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/alexander_alekhine/",
+          "note": "Federation biography records his emigration west in 1921 and subsequent Paris career. January 1938 exclusion from Hungary is an explicit continuous foreign-career inference; no French citizenship or transfer date is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:35520",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: Netherlands representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:15154",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/mikhail_botvinnik/",
+          "note": "Federation biography calls him the Soviet chess leader from 1931 for three decades and records his Soviet reception after Nottingham 1936. January 1938 exclusion from Hungary is a continuous-career inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:19593",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://museum.fide.com/champions/jose-raul-capablanca",
+          "note": "FIDE museum identifies his Cuban chess career, including his 1936 Moscow win and 1939 Olympiad result. January 1938 exclusion from Hungary is an explicit surrounding-career inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:38519",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: Czechoslovakia representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:108065",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: USA representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:37943",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: USA representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:63804",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: Estonia representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:62869",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: USA representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:73076",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://museum.fide.com/champions/emanuel-lasker",
+          "note": "FIDE museum records his 1935 emigration from Germany to USSR and later USA. None is Hungary. January 1938 exclusion from Hungary is a surrounding-career inference; disputed USSR-versus-USA affiliation is deliberately unresolved."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:75152",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/levenfish/",
+          "note": "Federation biography identifies him as USSR champion 1937, retaining the title after his 1937 match with Botvinnik. January 1938 exclusion from Hungary follows this immediately preceding Soviet affiliation."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:126062",
+      "countryCode": "HUN",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_10.pdf",
+          "note": "Lajos Steiner identifies Hungary as his country in his own 1937 article, The Chess Mind, printed pp.233–235; statement on p.235 (PDF p.16). January 1938 Hungarian affiliation is a short continuity inference."
+        },
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Federation records Lajos Steiner on its 1936 national team."
+        },
+        {
+          "url": "https://adb.anu.edu.au/biography/steiner-lajos-11758",
+          "note": "John Purdy original biography dates permanent Australian settlement to March 1939; the 1936–1937 Australian visit was a tour, not the later emigration."
+        }
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:129800",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: Poland representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:13879",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/bundeskongress-1931.html",
+          "note": "German federation history identifies Bogoljubow as a Germany 1931 representative and German champion, continuing its postwar championship record. January 1938 exclusion from Hungary is an explicit surrounding German-career inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:34162",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/eliskazes_pd/",
+          "note": "Federation biography distinguishes his Austrian career before the 1938 Anschluss, German representation 1939, and later South America. January 1938 exclusion from Hungary is an Austrian-career continuity inference before Anschluss."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:105845",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/viacheslav_ragozin/",
+          "note": "Federation biography records Ragozin second–third in USSR championship 1937 and his Leningrad/Moscow career. January 1938 exclusion from Hungary follows this immediately preceding Soviet affiliation."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:125321",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: Sweden representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:75703",
+      "countryCode": "HUN",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: Hungary representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        },
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Hungarian federation independently records Lilienthal on its 1937 national team."
+        },
+        {
+          "url": "https://his.fide.com/2026/09/08/chiaroscuros-of-life-the-1939-buenos-aires-nations-tournament-as-a-turning-point-for-european-chessplayers/",
+          "note": "FIDE Historical Committee original research dates his Soviet citizenship to 1939. Retain his last documented sporting representation for January 1938 despite earlier Soviet residence; this is an explicit temporal inference, not a citizenship-based retroactive transfer."
+        }
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:91045",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: Poland representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:101745",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: Yugoslavia representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:128739",
+      "countryCode": "HUN",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: Hungary representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:100580",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: Latvia representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:67421",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/konstantinopol/",
+          "note": "Federation biography records Konstantinopolsky second–third in USSR championship 1937 and his Kyiv/Ukraine/Moscow career. January 1938 exclusion from Hungary follows this immediately preceding Soviet affiliation."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:106831",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/vsevolod_rauzer/",
+          "note": "Federation biography identifies Rauzer as a leading Soviet master, USSR championship 1937 eighth, and Leningrad player until illness that year. January 1938 exclusion from Hungary is a short continuous-career inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:38829",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: Czechoslovakia representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:26630",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://worldchesshof.org/program/2016-09-29-open-files-celebrating-5-years-of-collecting/",
+          "note": "Museum catalog identifies Dake as a United States national-team member in 1931,1933,1935 and his lifelong American chess career. January 1938 exclusion from Hungary is an explicit continuous-career inference."
+        }
+      ],
+      "excludedCountryCodes": [
+        "HUN"
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:126051",
+      "countryCode": "HUN",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf",
+          "note": "1937 Stockholm: Hungary representative (printed p.195; PDF p.4). January 1938 continuity inference."
+        }
+      ]
+    },
+    {
+      "year": 1938,
+      "sourcePlayerId": "chessmetrics:81520",
+      "countryCode": "HUN",
+      "sources": [
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Hungarian federation records Maroczy on its 1936 national team. January 1938 Hungarian affiliation is an explicit continuity inference; his absence from the 1937 Olympiad does not exclude him from the rating-selected top five."
+        }
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:2138",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/alexander_alekhine/",
+          "note": "Federation biography places his post-1921 career in France, including both 1930s world-title matches; excludes American affiliation."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:19593",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://museum.fide.com/champions/jose-raul-capablanca",
+          "note": "FIDE identifies the Cuban world champion throughout his international career, including the 1927 title match."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:93234",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://danbase.skak.dk/skakbladet/1985/1985-08.pdf",
+          "note": "Danish federation magazine documents his Danish chess career from 1922 to 1934; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:13879",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/bundeskongress-1931.html",
+          "note": "German federation records German representation in 1931 and his 1929/1934 title challenges; national-career continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:112008",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://pzszach.pl/2019/09/09/wciaz-zagadkowy-rubinstein/",
+          "note": "Polish federation describes its 1927 champion and 1930 Olympic team leader; surrounding national career excludes American affiliation."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:35520",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/max_euwe/",
+          "note": "Federation biography describes his Amsterdam teaching and Dutch international career, including the 1935 world title."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:124892",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.chess.at/geschichte/gesheumo.htm",
+          "note": "Austrian federation identifies its interwar masters; national-career continuity at the January cutoff is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:138141",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/vidmar_pd/",
+          "note": "Federation biography documents Ljubljana University work and Yugoslav representation in the interwar period."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:129800",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/tartakover/",
+          "note": "Federation biography identifies post-WWI Polish citizenship and later French affiliation; American affiliation is excluded."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:47985",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.chess.at/geschichte/gesheumo.htm",
+          "note": "Austrian federation identifies its interwar masters; national-career continuity at the January cutoff is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:113233",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/schacholympiaden.html",
+          "note": "German federation lists its 1930 and 1936 national teams; continuity between surrounding events is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:82978",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.ruchess.ru/persons_of_day/mattison_pd/",
+          "note": "Federation biography identifies Matisons as Latvian at Karlsbad 1929 and in Latvia’s 1931 team; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:81701",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://www.marshallchessclub.org/about",
+          "note": "Marshall’s own club records his uninterrupted United States championship tenure from 1909 to 1936."
+        }
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:9480",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.chess.at/geschichte/gesheumo.htm",
+          "note": "Austrian federation identifies its interwar masters; national-career continuity at the January cutoff is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:81520",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Hungarian federation lists its 1927, 1930 and 1936 national squads; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:134977",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Hungarian federation lists its 1927, 1930 and 1936 national squads; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:126051",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Hungarian federation lists its 1927, 1930 and 1936 national squads; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:1431",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/schacholympiaden.html",
+          "note": "German federation lists its 1930 and 1936 national teams; continuity between surrounding events is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:133025",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://old.chess.cz/www/souteze/mcr-muzi/historie.html",
+          "note": "Czech federation national-championship archive records his Czech career; surrounding affiliation continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:62869",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1936/CR1936_04.pdf",
+          "note": "Kashdan’s first-person account identifies himself and Factor as American team members in 1928; January continuity is inferred."
+        }
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:60164",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://doc.rero.ch/record/52320/files/1929-08-05.pdf",
+          "note": "Contemporary August 1929 Swiss newspaper explicitly calls Paul Johner Swiss; January 1930 continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:23801",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://blog.frbe-kbsb-ksb.be/fr/belgium-championship/",
+          "note": "Belgian federation records Colle’s 1928 and 1929 national titles; January 1930 continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:65985",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.chess.at/geschichte/gesheumo.htm",
+          "note": "Austrian federation places Kmoch in its interwar generation and dates westward wartime exile later."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:68163",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/kostic_pd/",
+          "note": "Federation biography identifies the Yugoslav master and his interwar national career; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:104625",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://mp2017.pzszach.pl/medalisci/",
+          "note": "Polish federation identifies its 1926 national champion; surrounding national-career continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:75513",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://digital.slub-dresden.de/data/kitodo/DresNa_501434038-1929122501_01-f/DresNa_501434038-1929122501_01-f_tif/jpegs/DresNa_501434038-1929122501_01-f.pdf",
+          "note": "Dresdner Nachrichten, 25 December 1929, records Lichtenstein in Vienna’s ongoing master tournament; exclusion infers continuity from his Viennese chess career."
+        },
+        {
+          "url": "https://zanchess.wordpress.com/2018/04/23/lasker-simul-in-vienna-1934-lasker-wolf-consultation-game/",
+          "note": "Reproduces the Wiener Schach-Zeitung’s contemporary May 1934 Hakoah Vienna report naming Lichtenstein among its selected local masters."
+        },
+        {
+          "url": "https://anno.onb.ac.at/cgi-content/anno-plus?aid=sze&datum=1934&page=246&size=45",
+          "note": "Original Wiener Schach-Zeitung 1934 p.166 names Lichtenstein in Hakoah Vienna’s local master group; scan reproduced at the accompanying transcription URL."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:144600",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.englishchess.org.uk/wp-content/uploads/2023/06/Chess-Moves-June-2023.pdf",
+          "note": "English federation biography documents Yates’s British championships from 1913 to 1931 and international career, including San Remo 1930."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:19367",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.federscacchi.it/doc/notcom/d20250120175440_tattica-scacchistica-grau-saggio.pdf",
+          "note": "Italian federation publication identifies Canal as Peruvian; surrounding European career is used only to exclude American affiliation."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:133937",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CL-ALL/1968/1968_11.pdf",
+          "note": "Chess Life November 1968, p.417: Koltanowski’s personal profile documents Turover’s Washington career, arrival in 1912 and undefeated Washington title tenure through 1928."
+        }
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:44086",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.chess.cz/cesti-sachiste-na-sachovych-olympiadach/",
+          "note": "Czech federation records Gilg in its 1931 national team; surrounding Czechoslovak chess-career continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:129352",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Hungarian federation records Takács Sándor in its 1930 team; January continuity is inferred. Source duplicates the same name under two IDs."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:125321",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://schack.se/forbundet/tfs/arkiv/tidskrift-for-schack-1933/",
+          "note": "Swedish federation archive documents their 1933 Swedish chess careers; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:51706",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Hungarian federation lists its 1927, 1930 and 1936 national squads; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:89931",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://echecs.asso.fr/CultureEtHistoire/BulletinsFFE/1930JuinBullFFEn39.pdf",
+          "note": "Contemporary French federation June 1930 bulletin identifies Muffang with France and Sir Thomas with England; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:131079",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://echecs.asso.fr/CultureEtHistoire/BulletinsFFE/1930JuinBullFFEn39.pdf",
+          "note": "Contemporary French federation June 1930 bulletin identifies Muffang with France and Sir Thomas with England; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:129344",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Hungarian federation lists its 1927, 1930 and 1936 national squads; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:126062",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Hungarian federation names Steiner Lajos in its 1936 national team; surrounding European career excludes American affiliation."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:76281",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://britishchessnews.com/2020/09/09/remembering-paul-list-1887-09-ix-1954/",
+          "note": "Reproduces Klein and Winter’s first-person 1946 Anglo-Soviet Radio Chess Match profile: List managed Berlin chess rooms before British exile."
+        },
+        {
+          "url": "https://www.schachbund.de/news/lasker-tag-vortraege-und-simultane-beim-sc-bayer-leverkusen.html",
+          "note": "German federation reproduces a contemporary May 1929 Berlin chess-event photograph and newspaper report showing List’s local career."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:142236",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://texaschess.org/from-the-ivy-league-to-alcatraz-the-life-of-international-master-norman-t-whitaker/",
+          "note": "State federation biography documents Whitaker’s United States career; surrounding national-affiliation continuity is inferred."
+        }
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:52551",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/bundeskongress-1931.html",
+          "note": "German federation records the player in its 1931 national master event; surrounding national-career continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1930,
+      "sourcePlayerId": "chessmetrics:35808",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1936/CR1936_04.pdf",
+          "note": "Kashdan’s first-person account identifies himself and Factor as American team members in 1928; January continuity is inferred."
+        }
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:2138",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/alexander_alekhine/",
+          "note": "Federation biography places his post-1921 career in France, including both 1930s world-title matches; excludes American affiliation."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:62869",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1933/CR1933_06.pdf",
+          "note": "Contemporary June 1933 feature explicitly identifies the United States team; January 1934 national-affiliation continuity is inferred."
+        }
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:38519",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.chess.cz/obcan-flohr/",
+          "note": "Czech federation transcribes his 31 October 1933 Czechoslovak citizenship decision and documents national representation since 1930."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:35520",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/max_euwe/",
+          "note": "Federation biography describes his Amsterdam teaching and Dutch international career, including the 1935 world title."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:13879",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/bundeskongress-1931.html",
+          "note": "German federation records German representation in 1931 and his 1929/1934 title challenges; national-career continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:75703",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/andre/",
+          "note": "Federation biography dates Budapest residence from 1913 and Soviet settlement to 1935, excluding American affiliation in 1934."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:19593",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://museum.fide.com/champions/jose-raul-capablanca",
+          "note": "FIDE identifies the Cuban world champion throughout his international career, including the 1927 title match."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:128041",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://doc.fide.com/docs/DOC/3FC2023/Annex_8.5.pdf",
+          "note": "FIDE historical committee identifies Sultan Khan as a UK/Pakistani player for pre-WWII achievements; no exact January federation is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:19367",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.federscacchi.it/doc/notcom/d20250120175440_tattica-scacchistica-grau-saggio.pdf",
+          "note": "Italian federation publication identifies Canal as Peruvian; surrounding European career is used only to exclude American affiliation."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:129800",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/tartakover/",
+          "note": "Federation biography identifies post-WWI Polish citizenship and later French affiliation; American affiliation is excluded."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:124892",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.chess.at/geschichte/gesheumo.htm",
+          "note": "Austrian federation identifies its interwar masters; national-career continuity at the January cutoff is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:138141",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/vidmar_pd/",
+          "note": "Federation biography documents Ljubljana University work and Yugoslav representation in the interwar period."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:15154",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/mikhail_botvinnik/",
+          "note": "Federation biography identifies Botvinnik as Soviet champion from 1931 and describes his Soviet career throughout the 1930s."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:93234",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://danbase.skak.dk/skakbladet/1985/1985-08.pdf",
+          "note": "Danish federation magazine documents his Danish chess career from 1922 to 1934; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:81520",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Hungarian federation lists its 1927, 1930 and 1936 national squads; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:11452",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/bernstein/",
+          "note": "Federation biography places his 1930s return to chess in Paris and dates emigration from Russia to 1920."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:126905",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://schack.se/forbundet/tfs/arkiv/tidskrift-for-schack-1933/",
+          "note": "Swedish federation archive documents their 1933 Swedish chess careers; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:9480",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.chess.at/geschichte/gesheumo.htm",
+          "note": "Austrian federation identifies its interwar masters; national-career continuity at the January cutoff is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:34162",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.chess.at/geschichte/gesheumo.htm",
+          "note": "Austrian federation describes Eliskases as its 1930s leader and 1932 Austrian match champion; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:108650",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/bundeskongress-1931.html",
+          "note": "German federation records the player in its 1931 national master event; surrounding national-career continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:86216",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/mikenas_pd/",
+          "note": "Federation biography dates his move to Lithuania to 1931 and describes the ensuing Lithuanian chess career."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:101745",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/pirc_pd/",
+          "note": "Federation biography dates Ljubljana settlement around 1930 and Yugoslav national-team entry; excludes American affiliation in 1934."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:81701",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1933/CR1933_06.pdf",
+          "note": "Contemporary June 1933 feature explicitly identifies the United States team; January 1934 national-affiliation continuity is inferred."
+        }
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:126062",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Hungarian federation names Steiner Lajos in its 1936 national team; surrounding European career excludes American affiliation."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:47985",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.chess.at/geschichte/gesheumo.htm",
+          "note": "Austrian federation identifies its interwar masters; national-career continuity at the January cutoff is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:110287",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/bundeskongress-1931.html",
+          "note": "German federation records Rödl as its 1931 co-winner; surrounding German national-career continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:125321",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://schack.se/forbundet/tfs/arkiv/tidskrift-for-schack-1933/",
+          "note": "Swedish federation archive documents their 1933 Swedish chess careers; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:126051",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Hungarian federation lists its 1927, 1930 and 1936 national squads; January continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:1431",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/schacholympiaden.html",
+          "note": "German federation lists its 1930 and 1936 national teams; continuity between surrounding events is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:52551",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/bundeskongress-1931.html",
+          "note": "German federation records the player in its 1931 national master event; surrounding national-career continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:54689",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://hlbrm.digitale-sammlungen.hebis.de/download/pdf/3299195.pdf",
+          "note": "Contemporary Wiesbadener Tagblatt, 13 January 1933, p.10, identifies Hönlinger among twelve leading Austrian players; January 1934 continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:26630",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1933/CR1933_06.pdf",
+          "note": "Contemporary June 1933 feature explicitly identifies the United States team; January 1934 national-affiliation continuity is inferred."
+        }
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:67147",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://blog.frbe-kbsb-ksb.be/fr/belgium-championship/",
+          "note": "Belgian federation records Koltanowski as national champion in 1930 and 1936; surrounding affiliation continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:101034",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://federacionargentinadeajedrez.org/wp-content/uploads/2022/11/hitos-del-ajedrez-argentino-charla-fada-100-anos-1.ppt.pdf",
+          "note": "Argentine federation centenary history places Piazzini in its 1930s national chess career; January 1934 continuity is inferred."
+        },
+        {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Almanaque_del_Mensajero_1935.pdf",
+          "note": "Contemporary 1935 almanac dates Piazzini’s Argentine national-title match to November–December 1933, immediately before the January cutoff."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:37943",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1933/CR1933_06.pdf",
+          "note": "Contemporary June 1933 feature explicitly identifies the United States team; January 1934 national-affiliation continuity is inferred."
+        }
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:113233",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/schacholympiaden.html",
+          "note": "German federation lists its 1930 and 1936 national teams; continuity between surrounding events is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:19966",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/schacholympiaden.html",
+          "note": "German federation lists Carls in both its 1930 and 1936 national teams; intervening continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:66334",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/bundeskongress-1931.html",
+          "note": "German federation records the player in its 1931 national master event; surrounding national-career continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:2251",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1935/CR1935_10.pdf",
+          "note": "Contemporary report lists Alexander on England’s 1935 national team; surrounding British-career continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:64536",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/news/oeffentlichkeitsarbeiter-4.html",
+          "note": "German federation documents Weissgerber versus Kieninger in the 1933 German championship; January 1934 continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:141639",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/news/oeffentlichkeitsarbeiter-4.html",
+          "note": "German federation documents Weissgerber versus Kieninger in the 1933 German championship; January 1934 continuity is inferred."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1934,
+      "sourcePlayerId": "chessmetrics:126057",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1936/CR1936_04.pdf",
+          "note": "Kashdan’s first-person account identifies Steiner in the American 1928 and 1931 teams; surrounding American career is inferred."
+        },
+        {
+          "url": "https://worldchesshof.org/program/2013-10-25-jacqueline-piatigorsky-patron-player-pioneer/",
+          "note": "Museum documents Steiner’s American national representation and move from New York to Los Angeles during the Depression."
+        }
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:15154",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/mikhail_botvinnik/",
+          "note": "Federation biography documents Soviet national championships and leadership across the 1930s and 1940s. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:37943",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1940/CR1940_05.pdf#page=5",
+          "note": "Contemporary May 1940 Chess Review, printed page 76, reports this player in the American national championship finals. American affiliation at January 1942 is inferred from this surrounding national career."
+        },
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf#page=4",
+          "note": "Contemporary September 1937 Chess Review, printed page 195, explicitly lists this player in the United States national team, corroborating the later domestic championship record."
+        }
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:108065",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1940/CR1940_05.pdf#page=5",
+          "note": "Contemporary May 1940 Chess Review, printed page 76, reports this player in the American national championship finals. American affiliation at January 1942 is inferred from this surrounding national career."
+        },
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf#page=4",
+          "note": "Contemporary September 1937 Chess Review, printed page 195, explicitly lists this player in the United States national team, corroborating the later domestic championship record."
+        }
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:63804",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/keres/",
+          "note": "Federation biography distinguishes prewar Estonian, wartime occupied-European and postwar Soviet careers. January 1942 exclusion from USA is inferred; the disputed wartime Soviet-versus-Estonian sporting affiliation is deliberately unresolved."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:35520",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/max_euwe/",
+          "note": "Federation biography documents his Amsterdam teaching and Dutch national-team career across the interwar and postwar periods. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:125321",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://schack.se/forbundet/tfs/arkiv/tidskrift-for-schack-1941/",
+          "note": "Swedish federation's 1941 historical archive records Stahlberg's Argentine tournament victory alongside its Swedish national chess activities. January continuity is inferred; only USA exclusion is asserted."
+        },
+        {
+          "url": "https://his.fide.com/2026/09/08/chiaroscuros-of-life-the-1939-buenos-aires-nations-tournament-as-a-turning-point-for-european-chessplayers/",
+          "note": "FIDE historical research records his extended Argentine stay after 1939 and foreign status in the 1943 Argentine championship. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:2138",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/alexander_alekhine/",
+          "note": "Federation biography places the Paris-based champion in Vichy France and occupied-European tournaments during World War II. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:126905",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://schack.se/forbundet/tfs/arkiv/tidskrift-for-schack-1941/",
+          "note": "Swedish federation's 1941 archive identifies Stoltz's Munich success as a Swedish national achievement, with Lundin also competing. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:123392",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/smyslov/",
+          "note": "Federation biography documents Moscow chess and Soviet championship participation in 1940 and 1941. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:91045",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/najdorf_pd/",
+          "note": "Federation biography records his post-1939 Argentine competitive career and national-team leadership, separate from Soviet or American teams. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:34162",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.chess.at/geschichte/gesheumo.htm",
+          "note": "Austrian federation history records German representation in 1939 and permanent South American residence following that event. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:75703",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/andre/",
+          "note": "Federation biography records Soviet settlement, the 1940 USSR championship and subsequent Soviet playing career. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:117121",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/dem1941.html",
+          "note": "German federation's 1941 national championship record identifies Paul Felix Schmidt as its co-winner. January continuity is inferred; only USA exclusion is asserted."
+        },
+        {
+          "url": "https://www.schachbund.de/dem1940.html",
+          "note": "German federation's 1940 national championship record places Paul Felix Schmidt in Danzig. His later American career is not backdated to 1942."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:14127",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/boleslavsky/",
+          "note": "Federation biography documents the 1940 USSR championship and 1941 Soviet absolute-championship tournament. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:55639",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://worldchesshof.org/wp-content/uploads/2025/02/USChess80BrochureFinalWeb.pdf",
+          "note": "Museum institutional history records Horowitz challenging Reshevsky for the United States title on May 4-29, 1941. January 1942 American-affiliation continuity is inferred from this close national-title record."
+        },
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf#page=4",
+          "note": "Contemporary September 1937 Chess Review, printed page 195, explicitly identifies Horowitz as a United States national-team member."
+        }
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:14319",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/bondarevsky/",
+          "note": "Federation biography documents the Rostov career and 1940 USSR championship shared with Lilienthal. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:79869",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/makogonov/",
+          "note": "Federation biography documents Soviet championships through 1940, a 1942 domestic match and Soviet team representation in 1945. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:13879",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/bogoljubov_pd/",
+          "note": "Federation biography describes his German chess career following Soviet departure and continuing European tournament activity. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:65985",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://maxeuwe.nl/wp-content/uploads/2020/10/WK1935_extra1.pdf#page=1",
+          "note": "Max Euwe Centre's historical chapter explicitly dates Kmoch's Netherlands residence from 1932 through 1947. January 1942 USA exclusion follows this dated career; later American affiliation is not backdated."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:78449",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://schack.se/forbundet/tfs/arkiv/tidskrift-for-schack-1941/",
+          "note": "Swedish federation's 1941 archive records Lundin winning Stockholm and the Swedish national championship that year. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:40383",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://his.fide.com/2026/09/08/chiaroscuros-of-life-the-1939-buenos-aires-nations-tournament-as-a-turning-point-for-european-chessplayers/",
+          "note": "FIDE historical research records the Polish representative's post-1939 Argentine settlement and his Buenos Aires club activity in 1942. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:34598",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://his.fide.com/2026/09/08/chiaroscuros-of-life-the-1939-buenos-aires-nations-tournament-as-a-turning-point-for-european-chessplayers/",
+          "note": "FIDE historical research records the German team member's 1939 South American settlement and subsequent Brazilian home. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:108650",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/dem1941.html",
+          "note": "German federation's 1941 national championship record lists Richter third; its preceding 1940 record locates him in Berlin. January continuity is inferred; only USA exclusion is asserted."
+        },
+        {
+          "url": "https://www.schachbund.de/dem1940.html",
+          "note": "The official 1940 national championship table names Kurt Richter of Berlin, corroborating the adjacent 1941 record."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:100580",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.ruchess.ru/news/report/geroi_dovoennih_olimpiad/",
+          "note": "Federation original history documents the Latvian master's wartime Soviet competitions, including Sverdlovsk in 1942, preceding arrest. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:32249",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/petr_dubinin_pd/",
+          "note": "Federation biography dates Soviet army service from October 1941 through July 1946, following Soviet championship competition. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:62869",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1940/CR1940_05.pdf#page=5",
+          "note": "Contemporary May 1940 Chess Review, printed page 76, reports this player in the American national championship finals. American affiliation at January 1942 is inferred from this surrounding national career."
+        },
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1937/CR1937_09.pdf#page=4",
+          "note": "Contemporary September 1937 Chess Review, printed page 195, explicitly lists this player in the United States national team, corroborating the later domestic championship record."
+        }
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:138141",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/vidmar_pd/",
+          "note": "Federation biography records Ljubljana academic work and Yugoslav national-team representation over his senior playing career. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:38829",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/opochensky_pd/",
+          "note": "Federation biography records Foltys returning to Czech territory after 1939 and his Prague match against Opochensky in 1941. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:137687",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/gavriil_veresov_pd/",
+          "note": "Federation biography records Belarusian and Soviet chess in 1940 and voluntary Soviet military service from 1941 to 1944. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:66787",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/dem1940.html",
+          "note": "German federation's August 1940 national championship record identifies Anton Kohler of Munich, finishing fifth. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:128739",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://his.fide.com/2026/09/08/chiaroscuros-of-life-the-1939-buenos-aires-nations-tournament-as-a-turning-point-for-european-chessplayers/",
+          "note": "FIDE historical research identifies Szabo's wartime Hungarian forced-labor service and Soviet captivity until after the war. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:86216",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/mikenas_pd/",
+          "note": "Federation biography records Lithuanian representation through 1939 and subsequent Soviet championship participation after 1940. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:105845",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/viacheslav_ragozin/",
+          "note": "Federation biography documents his Soviet national and Moscow/Leningrad playing career and later Soviet team representation. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:1842",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://ruchess.ru/news/report/vladimir_alatortsev/",
+          "note": "Federation original history explicitly records Alatortsev organizing Moscow's championship at the end of 1941. January continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:48667",
+      "countryCode": null,
+      "sources": [
+        {
+          "url": "https://federacionargentinadeajedrez.org/wp-content/uploads/2022/11/hitos-del-ajedrez-argentino-charla-fada-100-anos-1.ppt.pdf#page=8",
+          "note": "Argentine federation's centenary history records Guimard's 1937 Argentine representation and explicitly includes him among Argentine players in its 1940s history. January 1942 national-career continuity is inferred; only USA exclusion is asserted."
+        }
+      ],
+      "excludedCountryCodes": [
+        "USA"
+      ]
+    },
+    {
+      "year": 1942,
+      "sourcePlayerId": "chessmetrics:101596",
+      "countryCode": "USA",
+      "sources": [
+        {
+          "url": "https://uscf1-nyc1.aodhosting.com/CL-AND-CR-ALL/CR-ALL/CR1940/CR1940_05.pdf#page=5",
+          "note": "Contemporary May 1940 Chess Review, printed pages 76-77, reports Pinkus in the American national championship finals and discusses his Manhattan club career. January 1942 American-affiliation continuity is inferred from this surrounding national career."
+        }
+      ]
     }
   ],
   "methodology": {
     "countryMeaning": "Historical chess affiliation, not a FIDE federation registration or birthplace.",
-    "completeness": "All world ranks through the fifth Soviet player are audited; other country top fives are not inferred.",
-    "temporalLimit": "Some January 1927 exclusions infer continuity from national careers around the cutoff; notes identify these cases. No exact-month registration record is claimed.",
-    "neutralCases": "Where only exclusion from the Soviet country pool is established, countryCode remains null."
+    "completeness": "All world ranks through each country’s fifth member are audited; other country top fives are not inferred.",
+    "temporalLimit": "Some cutoff assignments infer continuity from national careers around January; per-row notes identify these cases. Exact-month registration records are not claimed.",
+    "neutralCases": "Where only exclusion from a target country pool is established, countryCode remains null."
+  },
+  "identities": {
+    "chessmetrics:100509": {
+      "personId": "historical:petrosian tigran",
+      "sources": [
+        {
+          "url": "https://www.olimpbase.org/Elo/Elo197405n.html",
+          "note": "Links the former world champion to the historical FIDE Tigran Petrosian record, not the later Tigran L. Petrosian."
+        }
+      ]
+    },
+    "chessmetrics:67916": {
+      "personId": "fide:1300016",
+      "sources": [
+        {
+          "url": "https://ratings.fide.com/profile/1300016",
+          "note": "Viktor Korchnoi; historical estimate and later FIDE player are the same person."
+        }
+      ]
+    },
+    "chessmetrics:129382": {
+      "personId": "historical:tal mikhail n",
+      "sources": [
+        {
+          "url": "https://www.olimpbase.org/Elo/Elo197405n.html",
+          "note": "Mikhail Tal is recorded as Tal, Mikhail N. in the historical FIDE archive."
+        }
+      ]
+    },
+    "chessmetrics:124734": {
+      "personId": "fide:600024",
+      "sources": [
+        {
+          "url": "https://ratings.fide.com/profile/600024",
+          "note": "Boris Spassky; links the historical estimate to the archived Boris V. Spassky FIDE identity."
+        }
+      ]
+    },
+    "chessmetrics:102867": {
+      "personId": "historical:polugaevsky lev",
+      "sources": [
+        {
+          "url": "https://www.olimpbase.org/Elo/Elo197405n.html",
+          "note": "Lev Polugaevsky; links reversed source name order without creating a second person."
+        }
+      ]
+    },
+    "chessmetrics:108065": {
+      "personId": "historical:reshevsky samuel h",
+      "sources": [
+        {
+          "url": "https://www.olimpbase.org/Elo/Elo197405n.html",
+          "note": "Samuel Reshevsky is recorded as Reshevsky, Samuel H. in the historical FIDE archive."
+        }
+      ]
+    },
+    "chessmetrics:128739": {
+      "personId": "historical:szabo laszlo",
+      "sources": [
+        {
+          "url": "https://www.olimpbase.org/Elo/Elo197405n.html",
+          "note": "Links the historical Laszlo Szabo records across source name order and accents, without merging later players sharing the surname."
+        }
+      ]
+    }
+  },
+  "periodNotes": {
+    "1930": [
+      "The original Chessmetrics top-100 list contains two IDs with the same Sandor Takacs name and age. Both are excluded from USA membership; neither replaces a USA top-five player. The normalization retains the source list’s published reference sample rather than inventing an unlisted replacement."
+    ]
   }
 }

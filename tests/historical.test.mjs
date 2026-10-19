@@ -29,4 +29,6 @@ test('historical imports reject incomplete or contradictory country evidence and
   assert.throws(()=>buildHistoricalSnapshots(observations,conflict),/Contradictory/);
   const corrupted=structuredClone(observations);corrupted[0].players.reverse();
   assert.throws(()=>buildHistoricalSnapshots(corrupted,audit),/invalid top-100/);
+  const duplicate=structuredClone(audit);duplicate.targets.push(duplicate.targets[0]);
+  assert.throws(()=>buildHistoricalSnapshots(observations,duplicate),/Duplicate historical country/);
 });

@@ -38,8 +38,9 @@ export function buildSeed(dataset, federations, historic = null) {
         previous=player.rawRating;
         const ids=nameIds.get(canonicalName(player.name));
         const fideId=period.year>=1994?player.fideId:(ids?.size===1?[...ids][0]:null);
-        const personId=fideId?`fide:${fideId}`:`historical:${canonicalName(player.name)}`;
-        persons.set(personId,{id:personId,fide_id:fideId?String(fideId):null,name:displayName(player.name)});
+        const personId=player.personId||(fideId?`fide:${fideId}`:`historical:${canonicalName(player.name)}`);
+        const linked=player.personId?persons.get(personId):null;
+        persons.set(personId,{id:personId,fide_id:linked?.fide_id||(fideId?String(fideId):null),name:linked?.name||displayName(player.name)});
         editionRows.push({id:`${snapshotId}:${personId}`,snapshot_id:snapshotId,person_id:personId,rank:player.rank,raw_rating:player.rawRating,rating:Math.round(player.rawRating+adjustment),title:player.title||null});
       }
     }
