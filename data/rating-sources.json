@@ -1,0 +1,50 @@
+{
+  "elo1967-2001.zip": {
+    "url": "https://www.olimpbase.org/Elo/data/elo1967-2001.zip",
+    "sha256": "a93c69d1e3218769935aba92db50877a2e9c26cc62d377c1b663f37a786fe89b",
+    "bytes": 5912342,
+    "member": "all.csv"
+  },
+  "jan02frl.zip": {
+    "url": "https://ratings.fide.com/download/jan02frl.zip",
+    "sha256": "2bb57c21b3b64fe0af847d531215c84176702bdd8b011b68c26ee3c8d86e5826",
+    "bytes": 660715,
+    "member": "JAN02FRL.TXT"
+  },
+  "jan06frl.zip": {
+    "url": "https://ratings.fide.com/download/jan06frl.zip",
+    "sha256": "29a097116289b556cd20e70c11bd3769edf77ac1592788887892733e2271d787",
+    "bytes": 1370735,
+    "member": "JAN06FRL.TXT"
+  },
+  "jan10frl.zip": {
+    "url": "https://ratings.fide.com/download/jan10frl.zip",
+    "sha256": "965a6a7a75141e4455a0e77c5b55689c2c2815653e2ee3d5078acbedb8d35903",
+    "bytes": 2220410,
+    "member": "jan10frl.txt"
+  },
+  "standard_jan14frl.zip": {
+    "url": "https://ratings.fide.com/download/standard_jan14frl.zip",
+    "sha256": "d75a2c6080d6cdd2f9304ff7df4c9bdff9f1e4d3db9554e9548c7e0e022f2d06",
+    "bytes": 4012055,
+    "member": "standard_jan14frl.txt"
+  },
+  "standard_jan18frl.zip": {
+    "url": "https://ratings.fide.com/download/standard_jan18frl.zip",
+    "sha256": "ad485f2d48515f8c2398c545bd001f6755a88c936e0ba5e807fe8c6121fb05b3",
+    "bytes": 6938198,
+    "member": "standard_jan18frl.txt"
+  },
+  "standard_jan22frl.zip": {
+    "url": "https://ratings.fide.com/download/standard_jan22frl.zip",
+    "sha256": "307e2581affa649b800d2db07a4e83e96438f8f73e64bbc2762367249a62413d",
+    "bytes": 8776100,
+    "member": "standard_jan22frl.txt"
+  },
+  "standard_jan26frl.zip": {
+    "url": "https://ratings.fide.com/download/standard_jan26frl.zip",
+    "sha256": "2e863ec15760f7f184e595ef510a3cf1fd0090b02a572955dd7b147b726c0684",
+    "bytes": 12473276,
+    "member": "standard_jan26frl.txt"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "url": "https://ratings.fide.com/a_top_fed_list.php?list=open&period=2026-01-01",
+  "page": "https://ratings.fide.com/top_federations.phtml",
+  "notes": "Original 204 official labels and ISO2 flag codes, augmented with aliases LIB/ROM/SIN/TRI and historical CSR/GDR/SCG/URS/YUG. FID explicitly marked non-country."
+}

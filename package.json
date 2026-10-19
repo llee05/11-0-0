@@ -1,12 +1,17 @@
 {
   "name": "eleven-zero-zero",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
+  "engines": {"node": ">=22.13.0"},
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "start": "node scripts/serve.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check dist/app.js && node --check dist/engine.js"
+    "check": "node --check dist/app.js && node --check dist/engine.js && node --check server/catalog.mjs && node --check server/sqlite.mjs",
+    "build": "node scripts/build-hosted.mjs",
+    "db:generate": "node backend/node_modules/drizzle-kit/bin.cjs generate --config drizzle.config.ts",
+    "db:seed": "node scripts/seed-database.mjs",
+    "data:import": "node scripts/import-ratings.mjs"
   }
 }
