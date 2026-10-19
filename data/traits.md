@@ -1,6 +1,6 @@
 # Career-inspired player traits
 
-`dist/traits.js` owns 25 trait definitions and a curated set of 25 signature profiles, keyed by the catalogue's canonical person identity. Each profile includes its source URL and a short rationale, available in the game's Player traits guide. Signatures apply to every edition of the same person, including editions linked through historical identity crosswalks. The modern Tigran L. Petrosian is not the former world champion.
+`dist/traits.js` owns 25 trait definitions and a curated set of 28 signature profiles, keyed by the catalogue's canonical person identity. Each profile includes its source URL and a short rationale, available in the game's Player traits guide. Signatures apply to every edition of the same person, including editions linked through historical identity crosswalks. The modern Tigran L. Petrosian is not the former world champion.
 
 The evidence concerns recurring playing preferences and habits, rather than a single famous game or tournament. A signature highlights one aspect of a player's career; it does not claim that their style was static or limited to that aspect. Some published material is a player's own assessment, and some is a grandmaster's analysis or a FIDE career profile. Nakamura's citation is a print interview: Karsten Müller and Raymund Stolze, *Fighting Chess with Hikaru Nakamura* (Edition Olms, 2012), chapter 6, p. 138, interview by IM Georgios Souleidis in July 2011. Its URL links the publisher record, not the interview text.
 

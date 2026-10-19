@@ -60,6 +60,9 @@ export const SIGNATURE_PROFILES = [
   ['fide:5202213', 'Wesley So', 'practical', 'https://en.chessbase.com/post/interview-with-the-man-of-the-moment-wesley-so', 'So describes a pragmatic approach to results and the role of solid play.'],
   ['historical:fischer robert james', 'Bobby Fischer', 'endgame', 'https://www.newinchess.com/media/wysiwyg/product_pdf/9286.pdf', 'GM analysis of multiple Fischer endgames, with his own annotations, illustrates his technical conversion.'],
   ['fide:2016192', 'Hikaru Nakamura', 'defender', 'https://www.edition-olms.com/buecher/fighting-chess-with-hikaru-nakamura/', 'Nakamura describes persistence and seeking defensive resources as strengths in his 2011 interview: Müller and Stolze, Fighting Chess with Hikaru Nakamura (Edition Olms, 2012), chapter 6, p. 138. The link is the publisher’s book record.'],
+  ['fide:8603677', 'Ding Liren', 'positional', 'https://en.chessbase.com/post/cbm-210-special-ding-liren', 'GM Mihail Marin analyzes recurring aspects of Ding’s positional play in a collection spanning 2009–2021.'],
+  ['fide:2900084', 'Veselin Topalov', 'attacker', 'https://www.newinchess.com/media/wysiwyg/product_pdf/9129.pdf', 'IM Emmanuel Neiman describes Topalov’s habitual optimism and attacking approach in The Magnus Method, introduction, p. 13.'],
+  ['fide:46616543', 'Gukesh Dommaraju', 'calculator', 'https://en.chessbase.com/post/i-still-have-weaknesses-to-work-on-an-interview-with-vincent-keymer-i', 'GM Vincent Keymer describes Gukesh’s general reliance on concrete calculation when comparing their styles. This reflects his career so far, not a prediction of an unchanging style.'],
 ].map(([personId, name, trait, source, reason]) => Object.freeze({personId, name, trait, source, reason}));
 const profiles = new Map(SIGNATURE_PROFILES.map(p => [p.personId, p]));
 export const signatureProfile = player => profiles.get(player?.personId);

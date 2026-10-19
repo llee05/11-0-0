@@ -9,8 +9,8 @@ const {players} = await readCatalogue(db);
 db.close();
 
 test('curated profiles identify real catalogue people, across editions and without namesake leakage', () => {
-  assert.equal(SIGNATURE_PROFILES.length, 25);
-  assert.equal(new Set(SIGNATURE_PROFILES.map(p => p.personId)).size, 25);
+  assert.equal(SIGNATURE_PROFILES.length, 28);
+  assert.equal(new Set(SIGNATURE_PROFILES.map(p => p.personId)).size, 28);
   for (const profile of SIGNATURE_PROFILES) {
     const editions = players.filter(p => p.personId === profile.personId);
     assert.ok(editions.length, profile.name);

@@ -20,6 +20,11 @@ try {
   await page.getByRole('dialog').waitFor({state:'visible'});
   await page.keyboard.press('Escape');
   assert.equal(await page.getByRole('dialog').isVisible(),false);
+  await page.getByRole('button',{name:'PLAYER TRAITS'}).click();
+  assert.equal(await page.locator('.trait-guide article').count(),25);
+  assert.equal(await page.locator('.signature-list article').count(),28);
+  assert.ok((await page.locator('.signature-list').textContent()).includes('Bobby Fischer'));
+  await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'COUNTRIES & YEARS'}).click();
   assert.equal(await page.locator('#archive-year option').count(),26);
   assert.equal(await page.locator('[data-id="MGL-2026"][data-action="archive-country"]').count(),1);
@@ -27,6 +32,7 @@ try {
   assert.equal(await page.locator('.source-roster>div').count(),5);
   assert.ok((await page.locator('.source-roster').textContent()).includes('Hikaru Nakamura'));
   assert.ok((await page.locator('.source-roster').textContent()).includes('2810'));
+  assert.ok((await page.locator('.source-roster').textContent()).includes('Signature · Resourceful defender'));
   await page.getByRole('button',{name:'Explore other years'}).click();
   await page.getByLabel('EXPLORE A SNAPSHOT YEAR').selectOption('2022');
   await page.locator('[data-id="USA-2022"][data-action="archive-country"]').click();
@@ -75,15 +81,23 @@ try {
   const firstOffer=await page.locator('.nation-code').textContent();
   assert.ok(firstOffer.length===3);
   assert.equal(await page.locator('.candidate').count(),5);
+  assert.equal(await page.locator('.candidate .trait-badge').count(),5);
+  const offeredTraits=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v3')).offer.traits);
+  await page.reload();await page.locator('.candidate').first().waitFor();
+  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v3')).offer.traits),offeredTraits);
   await page.getByRole('button',{name:'Reroll nation'}).click();
   await page.waitForFunction(()=>document.querySelector('.reroll-button')?.textContent.includes('1 left'));
   assert.ok((await page.getByRole('button',{name:'Reroll nation'}).textContent()).includes('1 left'));
   await page.screenshot({path:`${artifacts}/desktop-offer.png`,fullPage:true});
+  await page.getByRole('button',{name:'Select reserve for your next pick'}).click();
+  const selectedId=await page.locator('.candidate:not([disabled])').first().getAttribute('data-id');
+  const selectedTrait=await page.evaluate(id=>JSON.parse(localStorage.getItem('11-0-0:save:v3')).offer.traits[id],selectedId);
   await page.locator('.candidate:not([disabled])').first().click();
   assert.ok(await page.locator('.reserve-slot').evaluate(el=>el.classList.contains('filled')));
   await page.reload();
   await page.locator('.squad-slot.filled').first().waitFor();
   assert.equal(await page.locator('.squad-slot.filled').count(),1);
+  assert.equal(await page.evaluate(id=>JSON.parse(localStorage.getItem('11-0-0:save:v3')).traits[id],selectedId),selectedTrait);
   assert.ok((await page.getByRole('button',{name:'Rename team'}).textContent()).includes('Queensland Knights'));
   for(let i=1;i<5;i++){
     await page.getByRole('button',{name:'Spin a nation'}).click();
@@ -94,9 +108,17 @@ try {
   await page.getByRole('button',{name:'All-time field'}).click();
   assert.equal(await page.locator('[data-action="field-team"]').count(),31);
   await page.keyboard.press('Escape');
+  const aiTraits=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v3')).tournament.teams.slice(1).map(t=>t.traits));
+  await page.getByRole('button',{name:'Preview next match'}).click();
+  assert.equal(await page.locator('.match-forecast article').count(),4);
+  assert.equal(await page.locator('.match-forecast .trait-badge').count(),8);
+  await page.screenshot({path:`${artifacts}/desktop-match-preview.png`,fullPage:true});
+  await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Play round 1'}).click();
   await page.locator('.match-score').waitFor();
   assert.equal(await page.locator('.board-result').count(),4);
+  assert.equal(await page.locator('.board-result .trait-badge').count(),8);
+  assert.equal(await page.locator('.board-condition').count(),4);
   await page.getByRole('button',{name:'Rotate reserve'}).click();
   await page.locator('.rotation-option').first().click();
   await page.getByRole('button',{name:'Play round 2'}).click();
@@ -109,6 +131,7 @@ try {
   await page.screenshot({path:`${artifacts}/desktop-tournament.png`,fullPage:true});
   await page.reload();
   await page.getByRole('button',{name:'Play round 3'}).waitFor();
+  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v3')).tournament.teams.slice(1).map(t=>t.traits)),aiTraits);
   await page.getByRole('button',{name:'Simulate remaining rounds'}).click();
   await page.getByRole('button',{name:'Copy result'}).waitFor();
   assert.equal(await page.locator('.round-tabs button:not([disabled])').count(),11);
@@ -124,6 +147,9 @@ try {
   assert.equal(await page.locator('.squad-slot.filled').count(),0);
   // Expert and auto-draft paths, plus mobile layout and a full playthrough.
   await page.setViewportSize({width:390,height:844});
+  await page.getByRole('button',{name:'PLAYER TRAITS'}).click();
+  assert.ok(await page.evaluate(()=>document.querySelector('#dialog').scrollWidth<=document.querySelector('#dialog').clientWidth));
+  await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'ALL-TIME FIELD'}).click();
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
   await page.locator('[data-action="field-team"][data-id="alltime:USA:A"]').click();
@@ -139,6 +165,11 @@ try {
   await page.getByRole('button',{name:'Quick draft'}).click();
   assert.equal(await page.locator('.squad-slot.filled').count(),5);
   await page.getByRole('button',{name:'Enter the Olympiad'}).click();
+  await page.getByRole('button',{name:'Preview next match'}).click();
+  assert.ok(await page.evaluate(()=>document.querySelector('#dialog').scrollWidth<=document.querySelector('#dialog').clientWidth));
+  await page.screenshot({path:`${artifacts}/mobile-match-preview.png`,fullPage:true});
+  await page.getByRole('button',{name:'Choose a reserve rotation'}).click();
+  await page.locator('.rotation-option').first().click();
   await page.getByRole('button',{name:'Simulate remaining rounds'}).click();
   await page.getByRole('button',{name:'Copy result'}).waitFor();
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
@@ -149,7 +180,17 @@ try {
   await page.screenshot({path:`${artifacts}/mobile-results.png`,fullPage:true});
   await page.setViewportSize({width:320,height:740});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+  const results=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v3')));
+  await page.reload();await page.getByRole('button',{name:'Copy result'}).waitFor();
+  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v3'))),results);
+  const legacyContext=await browser.newContext();
+  await legacyContext.addInitScript(()=>{localStorage.setItem('11-0-0:save:v2','legacy-save');localStorage.setItem('11-0-0:save:v3','{broken');});
+  const legacyPage=await legacyContext.newPage();await legacyPage.goto(url);await legacyPage.getByRole('button',{name:'Quick draft'}).waitFor();
+  assert.equal(await legacyPage.evaluate(()=>localStorage.getItem('11-0-0:save:v2')),'legacy-save');
+  assert.equal(await legacyPage.evaluate(()=>localStorage.getItem('11-0-0:save:v3:backup')),'{broken');
+  assert.equal(await legacyPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v3')).version),3);
+  await legacyContext.close();
   assert.deepEqual(errors,[]);
-  console.log('Browser QA passed: unchanged source ratings, strict country cutoff, all-time A/B roster and source dialogs, manual and quick drafts, expert mode, rerolls, team name, board targeting, persistence, reserve rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
+  console.log('Browser QA passed: trait guide and signatures, saved offer/pick traits, seeded AI traits, match previews and effects, legacy save preservation, unchanged source ratings, strict country cutoff, all-time A/B roster and source dialogs, manual and quick drafts, expert mode, rerolls, team name, board targeting, persistence, reserve rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
   console.log(`Screenshots: ${artifacts}`);
 } finally {await browser.close();}

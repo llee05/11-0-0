@@ -1,3 +1,4 @@
+import {TRAIT_RULESET, rollTraits, validTraits, fatiguePenalty, matchContext, validContext, matchupEffects} from './traits.js';
 // The server supplies a validated, versioned country-year catalogue from SQL.
 export let NATIONS=[],PLAYERS=[],OPPONENTS=[],CATALOGUE={release:null};
 let playerIndex=new Map(),nationIndex=new Map(),opponentIndex=new Map(),cheapestPlayers=[];
@@ -19,7 +20,7 @@ export function configureCatalogue(catalogue){
 }
 export const BUDGET = 100;
 export const ROUND_COUNT = 11;
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 export const nationById = id => nationIndex.get(id);
 export const playerById = id => playerIndex.get(id);
 export const spent = squad => squad.filter(Boolean).reduce((sum,id) => sum + playerById(id).cost,0);
@@ -45,20 +46,26 @@ export function createOffer(squad,rng=Math.random) {
   const nation=nations[Math.floor(rng()*nations.length)];
   // Always reveal the source list's full top five. Ineligible picks are shown
   // disabled by the UI; no lower-ranked player replaces an unaffordable star.
-  return {nation:nation.id,players:[...nation.players]};
+  return {nation:nation.id,players:[...nation.players],traits:rollTraits(nation.players.map(playerById),rng)};
 }
-export function initialState() { return {version:SAVE_VERSION,catalogueRelease:CATALOGUE.release,phase:'draft',mode:'classic',squad:[null,null,null,null,null],offer:null,rerolls:2,tournament:null,teamName:'The Dream Team'}; }
+export function initialState() { return {version:SAVE_VERSION,rulesVersion:TRAIT_RULESET,catalogueRelease:CATALOGUE.release,phase:'draft',mode:'classic',squad:[null,null,null,null,null],traits:{},offer:null,rerolls:2,tournament:null,teamName:'The Dream Team'}; }
 export function selectPlayer(state,id,slot) {
   const player=playerById(id);
-  if(state.phase!=='draft'||!nationById(state.offer?.nation)?.players.includes(id)||!state.offer?.players.includes(id)||!player||!canAfford(player,state.squad)||slot<0||slot>4||state.squad[slot]) return state;
-  return {...state,squad:state.squad.map((p,i)=>i===slot?id:p),offer:null};
+  if(state.phase!=='draft'||!nationById(state.offer?.nation)?.players.includes(id)||!state.offer?.players.includes(id)||!validTraits(state.offer.players,state.offer.traits,playerById)||!player||!canAfford(player,state.squad)||!Number.isInteger(slot)||slot<0||slot>4||state.squad[slot]) return state;
+  return {...state,squad:state.squad.map((p,i)=>i===slot?id:p),traits:{...state.traits,[id]:state.offer.traits[id]},offer:null};
 }
 export function sortBoards(squad) { return [...squad.slice(0,4).filter(Boolean).sort((a,b)=>playerById(b).rating-playerById(a).rating),...Array(4-squad.slice(0,4).filter(Boolean).length).fill(null),squad[4]]; }
 
-export function startTournament(squad,teamName,seed=Date.now()>>>0) {
+export function startTournament(squad,teamName,seed=Date.now()>>>0,traits=null) {
   if(squad.length!==5||squad.some(id=>!playerById(id))||new Set(squad.map(id=>playerById(id).personId)).size!==5||spent(squad)>BUDGET) throw new Error('Complete a valid five-player squad first.');
-  const make=(id,name,flag,rating,players=[])=>({id,name,flag,rating,players,mp:0,bp:0,w:0,d:0,l:0,history:[]});
-  return {seed,round:0,squad:sortBoards(squad),streaks:Object.fromEntries(squad.map(id=>[id,0])),teams:[make('YOU',teamName,'✦',average(squad.slice(0,4))),...OPPONENTS.map(o=>make(o.id,o.name,o.flag,o.rating,[...o.players]))],rounds:[]};
+  const rng=random(seed^0x54524149),lineup=sortBoards(squad);
+  const ownTraits=traits===null?rollTraits(lineup.map(playerById),rng):traits;
+  if(!validTraits(lineup,ownTraits,playerById))throw new Error('Invalid player traits.');
+  const make=(id,name,flag,players,assigned)=>({id,name,flag,rating:average(players.slice(0,4)),players:[...players],lineup:[...players],traits:{...assigned},streaks:Object.fromEntries(players.map(id=>[id,0])),mp:0,bp:0,w:0,d:0,l:0,history:[]});
+  // Use a separate stream for opponents so their rolls never depend on how the
+  // caller supplied the user's traits or on later reserve decisions.
+  const opponentRng=random(seed^0x41495452);
+  return {seed,round:0,squad:lineup,streaks:Object.fromEntries(squad.map(id=>[id,0])),teams:[make('YOU',teamName,'✦',lineup,ownTraits),...OPPONENTS.map(o=>make(o.id,o.name,o.flag,o.players,rollTraits(o.players.map(playerById),opponentRng)))],rounds:[]};
 }
 export function standings(t) {
   const sb=team=>team.history.reduce((s,h)=>s+(t.teams.find(o=>o.id===h.opponent)?.mp||0)*h.points,0);
@@ -79,38 +86,107 @@ export function pairTeams(t) {
   if(!pairs) throw new Error('No valid pairing found.');
   return pairs;
 }
-export function boardProbabilities(a,b,white=true) {
+export function boardProbabilities(a,b,white=true,drawShift=0) {
   const difference=a-b+(white?28:-28);
   const expected=1/(1+10**(-difference/400));
-  const draw=Math.min(0.5*Math.exp(-Math.abs(difference)/600),2*Math.min(expected,1-expected));
+  const draw=Math.max(0,Math.min(0.5*Math.exp(-Math.abs(difference)/600)+drawShift,2*Math.min(expected,1-expected)));
   return {win:expected-draw/2,draw,loss:1-expected-draw/2};
+}
+function prepareRound(tournament) {
+  const t=structuredClone(tournament);
+  for(const team of t.teams){
+    if(team.id==='YOU'){team.lineup=[...t.squad];team.streaks={...t.streaks};}
+    else {
+      // Opponents may rest a tired starter when their reserve is stronger after
+      // fatigue. Resolve ties by source strength and ID, then order the boards.
+      const effective=id=>playerById(id).rating-fatiguePenalty(team.traits[id],team.streaks[id]);
+      team.lineup=sortBoards([...team.players].sort((a,b)=>effective(b)-effective(a)||playerById(b).rating-playerById(a).rating||a.localeCompare(b)));
+    }
+    team.rating=average(team.lineup.slice(0,4));
+  }
+  return t;
+}
+function upcomingMatches(t) {
+  const contextRng=random(t.seed^Math.imul(t.round+1,0x9E3779B1));
+  return pairTeams(t).map(([aid,bid])=>{
+    const a=t.teams.find(x=>x.id===aid),b=t.teams.find(x=>x.id===bid);
+    const boards=Array.from({length:4},(_,i)=>{
+      const context=matchContext(contextRng),white=(t.round+i)%2===0;
+      const player=(team)=>{const p=playerById(team.lineup[i]),trait=team.traits[p.id],fatigue=fatiguePenalty(trait,team.streaks[p.id]);return {...p,baseRating:p.rating,trait,fatigue,rating:p.rating-fatigue};};
+      const ap=player(a),bp=player(b),effects=matchupEffects(ap.trait,bp.trait,context,ap.rating,bp.rating);
+      for(const [p,e] of [[ap,effects.a],[bp,effects.b]]){p.traitBonus=e.bonus;p.drawShift=e.draw;p.rating+=e.bonus;}
+      return {a:ap,b:bp,context,white,probabilities:boardProbabilities(ap.rating,bp.rating,white,effects.a.draw+effects.b.draw)};
+    });
+    return {a:aid,b:bid,boards};
+  });
+}
+// Pure forecast: repeated previews and reloads cannot reroll abilities or games.
+export function previewRound(tournament) {
+  if(tournament.round>=ROUND_COUNT)return null;
+  return upcomingMatches(prepareRound(tournament)).find(m=>m.a==='YOU'||m.b==='YOU');
 }
 export function simulateRound(tournament) {
   if(tournament.round>=ROUND_COUNT) return tournament;
-  const t=structuredClone(tournament),rng=random(t.seed+t.round*1009);
-  const pairs=pairTeams(t),matches=[];
-  for(const [aid,bid] of pairs) {
-    const a=t.teams.find(x=>x.id===aid),b=t.teams.find(x=>x.id===bid),boards=[];
-    const lineup=team=>team.id==='YOU'?t.squad.slice(0,4).map(id=>{const p=playerById(id);return {...p,rating:p.rating-Math.min(40,Math.max(0,t.streaks[id]-3)*8)};}):team.players.slice(0,4).map(id=>({...playerById(id)}));
-    const ap=lineup(a),bp=lineup(b);
-    for(let i=0;i<4;i++) { const white=(t.round+i)%2===0;const p=boardProbabilities(ap[i].rating,bp[i].rating,white),roll=rng();const score=roll<p.win?1:roll<p.win+p.draw?0.5:0;boards.push({a:ap[i],b:bp[i],score,white}); }
+  const t=prepareRound(tournament),rng=random(t.seed+t.round*1009),matches=[];
+  for(const match of upcomingMatches(t)) {
+    const {a:aid,b:bid,boards}=match,a=t.teams.find(x=>x.id===aid),b=t.teams.find(x=>x.id===bid);
+    for(const board of boards){const p=board.probabilities,roll=rng();board.score=roll<p.win?1:roll<p.win+p.draw?0.5:0;}
     const points=boards.reduce((n,board)=>n+board.score,0);
     const apply=(team,other,pts)=>{team.bp+=pts;team.mp+=pts>2?2:pts===2?1:0;team[pts>2?'w':pts===2?'d':'l']++;team.history.push({opponent:other.id,points:pts});};
     apply(a,b,points);apply(b,a,4-points);matches.push({a:aid,b:bid,points,boards});
   }
-  for(const id of t.squad) t.streaks[id]=t.squad.slice(0,4).includes(id)?t.streaks[id]+1:0;
+  for(const team of t.teams)for(const id of team.players)team.streaks[id]=team.lineup.slice(0,4).includes(id)?team.streaks[id]+1:0;
+  t.streaks={...t.teams.find(team=>team.id==='YOU').streaks};
   t.round++; t.rounds.push(matches);return t;
 }
 export function rotateReserve(tournament,boardIndex) {
   if(boardIndex<0||boardIndex>3||tournament.round>=11) return tournament;
   const t=structuredClone(tournament);
   [t.squad[boardIndex],t.squad[4]]=[t.squad[4],t.squad[boardIndex]];
-  t.squad=sortBoards(t.squad);t.teams.find(x=>x.id==='YOU').rating=average(t.squad.slice(0,4));return t;
+  t.squad=sortBoards(t.squad);const own=t.teams.find(x=>x.id==='YOU');own.lineup=[...t.squad];own.rating=average(t.squad.slice(0,4));return t;
 }
 export function validSave(s) {
-  if(!s||s.version!==SAVE_VERSION||s.catalogueRelease!==CATALOGUE.release||!['draft','tournament','results'].includes(s.phase)||!['classic','expert'].includes(s.mode)||!Array.isArray(s.squad)||s.squad.length!==5||s.squad.some(id=>id!==null&&!playerById(id))||new Set(s.squad.filter(Boolean).map(id=>playerById(id).personId)).size!==s.squad.filter(Boolean).length||spent(s.squad)>100||!Number.isInteger(s.rerolls)||s.rerolls<0||s.rerolls>2||typeof s.teamName!=='string'||s.teamName.length>30) return false;
-  if(s.phase==='draft') { const nation=nationById(s.offer?.nation);return !s.tournament&&(!s.offer||!!nation&&Array.isArray(s.offer.players)&&s.offer.players.length===5&&s.offer.players.every((id,i)=>id===nation.players[i])&&s.offer.players.some(id=>canAfford(playerById(id),s.squad))); }
+  try { return validateSave(s); } catch { return false; }
+}
+function validateSave(s) {
+  if(!s||s.version!==SAVE_VERSION||s.rulesVersion!==TRAIT_RULESET||s.catalogueRelease!==CATALOGUE.release||!['draft','tournament','results'].includes(s.phase)||!['classic','expert'].includes(s.mode)||!Array.isArray(s.squad)||s.squad.length!==5||s.squad.some(id=>id!==null&&!playerById(id))||new Set(s.squad.filter(Boolean).map(id=>playerById(id).personId)).size!==s.squad.filter(Boolean).length||spent(s.squad)>BUDGET||!validTraits(s.squad.filter(Boolean),s.traits,playerById)||!Number.isInteger(s.rerolls)||s.rerolls<0||s.rerolls>2||typeof s.teamName!=='string'||s.teamName.length>30)return false;
+  if(s.phase==='draft') {
+    const nation=nationById(s.offer?.nation);
+    return !s.tournament&&(!s.offer||!!nation&&Array.isArray(s.offer.players)&&s.offer.players.length===5&&s.offer.players.every((id,i)=>id===nation.players[i])&&validTraits(s.offer.players,s.offer.traits,playerById)&&s.offer.players.some(id=>canAfford(playerById(id),s.squad)));
+  }
   const t=s.tournament;
-  if(!t||!Array.isArray(t.teams)||t.teams.length!==32||new Set(t.teams.map(x=>x?.id)).size!==32||OPPONENTS.some(o=>!t.teams.some(x=>x?.id===o.id)))return false;
-  return !!t&&Number.isInteger(t.seed)&&Number.isInteger(t.round)&&t.round>=0&&t.round<=11&&(s.phase==='results'?t.round===11:t.round<11)&&Array.isArray(t.teams)&&t.teams.length===32&&t.teams.some(x=>x?.id==='YOU')&&t.teams.every(x=>x&&typeof x.id==='string'&&typeof x.name==='string'&&typeof x.flag==='string'&&Number.isFinite(x.rating)&&Number.isFinite(x.mp)&&Number.isFinite(x.bp)&&Number.isFinite(x.w)&&Number.isFinite(x.d)&&Number.isFinite(x.l)&&(x.id==='YOU'||x.name===opponentIndex.get(x.id)?.name&&x.flag===opponentIndex.get(x.id)?.flag&&x.rating===opponentIndex.get(x.id)?.rating&&Array.isArray(x.players)&&x.players.length===5&&x.players.every((id,i)=>id===opponentIndex.get(x.id)?.players[i]))&&Array.isArray(x.history)&&x.history.length===t.round&&x.history.every(h=>h&&t.teams.some(o=>o?.id===h.opponent)&&Number.isFinite(h.points)))&&Array.isArray(t.squad)&&t.squad.length===5&&new Set(t.squad).size===5&&t.squad.every(id=>s.squad.includes(id)&&Number.isFinite(t.streaks?.[id]))&&Array.isArray(t.rounds)&&t.rounds.length===t.round&&t.rounds.every(matches=>Array.isArray(matches)&&matches.length===16&&matches.every(m=>m&&t.teams.some(x=>x?.id===m.a)&&t.teams.some(x=>x?.id===m.b)&&Number.isFinite(m.points)&&Array.isArray(m.boards)&&m.boards.length===4&&m.boards.every(b=>typeof b?.a?.name==='string'&&typeof b.b?.name==='string'&&Number.isFinite(b.a.rating)&&Number.isFinite(b.b.rating)&&[0,0.5,1].includes(b.score))));
+  if(s.offer||s.squad.some(id=>!id)||!t||!Number.isInteger(t.seed)||!Number.isInteger(t.round)||t.round<0||t.round>ROUND_COUNT||(s.phase==='results'?t.round!==ROUND_COUNT:t.round>=ROUND_COUNT)||!Array.isArray(t.teams)||t.teams.length!==32||new Set(t.teams.map(x=>x?.id)).size!==32||!t.teams.some(x=>x.id==='YOU')||OPPONENTS.some(o=>!t.teams.some(x=>x.id===o.id)))return false;
+  const same=(a,b)=>a.length===b.length&&a.every((id,i)=>id===b[i]);
+  const streaks=(ids,values)=>values&&Object.keys(values).length===5&&ids.every(id=>Number.isInteger(values[id])&&values[id]>=0&&values[id]<=t.round);
+  if(!Array.isArray(t.squad)||!same([...t.squad].sort(),[...s.squad].sort())||!same(t.squad,sortBoards(t.squad))||!streaks(t.squad,t.streaks))return false;
+  for(const team of t.teams){
+    const source=opponentIndex.get(team.id),own=team.id==='YOU';
+    const canonical=own?sortBoards(s.squad):source?.players;
+    if(!canonical||typeof team.name!=='string'||typeof team.flag!=='string'||(own?team.name!==s.teamName||team.flag!=='✦':team.name!==source.name||team.flag!==source.flag)||!Array.isArray(team.players)||!same(team.players,canonical)||!Array.isArray(team.lineup)||!same([...team.lineup].sort(),[...canonical].sort())||!same(team.lineup,sortBoards(team.lineup))||team.rating!==average(team.lineup.slice(0,4))||!validTraits(team.players,team.traits,playerById)||!streaks(team.players,team.streaks)||!Array.isArray(team.history)||team.history.length!==t.round)return false;
+    if(own&&(!same(team.lineup,t.squad)||team.players.some(id=>team.traits[id]!==s.traits[id]||team.streaks[id]!==t.streaks[id])))return false;
+    const opponents=new Set();let mp=0,bp=0,w=0,d=0,l=0;
+    for(const h of team.history){
+      if(!h||h.opponent===team.id||opponents.has(h.opponent)||!t.teams.some(o=>o.id===h.opponent)||![0,0.5,1,1.5,2,2.5,3,3.5,4].includes(h.points))return false;
+      opponents.add(h.opponent);bp+=h.points;mp+=h.points>2?2:h.points===2?1:0;
+      if(h.points>2)w++;else if(h.points===2)d++;else l++;
+    }
+    if(team.mp!==mp||team.bp!==bp||team.w!==w||team.d!==d||team.l!==l)return false;
+  }
+  if(!Array.isArray(t.rounds)||t.rounds.length!==t.round)return false;
+  return t.rounds.every((matches,round)=>Array.isArray(matches)&&matches.length===16&&new Set(matches.flatMap(m=>[m?.a,m?.b])).size===32&&matches.every(m=>{
+    const a=t.teams.find(x=>x.id===m?.a),b=t.teams.find(x=>x.id===m?.b);
+    if(!a||!b||a===b||!Array.isArray(m.boards)||m.boards.length!==4||m.points!==m.boards.reduce((sum,board)=>sum+board.score,0)||a.history[round].opponent!==b.id||b.history[round].opponent!==a.id||a.history[round].points!==m.points||b.history[round].points!==4-m.points)return false;
+    if(new Set(m.boards.map(board=>board.a?.id)).size!==4||new Set(m.boards.map(board=>board.b?.id)).size!==4)return false;
+    return m.boards.every((board,i)=>{
+      if(!validContext(board.context)||board.white!==((round+i)%2===0)||![0,0.5,1].includes(board.score))return false;
+      for(const [p,team] of [[board.a,a],[board.b,b]]){
+        const source=playerById(p?.id);
+        if(!source||!team.players.includes(p.id)||p.name!==source.name||p.year!==source.year||p.baseRating!==source.rating||p.trait!==team.traits[p.id]||!Number.isFinite(p.fatigue)||p.fatigue<0||p.fatigue>fatiguePenalty(p.trait,100)||p.fatigue%(p.trait==='grinder'?4:8)!==0)return false;
+      }
+      const effects=matchupEffects(board.a.trait,board.b.trait,board.context,board.a.baseRating-board.a.fatigue,board.b.baseRating-board.b.fatigue);
+      for(const [p,e] of [[board.a,effects.a],[board.b,effects.b]])if(p.traitBonus!==e.bonus||p.drawShift!==e.draw||p.rating!==p.baseRating-p.fatigue+e.bonus)return false;
+      const probabilities=boardProbabilities(board.a.rating,board.b.rating,board.white,effects.a.draw+effects.b.draw);
+      return ['win','draw','loss'].every(k=>board.probabilities?.[k]===probabilities[k]);
+    });
+  }));
 }

@@ -18,12 +18,14 @@ Edit the maintained HTML, CSS and ES modules in `dist/` directly. The app now ne
 
 - **Country-year rolls:** USA 2026 and USA 2022 are separate rollable options. Every offer shows its source list's five highest standard-rated players, ordered by the original rating. A snapshot is playable only if at least one of those players is rated strictly above 2500. Olympiad participation is never a selection filter.
 - **Draft:** Pick five distinct people within 100 credits. Two nation rerolls are available. Unaffordable or already-drafted players remain visible and disabled; lower-ranked players never replace them. Only snapshots with an eligible pick can be rolled. Quick Draft can complete an affordable squad.
+- **Player traits:** 28 famous players have fixed, sourced career-inspired signatures across their year editions. Everyone else rolls one of 25 abilities or no trait (25% chance) with each new draft offer. A picked trait stays for the game and survives reloads. The **Player traits** guide explains every effect and links the signature sources. Trait rolls are visible in both modes.
 - **Lineup:** Four active boards and one reserve. Choose an empty slot before picking; click two filled slots to swap. Active boards sort by source rating before the tournament and after substitutions.
 - **Modes:** Classic shows source ratings. Expert hides ratings on draft cards; prices hint at strength. The archive and source dialogs remain available as reference material.
 - **Olympiad:** Face the 31 strongest all-time national A/B lineups derived from the catalogue, alongside your fantasy squad in a 32-team field. Each opposing roster can mix eras; Russia and the Soviet Union remain separate. Open **All-time field** to inspect the teams and their source editions. Play eleven rounds with no rematches. A match win gives 2 match points; a draw gives 1. All 32 teams play every round.
-- **Fatigue:** Starting with the fifth consecutive appearance, each extra game reduces effective rating by 8, capped at 40. One round on the bench resets fatigue.
+- **Match preview:** Inspect the next opponent, both sides' traits, abstract match conditions and probabilities before choosing a reserve rotation. Conditions activate different abilities, allowing a lower-rated specialist to outperform a stronger player in favorable conditions. Published source ratings and board ordering stay unchanged.
+- **Fatigue:** Starting with the fifth consecutive appearance, each extra game reduces effective rating by 8, capped at 40. Grinders lose half as much. One round on the bench resets fatigue. AI teams follow the same fatigue rules and can rest starters when a reserve is stronger after fatigue.
 - **Results:** Review individual boards, previous rounds and full standings, or copy your result. Starting over asks before replacing progress.
-- **Resume:** Valid version-2 saves resume from browser local storage. Old prototype saves remain under their original version-1 key. Incompatible version-2 saves are copied to a backup key before a fresh draft starts.
+- **Resume:** Valid version-3 saves resume from browser local storage. Version-1 and version-2 games remain under their original keys; the new trait rules start with a fresh draft. Incompatible or malformed version-3 saves are copied to a backup key before replacement.
 
 ## Rating data and historical coverage
 
@@ -48,7 +50,15 @@ Top-five selection and gameplay both use the **published source rating unchanged
 
 Only country-year snapshots containing a player rated **strictly above 2500** are playable. A top rating of exactly 2500 does not qualify. Qualifying snapshots retain their complete top five, including players below the cutoff. The checked-in source observations retain excluded snapshots for reproducibility.
 
-Prices use `max(8, round((game Elo − 2320) / 20))`. No actual chess moves are played: each board samples an outcome from Elo expected score, a draw probability, color advantage and fatigue. Tournament randomness is seeded; the same squad, seed and reserve decisions produce repeatable results.
+Prices use `max(8, round((source Elo − 2320) / 20))`. No actual chess moves are played: each board samples an outcome from Elo expected score, a draw probability, color advantage, fatigue and trait effects. Tournament randomness is seeded; the same squad, trait assignments, seed and reserve decisions produce repeatable results.
+
+### Career-inspired traits
+
+The 28 curated signatures include Tal's sacrificial attacks, Petrosian's prophylaxis, Karpov's positional technique, Kasparov's opening innovation, Carlsen's grinding, Fischer's endgame technique, Caruana's calculation and Anand's intuition. Profiles match canonical person IDs, including sourced cross-era links; the modern Tigran L. Petrosian remains a separate person. Sources and rationales are in `dist/traits.js`, the in-game guide and [the trait data notes](data/traits.md).
+
+All numerical modifiers, drawbacks and conditions are **fictional balance rules**, not measured strengths or biographical weaknesses. Unprofiled players' random traits make no claims about their real styles. Match conditions (opening theory, sharp play, quiet maneuvering, technical endings and time pressure) are abstract, seeded inputs, not positions from simulated moves. Effects are resolved simultaneously for both sides; counters reduce positive bonuses, and Elo bonuses are bounded at 40 per side. Draw modifiers change variance while retaining the expected score implied by effective Elo and color. Match previews and reports distinguish source Elo, fatigue and trait bonuses.
+
+Roll each draft candidate's trait once when creating an offer. Save the offer and the selected player's assignment; rendering, opening dialogs and reloading never reroll them. A new offer can generate a different unprofiled trait. Opponents receive their own deterministic assignments at tournament start and retain them throughout. Traits live in browser game state and a versioned pure rules module; they do not change the shared SQL source catalogue.
 
 ### Reproduce or extend the catalogue
 
@@ -66,7 +76,7 @@ The importer downloads only missing archives to `.data/rating-archives/` and val
 The tournament keeps 32 teams: your squad plus the strongest 31 national A/B teams. Build the field from the playable catalogue as follows:
 
 1. Keep each person's highest recorded source-rating edition. A player who represented multiple federations belongs to the federation in that edition. Equal ratings prefer the latest year, then federation code and edition ID.
-2. Within each federation, rank those distinct people by rating. Its first five form the A team; its next five form the B team. Each roster has four starting boards and a fifth reserve; the simulation uses the four starters. No person repeats across opposing teams.
+2. Within each federation, rank those distinct people by rating. Its first five form the A team; its next five form the B team. Each roster has four starting boards and a fifth reserve. Opponents can rotate that reserve to rest tired starters during the simulation; roster allocation stays fixed. No person repeats across opposing teams.
 3. Rank all complete A/B teams by the sum of their four starting ratings, before display rounding, and select 31. B teams receive no reserved places. Russia (`RUS`) and the Soviet Union (`URS`) are independent federation pools. No C teams are generated.
 
 These are **best observed editions**, not complete career peaks: four-year sampling, source top-five cutoffs and selective early coverage can omit stronger editions or players. Historical estimates remain estimates and are used unchanged. The **All-time field** dialog lists every opponent and links each player's edition to its original country-year source. Your fantasy squad is independent of opposing roster allocation and may draft the same historical person as an opponent.
@@ -90,7 +100,7 @@ These are **best observed editions**, not complete career peaks: four-year sampl
 | `backend/db/schema.ts`, `drizzle/` | Drizzle schema and generated schema-only SQL migrations, snapshots and journal. |
 | `scripts/build-hosted.mjs`, `.openai/hosting.json` | Hosted build and D1 binding; preserves the existing Site identity and browser source. |
 
-The game moves through `draft` → `tournament` → `results`. UI actions update state through the engine and re-render. Saves use `11-0-0:save:v2`; selected dialogs and views are transient. There are no application accounts or remote game saves.
+The game moves through `draft` → `tournament` → `results`. UI actions update state through the engine and re-render. Saves use `11-0-0:save:v3` and carry catalogue and trait-rules versions; selected dialogs and views are transient. There are no application accounts or remote game saves.
 
 ## Checks
 
@@ -99,7 +109,7 @@ npm run check
 npm test
 ```
 
-Tests cover persistent SQL data, source ordering, known USA rosters, unchanged ratings, the strict 2500 cutoff, source identity links, all-time A/B field selection, cross-year player uniqueness, complete five-player offers, 1,000 drafts, 100 tournaments, scoring, pairings, reproducibility, fatigue and invalid saves.
+Tests cover persistent SQL data, source ordering, known USA rosters, unchanged ratings, the strict 2500 cutoff, source identity links, all-time A/B field selection, cross-year player uniqueness, complete five-player offers, 1,000 drafts, 100 tournaments, scoring, pairings, reproducibility, symmetric fatigue, trait assignment/counters, forecast consistency and invalid saves. Browser QA also checks saved offer/pick traits, guide/source dialogs, forecasts, seeded opponent traits and preservation of legacy or malformed saves.
 
 Optional browser QA, with the local app running:
 
