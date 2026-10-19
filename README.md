@@ -16,10 +16,10 @@ Edit the maintained HTML, CSS and ES modules in `dist/` directly. The app now ne
 
 ## Play
 
-- **Country-year rolls:** USA 2026 and USA 2022 are separate rollable options. Every offer shows its source list's five highest standard-rated players, ordered by the original rating. Olympiad participation is never a selection filter.
+- **Country-year rolls:** USA 2026 and USA 2022 are separate rollable options. Every offer shows its source list's five highest standard-rated players, ordered by the original rating. A snapshot is playable only if at least one of those players is rated strictly above 2500. Olympiad participation is never a selection filter.
 - **Draft:** Pick five distinct people within 100 credits. Two nation rerolls are available. Unaffordable or already-drafted players remain visible and disabled; lower-ranked players never replace them. Only snapshots with an eligible pick can be rolled. Quick Draft can complete an affordable squad.
-- **Lineup:** Four active boards and one reserve. Choose an empty slot before picking; click two filled slots to swap. Active boards sort by adjusted rating before the tournament and after substitutions.
-- **Modes:** Classic shows source and adjusted ratings. Expert hides ratings on draft cards; prices hint at strength. The archive and source dialogs remain available as reference material.
+- **Lineup:** Four active boards and one reserve. Choose an empty slot before picking; click two filled slots to swap. Active boards sort by source rating before the tournament and after substitutions.
+- **Modes:** Classic shows source ratings. Expert hides ratings on draft cards; prices hint at strength. The archive and source dialogs remain available as reference material.
 - **Olympiad:** Face 31 national teams using the strongest January 2026 four-board lineups in the database. Play eleven rounds with no rematches. A match win gives 2 match points; a draw gives 1. All 32 teams play every round.
 - **Fatigue:** Starting with the fifth consecutive appearance, each extra game reduces effective rating by 8, capped at 40. One round on the bench resets fatigue.
 - **Results:** Review individual boards, previous rounds and full standings, or copy your result. Starting over asks before replacing progress.
@@ -27,7 +27,7 @@ Edit the maintained HTML, CSS and ES modules in `dist/` directly. The app now ne
 
 ## Rating data and historical coverage
 
-The playable catalogue contains **1,569 country-year snapshots**, **7,845 player editions** and **196 federation codes**, covering **1974–2026 every four years**, plus **12 audited historical estimates from 1927–1970**. All 26 scheduled years now have at least one country. Four neutral `FID` entries are excluded from country rolls. The intended schedule is 2026, 2022, …, 1930, plus 1927, the year of the first Chess Olympiad.
+The playable catalogue contains **722 country-year snapshots**, **3,610 player editions** and **93 federation codes**, covering **1974–2026 every four years**, plus **12 audited historical estimates from 1927–1970**. All 26 scheduled years now have at least one country. Four neutral `FID` entries are excluded from country rolls. The intended schedule is 2026, 2022, …, 1930, plus 1927, the year of the first Chess Olympiad.
 
 Sources:
 
@@ -40,17 +40,13 @@ Sources:
 
 All titles and sexes are eligible. An explicit inactive flag excludes a player; inactivity is not inferred when historical lists lack reliable flags. Countries need at least five listed eligible players. Ties use source name, then source ID. Birth country, current citizenship and Olympiad team rosters are not substituted for the period federation. Historical name spellings and IDs may vary; unique matching source names and sourced identity crosswalks link older records to later FIDE identities where possible. Namesakes remain separate.
 
-Each snapshot records its source date, URL, archive SHA256, published player ratings and normalization adjustment. The in-game **Countries & years** archive exposes available years, top fives, source notes and coverage gaps.
+Each snapshot records its source date, URL, archive SHA256, published player ratings. The in-game **Countries & years** archive exposes available years, top fives, source notes and coverage gaps.
 
 ### Comparing eras
 
-Top-five selection always uses the **published source rating**. Gameplay uses:
+Top-five selection and gameplay both use the **published source rating unchanged**. There is no era adjustment. Pre-FIDE Chessmetrics estimates remain labelled as estimates; comparing these ratings across eras does not establish absolute playing strength. Source top-100 statistics remain recorded for provenance but do not affect gameplay.
 
-```text
-2026 game Elo = round(source rating + 2664.5 − snapshot world-top-100 median)
-```
-
-2664.5 is the median of the active world top 100 in January 2026. A shared additive adjustment preserves every within-era rating gap. January 2026 ratings are unchanged. This is an explicit game-balancing convention, not an official FIDE conversion or a scientific estimate of absolute strength across eras. The raw rating is retained and displayed alongside it.
+Only country-year snapshots containing a player rated **strictly above 2500** are playable. A top rating of exactly 2500 does not qualify. Qualifying snapshots retain their complete top five, including players below the cutoff. The checked-in source observations retain excluded snapshots for reproducibility.
 
 Prices use `max(8, round((game Elo − 2320) / 20))`. No actual chess moves are played: each board samples an outcome from Elo expected score, a draw probability, color advantage and fatigue. Tournament randomness is seeded; the same squad, seed and reserve decisions produce repeatable results.
 
@@ -74,7 +70,7 @@ The importer downloads only missing archives to `.data/rating-archives/` and val
 | `dist/index.html`, `dist/styles.css`, SVGs, `dist/fonts/` | Maintained browser shell, responsive presentation and local assets; retain font licenses. |
 | `dist/app.js` | Loads `/api/catalog`; renders the draft, archive, dialogs and tournament; handles browser saves. |
 | `dist/engine.js` | Configurable catalogue indexes, affordability, unique-player rules, full-five offers, seeded simulation, pairings, scoring, fatigue and save validation; independent of DOM and database APIs. |
-| `server/catalog.mjs` | Shared source normalization, bulk import statements and catalogue queries for SQLite/D1. |
+| `server/catalog.mjs` | Shared source selection, bulk import statements and catalogue queries for SQLite/D1. |
 | `server/sqlite.mjs`, `scripts/serve.mjs` | Local persistent database, migrations, seeding, read-only catalogue API and static assets. |
 | `data/`, `scripts/ratings/` | Checked-in observations, source checksums, federation metadata and reproducible importers. |
 | `backend/` | Isolated Sites Vinext/D1 adapter using the supplied Sites build integration. Existing browser modules stay framework independent. |
@@ -90,7 +86,7 @@ npm run check
 npm test
 ```
 
-Tests cover persistent SQL data, source ordering, known USA rosters, cross-year player uniqueness, complete five-player offers, 1,000 drafts, 100 tournaments, scoring, pairings, reproducibility, fatigue and invalid saves.
+Tests cover persistent SQL data, source ordering, known USA rosters, unchanged ratings, the strict 2500 cutoff, cross-year player uniqueness, complete five-player offers, 1,000 drafts, 100 tournaments, scoring, pairings, reproducibility, fatigue and invalid saves.
 
 Optional browser QA, with the local app running:
 

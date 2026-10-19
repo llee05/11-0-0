@@ -12,8 +12,8 @@ test('SQLite persists sourced top-five country snapshots and reopens without dup
   try{
     const filename=join(directory,'catalogue.sqlite');db=openDatabase(filename);
     const catalogue=await readCatalogue(db);
-    assert.equal(catalogue.nations.length,1569);
-    assert.equal(catalogue.players.length,7845);
+    assert.equal(catalogue.nations.length,722);
+    assert.equal(catalogue.players.length,3610);
     assert.ok(catalogue.nations.every(n=>n.players.length===5&&n.source.sha256.length===64));
     assert.ok(catalogue.nations.every(n=>n.code!=='FID'));
     const usa=year=>catalogue.players.filter(p=>p.nation===`USA-${year}`);
@@ -25,13 +25,15 @@ test('SQLite persists sourced top-five country snapshots and reopens without dup
       const players=nation.players.map(id=>catalogue.players.find(p=>p.id===id));
       assert.deepEqual(players.map(p=>p.rank),[1,2,3,4,5]);
       assert.ok(players.every((p,i)=>!i||players[i-1].rawRating>=p.rawRating));
-      assert.ok(players.every(p=>p.rating===Math.round(p.rawRating+nation.adjustment)));
+      assert.equal(nation.adjustment,0);
+      assert.ok(players.every(p=>p.rating===p.rawRating));
+      assert.ok(players.some(p=>p.rawRating>2500));
     }
     assert.ok(!catalogue.metadata.missingYears.includes(1927));
     assert.deepEqual(catalogue.metadata.missingYears,[]);
     assert.deepEqual(catalogue.metadata.years,catalogue.metadata.requestedYears);
     const early=catalogue.players.filter(p=>p.nation==='URS-1927');
-    assert.ok(early.every(p=>p.estimated&&p.rating===p.rawRating+153));
+    assert.ok(early.every(p=>p.estimated&&p.rating===p.rawRating));
     db.close();db=openDatabase(filename);
     assert.deepEqual(await readCatalogue(db),catalogue);
     assert.throws(()=>db.sqlite.prepare('DELETE FROM rating_sources').run());
@@ -52,4 +54,21 @@ test('a new catalogue release replaces stale database rows atomically',async()=>
     assert.ok(catalogue.nations.every(n=>n.year===2026));
     assert.ok(catalogue.players.every(p=>p.year===2026));
   }finally{db.close();}
+});
+
+test('the cutoff is strictly above 2500 and retains all five unadjusted source ratings',()=>{
+  const dataset=JSON.parse(readFileSync(new URL('../data/fide-snapshots.json',import.meta.url)));
+  const federations=JSON.parse(readFileSync(new URL('../data/federations.json',import.meta.url)));
+  const reference=structuredClone(dataset.snapshots.find(s=>s.year===2026));
+  const usa=reference.countries.find(c=>c.federation==='USA');
+  const ratings=[2500,2400,2300,2200,2100];
+  usa.players.forEach((p,i)=>p.rawRating=ratings[i]);
+  reference.countries=[usa];
+  assert.equal(buildSeed({...dataset,snapshots:[reference]},federations).snapshots.length,0);
+  usa.players[0].rawRating=2501;
+  const seed=buildSeed({...dataset,snapshots:[reference]},federations);
+  assert.equal(seed.snapshots.length,1);
+  assert.deepEqual(seed.editions.map(p=>p.rating),[2501,2400,2300,2200,2100]);
+  assert.ok(seed.editions.every(p=>p.rating===p.raw_rating));
+  assert.equal(seed.periods[0].adjustment,0);
 });

@@ -16,7 +16,7 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 | `dist/styles.css` | Responsive presentation, interaction states and reduced-motion behavior. |
 | `dist/*.svg`, `dist/fonts/` | Local artwork and fonts, including font licenses. |
 | `scripts/serve.mjs`, `server/sqlite.mjs` | Local static server and read-only `/api/catalog` backed by persistent SQLite, schema migrations and source imports. Bound to `127.0.0.1:4173`; configure `PORT` and `DATABASE_PATH`. |
-| `server/catalog.mjs`, `data/` | Shared SQLite/D1 catalogue queries and atomic imports, rating normalization, source observations, checksums and federation metadata. |
+| `server/catalog.mjs`, `data/` | Shared SQLite/D1 catalogue queries and atomic imports, source-rating selection, source observations, checksums and federation metadata. |
 | `backend/` | Isolated Sites Vinext/D1 API adapter and maintained Sites build integration; dependencies installed here. |
 | `backend/db/schema.ts`, `drizzle/` | Drizzle schema, generated schema-only SQL migrations, snapshots and journal. |
 | `scripts/ratings/`, `scripts/import-ratings.mjs` | Reproducible, checksum-verified source extraction. |
@@ -35,7 +35,7 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 - There are no application accounts or remote game saves. SQL stores the shared player catalogue.
 - Country snapshots use period federation and the top five published standard ratings, independent of Olympiad participation. Show all five; disable ineligible picks. Prevent drafting the same person from multiple years.
 - Official-list coverage is 1974–2026 at four-year intervals. Twelve labelled Chessmetrics country snapshots cover every scheduled early year from 1927–1970. Their country coverage is selective and each has a complete higher-rank affiliation audit. Additional early countries remain unavailable pending evidence; never publish speculative top fives. Preserve temporal inference qualifications and sourced person-identity crosswalks.
-- Preserve source date, URL, SHA256 and raw ratings. Gameplay ratings use the documented 2026 top-100-median adjustment; never describe adjusted ratings as official FIDE values.
+- Preserve source date, URL, SHA256 and raw ratings. Gameplay uses source ratings unchanged, with no era adjustment. Country-year rolls must contain at least one player rated strictly above 2500; preserve the complete top five of each qualifying snapshot.
 
 ## Implementation guidance
 
@@ -61,7 +61,7 @@ npm test       # SQL catalogue, rules and simulation tests
 npm run build  # Hosted Worker/assets; requires npm --prefix backend ci
 ```
 
-For catalogue changes, test SQLite persistence, foreign keys, complete source-ranked top fives, known modern rosters, normalization and atomic release replacement. For engine changes, run the syntax checks and engine suite; add or adjust tests for changed behavior. The suite covers 1,000 drafts, 100 complete tournaments, deterministic results, scoring, pairings, fatigue, invalid actions and saved-game validation.
+For catalogue changes, test SQLite persistence, foreign keys, complete source-ranked top fives, known modern rosters, unchanged ratings, the strict 2500 cutoff and atomic release replacement. For engine changes, run the syntax checks and engine suite; add or adjust tests for changed behavior. The suite covers 1,000 drafts, 100 complete tournaments, deterministic results, scoring, pairings, fatigue, invalid actions and saved-game validation.
 
 For UI changes, run syntax checks and verify the affected browser flows at desktop and mobile widths. The optional full browser QA setup and environment overrides are documented in `README.md`. For documentation-only changes, verify commands, file paths and statements against the source, and check the diff for whitespace errors with `git diff --check`.
 

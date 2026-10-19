@@ -4,7 +4,7 @@
 
 Reproduce the official-list extraction with `npm run data:import` (Python 3 required), then update the local persistent SQLite catalogue with `npm run db:seed`. Normal startup imports checked-in observations without fetching third-party sites. `RATINGS_CACHE` selects the source archive cache; `DATABASE_PATH` selects the local SQL file.
 
-Published ratings, source dates, URLs and checksums remain separate from game ratings. The normalization is `round(raw + 2664.5 - period world-top-100 median)`, where 2664.5 is January 2026's reference median. This is a game balancing convention, not an official FIDE conversion.
+Gameplay uses published ratings unchanged, without any era adjustment. The playable SQL catalogue excludes country-year snapshots unless at least one player has a source rating strictly above 2500. All five players in qualifying snapshots are retained. The checked-in observations keep the excluded snapshots and top-100 statistics for provenance.
 
 The January lists are used except May 1974, the earliest available 1974 archive. Explicitly inactive players are excluded. All sexes and titles are eligible, but the early archive omits much of the women's list and does not consistently supply activity flags. These limitations are preserved in each source's notes. No Olympiad roster or participation filter is used.
 
