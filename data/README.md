@@ -13,3 +13,11 @@ The January lists are used except May 1974, the earliest available 1974 archive.
 Some cutoff assignments infer continuity from surrounding national careers; those qualifications remain in the audit. Country labels describe historical sporting affiliation, not invented FIDE registrations. The 1930 source contains duplicate Takács identities; both are excluded from USA membership and neither replaces an American top-five player. Additional early countries remain unavailable pending the same audit. Never label these estimates as pre-1971 official FIDE ratings.
 
 Original sources: [FIDE downloads](https://ratings.fide.com/download_lists.phtml), [historical FIDE archive](https://www.olimpbase.org/Elo/summary.html), [FIDE federation rankings](https://ratings.fide.com/top_federations.phtml), [Chessmetrics](http://www.chessmetrics.com/cm/).
+
+## All-time national lineups and identities
+
+`server/all-time.mjs` derives national A/B opponents from the playable SQL editions. Each person contributes only their highest source rating, with the latest year breaking ties; their federation at that edition determines their one opposing nation. Russia and the Soviet Union remain separate. A teams use the first five ranked people, B teams the next five. Rank both divisions together by their four starters' total and select 31 opponents for a 32-team tournament including the user. The fifth player is a reserve and does not enter the strength calculation.
+
+The field uses the best editions in these observations; four-year sampling, country top-five limits and selective early coverage make it incomplete as an all-time record. No unsourced career peaks or inferred nationalities are added.
+
+`identity-links.json` records explicit source-name/ID crosswalks with archival player-history links. Its name guards keep unrelated reuses of IDs separate. Confirmed namesakes such as French GM Andrei Sokolov (627089) and Latvian IM Andrei Sokolov (11600306) remain distinct. Historical ID 4500024 under Lembit Oll is separated from modern Ottomar Ladva; Fernando Braga's old ID 800015 is linked to 811408 only under Braga's name, preserving Marco Codenotti's modern 800015. Raw source IDs remain in the observations. The crosswalk contents are part of the catalogue release fingerprint.

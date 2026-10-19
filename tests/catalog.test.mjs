@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { openDatabase } from '../server/sqlite.mjs';
 import { readCatalogue, buildSeed, seedStatements } from '../server/catalog.mjs';
+import {buildAllTimeTeams} from '../server/all-time.mjs';
 
 test('SQLite persists sourced top-five country snapshots and reopens without duplicating them',async()=>{
   const directory=mkdtempSync(join(tmpdir(),'olympiad-db-'));
@@ -34,10 +35,45 @@ test('SQLite persists sourced top-five country snapshots and reopens without dup
     assert.deepEqual(catalogue.metadata.years,catalogue.metadata.requestedYears);
     const early=catalogue.players.filter(p=>p.nation==='URS-1927');
     assert.ok(early.every(p=>p.estimated&&p.rating===p.rawRating));
+    assert.deepEqual(catalogue.opponents,buildAllTimeTeams(catalogue.nations,catalogue.players).slice(0,31));
     db.close();db=openDatabase(filename);
     assert.deepEqual(await readCatalogue(db),catalogue);
     assert.throws(()=>db.sqlite.prepare('DELETE FROM rating_sources').run());
   }finally{db?.close();rmSync(directory,{recursive:true,force:true});}
+});
+
+test('sourced identity links handle transfers while preserving namesakes and reused IDs',async()=>{
+  const db=openDatabase(':memory:');
+  try{
+    const {players,opponents}=await readCatalogue(db);
+    const editions=name=>players.filter(p=>p.name===name);
+    for(const name of ['Boris Gelfand','Zurab Azmaiparashvili','Lembit Oll','Ottomar Ladva','Fernando Braga'])assert.ok(editions(name).length,name);
+    assert.equal(new Set(editions('Boris Gelfand').map(p=>p.personId)).size,1);
+    assert.equal(new Set(editions('Zurab Azmaiparashvili').map(p=>p.personId)).size,1);
+    assert.ok(editions('Lembit Oll').every(p=>p.personId==='historical:oll lembit'));
+    assert.ok(editions('Ottomar Ladva').every(p=>p.personId==='fide:4500024'));
+    assert.ok(editions('Fernando Braga').every(p=>p.personId==='fide:811408'));
+    const sokolovs=editions('Andrei Sokolov');
+    assert.ok(sokolovs.some(p=>p.personId==='fide:627089'));
+    assert.ok(sokolovs.some(p=>p.personId==='fide:11600306'));
+    const fieldPeople=opponents.flatMap(t=>t.players.map(id=>players.find(p=>p.id===id).personId));
+    assert.equal(new Set(fieldPeople).size,155);
+  }finally{db.close();}
+});
+
+test('a name-qualified historic ID link never captures an unrelated modern player',()=>{
+  const dataset=JSON.parse(readFileSync(new URL('../data/fide-snapshots.json',import.meta.url)));
+  const federations=JSON.parse(readFileSync(new URL('../data/federations.json',import.meta.url)));
+  const reference=structuredClone(dataset.snapshots.find(s=>s.year===2026));
+  reference.countries=reference.countries.filter(c=>['ITA','ARG'].includes(c.federation));
+  for(const country of reference.countries){
+    // Test observations deliberately reuse ID 800015 under two source names.
+    country.players[0]={...country.players[0],name:country.federation==='ITA'?'Codenotti, Marco':'Braga, Fernando',fideId:'800015',rawRating:2700};
+    country.players.slice(1).forEach((p,i)=>p.rawRating=2500-i*100);
+  }
+  const seed=buildSeed({...dataset,snapshots:[reference]},federations);
+  assert.equal(seed.people.find(p=>p.name==='Marco Codenotti').id,'fide:800015');
+  assert.equal(seed.people.find(p=>p.name==='Fernando Braga').id,'fide:811408');
 });
 
 test('a new catalogue release replaces stale database rows atomically',async()=>{

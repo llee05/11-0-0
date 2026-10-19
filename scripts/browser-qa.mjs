@@ -22,6 +22,7 @@ try {
   assert.equal(await page.getByRole('dialog').isVisible(),false);
   await page.getByRole('button',{name:'COUNTRIES & YEARS'}).click();
   assert.equal(await page.locator('#archive-year option').count(),26);
+  assert.equal(await page.locator('[data-id="MGL-2026"][data-action="archive-country"]').count(),1);
   await page.locator('[data-id="USA-2026"][data-action="archive-country"]').click();
   assert.equal(await page.locator('.source-roster>div').count(),5);
   assert.ok((await page.locator('.source-roster').textContent()).includes('Hikaru Nakamura'));
@@ -44,6 +45,24 @@ try {
     assert.equal(await page.locator('.source-roster>div').count(),5);
     assert.ok((await page.locator('.source-roster').textContent()).includes(name));
   }
+  await page.getByRole('button',{name:'Explore other years'}).click();
+  await page.getByLabel('EXPLORE A SNAPSHOT YEAR').selectOption('1974');
+  assert.equal(await page.locator('[data-id="MGL-1974"][data-action="archive-country"]').count(),0);
+  await page.locator('[data-id="USA-1974"][data-action="archive-country"]').click();
+  assert.ok((await page.locator('.source-roster').textContent()).includes('2780'));
+  assert.ok(!(await page.locator('.source-roster').textContent()).includes('→'));
+  await page.keyboard.press('Escape');
+  await page.getByRole('button',{name:'ALL-TIME FIELD'}).click();
+  assert.equal(await page.locator('[data-action="field-team"]').count(),31);
+  for(const id of ['alltime:RUS:A','alltime:URS:A','alltime:RUS:B','alltime:URS:B']){
+    assert.equal(await page.locator(`[data-action="field-team"][data-id="${id}"]`).count(),1);
+  }
+  await page.locator('[data-action="field-team"][data-id="alltime:USA:A"]').click();
+  assert.equal(await page.locator('.field-roster>div').count(),5);
+  assert.ok((await page.locator('.field-roster').textContent()).includes('Fischer'));
+  assert.ok((await page.locator('.field-roster').textContent()).includes('Caruana'));
+  await page.locator('.field-roster [data-action="archive-country"]').first().click();
+  assert.ok((await page.locator('.source-roster').textContent()).includes('Caruana'));
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Rename team'}).click();
   await page.getByLabel('TEAM NAME',{exact:true}).fill('Queensland Knights');
@@ -72,6 +91,9 @@ try {
   }
   assert.equal(await page.locator('.squad-slot.filled').count(),5);
   await page.getByRole('button',{name:'Enter the Olympiad'}).click();
+  await page.getByRole('button',{name:'All-time field'}).click();
+  assert.equal(await page.locator('[data-action="field-team"]').count(),31);
+  await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Play round 1'}).click();
   await page.locator('.match-score').waitFor();
   assert.equal(await page.locator('.board-result').count(),4);
@@ -102,6 +124,12 @@ try {
   assert.equal(await page.locator('.squad-slot.filled').count(),0);
   // Expert and auto-draft paths, plus mobile layout and a full playthrough.
   await page.setViewportSize({width:390,height:844});
+  await page.getByRole('button',{name:'ALL-TIME FIELD'}).click();
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+  await page.locator('[data-action="field-team"][data-id="alltime:USA:A"]').click();
+  await page.screenshot({path:`${artifacts}/mobile-all-time-roster.png`,fullPage:true});
+  assert.ok(await page.evaluate(()=>document.querySelector('#dialog').scrollWidth<=document.querySelector('#dialog').clientWidth));
+  await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Expert Trust your instincts'}).click();
   await page.getByRole('button',{name:'Spin a nation'}).click();
   await page.locator('.candidate').first().waitFor();
@@ -122,6 +150,6 @@ try {
   await page.setViewportSize({width:320,height:740});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
   assert.deepEqual(errors,[]);
-  console.log('Browser QA passed: manual and quick drafts, expert mode, rerolls, team name, board targeting, persistence, reserve rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
+  console.log('Browser QA passed: unchanged source ratings, strict country cutoff, all-time A/B roster and source dialogs, manual and quick drafts, expert mode, rerolls, team name, board targeting, persistence, reserve rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
   console.log(`Screenshots: ${artifacts}`);
 } finally {await browser.close();}

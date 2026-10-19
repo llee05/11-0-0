@@ -1,12 +1,20 @@
 // The server supplies a validated, versioned country-year catalogue from SQL.
-export let NATIONS=[],PLAYERS=[],CATALOGUE={release:null};
-let playerIndex=new Map(),nationIndex=new Map(),cheapestPlayers=[];
+export let NATIONS=[],PLAYERS=[],OPPONENTS=[],CATALOGUE={release:null};
+let playerIndex=new Map(),nationIndex=new Map(),opponentIndex=new Map(),cheapestPlayers=[];
 export function configureCatalogue(catalogue){
   if(!catalogue?.metadata?.release||!Array.isArray(catalogue.nations)||!Array.isArray(catalogue.players)||catalogue.nations.length<1)throw new Error('Invalid rating catalogue.');
   const players=new Map(catalogue.players.map(p=>[p.id,p]));
   if(players.size!==catalogue.players.length||catalogue.nations.some(n=>n.players.length!==5||new Set(n.players).size!==5||n.players.some(id=>players.get(id)?.nation!==n.id)))throw new Error('Incomplete country-year roster.');
-  NATIONS=catalogue.nations;PLAYERS=catalogue.players;CATALOGUE=catalogue.metadata;
+  const opponents=catalogue.opponents;
+  const usedPeople=new Set();
+  if(!Array.isArray(opponents)||opponents.length!==31||new Set(opponents.map(o=>o.id)).size!==31||opponents.some(o=>!o.id.startsWith('alltime:')||o.players.length!==5||o.players.some(id=>{
+    const p=players.get(id);
+    if(!p||p.federation!==o.code||usedPeople.has(p.personId))return true;
+    usedPeople.add(p.personId);return false;
+  })||o.rating!==Math.round(o.players.slice(0,4).reduce((sum,id)=>sum+players.get(id).rating,0)/4)))throw new Error('Invalid all-time tournament field.');
+  NATIONS=catalogue.nations;PLAYERS=catalogue.players;OPPONENTS=opponents;CATALOGUE=catalogue.metadata;
   playerIndex=players;nationIndex=new Map(NATIONS.map(n=>[n.id,n]));
+  opponentIndex=new Map(OPPONENTS.map(o=>[o.id,o]));
   cheapestPlayers=[...PLAYERS].sort((a,b)=>a.cost-b.cost);
 }
 export const BUDGET = 100;
@@ -50,9 +58,7 @@ export function sortBoards(squad) { return [...squad.slice(0,4).filter(Boolean).
 export function startTournament(squad,teamName,seed=Date.now()>>>0) {
   if(squad.length!==5||squad.some(id=>!playerById(id))||new Set(squad.map(id=>playerById(id).personId)).size!==5||spent(squad)>BUDGET) throw new Error('Complete a valid five-player squad first.');
   const make=(id,name,flag,rating,players=[])=>({id,name,flag,rating,players,mp:0,bp:0,w:0,d:0,l:0,history:[]});
-  const opponents=NATIONS.filter(n=>n.year===2026).sort((a,b)=>average(b.players.slice(0,4))-average(a.players.slice(0,4))||a.id.localeCompare(b.id)).slice(0,31);
-  if(opponents.length!==31)throw new Error('The catalogue needs at least 31 national teams.');
-  return {seed,round:0,squad:sortBoards(squad),streaks:Object.fromEntries(squad.map(id=>[id,0])),teams:[make('YOU',teamName,'✦',average(squad.slice(0,4))),...opponents.map(o=>make(o.id,o.name,o.flag,average(o.players.slice(0,4)),[...o.players]))],rounds:[]};
+  return {seed,round:0,squad:sortBoards(squad),streaks:Object.fromEntries(squad.map(id=>[id,0])),teams:[make('YOU',teamName,'✦',average(squad.slice(0,4))),...OPPONENTS.map(o=>make(o.id,o.name,o.flag,o.rating,[...o.players]))],rounds:[]};
 }
 export function standings(t) {
   const sb=team=>team.history.reduce((s,h)=>s+(t.teams.find(o=>o.id===h.opponent)?.mp||0)*h.points,0);
@@ -105,5 +111,6 @@ export function validSave(s) {
   if(!s||s.version!==SAVE_VERSION||s.catalogueRelease!==CATALOGUE.release||!['draft','tournament','results'].includes(s.phase)||!['classic','expert'].includes(s.mode)||!Array.isArray(s.squad)||s.squad.length!==5||s.squad.some(id=>id!==null&&!playerById(id))||new Set(s.squad.filter(Boolean).map(id=>playerById(id).personId)).size!==s.squad.filter(Boolean).length||spent(s.squad)>100||!Number.isInteger(s.rerolls)||s.rerolls<0||s.rerolls>2||typeof s.teamName!=='string'||s.teamName.length>30) return false;
   if(s.phase==='draft') { const nation=nationById(s.offer?.nation);return !s.tournament&&(!s.offer||!!nation&&Array.isArray(s.offer.players)&&s.offer.players.length===5&&s.offer.players.every((id,i)=>id===nation.players[i])&&s.offer.players.some(id=>canAfford(playerById(id),s.squad))); }
   const t=s.tournament;
-  return !!t&&Number.isInteger(t.seed)&&Number.isInteger(t.round)&&t.round>=0&&t.round<=11&&(s.phase==='results'?t.round===11:t.round<11)&&Array.isArray(t.teams)&&t.teams.length===32&&t.teams.some(x=>x?.id==='YOU')&&t.teams.every(x=>x&&typeof x.id==='string'&&typeof x.name==='string'&&typeof x.flag==='string'&&Number.isFinite(x.rating)&&Number.isFinite(x.mp)&&Number.isFinite(x.bp)&&Number.isFinite(x.w)&&Number.isFinite(x.d)&&Number.isFinite(x.l)&&(x.id==='YOU'||Array.isArray(x.players)&&x.players.length===5&&x.players.every((id,i)=>id===nationById(x.id)?.players[i]))&&Array.isArray(x.history)&&x.history.length===t.round&&x.history.every(h=>h&&t.teams.some(o=>o?.id===h.opponent)&&Number.isFinite(h.points)))&&Array.isArray(t.squad)&&t.squad.length===5&&new Set(t.squad).size===5&&t.squad.every(id=>s.squad.includes(id)&&Number.isFinite(t.streaks?.[id]))&&Array.isArray(t.rounds)&&t.rounds.length===t.round&&t.rounds.every(matches=>Array.isArray(matches)&&matches.length===16&&matches.every(m=>m&&t.teams.some(x=>x?.id===m.a)&&t.teams.some(x=>x?.id===m.b)&&Number.isFinite(m.points)&&Array.isArray(m.boards)&&m.boards.length===4&&m.boards.every(b=>typeof b?.a?.name==='string'&&typeof b.b?.name==='string'&&Number.isFinite(b.a.rating)&&Number.isFinite(b.b.rating)&&[0,0.5,1].includes(b.score))));
+  if(!t||!Array.isArray(t.teams)||t.teams.length!==32||new Set(t.teams.map(x=>x?.id)).size!==32||OPPONENTS.some(o=>!t.teams.some(x=>x?.id===o.id)))return false;
+  return !!t&&Number.isInteger(t.seed)&&Number.isInteger(t.round)&&t.round>=0&&t.round<=11&&(s.phase==='results'?t.round===11:t.round<11)&&Array.isArray(t.teams)&&t.teams.length===32&&t.teams.some(x=>x?.id==='YOU')&&t.teams.every(x=>x&&typeof x.id==='string'&&typeof x.name==='string'&&typeof x.flag==='string'&&Number.isFinite(x.rating)&&Number.isFinite(x.mp)&&Number.isFinite(x.bp)&&Number.isFinite(x.w)&&Number.isFinite(x.d)&&Number.isFinite(x.l)&&(x.id==='YOU'||x.name===opponentIndex.get(x.id)?.name&&x.flag===opponentIndex.get(x.id)?.flag&&x.rating===opponentIndex.get(x.id)?.rating&&Array.isArray(x.players)&&x.players.length===5&&x.players.every((id,i)=>id===opponentIndex.get(x.id)?.players[i]))&&Array.isArray(x.history)&&x.history.length===t.round&&x.history.every(h=>h&&t.teams.some(o=>o?.id===h.opponent)&&Number.isFinite(h.points)))&&Array.isArray(t.squad)&&t.squad.length===5&&new Set(t.squad).size===5&&t.squad.every(id=>s.squad.includes(id)&&Number.isFinite(t.streaks?.[id]))&&Array.isArray(t.rounds)&&t.rounds.length===t.round&&t.rounds.every(matches=>Array.isArray(matches)&&matches.length===16&&matches.every(m=>m&&t.teams.some(x=>x?.id===m.a)&&t.teams.some(x=>x?.id===m.b)&&Number.isFinite(m.points)&&Array.isArray(m.boards)&&m.boards.length===4&&m.boards.every(b=>typeof b?.a?.name==='string'&&typeof b.b?.name==='string'&&Number.isFinite(b.a.rating)&&Number.isFinite(b.b.rating)&&[0,0.5,1].includes(b.score))));
 }

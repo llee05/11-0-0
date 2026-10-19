@@ -1,0 +1,213 @@
+{
+  "version": 1,
+  "notes": [
+    "Explicit source-name and source-ID matches only; never merge players through fuzzy names.",
+    "Andrei Sokolov 627089 (French GM, born 1963) and 11600306 (Latvian IM, born 1972) are separate people.",
+    "Original FIDE IDs remain in the checked-in observation files. Catalogue FIDE IDs identify the linked person."
+  ],
+  "namesakes": [
+    {
+      "name": "Andrei Sokolov",
+      "separateIds": [
+        "627089",
+        "11600306"
+      ],
+      "sources": [
+        "https://ratings.fide.com/profile/627089",
+        "https://ratings.fide.com/profile/11600306"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "names": [
+        "Boris Gelfand"
+      ],
+      "sourceIds": [
+        "13500015",
+        "2805677"
+      ],
+      "personId": "fide:2805677",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/G/Gelfand%2C%20Boris.html"
+      ]
+    },
+    {
+      "names": [
+        "Ivan Morovic Fernandez"
+      ],
+      "sourceIds": [
+        "3400018",
+        "14507226",
+        "3405400"
+      ],
+      "personId": "fide:3405400",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/M/Morovic%20Fernandez%2C%20Ivan.html"
+      ]
+    },
+    {
+      "names": [
+        "Vasilios Kotronias"
+      ],
+      "sourceIds": [
+        "4200012",
+        "5900212"
+      ],
+      "personId": "fide:5900212",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/K/Kotronias%2C%20Vasilios.html"
+      ]
+    },
+    {
+      "names": [
+        "Alexei Shirov"
+      ],
+      "sourceIds": [
+        "11600012",
+        "2209390"
+      ],
+      "personId": "fide:2209390",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/S/Shirov%2C%20Alexei.html"
+      ]
+    },
+    {
+      "names": [
+        "Vladislav Tkachiev"
+      ],
+      "sourceIds": [
+        "13700146",
+        "618438"
+      ],
+      "personId": "fide:618438",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/T/Tkachiev%2C%20Vladislav.html"
+      ]
+    },
+    {
+      "names": [
+        "Zurab Azmaiparashvili"
+      ],
+      "sourceIds": [
+        "13600010",
+        "14400669",
+        "13601326"
+      ],
+      "personId": "fide:13601326",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/A/Azmaiparashvili%2C%20Zurab.html"
+      ]
+    },
+    {
+      "names": [
+        "Vadim Milov"
+      ],
+      "sourceIds": [
+        "2802058",
+        "1304364"
+      ],
+      "personId": "fide:1304364",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/M/Milov%2C%20Vadim.html"
+      ],
+      "notes": "The continuous archival player history records an apparent day/month birth-date transposition; federation and ID transition remain explicit."
+    },
+    {
+      "names": [
+        "Alexander Huzman"
+      ],
+      "sourceIds": [
+        "14100185",
+        "2803828"
+      ],
+      "personId": "fide:2803828",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/H/Huzman%2C%20Alexander.html"
+      ]
+    },
+    {
+      "names": [
+        "Viktor Gavrikov"
+      ],
+      "sourceIds": [
+        "1302310",
+        "12801747"
+      ],
+      "personId": "fide:12801747",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/G/Gavrikov%2C%20Viktor.html"
+      ]
+    },
+    {
+      "names": [
+        "Alexander G. Beliavsky"
+      ],
+      "sourceIds": [
+        "14100029",
+        "14602377"
+      ],
+      "personId": "fide:14602377",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/B/Beliavsky%2C%20Alexander%20G..html"
+      ]
+    },
+    {
+      "names": [
+        "Sang Cao",
+        "Cao Sang"
+      ],
+      "sourceIds": [
+        "12400173",
+        "725056"
+      ],
+      "personId": "fide:725056",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/C/Cao%2C%20Sang.html"
+      ]
+    },
+    {
+      "names": [
+        "Zenon Franco Ocampos"
+      ],
+      "sourceIds": [
+        "3700011",
+        "2209381"
+      ],
+      "personId": "fide:2209381",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/F/Franco%20Ocampos%2C%20Zenon.html"
+      ]
+    },
+    {
+      "names": [
+        "Fernando Braga"
+      ],
+      "sourceIds": [
+        "800015",
+        "811408"
+      ],
+      "personId": "fide:811408",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/B/Braga%2C%20Fernando.html",
+        "https://ratings.fide.com/profile/811408",
+        "https://ratings.fide.com/profile/800015"
+      ],
+      "notes": "Name-qualified link only: modern ID 800015 belongs to Marco Codenotti, born 1997; Braga was born in 1958."
+    },
+    {
+      "names": [
+        "Lembit Oll"
+      ],
+      "sourceIds": [
+        "4500024"
+      ],
+      "personId": "historical:oll lembit",
+      "sources": [
+        "https://www.olimpbase.org/Elo/player/O/Oll%2C%20Lembit.html",
+        "https://ratings.fide.com/profile/4500024"
+      ],
+      "notes": "Historical ID 4500024 appears under Oll; the modern profile belongs to Ottomar Ladva. Keep their identities separate."
+    }
+  ]
+}

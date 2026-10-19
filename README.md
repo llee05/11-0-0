@@ -20,7 +20,7 @@ Edit the maintained HTML, CSS and ES modules in `dist/` directly. The app now ne
 - **Draft:** Pick five distinct people within 100 credits. Two nation rerolls are available. Unaffordable or already-drafted players remain visible and disabled; lower-ranked players never replace them. Only snapshots with an eligible pick can be rolled. Quick Draft can complete an affordable squad.
 - **Lineup:** Four active boards and one reserve. Choose an empty slot before picking; click two filled slots to swap. Active boards sort by source rating before the tournament and after substitutions.
 - **Modes:** Classic shows source ratings. Expert hides ratings on draft cards; prices hint at strength. The archive and source dialogs remain available as reference material.
-- **Olympiad:** Face 31 national teams using the strongest January 2026 four-board lineups in the database. Play eleven rounds with no rematches. A match win gives 2 match points; a draw gives 1. All 32 teams play every round.
+- **Olympiad:** Face the 31 strongest all-time national A/B lineups derived from the catalogue, alongside your fantasy squad in a 32-team field. Each opposing roster can mix eras; Russia and the Soviet Union remain separate. Open **All-time field** to inspect the teams and their source editions. Play eleven rounds with no rematches. A match win gives 2 match points; a draw gives 1. All 32 teams play every round.
 - **Fatigue:** Starting with the fifth consecutive appearance, each extra game reduces effective rating by 8, capped at 40. One round on the bench resets fatigue.
 - **Results:** Review individual boards, previous rounds and full standings, or copy your result. Starting over asks before replacing progress.
 - **Resume:** Valid version-2 saves resume from browser local storage. Old prototype saves remain under their original version-1 key. Incompatible version-2 saves are copied to a backup key before a fresh draft starts.
@@ -40,7 +40,7 @@ Sources:
 
 All titles and sexes are eligible. An explicit inactive flag excludes a player; inactivity is not inferred when historical lists lack reliable flags. Countries need at least five listed eligible players. Ties use source name, then source ID. Birth country, current citizenship and Olympiad team rosters are not substituted for the period federation. Historical name spellings and IDs may vary; unique matching source names and sourced identity crosswalks link older records to later FIDE identities where possible. Namesakes remain separate.
 
-Each snapshot records its source date, URL, archive SHA256, published player ratings. The in-game **Countries & years** archive exposes available years, top fives, source notes and coverage gaps.
+Each snapshot records its source date, URL, archive SHA256 and published player ratings. The in-game **Countries & years** archive exposes available years, top fives, source notes and coverage gaps.
 
 ### Comparing eras
 
@@ -61,6 +61,18 @@ npm run db:seed
 
 The importer downloads only missing archives to `.data/rating-archives/` and validates them against `data/rating-sources.json`. Set `RATINGS_CACHE` to reuse an archive directory. Updating a source requires deliberately updating its pinned checksum and reviewing the resulting top fives. Run `npm run data:historical` to regenerate the audited early snapshot from `historical-observations.json` and `historical-affiliations.json`. The importer rejects a country if any player ranked above its fifth member lacks a sourced affiliation or explicit exclusion. Other early country rosters remain unavailable until their affiliations and country rankings are verified. The 1927 Soviet country label does not imply FIDE membership; the Soviet Union joined FIDE in 1947.
 
+### All-time tournament field
+
+The tournament keeps 32 teams: your squad plus the strongest 31 national A/B teams. Build the field from the playable catalogue as follows:
+
+1. Keep each person's highest recorded source-rating edition. A player who represented multiple federations belongs to the federation in that edition. Equal ratings prefer the latest year, then federation code and edition ID.
+2. Within each federation, rank those distinct people by rating. Its first five form the A team; its next five form the B team. Each roster has four starting boards and a fifth reserve; the simulation uses the four starters. No person repeats across opposing teams.
+3. Rank all complete A/B teams by the sum of their four starting ratings, before display rounding, and select 31. B teams receive no reserved places. Russia (`RUS`) and the Soviet Union (`URS`) are independent federation pools. No C teams are generated.
+
+These are **best observed editions**, not complete career peaks: four-year sampling, source top-five cutoffs and selective early coverage can omit stronger editions or players. Historical estimates remain estimates and are used unchanged. The **All-time field** dialog lists every opponent and links each player's edition to its original country-year source. Your fantasy squad is independent of opposing roster allocation and may draft the same historical person as an opponent.
+
+`data/identity-links.json` documents verified ID changes and name-qualified exceptions. It prevents duplicate transferred players without merging namesakes, including the two Andrei Sokolovs, or reused historical IDs (Oll/Ladva and Braga/Codenotti). The original source IDs remain in the observation files. Identity-link changes advance the catalogue release automatically; bump the policy marker in `CATALOGUE_FORMAT` after changing selection rules. Existing incompatible browser saves are backed up before a new draft starts.
+
 `server/catalog.mjs` builds an atomic catalogue release from the source files. SQLite and D1 use the same six-table schema: sources, periods, country snapshots, people, player editions and metadata. Imports are separate from schema-only migrations. A changed release replaces stale rosters atomically; browser saves carry the release ID to reject incompatible data safely.
 
 ## Architecture
@@ -70,7 +82,7 @@ The importer downloads only missing archives to `.data/rating-archives/` and val
 | `dist/index.html`, `dist/styles.css`, SVGs, `dist/fonts/` | Maintained browser shell, responsive presentation and local assets; retain font licenses. |
 | `dist/app.js` | Loads `/api/catalog`; renders the draft, archive, dialogs and tournament; handles browser saves. |
 | `dist/engine.js` | Configurable catalogue indexes, affordability, unique-player rules, full-five offers, seeded simulation, pairings, scoring, fatigue and save validation; independent of DOM and database APIs. |
-| `server/catalog.mjs` | Shared source selection, bulk import statements and catalogue queries for SQLite/D1. |
+| `server/catalog.mjs`, `server/all-time.mjs` | Shared source selection, identity crosswalks, atomic import/query logic and ranked all-time A/B rosters for SQLite/D1. |
 | `server/sqlite.mjs`, `scripts/serve.mjs` | Local persistent database, migrations, seeding, read-only catalogue API and static assets. |
 | `data/`, `scripts/ratings/` | Checked-in observations, source checksums, federation metadata and reproducible importers. |
 | `backend/` | Isolated Sites Vinext/D1 adapter using the supplied Sites build integration. Existing browser modules stay framework independent. |
@@ -86,7 +98,7 @@ npm run check
 npm test
 ```
 
-Tests cover persistent SQL data, source ordering, known USA rosters, unchanged ratings, the strict 2500 cutoff, cross-year player uniqueness, complete five-player offers, 1,000 drafts, 100 tournaments, scoring, pairings, reproducibility, fatigue and invalid saves.
+Tests cover persistent SQL data, source ordering, known USA rosters, unchanged ratings, the strict 2500 cutoff, source identity links, all-time A/B field selection, cross-year player uniqueness, complete five-player offers, 1,000 drafts, 100 tournaments, scoring, pairings, reproducibility, fatigue and invalid saves.
 
 Optional browser QA, with the local app running:
 

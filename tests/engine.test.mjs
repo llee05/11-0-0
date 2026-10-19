@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PLAYERS,NATIONS,initialState,createOffer,selectPlayer,random,spent,canAfford,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue} from '../dist/engine.js';
+import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,spent,canAfford,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue} from '../dist/engine.js';
 
 import {openDatabase} from '../server/sqlite.mjs';
 import {readCatalogue} from '../server/catalog.mjs';
@@ -108,6 +108,30 @@ test('a tournament requires five unique affordable players',()=>{
   assert.throws(()=>startTournament(Array(5).fill(PLAYERS[0].id),'Bad'));
   const expensive=[...PLAYERS].sort((a,b)=>b.rating-a.rating).slice(0,5).map(p=>p.id);
   assert.throws(()=>startTournament(expensive,'Bad'));
+});
+
+test('the field contains 31 all-time opponents, separate Russia and USSR, mixed eras and qualifying B teams',()=>{
+  const s=draft(12),t=startTournament(s.squad,'All-time',12);
+  assert.equal(t.teams.length,32);
+  assert.deepEqual(t.teams.slice(1).map(team=>team.id),OPPONENTS.map(team=>team.id));
+  assert.ok(OPPONENTS.some(team=>team.code==='RUS'));
+  assert.ok(OPPONENTS.some(team=>team.code==='URS'));
+  assert.ok(OPPONENTS.some(team=>team.division==='B'));
+  const players=OPPONENTS.flatMap(team=>team.players.map(id=>PLAYERS.find(p=>p.id===id)));
+  assert.equal(new Set(players.map(p=>p.personId)).size,players.length);
+  const usa=OPPONENTS.find(team=>team.code==='USA'&&team.division==='A').players.map(id=>PLAYERS.find(p=>p.id===id));
+  assert.ok(usa.some(p=>p.name.includes('Fischer')));
+  assert.ok(usa.some(p=>p.name.includes('Caruana')));
+  assert.ok(new Set(usa.map(p=>p.year)).size>1);
+  const state={...s,phase:'tournament',tournament:t};
+  assert.ok(validSave(state));
+  for(const mutate of [
+    copy=>copy.teams[1].players.reverse(),
+    copy=>copy.teams[1].players[0]=copy.teams[2].players[0],
+    copy=>copy.teams[1].rating++,
+    copy=>copy.teams[1].id=copy.teams[2].id,
+    copy=>copy.teams[1].id='USA-2026',
+  ]){const forged=structuredClone(t);mutate(forged);assert.equal(validSave({...state,tournament:forged}),false);}
 });
 
 test('board probabilities are normalized, unbiased in expectation and reward strength',()=>{

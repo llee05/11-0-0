@@ -1,12 +1,20 @@
 // Shared SQLite/D1 catalogue logic. No Node or browser APIs in this module.
+import {buildAllTimeTeams} from './all-time.mjs';
+import identities from '../data/identity-links.json' with {type:'json'};
 export const NORMALIZATION = 'source-ratings-v1';
-export const CATALOGUE_FORMAT = 'country-year-v3-raw-over2500';
+export const CATALOGUE_FORMAT = `country-year-v4-raw-over2500-alltime-1-identities-${JSON.stringify(identities)}`;
 export const EXCLUDED_FEDERATIONS = new Set(['FID']);
 const historicNames = {CSR:['Czechoslovakia',null],GDR:['East Germany',null],SCG:['Serbia and Montenegro',null],URS:['Soviet Union',null],YUG:['Yugoslavia',null]};
 const aliases = {LIB:'LBN',ROM:'ROU',SIN:'SGP',TRI:'TTO'};
 const canonicalName = name => name.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 const displayName = name => name.includes(',') ? name.split(',').slice(1).join(',').trim()+' '+name.split(',')[0].trim() : name;
 const flagFor = iso => iso && /^[A-Z]{2}$/.test(iso) ? [...iso].map(c=>String.fromCodePoint(c.charCodeAt(0)+127397)).join('') : '⚑';
+const identityByName=new Map(identities.links.flatMap(link=>link.names.map(name=>[canonicalName(name),link])));
+function explicitIdentity(player){
+  const link=identityByName.get(canonicalName(displayName(player.name)));
+  if(!link||player.fideId&&!link.sourceIds.includes(String(player.fideId)))return null;
+  return {personId:link.personId,fideId:link.personId.startsWith('fide:')?link.personId.slice(5):null};
+}
 
 export function buildSeed(dataset, federations, historic = null) {
   const reference = dataset.snapshots.find(s=>s.year===2026);
@@ -17,8 +25,9 @@ export function buildSeed(dataset, federations, historic = null) {
   // Link older records without FIDE IDs to uniquely named later identities.
   const nameIds=new Map();
   for(const s of allPeriods.filter(s=>s.year>=1994))for(const c of s.countries)for(const p of c.players){
-    if(!p.fideId)continue;
-    const key=canonicalName(p.name),ids=nameIds.get(key)||new Set();ids.add(String(p.fideId));nameIds.set(key,ids);
+    const explicit=explicitIdentity(p),fideId=explicit?explicit.fideId:p.fideId;
+    if(!fideId)continue;
+    const key=canonicalName(p.name),ids=nameIds.get(key)||new Set();ids.add(String(fideId));nameIds.set(key,ids);
   }
   for(const period of allPeriods){
     const sourceId=`${period.source.type}-${period.year}`;
@@ -38,8 +47,9 @@ export function buildSeed(dataset, federations, historic = null) {
         if(!Number.isInteger(player.rawRating)||player.rawRating>previous||player.rank!==index+1)throw new Error(`Unordered ratings: ${snapshotId}`);
         previous=player.rawRating;
         const ids=nameIds.get(canonicalName(player.name));
-        const fideId=period.year>=1994?player.fideId:(ids?.size===1?[...ids][0]:null);
-        const personId=player.personId||(fideId?`fide:${fideId}`:`historical:${canonicalName(player.name)}`);
+        const explicit=explicitIdentity(player);
+        const fideId=explicit?explicit.fideId:period.year>=1994?player.fideId:(ids?.size===1?[...ids][0]:null);
+        const personId=explicit?.personId||player.personId||(fideId?`fide:${fideId}`:`historical:${canonicalName(player.name)}`);
         const linked=player.personId?persons.get(personId):null;
         persons.set(personId,{id:personId,fide_id:linked?.fide_id||(fideId?String(fideId):null),name:linked?.name||displayName(player.name)});
         editionRows.push({id:`${snapshotId}:${personId}`,snapshot_id:snapshotId,person_id:personId,rank:player.rank,raw_rating:player.rawRating,rating:player.rawRating,title:player.title||null});
@@ -84,5 +94,6 @@ export async function readCatalogue(db){
     return {id:e.id,personId:e.person_id,fideId:e.fide_id,name:e.name,nation:nation.id,federation:nation.code,flag:nation.flag,year:nation.year,rank:e.rank,rawRating:e.raw_rating,rating:e.rating,estimated:nation.source.kind==='historical-estimate',title:e.title,cost:Math.max(8,Math.round((e.rating-2320)/20))};
   });
   if(nations.some(n=>n.players.length!==5))throw new Error('The database contains an incomplete country snapshot.');
-  return {metadata:{...metadata,snapshotCount:nations.length,playerCount:players.length,countryCount:new Set(nations.map(n=>n.code)).size},nations,players};
+  const opponents=buildAllTimeTeams(nations,players).slice(0,31);
+  return {metadata:{...metadata,snapshotCount:nations.length,playerCount:players.length,countryCount:new Set(nations.map(n=>n.code)).size,opponentPolicy:'Best observed source edition per person; federation at that edition; latest year breaks ties. A team = first five, B = next five. Strongest 31 teams by four-board mean; Russia and Soviet Union separate.'},nations,players,opponents};
 }
