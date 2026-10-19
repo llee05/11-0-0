@@ -34,7 +34,7 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 - Game saves carry a catalogue release ID. Preserve version-1 saves, and back up incompatible version-2 saves before replacing them.
 - There are no application accounts or remote game saves. SQL stores the shared player catalogue.
 - Country snapshots use period federation and the top five published standard ratings, independent of Olympiad participation. Show all five; disable ineligible picks. Prevent drafting the same person from multiple years.
-- Official-list coverage is 1974–2026 at four-year intervals. Earlier observations back to 1927 are historical estimates awaiting verified affiliations; never publish speculative country top fives.
+- Official-list coverage is 1974–2026 at four-year intervals. Soviet Union 1927 is a labelled Chessmetrics estimate with a separate higher-rank affiliation audit. Other early observations remain unavailable pending affiliations; never publish speculative country top fives. Preserve temporal inference qualifications.
 - Preserve source date, URL, SHA256 and raw ratings. Gameplay ratings use the documented 2026 top-100-median adjustment; never describe adjusted ratings as official FIDE values.
 
 ## Implementation guidance

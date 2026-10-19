@@ -27,14 +27,14 @@ Edit the maintained HTML, CSS and ES modules in `dist/` directly. The app now ne
 
 ## Rating data and historical coverage
 
-The playable catalogue contains **1,557 country-year snapshots**, **7,785 player editions** and **196 federation codes**, covering **1974–2026 every four years**. Four neutral `FID` entries are excluded from country rolls. The intended schedule is 2026, 2022, …, 1930, plus 1927, the year of the first Chess Olympiad.
+The playable catalogue contains **1,558 country-year snapshots**, **7,790 player editions** and **196 federation codes**, covering **1974–2026 every four years**, plus an audited **Soviet Union 1927** estimate. Four neutral `FID` entries are excluded from country rolls. The intended schedule is 2026, 2022, …, 1930, plus 1927, the year of the first Chess Olympiad.
 
 Sources:
 
 - [Official FIDE rating downloads](https://ratings.fide.com/download_lists.phtml): January standard lists for 2002–2026.
 - [OlimpBase's transcribed historical FIDE lists](https://www.olimpbase.org/Elo/summary.html): 1974–1998. The earliest 1974 list available here is May; subsequent snapshots use January. Source notes record incomplete early coverage of women and missing activity flags.
 - [Official FIDE federation rankings](https://ratings.fide.com/top_federations.phtml): federation names and country codes, supplemented by historical names such as the Soviet Union, East Germany and Yugoslavia. A player's federation is taken from that period's list.
-- [Chessmetrics](http://www.chessmetrics.com/cm/): 1,200 historical rating estimates across January 1927, 1930, 1934, …, 1970 are retained in `data/historical-observations.json` for further verification. **These early years are not yet rollable**: the source supplies no country affiliations, so their country top fives cannot yet be established reliably. These are estimates, not official FIDE ratings, which began in 1971.
+- [Chessmetrics](http://www.chessmetrics.com/cm/): 1,200 historical rating estimates across January 1927, 1930, 1934, …, 1970 are retained in `data/historical-observations.json` for further verification. One early country roll is available: **Soviet Union 1927**, reconstructed from the estimate list and a separate affiliation audit of all 31 players through its fifth member. Its five players are Romanovsky, Verlinsky, Bohatirchuk, Rabinovich and Levenfish. The source supplies no affiliations; the audit uses contemporary records and federation histories, with surrounding-career inferences explicitly qualified. Other 1927 countries and **1930–1970 remain unavailable** until their country top fives are verified. These are estimates, not official FIDE ratings, which began in 1971.
 
 All titles and sexes are eligible. An explicit inactive flag excludes a player; inactivity is not inferred when historical lists lack reliable flags. Countries need at least five listed eligible players. Ties use source name, then source ID. Birth country, current citizenship and Olympiad team rosters are not substituted for the period federation. Historical name spellings and IDs may vary; unique matching source names link older records to later FIDE IDs where possible.
 
@@ -61,7 +61,7 @@ npm run data:import
 npm run db:seed
 ```
 
-The importer downloads only missing archives to `.data/rating-archives/` and validates them against `data/rating-sources.json`. Set `RATINGS_CACHE` to reuse an archive directory. Updating a source requires deliberately updating its pinned checksum and reviewing the resulting top fives. Early estimates remain research observations until period affiliations and complete country rankings are verified.
+The importer downloads only missing archives to `.data/rating-archives/` and validates them against `data/rating-sources.json`. Set `RATINGS_CACHE` to reuse an archive directory. Updating a source requires deliberately updating its pinned checksum and reviewing the resulting top fives. Run `npm run data:historical` to regenerate the audited early snapshot from `historical-observations.json` and `historical-affiliations.json`. The importer rejects a country if any player ranked above its fifth member lacks a sourced affiliation or explicit exclusion. Other early estimates remain research observations until their affiliations and country rankings are verified. The 1927 Soviet country label does not imply FIDE membership; the Soviet Union joined FIDE in 1947.
 
 `server/catalog.mjs` builds an atomic catalogue release from the source files. SQLite and D1 use the same six-table schema: sources, periods, country snapshots, people, player editions and metadata. Imports are separate from schema-only migrations. A changed release replaces stale rosters atomically; browser saves carry the release ID to reject incompatible data safely.
 

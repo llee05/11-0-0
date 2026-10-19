@@ -1,0 +1,539 @@
+{
+  "targets": [
+    {
+      "year": 1927,
+      "countryCode": "URS"
+    }
+  ],
+  "affiliations": [
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:13879",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://dspace.nplg.gov.ge/bitstream/1234/492686/1/Zaria_Vostoka_1926_N1356.pdf",
+          "note": "Contemporary December 1926 newspaper records his withdrawal from Soviet citizenship and exclusion by the Soviet chess section. Do not infer German citizenship at January cutoff."
+        },
+        {
+          "url": "https://ruchess.ru/persons_of_day/bogoljubov_pd/",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:73076",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/lasker/",
+          "note": "Federation biography describes Germany as his homeland, with emigration to Moscow only in the 1930s; contemporary handbook lists his Berlin address and calls him a foreign visiting master."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:2138",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/alexander_alekhine/",
+          "note": "Federation biography dates westward emigration to 1921; contemporary handbook places him in Paris. Historical chess affiliation excluded from Soviet team; no January French-citizenship assertion."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:19593",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://museum.fide.com/champions/jose-raul-capablanca",
+          "note": "FIDE museum identifies Capablanca as Cuban throughout his world-champion career, including the 1927 title match."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:93234",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://danbase.skak.dk/skakbladet/1985/1985-08.pdf",
+          "note": "Danish federation magazine documents his Danish chess career from 1922 to 1934; contemporary Soviet handbook describes emigration to Copenhagen."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:112008",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://pzszach.pl/2019/09/09/wciaz-zagadkowy-rubinstein/",
+          "note": "Polish federation documents his 1927 Polish championship; contemporary Soviet handbook records residence in Berlin rather than Soviet affiliation. Temporal inference: the cited national career covers the surrounding period; no January 1927 federation registration document has been located."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:138141",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/vidmar_pd/",
+          "note": "Federation biography places him at Ljubljana University in the 1920s and in the Yugoslav national team; contemporary handbook calls him a professor in Yugoslavia. Temporal inference: the cited national career covers the surrounding period; no January 1927 federation registration document has been located."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:81701",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://www.marshallchessclub.org/about",
+          "note": "His own club and US Chess heritage record document uninterrupted United States championship tenure from 1909 through 1936."
+        },
+        {
+          "url": "https://new.uschess.org/sites/default/files/media/documents/2006_chess_life_yearbook.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:35520",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/max_euwe/",
+          "note": "Federation biography describes the Dutch mathematician's Amsterdam employment and his 1926-1927 match against Alekhine."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:132383",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://www.yucatan.gob.mx/saladeprensa/ver_nota.php?id=10229",
+          "note": "Mexican state government identifies Torre as the first Mexican grandmaster; contemporary Soviet handbook describes his American and European competitive career. Temporal inference: the cited national career covers the surrounding period; no January 1927 federation registration document has been located."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:129800",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/tartakover/",
+          "note": "Federation biography explicitly dates his choice of Polish citizenship to after World War I; contemporary handbook records Paris residence. Russian birthplace does not imply Soviet affiliation."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:124892",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://www.chess.at/geschichte/gesheumo.htm",
+          "note": "Austrian federation's own historical booklet identifies Spielmann as Austrian and describes his Semmering 1926 win; later exile followed the 1938 annexation."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:47985",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://www.chess.at/geschichte/gesheumo.htm",
+          "note": "Austrian federation identifies the leading Austrian players in the 1920s; Hungarian federation explicitly calls Gruenfeld Austrian in its Budapest 1926 history."
+        },
+        {
+          "url": "https://chess.hu/5-nap-1926-budapesti-nemzetkozi-verseny/",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:108110",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/reti_pd/",
+          "note": "Federation biography documents Czechoslovak affiliation and its 1927 team; contemporary Soviet handbook explicitly calls Reti a representative of Czechoslovakia."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:71015",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://new.uschess.org/sites/default/files/media/documents/2014-delegates-call3.pdf",
+          "note": "US Chess's own Hall of Fame nomination identifies Kupchik as an American, dates immigration to 1903 and describes his New York championships and 1926 performance. Temporal inference: the cited national career covers the surrounding period; no January 1927 federation registration document has been located."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:110848",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/romanovsky/",
+          "note": "Federation biography identifies Soviet championship wins in 1923 and 1927 and Leningrad master-tournament wins in 1927 and 1933."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:81520",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://chess.hu/a-sakkolimpiai-versenysorozat-szuletese-bottlik-ivan-sakktortenesztol/",
+          "note": "Hungarian federation's historical record identifies Maroczy in Hungary's 1927 national team. This establishes affiliation only; ratings determine selection independently. Temporal inference: the cited national career covers the surrounding period; no January 1927 federation registration document has been located."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:137778",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/verlinsky_pd/",
+          "note": "Federation biography describes Moscow residence after the revolution and his 1924-1925 Soviet championship career; contemporary handbook lists the same Moscow and Soviet events."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:88274",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://www.federscacchi.com/fsi/images/FSI/Scacchitalia/scacchitalia2008_4.pdf",
+          "note": "Italy's official federation magazine says he was sent as Italian representative to Budapest in June 1926; Hungarian federation independently calls him Italian."
+        },
+        {
+          "url": "https://chess.hu/5-nap-1926-budapesti-nemzetkozi-verseny/",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:13919",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/bogatyrchuk_pd/",
+          "note": "Federation biography documents Kyiv medical work, Soviet championships from 1923, the shared Soviet title in 1927 and emigration to Canada only in 1948."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:129344",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://chess.hu/5-nap-1926-budapesti-nemzetkozi-verseny/",
+          "note": "Hungarian federation includes Takacs among its masters in the Budapest 1926 account and notes that he had lived abroad for some time; no Soviet affiliation is indicated. Temporal inference: the cited national career covers the surrounding period; no January 1927 federation registration document has been located."
+        },
+        {
+          "url": "https://chess.hu/a-magyar-sakkozas-rovid-tortenete/",
+          "note": "Hungarian federation history lists Takacs in the Hungarian 1930 team, corroborating the surrounding Hungarian career. January 1927 remains a temporal inference."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:9480",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://www.chess.at/geschichte/gesheumo.htm",
+          "note": "Austrian federation identifies Becker among the generation leading Austrian chess after 1918, and dates his later German representation and South American settlement to the 1938-1939 period. Temporal inference: the cited national career covers the surrounding period; no January 1927 federation registration document has been located."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:133025",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://old.chess.cz/www/souteze/mcr-muzi/historie.html",
+          "note": "Czech federation records his 1921 Czechoslovak championship placing and later Czechoslovak representation; contemporary handbook describes Prague legal education and career after Siberian wartime captivity. Temporal inference: the cited national career covers the surrounding period; no January 1927 federation registration document has been located."
+        },
+        {
+          "url": "https://www.chess.cz/cesti-sachiste-na-sachovych-olympiadach/",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:105469",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/rabinovich_pd/",
+          "note": "Federation biography documents Leningrad chess leadership in the 1920s, including the 1924 public game against Romanovsky and championship titles; contemporary handbook records Soviet championships through 1925."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:1431",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://www.schachbund.de/files/dsb/kongresse/protokolle/Kongress_1927_Magdeburg_Buch_v2.pdf",
+          "note": "Original German 1927 congress book lists Ahues of Berlin; German federation's chronology documents his Berlin club career before 1927 and national representation in 1930. Temporal inference: the cited national career covers the surrounding period; no January 1927 federation registration document has been located."
+        },
+        {
+          "url": "https://www.schachbund.de/chronik/1900-1939.html",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        },
+        {
+          "url": "https://www.schachbund.de/schacholympiaden.html",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:68163",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/kostic_pd/",
+          "note": "Federation biography identifies Yugoslav affiliation and the 1924-1926 world tour; contemporary 1926 Soviet magazine says he was returning home to Yugoslavia after his Soviet visit."
+        },
+        {
+          "url": "https://ruchess.ru/upload/iblock/e8e/e8eae9b04533be6df6d8721e79616415.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:60164",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://www.swisschess.ch/ssz-archiv.html?file=tl_files%2Fssb%2Fssz%2F2009%2F2009_ssz3.pdf",
+          "note": "Swiss federation records Johner's 1925 Swiss tournament championship; contemporary Soviet handbook explicitly identifies Paul Johner as Swiss champion in its 1925 foreign-results section. Temporal inference: the cited national career covers the surrounding period; no January 1927 federation registration document has been located."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:104625",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://mp2017.pzszach.pl/medalisci/",
+          "note": "Polish federation's national championship record identifies Przepiorka as 1926 Polish champion, preceding its Rubinstein/Tartakower 1927 results. Temporal inference: the cited national career covers the surrounding period; no January 1927 federation registration document has been located."
+        },
+        {
+          "url": "https://pzszach.pl/2019/09/09/wciaz-zagadkowy-rubinstein/",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:19367",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://www.federscacchi.it/doc/notcom/d20250120175440_tattica-scacchistica-grau-saggio.pdf",
+          "note": "Italian federation-hosted publication identifies Canal as Peruvian. Original archival research transcribes a 1920 Swiss court report identifying him as Peruvian and 1923/1926 interviews describing his American-European background. Temporal inference: the cited national career covers the surrounding period; no January 1927 federation registration document has been located."
+        },
+        {
+          "url": "https://www.kwabc.org/en/newsitem/esteban-canal-birth-pains.html",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:65985",
+      "countryCode": null,
+      "excludedCountryCodes": [
+        "URS"
+      ],
+      "sources": [
+        {
+          "url": "https://www.chess.at/geschichte/gesheumo.htm",
+          "note": "Austrian federation identifies Kmoch with its 1920s generation; Hungarian federation explicitly calls him Austrian in its original-research account of Kecskemet 1927."
+        },
+        {
+          "url": "https://chess.hu/6-nap-1927-kecskemeti-nemzetkozi-verseny/",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    },
+    {
+      "year": 1927,
+      "sourcePlayerId": "chessmetrics:75152",
+      "countryCode": "URS",
+      "sources": [
+        {
+          "url": "https://ruchess.ru/persons_of_day/levenfish/",
+          "note": "Federation biography explicitly describes Levenfish's Soviet competition successes throughout the 1920s; contemporary handbook records his Leningrad residence and Soviet championship results."
+        },
+        {
+          "url": "http://ruchess.ru/upload/iblock/91f/91fe0bf7b3061ae4e227bf7aa0a86575.pdf",
+          "note": "Corroborates the historical-affiliation decision described in the first source note; see the source-specific event/year in that note."
+        }
+      ]
+    }
+  ],
+  "methodology": {
+    "countryMeaning": "Historical chess affiliation, not a FIDE federation registration or birthplace.",
+    "completeness": "All world ranks through the fifth Soviet player are audited; other country top fives are not inferred.",
+    "temporalLimit": "Some January 1927 exclusions infer continuity from national careers around the cutoff; notes identify these cases. No exact-month registration record is claimed.",
+    "neutralCases": "Where only exclusion from the Soviet country pool is established, countryCode remains null."
+  }
+}

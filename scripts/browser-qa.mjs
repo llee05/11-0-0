@@ -13,6 +13,7 @@ try {
   const page=await context.newPage();
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto(url);await page.evaluate(()=>document.fonts.ready);
+  await page.getByRole('button',{name:'Quick draft'}).waitFor();
   assert.equal(await page.title(),'11–0–0 · The Fantasy Chess Olympiad');
   await page.screenshot({path:`${artifacts}/desktop-draft.png`,fullPage:true});
   await page.getByRole('button',{name:'How to play'}).click();
@@ -29,6 +30,12 @@ try {
   await page.locator('[data-id="USA-2022"][data-action="archive-country"]').click();
   assert.ok(!(await page.locator('.source-roster').textContent()).includes('Nakamura'));
   assert.ok((await page.locator('.source-roster').textContent()).includes('Fabiano Caruana'));
+  await page.getByRole('button',{name:'Explore other years'}).click();
+  await page.getByLabel('EXPLORE A SNAPSHOT YEAR').selectOption('1927');
+  await page.locator('[data-id="URS-1927"][data-action="archive-country"]').click();
+  assert.equal(await page.locator('.source-roster>div').count(),5);
+  assert.ok((await page.locator('.source-roster').textContent()).includes('Peter Romanovsky'));
+  assert.equal(await page.locator('.source-roster small').first().textContent(),'ESTIMATE');
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Rename team'}).click();
   await page.getByLabel('TEAM NAME',{exact:true}).fill('Queensland Knights');

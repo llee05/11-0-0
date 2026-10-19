@@ -12,8 +12,8 @@ test('SQLite persists sourced top-five country snapshots and reopens without dup
   try{
     const filename=join(directory,'catalogue.sqlite');db=openDatabase(filename);
     const catalogue=await readCatalogue(db);
-    assert.equal(catalogue.nations.length,1557);
-    assert.equal(catalogue.players.length,7785);
+    assert.equal(catalogue.nations.length,1558);
+    assert.equal(catalogue.players.length,7790);
     assert.ok(catalogue.nations.every(n=>n.players.length===5&&n.source.sha256.length===64));
     assert.ok(catalogue.nations.every(n=>n.code!=='FID'));
     const usa=year=>catalogue.players.filter(p=>p.nation===`USA-${year}`);
@@ -27,7 +27,10 @@ test('SQLite persists sourced top-five country snapshots and reopens without dup
       assert.ok(players.every((p,i)=>!i||players[i-1].rawRating>=p.rawRating));
       assert.ok(players.every(p=>p.rating===Math.round(p.rawRating+nation.adjustment)));
     }
-    assert.ok(catalogue.metadata.missingYears.includes(1927));
+    assert.ok(!catalogue.metadata.missingYears.includes(1927));
+    assert.ok(catalogue.metadata.missingYears.includes(1930));
+    const early=catalogue.players.filter(p=>p.nation==='URS-1927');
+    assert.ok(early.every(p=>p.estimated&&p.rating===p.rawRating+153));
     db.close();db=openDatabase(filename);
     assert.deepEqual(await readCatalogue(db),catalogue);
     assert.throws(()=>db.sqlite.prepare('DELETE FROM rating_sources').run());

@@ -12,6 +12,7 @@
     "build": "node scripts/build-hosted.mjs",
     "db:generate": "node backend/node_modules/drizzle-kit/bin.cjs generate --config drizzle.config.ts",
     "db:seed": "node scripts/seed-database.mjs",
-    "data:import": "node scripts/import-ratings.mjs"
+    "data:import": "node scripts/import-ratings.mjs",
+    "data:historical": "node scripts/import-historical.mjs"
   }
 }
