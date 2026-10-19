@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#172d29">
+  <meta name="description" content="Spin a nation. Draft your dream chess team. Chase a perfect 11–0–0 at the Fantasy Olympiad.">
+  <title>11–0–0 · The Fantasy Chess Olympiad</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to game</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./" aria-label="11–0–0 home"><img class="brand-mark" src="./knight.svg" alt="" width="32" height="39"><span>11<span class="brand-dash">–</span>0<span class="brand-dash">–</span>0<span class="brand-dot">.</span></span><span class="brand-description">THE FANTASY<br>CHESS OLYMPIAD</span></a>
+      <nav aria-label="Main navigation"><button class="nav-item active" data-action="game">The game <span class="nav-dot"></span></button><button class="nav-item" data-action="rules">How to play <span class="small-arrow">↗</span></button></nav>
+      <span class="prototype"><span></span> PROTOTYPE 01</span>
+    </div>
+  </header>
+  <main id="main"></main>
+  <footer><a class="footer-brand" href="./">11–0–0.</a><span>A little strategy. A little luck. A lot of chess.</span><button data-action="about">An independent fantasy game <span>↗</span></button></footer>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

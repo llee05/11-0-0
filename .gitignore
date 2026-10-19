@@ -1,0 +1,5 @@
+node_modules/
+.sites-local/
+test-results/
+*.tar.gz
+*.png
