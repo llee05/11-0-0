@@ -1,13 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PLAYERS,NATIONS,initialState,createOffer,selectPlayer,random,spent,canAfford,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave} from '../dist/engine.js';
+import {PLAYERS,NATIONS,initialState,createOffer,selectPlayer,random,spent,canAfford,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue} from '../dist/engine.js';
+
+import {openDatabase} from '../server/sqlite.mjs';
+import {readCatalogue} from '../server/catalog.mjs';
+const db=openDatabase(':memory:');
+configureCatalogue(await readCatalogue(db));
+db.close();
 
 function draft(seed=1) {
   let s=initialState();const rng=random(seed);
   for(let i=0;i<5;i++){
     s.offer=createOffer(s.squad,rng);
     assert.ok(s.offer?.players.length);
-    const id=s.offer.players[Math.floor(rng()*s.offer.players.length)];
+    const available=s.offer.players.filter(id=>canAfford(PLAYERS.find(p=>p.id===id),s.squad));
+    const id=available[Math.floor(rng()*available.length)];
     s=selectPlayer(s,id,i);
     assert.equal(s.squad.filter(Boolean).length,i+1);
   }
@@ -15,8 +22,8 @@ function draft(seed=1) {
 }
 
 test('the entire player pool has unique identities and valid nations',()=>{
-  assert.equal(PLAYERS.length,60);
-  assert.equal(new Set(PLAYERS.map(p=>p.id)).size,60);
+  assert.equal(PLAYERS.length,7785);
+  assert.equal(new Set(PLAYERS.map(p=>p.id)).size,PLAYERS.length);
   assert.ok(PLAYERS.every(p=>NATIONS.some(n=>n.id===p.nation)&&p.cost>0));
 });
 
@@ -39,6 +46,39 @@ test('draft rejects forged offers, occupied slots and repeated players',()=>{
   s.offer=createOffer(s.squad,random(4));
   assert.strictEqual(selectPlayer(s,s.offer.players[0],0),s);
   assert.strictEqual(selectPlayer(s,picked,1),s);
+});
+
+test('country-year rolls always reveal the complete top five in source order',()=>{
+  const s=draft(17);
+  s.squad[4]=null;
+  for(let seed=0;seed<100;seed++){
+    const offer=createOffer(s.squad,random(seed));
+    const nation=NATIONS.find(n=>n.id===offer.nation);
+    assert.deepEqual(offer.players,nation.players);
+    assert.equal(offer.players.length,5);
+    assert.ok(offer.players.some(id=>canAfford(PLAYERS.find(p=>p.id===id),s.squad)));
+    assert.deepEqual(offer.players.map(id=>PLAYERS.find(p=>p.id===id).rank),[1,2,3,4,5]);
+  }
+});
+
+test('the same person cannot be drafted from two different years',()=>{
+  const caruana=PLAYERS.filter(p=>p.fideId==='2020009');
+  assert.ok(caruana.some(p=>p.year===2022)&&caruana.some(p=>p.year===2026));
+  const picked=caruana.find(p=>p.year===2022),other=caruana.find(p=>p.year===2026);
+  const squad=[picked.id,null,null,null,null];
+  assert.equal(canAfford(other,squad),false);
+  const state={...initialState(),squad,offer:{nation:other.nation,players:NATIONS.find(n=>n.id===other.nation).players}};
+  assert.strictEqual(selectPlayer(state,other.id,1),state);
+});
+
+test('saved offers retain disabled top-five players and reject altered rankings or catalogue releases',()=>{
+  const s=initialState();
+  const usa=NATIONS.find(n=>n.id==='USA-2026');
+  s.offer={nation:usa.id,players:[...usa.players]};
+  assert.ok(validSave(s));
+  assert.equal(validSave({...s,catalogueRelease:'old-data'}),false);
+  assert.equal(validSave({...s,offer:{...s.offer,players:s.offer.players.slice(0,3)}}),false);
+  assert.equal(validSave({...s,offer:{...s.offer,players:[...s.offer.players].reverse()}}),false);
 });
 
 test('a tournament requires five unique affordable players',()=>{

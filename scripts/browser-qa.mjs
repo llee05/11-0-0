@@ -19,6 +19,17 @@ try {
   await page.getByRole('dialog').waitFor({state:'visible'});
   await page.keyboard.press('Escape');
   assert.equal(await page.getByRole('dialog').isVisible(),false);
+  await page.getByRole('button',{name:'COUNTRIES & YEARS'}).click();
+  await page.locator('[data-id="USA-2026"][data-action="archive-country"]').click();
+  assert.equal(await page.locator('.source-roster>div').count(),5);
+  assert.ok((await page.locator('.source-roster').textContent()).includes('Hikaru Nakamura'));
+  assert.ok((await page.locator('.source-roster').textContent()).includes('2810'));
+  await page.getByRole('button',{name:'Explore other years'}).click();
+  await page.getByLabel('EXPLORE A SNAPSHOT YEAR').selectOption('2022');
+  await page.locator('[data-id="USA-2022"][data-action="archive-country"]').click();
+  assert.ok(!(await page.locator('.source-roster').textContent()).includes('Nakamura'));
+  assert.ok((await page.locator('.source-roster').textContent()).includes('Fabiano Caruana'));
+  await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Rename team'}).click();
   await page.getByLabel('TEAM NAME',{exact:true}).fill('Queensland Knights');
   await page.getByRole('button',{name:'Save team name'}).click();
@@ -29,18 +40,20 @@ try {
   await page.locator('.candidate').first().waitFor();
   const firstOffer=await page.locator('.nation-code').textContent();
   assert.ok(firstOffer.length===3);
+  assert.equal(await page.locator('.candidate').count(),5);
   await page.getByRole('button',{name:'Reroll nation'}).click();
   await page.waitForFunction(()=>document.querySelector('.reroll-button')?.textContent.includes('1 left'));
   assert.ok((await page.getByRole('button',{name:'Reroll nation'}).textContent()).includes('1 left'));
   await page.screenshot({path:`${artifacts}/desktop-offer.png`,fullPage:true});
-  await page.locator('.candidate').first().click();
+  await page.locator('.candidate:not([disabled])').first().click();
   assert.ok(await page.locator('.reserve-slot').evaluate(el=>el.classList.contains('filled')));
   await page.reload();
+  await page.locator('.squad-slot.filled').first().waitFor();
   assert.equal(await page.locator('.squad-slot.filled').count(),1);
   assert.ok((await page.getByRole('button',{name:'Rename team'}).textContent()).includes('Queensland Knights'));
   for(let i=1;i<5;i++){
     await page.getByRole('button',{name:'Spin a nation'}).click();
-    await page.locator('.candidate').first().click();
+    await page.locator('.candidate:not([disabled])').first().click();
   }
   assert.equal(await page.locator('.squad-slot.filled').count(),5);
   await page.getByRole('button',{name:'Enter the Olympiad'}).click();

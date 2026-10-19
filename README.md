@@ -1,57 +1,85 @@
 # 11–0–0 · The Fantasy Chess Olympiad
 
-A playable browser prototype: spin a federation, draft five real grandmasters within 100 credits, choose four starting boards, and chase an eleven-win Olympiad.
+Draft a team from historical country-year rating lists, spend up to 100 credits on five players, and chase eleven tournament wins.
 
 ## Run locally
 
-Requires Node.js 22 or newer. There are no packages to install. Run from the repository root (`11-0-0/`):
+Requires **Node.js 22.13 or newer** (for built-in SQLite). The local app needs no npm dependencies. Run from this repository's root:
 
 ```bash
 npm start
 ```
 
-Open http://localhost:4173. Set `PORT` to use another port. The entire deployable app is in `dist/`; any static web server can serve it. Use an HTTP server rather than opening the HTML as a local file, because the JavaScript uses ES modules.
+Open http://localhost:4173. `npm run dev` starts the same server; set `PORT` for another port. The server creates `.data/catalogue.sqlite`, applies pending schema migrations and imports the checked-in rating catalogue. Override `DATABASE_PATH` to choose another database file. Game progress still saves in the browser; SQLite stores the shared historical player catalogue.
 
-`npm run dev` starts the same local server. There is no build step: edit the files in `dist/` directly, then refresh the browser. Despite its name, `dist/` contains the maintained application source, not generated output.
+Edit the maintained HTML, CSS and ES modules in `dist/` directly. The app now needs its `/api/catalog` endpoint, so a static-only web server is insufficient. Hosted builds add generated `dist/server/`, `dist/client/` and `dist/.openai/` directories without replacing the maintained source files.
 
-## The game
+## Play
 
-- **Draft:** 60 grandmasters across 12 federations. Each spin reveals up to three eligible players. You get two nation rerolls. Every offered player leaves enough credits to complete your squad; duplicates are excluded.
-- **Lineup:** Four active boards and one reserve. Choose a slot before picking; click two filled slots to swap. Active boards sort by rating before the tournament and after substitutions. A quick draft can complete your remaining slots.
-- **Modes:** Classic shows game ratings. Expert hides them during the draft; prices still provide a clue.
-- **Olympiad:** Your fantasy team faces 31 national teams over eleven rounds. Four board scores determine each match: win = 2 match points; draw = 1. Pairings prefer similar scores and never repeat opponents. All 32 teams play every round.
-- **Reserve:** Rotate between rounds to manage fatigue. Starting with a player's fifth consecutive appearance, each extra consecutive game reduces effective rating by 8, capped at 40. One round on the bench resets fatigue.
-- **Results:** Inspect each round's four boards or the complete standings. Copy a result to share. A new draft asks before replacing your progress.
-- **Persistence:** The current game automatically saves to this browser's local storage. No account or server is required. Saves are versioned and validated before loading.
+- **Country-year rolls:** USA 2026 and USA 2022 are separate rollable options. Every offer shows its source list's five highest standard-rated players, ordered by the original rating. Olympiad participation is never a selection filter.
+- **Draft:** Pick five distinct people within 100 credits. Two nation rerolls are available. Unaffordable or already-drafted players remain visible and disabled; lower-ranked players never replace them. Only snapshots with an eligible pick can be rolled. Quick Draft can complete an affordable squad.
+- **Lineup:** Four active boards and one reserve. Choose an empty slot before picking; click two filled slots to swap. Active boards sort by adjusted rating before the tournament and after substitutions.
+- **Modes:** Classic shows source and adjusted ratings. Expert hides ratings on draft cards; prices hint at strength. The archive and source dialogs remain available as reference material.
+- **Olympiad:** Face 31 national teams using the strongest January 2026 four-board lineups in the database. Play eleven rounds with no rematches. A match win gives 2 match points; a draw gives 1. All 32 teams play every round.
+- **Fatigue:** Starting with the fifth consecutive appearance, each extra game reduces effective rating by 8, capped at 40. One round on the bench resets fatigue.
+- **Results:** Review individual boards, previous rounds and full standings, or copy your result. Starting over asks before replacing progress.
+- **Resume:** Valid version-2 saves resume from browser local storage. Old prototype saves remain under their original version-1 key. Incompatible version-2 saves are copied to a backup key before a fresh draft starts.
 
-## Why this stack
+## Rating data and historical coverage
 
-**HTML, CSS and modern JavaScript ES modules** fit this prototype's actual needs: one browser-local game, no authentication, shared data, payments, or remote computation. There is no production dependency, bundler, framework runtime, or build pipeline to configure. Static hosting is inexpensive and the source can be edited directly.
+The playable catalogue contains **1,557 country-year snapshots**, **7,785 player editions** and **196 federation codes**, covering **1974–2026 every four years**. Four neutral `FID` entries are excluded from country rolls. The intended schedule is 2026, 2022, …, 1930, plus 1927, the year of the first Chess Olympiad.
 
-**A separate, pure JavaScript game engine** keeps budgets, probability, pairings, scoring and save validation independent of the DOM. It makes simulation changes easy to test and would allow a future React, Svelte, or mobile interface to reuse the rules. Tournament randomness is seeded, so a completed draft and seed produce repeatable results.
+Sources:
 
-**Local storage** gives immediate resume behavior without introducing a backend before the game loop is proven. The tradeoff is deliberate: saves remain on one browser and device. Multiplayer, public leaderboards, cross-device saves, and trusted competitive results would need a server and identity system.
+- [Official FIDE rating downloads](https://ratings.fide.com/download_lists.phtml): January standard lists for 2002–2026.
+- [OlimpBase's transcribed historical FIDE lists](https://www.olimpbase.org/Elo/summary.html): 1974–1998. The earliest 1974 list available here is May; subsequent snapshots use January. Source notes record incomplete early coverage of women and missing activity flags.
+- [Official FIDE federation rankings](https://ratings.fide.com/top_federations.phtml): federation names and country codes, supplemented by historical names such as the Soviet Union, East Germany and Yugoslavia. A player's federation is taken from that period's list.
+- [Chessmetrics](http://www.chessmetrics.com/cm/): 1,200 historical rating estimates across January 1927, 1930, 1934, …, 1970 are retained in `data/historical-observations.json` for further verification. **These early years are not yet rollable**: the source supplies no country affiliations, so their country top fives cannot yet be established reliably. These are estimates, not official FIDE ratings, which began in 1971.
 
-**Node's built-in test runner** verifies the rules without test dependencies. A tiny development-only Node HTTP server serves the static app. Optional browser QA uses Playwright Core and an existing Chromium installation.
+All titles and sexes are eligible. An explicit inactive flag excludes a player; inactivity is not inferred when historical lists lack reliable flags. Countries need at least five listed eligible players. Ties use source name, then source ID. Birth country, current citizenship and Olympiad team rosters are not substituted for the period federation. Historical name spellings and IDs may vary; unique matching source names link older records to later FIDE IDs where possible.
 
-**CSS, SVG, and locally bundled open-source fonts** keep the presentation sharp, responsive and independent of third-party asset services. The native HTML dialog handles modal focus and Escape. Reduced-motion preferences are respected, and the game can be operated by keyboard.
+Each snapshot records its source date, URL, archive SHA256, published player ratings and normalization adjustment. The in-game **Countries & years** archive exposes available years, top fives, source notes and coverage gaps.
+
+### Comparing eras
+
+Top-five selection always uses the **published source rating**. Gameplay uses:
+
+```text
+2026 game Elo = round(source rating + 2664.5 − snapshot world-top-100 median)
+```
+
+2664.5 is the median of the active world top 100 in January 2026. A shared additive adjustment preserves every within-era rating gap. January 2026 ratings are unchanged. This is an explicit game-balancing convention, not an official FIDE conversion or a scientific estimate of absolute strength across eras. The raw rating is retained and displayed alongside it.
+
+Prices use `max(8, round((game Elo − 2320) / 20))`. No actual chess moves are played: each board samples an outcome from Elo expected score, a draw probability, color advantage and fatigue. Tournament randomness is seeded; the same squad, seed and reserve decisions produce repeatable results.
+
+### Reproduce or extend the catalogue
+
+The checked-in source data makes normal startup independent of external websites. To reproduce the official-list extraction, install Python 3 and run:
+
+```bash
+npm run data:import
+npm run db:seed
+```
+
+The importer downloads only missing archives to `.data/rating-archives/` and validates them against `data/rating-sources.json`. Set `RATINGS_CACHE` to reuse an archive directory. Updating a source requires deliberately updating its pinned checksum and reviewing the resulting top fives. Early estimates remain research observations until period affiliations and complete country rankings are verified.
+
+`server/catalog.mjs` builds an atomic catalogue release from the source files. SQLite and D1 use the same six-table schema: sources, periods, country snapshots, people, player editions and metadata. Imports are separate from schema-only migrations. A changed release replaces stale rosters atomically; browser saves carry the release ID to reject incompatible data safely.
 
 ## Architecture
 
-The app runs entirely in the browser. `dist/index.html` supplies the page shell, loads `dist/styles.css`, and starts `dist/app.js` as an ES module. The UI imports game data and rules from `dist/engine.js`.
-
-| Layer | Responsibility |
+| Path | Responsibility |
 | --- | --- |
-| `dist/engine.js` | Curated player and nation data, draft affordability and offers, lineup ordering, seeded tournament simulation, pairings, scoring, standings, fatigue and save validation. No DOM or browser storage access. |
-| `dist/app.js` | In-memory game state, delegated `data-action` events, rendering, dialogs, focus handling, clipboard sharing and local-storage persistence. |
-| `dist/index.html`, `dist/styles.css`, SVGs and `dist/fonts/` | Page structure, responsive styling, artwork and locally hosted fonts. |
-| `scripts/serve.mjs` | Development HTTP server serving `dist/` on `127.0.0.1:4173` by default. It does not run game logic or provide an API. |
-| `tests/engine.test.mjs`, `scripts/browser-qa.mjs` | Node tests for the engine and an optional Chromium playthrough for the UI. |
-| `.openai/hosting.json` | Static hosting configuration pointing at `dist/`. |
+| `dist/index.html`, `dist/styles.css`, SVGs, `dist/fonts/` | Maintained browser shell, responsive presentation and local assets; retain font licenses. |
+| `dist/app.js` | Loads `/api/catalog`; renders the draft, archive, dialogs and tournament; handles browser saves. |
+| `dist/engine.js` | Configurable catalogue indexes, affordability, unique-player rules, full-five offers, seeded simulation, pairings, scoring, fatigue and save validation; independent of DOM and database APIs. |
+| `server/catalog.mjs` | Shared source normalization, bulk import statements and catalogue queries for SQLite/D1. |
+| `server/sqlite.mjs`, `scripts/serve.mjs` | Local persistent database, migrations, seeding, read-only catalogue API and static assets. |
+| `data/`, `scripts/ratings/` | Checked-in observations, source checksums, federation metadata and reproducible importers. |
+| `backend/` | Isolated Sites Vinext/D1 adapter using the supplied Sites build integration. Existing browser modules stay framework independent. |
+| `backend/db/schema.ts`, `drizzle/` | Drizzle schema and generated schema-only SQL migrations, snapshots and journal. |
+| `scripts/build-hosted.mjs`, `.openai/hosting.json` | Hosted build and D1 binding; preserves the existing Site identity and browser source. |
 
-Game state moves through `draft` → `tournament` → `results`. UI actions update state using engine functions, then render the current phase. Rendering also saves the game under the local-storage key `11-0-0:save:v1`. On startup, the UI loads saved JSON only if `validSave` accepts it; unavailable storage or invalid data falls back to a fresh draft. View-only state, such as the selected round or open dialog, stays in memory.
-
-Draft offers use unseeded randomness by default. Tournament rounds use the stored seed and round number, so the same starting squad, seed and reserve-rotation decisions produce repeatable results.
+The game moves through `draft` → `tournament` → `results`. UI actions update state through the engine and re-render. Saves use `11-0-0:save:v2`; selected dialogs and views are transient. There are no application accounts or remote game saves.
 
 ## Checks
 
@@ -60,57 +88,25 @@ npm run check
 npm test
 ```
 
-The rules suite exercises 1,000 drafts, 100 complete tournaments, score conservation, unique pairings, deterministic results, reserve fatigue, invalid actions, and saved-game validation.
+Tests cover persistent SQL data, source ordering, known USA rosters, cross-year player uniqueness, complete five-player offers, 1,000 drafts, 100 tournaments, scoring, pairings, reproducibility, fatigue and invalid saves.
 
-Optional browser QA (with the app running):
+Optional browser QA, with the local app running:
 
 ```bash
 npm install --no-save --package-lock=false playwright-core
 PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium node scripts/browser-qa.mjs
 ```
 
-Override `QA_URL`, `QA_ARTIFACTS`, or `PLAYWRIGHT_MODULE` if needed. The browser flow covers manual and quick drafts, Expert mode, rerolls, team naming, slot selection, reload persistence, reserve rotation, results, standings, clipboard sharing, reset confirmation and narrow/mobile/desktop widths. Screenshots go to `/tmp/eleven-zero-zero-qa/screenshots` by default.
+Override `QA_URL`, `QA_ARTIFACTS` or `PLAYWRIGHT_MODULE` if needed. Screenshots default to `/tmp/eleven-zero-zero-qa/screenshots`.
+
+## Hosted database and build
+
+The existing Sites deployment uses Cloudflare D1 through binding `DB`. Install the isolated hosting dependencies with `npm --prefix backend ci`, then run `npm run build`. The Sites workflow packages the generated Worker/assets and applies pending Drizzle schema migrations before deployment. On the first catalogue request for a release, an idempotent D1 data import publishes the complete roster and release marker in one transaction. No arbitrary SQL or import endpoint is exposed to browsers.
+
+After changing `backend/db/schema.ts`, run `npm run db:generate`, review the generated SQL and commit the migration and metadata together. Applied migrations are immutable. Local SQLite and hosted D1 are separate databases seeded from the same checked-in sources.
 
 ## Contributing
 
-Read [AGENTS.md](AGENTS.md) for the app architecture, implementation guidelines, validation steps and AI contribution workflow. Keep game rules in the engine and browser interactions in the UI, and update these docs when behavior or setup changes.
+Read [AGENTS.md](AGENTS.md). Split each task into focused, reviewable commits; keep implementation, relevant tests and accompanying docs together. Write messages as `action: message`, for example `add: import historical country-year rating snapshots`.
 
-Split each task into focused, reviewable commits. Keep a small cohesive task in one commit, and keep code, relevant tests and accompanying documentation together. Use commit messages in the form `action: message`, with a lowercase action and a concise imperative description, for example:
-
-```text
-add: support reserve rotation between rounds
-fix: preserve the selected draft slot after a reroll
-docs: describe app architecture and contribution workflow
-```
-
-## Model and data boundaries
-
-This is a fantasy simulation, not a chess engine or an official Olympiad predictor. No moves are played. Each board samples win/draw/loss probabilities from Elo expected score, a rating-gap-dependent draw rate, a small color advantage, and fatigue. Simulated national teams use generated board ratings around curated team strengths.
-
-Player names are real. All ratings and prices are **curated game data inspired by the 2024 player pool**, not current FIDE ratings. Fantasy rosters can combine nationalities; the pool is not intended to reproduce official team lineups.
-
-The eleven-round, four-board, one-reserve and 2/1/0 match-point structure follows the [2024 FIDE Olympiad format](https://handbook.fide.com/files/handbook/Olympiad2024.pdf). This prototype uses a smaller 32-team field and simplified score-group Swiss matching, with full Sonneborn–Berger (`sum of opponent match points × board points scored against that opponent`), then board points, then initial rating and ID as deterministic tiebreaks. It does not implement FIDE's complete controlled-Swiss/color-allocation or cut-tiebreak rules.
-
-The random nation → player choice → campaign loop is inspired by [38–0–0](https://38-0-0.com/). This is an independent prototype, unaffiliated with that game or FIDE.
-
-## Files
-
-```text
-AGENTS.md         Architecture and instructions for AI contributors
-README.md         Setup, gameplay and development guide
-package.json      Development and validation commands
-dist/
-  index.html      App shell and metadata
-  styles.css      Responsive presentation
-  app.js          UI, actions, dialogs and persistence
-  engine.js       Player pool, draft rules and tournament simulation
-  *.svg           Original vector chess artwork
-  fonts/          DM Sans and Manrope, including SIL OFL licenses
-scripts/
-  serve.mjs       Local static server
-  browser-qa.mjs  Optional full browser playthrough
-tests/
-  engine.test.mjs Game-rule and simulation checks
-.openai/
-  hosting.json    Static Sites hosting configuration
-```
+The [2024 Olympiad format](https://handbook.fide.com/files/handbook/Olympiad2024.pdf) inspires the eleven-round, four-board, one-reserve and 2/1/0 structure. This smaller 32-team simulation uses simplified Swiss matching and full Sonneborn–Berger, then board points, team rating and ID as tiebreaks. The draft loop is inspired by [38–0–0](https://38-0-0.com/). This is an independent game, unaffiliated with FIDE or 38–0–0.
