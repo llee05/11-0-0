@@ -4,14 +4,15 @@ A playable browser prototype: spin a federation, draft five real grandmasters wi
 
 ## Run locally
 
-Requires Node.js 22 or newer. There are no packages to install.
+Requires Node.js 22 or newer. There are no packages to install. Run from the repository root (`11-0-0/`):
 
 ```bash
-cd olympiad
 npm start
 ```
 
 Open http://localhost:4173. Set `PORT` to use another port. The entire deployable app is in `dist/`; any static web server can serve it. Use an HTTP server rather than opening the HTML as a local file, because the JavaScript uses ES modules.
+
+`npm run dev` starts the same local server. There is no build step: edit the files in `dist/` directly, then refresh the browser. Despite its name, `dist/` contains the maintained application source, not generated output.
 
 ## The game
 
@@ -35,6 +36,23 @@ Open http://localhost:4173. Set `PORT` to use another port. The entire deployabl
 
 **CSS, SVG, and locally bundled open-source fonts** keep the presentation sharp, responsive and independent of third-party asset services. The native HTML dialog handles modal focus and Escape. Reduced-motion preferences are respected, and the game can be operated by keyboard.
 
+## Architecture
+
+The app runs entirely in the browser. `dist/index.html` supplies the page shell, loads `dist/styles.css`, and starts `dist/app.js` as an ES module. The UI imports game data and rules from `dist/engine.js`.
+
+| Layer | Responsibility |
+| --- | --- |
+| `dist/engine.js` | Curated player and nation data, draft affordability and offers, lineup ordering, seeded tournament simulation, pairings, scoring, standings, fatigue and save validation. No DOM or browser storage access. |
+| `dist/app.js` | In-memory game state, delegated `data-action` events, rendering, dialogs, focus handling, clipboard sharing and local-storage persistence. |
+| `dist/index.html`, `dist/styles.css`, SVGs and `dist/fonts/` | Page structure, responsive styling, artwork and locally hosted fonts. |
+| `scripts/serve.mjs` | Development HTTP server serving `dist/` on `127.0.0.1:4173` by default. It does not run game logic or provide an API. |
+| `tests/engine.test.mjs`, `scripts/browser-qa.mjs` | Node tests for the engine and an optional Chromium playthrough for the UI. |
+| `.openai/hosting.json` | Static hosting configuration pointing at `dist/`. |
+
+Game state moves through `draft` → `tournament` → `results`. UI actions update state using engine functions, then render the current phase. Rendering also saves the game under the local-storage key `11-0-0:save:v1`. On startup, the UI loads saved JSON only if `validSave` accepts it; unavailable storage or invalid data falls back to a fresh draft. View-only state, such as the selected round or open dialog, stays in memory.
+
+Draft offers use unseeded randomness by default. Tournament rounds use the stored seed and round number, so the same starting squad, seed and reserve-rotation decisions produce repeatable results.
+
 ## Checks
 
 ```bash
@@ -53,6 +71,18 @@ PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium node scripts/browser-qa.mjs
 
 Override `QA_URL`, `QA_ARTIFACTS`, or `PLAYWRIGHT_MODULE` if needed. The browser flow covers manual and quick drafts, Expert mode, rerolls, team naming, slot selection, reload persistence, reserve rotation, results, standings, clipboard sharing, reset confirmation and narrow/mobile/desktop widths. Screenshots go to `/tmp/eleven-zero-zero-qa/screenshots` by default.
 
+## Contributing
+
+Read [AGENTS.md](AGENTS.md) for the app architecture, implementation guidelines, validation steps and AI contribution workflow. Keep game rules in the engine and browser interactions in the UI, and update these docs when behavior or setup changes.
+
+Split each task into focused, reviewable commits. Keep a small cohesive task in one commit, and keep code, relevant tests and accompanying documentation together. Use commit messages in the form `action: message`, with a lowercase action and a concise imperative description, for example:
+
+```text
+add: support reserve rotation between rounds
+fix: preserve the selected draft slot after a reroll
+docs: describe app architecture and contribution workflow
+```
+
 ## Model and data boundaries
 
 This is a fantasy simulation, not a chess engine or an official Olympiad predictor. No moves are played. Each board samples win/draw/loss probabilities from Elo expected score, a rating-gap-dependent draw rate, a small color advantage, and fatigue. Simulated national teams use generated board ratings around curated team strengths.
@@ -66,6 +96,9 @@ The random nation → player choice → campaign loop is inspired by [38–0–0
 ## Files
 
 ```text
+AGENTS.md         Architecture and instructions for AI contributors
+README.md         Setup, gameplay and development guide
+package.json      Development and validation commands
 dist/
   index.html      App shell and metadata
   styles.css      Responsive presentation
