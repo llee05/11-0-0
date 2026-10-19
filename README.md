@@ -82,6 +82,7 @@ These are **best observed editions**, not complete career peaks: four-year sampl
 | `dist/index.html`, `dist/styles.css`, SVGs, `dist/fonts/` | Maintained browser shell, responsive presentation and local assets; retain font licenses. |
 | `dist/app.js` | Loads `/api/catalog`; renders the draft, archive, dialogs and tournament; handles browser saves. |
 | `dist/engine.js` | Configurable catalogue indexes, affordability, unique-player rules, full-five offers, seeded simulation, pairings, scoring, fatigue and save validation; independent of DOM and database APIs. |
+| `dist/traits.js`, `data/traits.md` | Career-inspired signature profiles, source citations, random trait assignment and pure matchup effects; numerical effects are fictional game rules. |
 | `server/catalog.mjs`, `server/all-time.mjs` | Shared source selection, identity crosswalks, atomic import/query logic and ranked all-time A/B rosters for SQLite/D1. |
 | `server/sqlite.mjs`, `scripts/serve.mjs` | Local persistent database, migrations, seeding, read-only catalogue API and static assets. |
 | `data/`, `scripts/ratings/` | Checked-in observations, source checksums, federation metadata and reproducible importers. |
