@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,RULES_VERSION,planLineup,previewTeams,applyRecommendedLineup,completeDraft,quickSim,roundFixtures} from '../dist/engine.js';
+import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,RULES_VERSION,planLineup,previewTeams,applyRecommendedLineup,completeDraft,quickSim,roundFixtures,sortBoards,lineupExpectation,expectedMatchPoints,recommendedLineup} from '../dist/engine.js';
 
 import {rollTraits,careerProfile} from '../dist/traits.js';
 import {fixedProfile,rollProfiles,profileFatigue,nextFatigue,performanceSeed,performanceSwing,restedForm} from '../dist/player-profile.js';
@@ -254,7 +254,7 @@ test('colour allocation responds to individual history and keeps two whites per 
   assert.ok(Math.abs(botvinnik.white-botvinnik.black)<=3);
   const corrupt=structuredClone(t);corrupt.teams[0].seedingRating++;
   assert.equal(validSave({...s,phase:'results',tournament:corrupt}),false);
-  assert.equal(validSave({...s,phase:'results',tournament:t,rulesVersion:RULES_VERSION.replace('/olympiad-2','')}),false);
+  assert.equal(validSave({...s,phase:'results',tournament:t,rulesVersion:RULES_VERSION.split('/').slice(0,2).join('/')}),false);
 });
 
 test('reserve rotates into active boards and sitting out recovers fatigue only after the round',()=>{
@@ -463,4 +463,30 @@ test('form and fatigue histories survive rest, reload and reserve rotation',()=>
     copy=>copy.tournament.rounds[0][0].boards[0].a.fatigueLoad++,
     copy=>copy.tournament.rounds[0][0].boards[0].a.afterFatigue++,
   ]){const copy=structuredClone(before);mutate(copy);assert.equal(validSave(copy),false);}
+});
+
+
+test('match-aware planning selects a lower-rated specialist and maximises final-round chances without daily swings',()=>{
+  assert.equal(expectedMatchPoints(Array(4).fill({win:1,draw:0,loss:0})),2);
+  assert.equal(expectedMatchPoints(Array(4).fill({win:0,draw:1,loss:0})),1);
+  assert.equal(expectedMatchPoints(Array(4).fill({win:0,draw:0,loss:1})),0);
+  const unprofiled=PLAYERS.filter(p=>!careerProfile(p)&&p.rating>=2600&&p.rating<=2620);
+  const lower=unprofiled[0],higher=unprofiled.find(p=>p.personId!==lower.personId&&p.rating>lower.rating&&p.rating<=lower.rating+10);
+  assert.ok(higher);
+  const stars=[],seen=new Set();
+  for(const player of [...PLAYERS].sort((a,b)=>b.rating-a.rating))if(!seen.has(player.personId)){stars.push(player.id);seen.add(player.personId);if(stars.length===3)break;}
+  const ids=[...stars,higher.id,lower.id],traits=rollTraits(ids.map(playerById),random(4)),profiles=rollProfiles(ids.map(playerById),random(8));
+  traits[lower.id]='preparation';traits[higher.id]=null;
+  profiles[lower.id]={style:'universal',stamina:3,consistency:3,form:0};profiles[higher.id]={style:'universal',stamina:3,consistency:3,form:0};
+  const t=startTournament(ids,'Specialists',4,traits,profiles),team=t.teams[0],opponent=t.teams[1];
+  team.players.forEach(id=>{team.forms[id]=0;});opponent.players.forEach(id=>{opponent.forms[id]=0;});
+  const matchup={opponent,side:'a',boards:Array.from({length:4},(_,i)=>({white:i%2===0,context:{kind:'theory',ending:null,timePressure:false}}))};
+  const before=structuredClone(team),lineup=planLineup(team,1,matchup);
+  assert.equal(lineup[4],higher.id);
+  const score=lineupExpectation(team,lineup,matchup);
+  for(const reserve of ids){const candidate=sortBoards([...ids.filter(id=>id!==reserve),reserve]);assert.ok(score>=lineupExpectation(team,candidate,matchup)-1e-12);}
+  assert.deepEqual(team,before);
+  lineup[0]='modified';assert.notEqual(planLineup(team,1,matchup)[0],'modified');
+  const recommended=recommendedLineup(t),rotated=rotateReserve(t,0);
+  assert.deepEqual(recommendedLineup(rotated),recommended);
 });

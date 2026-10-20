@@ -1,4 +1,4 @@
-import {careerProfile} from './traits.js';
+import {careerProfile,matchupEffects} from './traits.js';
 
 export const PROFILE_RULESET = 'squad-profiles-3';
 export const STYLES = [
@@ -67,6 +67,22 @@ export function nextForm(form,score,expected) {
   return Math.max(-2,Math.min(2,form+(difference>0.15?1:difference< -0.15?-1:0)));
 }
 export const restedForm = form=>form-Math.sign(form);
+// Unknown future opponents/conditions are integrated, never sampled or peeked.
+// This broad reference mix is a game-planning estimate, not rating-list data.
+export function profileOutlook(trait,style,rating){
+  const opponents=[{trait:null,style:'universal',weight:0.25},...[
+    ['attacker','attacking'],['preparation','positional'],['endgame','positional'],['defender','defensive'],
+  ].map(([trait,style])=>({trait,style,weight:0.1875}))];
+  let bonus=0,draw=0;
+  for(const other of opponents)for(const kind of ['theory','sharp','quiet','technical'])for(const ending of kind==='technical'?['rook','minor']:[null])for(const timePressure of [false,true]){
+    const context={kind,ending,timePressure},weight=other.weight*0.25*(kind==='technical'?0.5:1)*(timePressure?0.2:0.8);
+    const a=styleEffect(style,other.style,context),b=styleEffect(other.style,style,context);
+    const effects=matchupEffects(trait,other.trait,context,rating+a.bonus,2720+b.bonus);
+    bonus+=weight*(a.bonus+effects.a.bonus-b.bonus-effects.b.bonus);
+    draw+=weight*(a.draw+b.draw+effects.a.draw+effects.b.draw);
+  }
+  return {bonus,draw};
+}
 // Independent per player/round; previewing or moving boards
 // never rerolls a player's daily performance.
 export function performanceSeed(seed,round,teamId,playerId) {

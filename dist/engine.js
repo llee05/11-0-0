@@ -1,7 +1,8 @@
 import {TRAIT_RULESET, rollTraits, validTraits, matchContext, validContext, matchupEffects} from './traits.js';
-import {PROFILE_RULESET,rollProfiles,validProfiles,validForm,profileFatigue,nextFatigue,validFatigue,styleEffect,performanceSwing,performanceSeed,nextForm,restedForm,FORM_ELO} from './player-profile.js';
+import {PROFILE_RULESET,rollProfiles,validProfiles,validForm,profileFatigue,nextFatigue,validFatigue,styleEffect,performanceSwing,performanceSeed,nextForm,restedForm,FORM_ELO,profileOutlook} from './player-profile.js';
 // The server supplies a validated, versioned country-year catalogue from SQL.
 export let NATIONS=[],PLAYERS=[],OPPONENTS=[],CATALOGUE={release:null};
+const planningCache=new Map(),outlookCache=new Map();
 let playerIndex=new Map(),nationIndex=new Map(),opponentIndex=new Map();
 export function configureCatalogue(catalogue){
   if(!catalogue?.metadata?.release||!Array.isArray(catalogue.nations)||!Array.isArray(catalogue.players)||catalogue.nations.length<1)throw new Error('Invalid rating catalogue.');
@@ -14,13 +15,14 @@ export function configureCatalogue(catalogue){
     if(!p||p.federation!==o.code||usedPeople.has(p.personId))return true;
     usedPeople.add(p.personId);return false;
   })||o.rating!==Math.round(o.players.slice(0,4).reduce((sum,id)=>sum+players.get(id).rating,0)/4)))throw new Error('Invalid all-time tournament field.');
+  planningCache.clear();outlookCache.clear();
   NATIONS=catalogue.nations;PLAYERS=catalogue.players;OPPONENTS=opponents;CATALOGUE=catalogue.metadata;
   playerIndex=players;nationIndex=new Map(NATIONS.map(n=>[n.id,n]));
   opponentIndex=new Map(OPPONENTS.map(o=>[o.id,o]));
 }
 export const ROUND_COUNT = 11;
 export const SAVE_VERSION = 4;
-export const SIMULATION_RULESET = 'olympiad-2';
+export const SIMULATION_RULESET = 'olympiad-3';
 export const RULES_VERSION = `${TRAIT_RULESET}/${PROFILE_RULESET}/${SIMULATION_RULESET}`;
 export const nationById = id => nationIndex.get(id);
 export const playerById = id => playerIndex.get(id);
@@ -145,50 +147,105 @@ function matchSetup(t,aid,bid){
   }));
 }
 export const roundFixtures=t=>pairTeams(t).map(([a,b])=>({a,b,boards:matchSetup(t,a,b)}));
-// Compare every possible reserve over up to three rounds. Future form remains
-// unchanged when playing and moves toward neutral when resting; outcomes and
-// daily performance are deliberately unknown to the planner.
-export function planLineup(team,roundsRemaining=3) {
-  const ids=team.players,players=ids.map(playerById),profiles=ids.map(id=>team.profiles[id]);
-  const choices=ids.map((reserve,index)=>{
-    const lineup=sortBoards([...ids.filter(id=>id!==reserve),reserve]);
-    return {reserve,index,lineup};
-  }).sort((a,b)=>players[a.index].rating-players[b.index].rating||a.reserve.localeCompare(b.reserve));
-  function search(loads,forms,depth) {
+// Board resolution is shared by visible forecasts and matchup planning.
+function resolveBoard(a,b,context,white){
+  const ap={...a},bp={...b},as=styleEffect(ap.style,bp.style,context),bs=styleEffect(bp.style,ap.style,context);
+  ap.styleBonus=as.bonus;bp.styleBonus=bs.bonus;ap.rating+=as.bonus;bp.rating+=bs.bonus;
+  const effects=matchupEffects(ap.trait,bp.trait,context,ap.rating,bp.rating);
+  for(const [p,e,style] of [[ap,effects.a,as],[bp,effects.b,bs]]){p.traitBonus=e.bonus;p.drawShift=e.draw+style.draw;p.rating+=e.bonus;}
+  return {a:ap,b:bp,context,white,probabilities:boardProbabilities(ap.rating,bp.rating,white,ap.drawShift+bp.drawShift)};
+}
+export function expectedMatchPoints(probabilities){
+  let distribution=[1];
+  for(const p of probabilities){
+    const next=Array(distribution.length+2).fill(0);
+    distribution.forEach((value,i)=>[p.loss,p.draw,p.win].forEach((chance,score)=>next[i+score]+=value*chance));
+    distribution=next;
+  }
+  return distribution[4]+2*distribution.slice(5).reduce((sum,value)=>sum+value,0);
+}
+const planningPlayer=(team,id,load=team.loads[id],form=team.forms[id])=>({
+  ...team.profiles[id],trait:team.traits[id],rating:playerById(id).rating-profileFatigue(team.traits[id],load)+form*FORM_ELO,
+});
+export function lineupExpectation(team,lineup,matchup){
+  return expectedMatchPoints(lineup.slice(0,4).map((id,board)=>{
+    const setup=matchup.boards[board],other=matchup.opponent.lineup[board];
+    return resolveBoard(planningPlayer(team,id),planningPlayer(matchup.opponent,other),setup.context,matchup.side==='a'?setup.white:!setup.white).probabilities;
+  }));
+}
+// Maximise expected match points over up to three rounds. The known fixture
+// uses exact trait/style matchups; later rounds use averaged reference effects.
+// Future outcomes, contexts, form changes and daily swings are never revealed.
+export function planLineup(team,roundsRemaining=3,matchup=null) {
+  const signature=t=>t.players.map(id=>[id,t.traits[id],t.profiles[id],t.forms[id],t.loads[id]]);
+  const cacheKey=JSON.stringify([roundsRemaining,signature(team),matchup?[signature(matchup.opponent),matchup.opponent.lineup,matchup.boards,matchup.side]:null]);
+  if(planningCache.has(cacheKey))return [...planningCache.get(cacheKey)];
+  const ids=team.players,profiles=ids.map(id=>team.profiles[id]),index=new Map(ids.map((id,i)=>[id,i]));
+  const horizon=Math.max(1,Math.min(3,roundsRemaining));
+  const outlooks=ids.map(id=>{
+    const key=JSON.stringify([team.traits[id],team.profiles[id].style,playerById(id).rating]);
+    if(!outlookCache.has(key))outlookCache.set(key,profileOutlook(team.traits[id],team.profiles[id].style,playerById(id).rating));
+    return outlookCache.get(key);
+  });
+  const choices=ids.map((reserve,i)=>({reserve,index:i,lineup:sortBoards([...ids.filter(id=>id!==reserve),reserve])}))
+    .sort((a,b)=>playerById(a.reserve).rating-playerById(b.reserve).rating||a.reserve.localeCompare(b.reserve));
+  const memo=new Map(),boardCache=new Map();
+  function neutralBoard(i,load,form){
+    const key=`${i}:${load}:${form}`;
+    if(!boardCache.has(key)){
+      const rating=planningPlayer(team,ids[i],load,form).rating+outlooks[i].bonus;
+      const a=boardProbabilities(rating,2720,true,outlooks[i].draw),b=boardProbabilities(rating,2720,false,outlooks[i].draw);
+      boardCache.set(key,Object.fromEntries(['win','draw','loss'].map(k=>[k,(a[k]+b[k])/2])));
+    }
+    return boardCache.get(key);
+  }
+  function search(loads,forms,depth){
+    const key=`${depth}:${loads.join(',')}:${forms.join(',')}`;
+    if(memo.has(key))return memo.get(key);
     let best=null;
     for(const choice of choices){
-      let current=0;
-      const futureLoads=[],futureForms=[];
-      for(let i=0;i<5;i++){
-        const playing=i!==choice.index;
-        if(playing)current+=players[i].rating-profileFatigue(team.traits[ids[i]],loads[i])+forms[i]*FORM_ELO;
-        futureLoads.push(nextFatigue(loads[i],playing,profiles[i]));
-        futureForms.push(playing?forms[i]:restedForm(forms[i]));
-      }
+      const current=matchup&&depth===horizon?lineupExpectation(team,choice.lineup,matchup):expectedMatchPoints(choice.lineup.slice(0,4).map(id=>{
+        const i=index.get(id);return neutralBoard(i,loads[i],forms[i]);
+      }));
+      const futureLoads=loads.map((load,i)=>nextFatigue(load,i!==choice.index,profiles[i]));
+      const futureForms=forms.map((form,i)=>i===choice.index?restedForm(form):form);
       const score=current+(depth>1?search(futureLoads,futureForms,depth-1).score:0);
-      if(!best||score>best.score||score===best.score&&current>best.current)best={score,current,lineup:choice.lineup};
+      if(!best||score>best.score+1e-12||Math.abs(score-best.score)<=1e-12&&current>best.current+1e-12)best={score,current,lineup:choice.lineup};
     }
-    return best;
+    memo.set(key,best);return best;
   }
-  return search(ids.map(id=>team.loads[id]),ids.map(id=>team.forms[id]),Math.max(1,Math.min(3,roundsRemaining))).lineup;
+  const lineup=search(ids.map(id=>team.loads[id]),ids.map(id=>team.forms[id]),horizon).lineup;
+  if(planningCache.size>=2048)planningCache.clear();
+  planningCache.set(cacheKey,[...lineup]);return lineup;
+}
+function projectedLineups(t){
+  return new Map(t.teams.map(team=>[team.id,planLineup(team,1)]));
 }
 function prepareRound(tournament) {
-  const t=structuredClone(tournament);
+  const t=structuredClone(tournament),projections=projectedLineups(t),fixtures=roundFixtures(t);
   for(const team of t.teams){
     if(team.id==='YOU'){team.lineup=[...t.squad];team.streaks={...t.streaks};team.loads={...t.loads};}
     else {
-      team.lineup=planLineup(team,ROUND_COUNT-t.round);
+      const fixture=fixtures.find(m=>m.a===team.id||m.b===team.id),side=fixture.a===team.id?'a':'b';
+      const other=t.teams.find(other=>other.id===(side==='a'?fixture.b:fixture.a));
+      team.lineup=planLineup(team,ROUND_COUNT-t.round,{opponent:{...other,lineup:projections.get(other.id)},boards:fixture.boards,side});
     }
     team.rating=average(team.lineup.slice(0,4));
   }
   return t;
 }
 export const previewTeams = tournament=>tournament.round>=ROUND_COUNT?structuredClone(tournament.teams):prepareRound(tournament).teams;
+export function recommendedLineup(tournament){
+  const own=tournament.teams.find(team=>team.id==='YOU');
+  if(tournament.round>=ROUND_COUNT)return [...tournament.squad];
+  const prepared=prepareRound(tournament),fixture=roundFixtures(tournament).find(m=>m.a==='YOU'||m.b==='YOU'),side=fixture.a==='YOU'?'a':'b';
+  const opponent=prepared.teams.find(team=>team.id===(side==='a'?fixture.b:fixture.a));
+  return planLineup(own,ROUND_COUNT-tournament.round,{opponent,boards:fixture.boards,side});
+}
 export function applyRecommendedLineup(tournament) {
   if(tournament.round>=ROUND_COUNT)return tournament;
-  const t=structuredClone(tournament),own=t.teams.find(team=>team.id==='YOU');
-  t.squad=planLineup(own,ROUND_COUNT-t.round);own.lineup=[...t.squad];own.rating=average(t.squad.slice(0,4));
-  return t;
+  const lineup=recommendedLineup(tournament),t=structuredClone(tournament),own=t.teams.find(team=>team.id==='YOU');
+  t.squad=lineup;own.lineup=[...lineup];own.rating=average(lineup.slice(0,4));return t;
 }
 function upcomingMatches(t) {
   return roundFixtures(t).map(({a:aid,b:bid,boards:setup})=>{
@@ -200,11 +257,7 @@ function upcomingMatches(t) {
         const fatigue=profileFatigue(trait,fatigueLoad),performance=performanceSwing(profile.consistency,random(performanceSeed(t.seed,t.round,team.id,p.id)));
         return {...p,...profile,form,streak,fatigueLoad,baseRating:p.rating,trait,fatigue,performance,formBonus:form*FORM_ELO,rating:p.rating-fatigue+form*FORM_ELO+performance};
       };
-      const ap=player(a),bp=player(b),styles={a:styleEffect(ap.style,bp.style,context),b:styleEffect(bp.style,ap.style,context)};
-      for(const [p,e] of [[ap,styles.a],[bp,styles.b]]){p.styleBonus=e.bonus;p.rating+=e.bonus;}
-      const effects=matchupEffects(ap.trait,bp.trait,context,ap.rating,bp.rating);
-      for(const [p,e,se] of [[ap,effects.a,styles.a],[bp,effects.b,styles.b]]){p.traitBonus=e.bonus;p.drawShift=e.draw+se.draw;p.rating+=e.bonus;}
-      return {a:ap,b:bp,context,white,probabilities:boardProbabilities(ap.rating,bp.rating,white,ap.drawShift+bp.drawShift)};
+      return resolveBoard(player(a),player(b),context,white);
     });
     return {a:aid,b:bid,boards};
   });
