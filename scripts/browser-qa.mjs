@@ -166,6 +166,15 @@ try {
   await page.locator('.match-score').waitFor();
   assert.equal(await page.locator('.board-result').count(),4);
   assert.equal(await page.locator('.board-result .trait-badge').count(),8);
+  assert.equal(await page.locator('.board-result .board-breakdown').count(),8);
+  const beforeBreakdown=await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
+  const breakdown=page.locator('.board-result .board-breakdown').first();
+  await breakdown.locator('summary').focus();await page.keyboard.press('Enter');
+  assert.equal(await breakdown.evaluate(el=>el.open),true);
+  assert.ok((await breakdown.textContent()).includes('PERFORMANCE'));
+  await page.keyboard.press('Enter');
+  assert.equal(await breakdown.evaluate(el=>el.open),false);
+  assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),beforeBreakdown);
   assert.equal(await page.locator('.board-condition').count(),4);
   assert.equal(await page.locator('.board-result .profile-levels').count(),8);
   await page.getByRole('button',{name:'Rotate reserve'}).click();

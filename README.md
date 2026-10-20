@@ -30,7 +30,7 @@ Edit the maintained HTML, CSS and ES modules in `dist/` directly. Local developm
 - **Stamina and fatigue:** Every player, including all opponents, carries fatigue load from 0–100. A played round adds `14 − stamina` load (9–13); sitting out removes 30. Each point above 24 costs one effective Elo, up to 76; grinders lose half as much. Recovery occurs after a played round, so swapping or previewing cannot erase fatigue. Squad, opponent-roster and rotation views show the load and penalty.
 - **Reserve planning:** Opponents compare all five possible reserves over up to three remaining rounds, maximising expected match points from source rating, traits, playing styles, draw chances, fatigue, form and recovery. Current fixtures use their known conditions and projected opposing lineup; unknown future rounds use a neutral 2720 reference mix. They cannot see future results or daily performance. Choose your own reserve manually or use **Use recommended lineup**. **Auto-rotate & finish** uses the same planner for your team before every remaining round. Active boards remain ordered by source rating.
 - **Form and consistency:** Form runs from Cold to Hot (−2 to +2), worth 12 Elo per level. Beating or falling short of the expected board score by more than 0.15 changes form one step; resting moves it toward neutral. Consistency 1–5 narrows the daily performance swing from ±32 to ±4 Elo. Each player's daily performance is fixed for the round; previews, board moves cannot reroll it.
-- **Results:** Review individual boards, previous rounds and full standings, or copy your result. Starting over asks before replacing progress.
+- **Results:** Review individual boards, previous rounds and full standings, or copy your result. Match reports show source/effective ratings, traits and readiness; open **Performance breakdown** for each player's full modifier and post-game details. Pre-match forecasts show the full calculations directly. Starting over asks before replacing progress.
 - **Resume:** Valid version-4 saves resume from browser local storage. Version-1, version-2 and version-3 games remain under their original keys; the new profile rules start with a fresh draft. Incompatible or malformed version-4 saves are copied to a backup key before replacement.
 
 ## Rating data and historical coverage
@@ -96,6 +96,8 @@ These are **best observed editions**, not complete career peaks: four-year sampl
 `server/catalog.mjs` builds an atomic catalogue release from the source files. SQLite and D1 use the same six-table schema: sources, periods, country snapshots, people, player editions and metadata. Imports are separate from schema-only migrations. A changed release replaces stale rosters atomically; browser saves carry the release ID to reject incompatible data safely.
 
 ## Architecture
+
+The interface combines a chess almanac with tournament broadcast graphics: warm paper, forest green, serif headings, country/year stamps and tabular scoreboards. Trait symbols supplement their written labels; form and fatigue retain text readouts alongside colour. Mobile lineups use two columns so all five players and their profiles remain readable. The serif stack uses system fonts; the existing local sans fonts and licenses remain bundled.
 
 | Path | Responsibility |
 | --- | --- |
