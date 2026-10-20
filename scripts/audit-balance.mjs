@@ -181,7 +181,7 @@ async function main(){
       calibration:Object.fromEntries(names.map(n=>[n,{boards:calibrationReport(boards[n]),userMatches:calibrationReport(matches[n]),userMatchesByCohort:Object.fromEntries(cohorts.map(c=>[c.name,calibrationReport(cohortMatches[c.name][n])]))}])),poorRunExamples:examples,
       ...(args['include-samples']?{samples:samples.map(({rounds,...row})=>row)}:{})};
     if(args.output){mkdirSync(dirname(resolve(args.output)),{recursive:true});writeFileSync(args.output,JSON.stringify(result,null,2)+'\n');console.error(`Wrote ${args.output}`);}
-    else console.log(JSON.stringify({...result,samples:undefined},null,2));
+    else console.log(JSON.stringify(result,null,2));
   }finally{await Promise.all(pool.map(worker=>worker.terminate()));rmSync(temp,{recursive:true,force:true});}
 }
 

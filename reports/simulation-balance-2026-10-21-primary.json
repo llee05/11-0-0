@@ -1,0 +1,1926 @@
+{
+  "metadata": {
+    "baselineRef": "68a4ff679b453a4dc79ed79bed84edb177aed9d0",
+    "catalogueRelease": "a0fdb700d517ce26894c43a6a85f6f8b4325621db06369b805f08387605b8db2",
+    "runsPerCohort": 1000,
+    "seedOffset": 1000,
+    "totalTournaments": 3000,
+    "workers": 10,
+    "seconds": 448.368,
+    "cohorts": [
+      {
+        "name": "2800",
+        "target": 2800,
+        "sourceRating": 2803,
+        "roster": [
+          {
+            "id": "BUL-2010:fide:2900084",
+            "personId": "fide:2900084",
+            "name": "Veselin Topalov",
+            "year": 2010,
+            "rating": 2805
+          },
+          {
+            "id": "AZE-2018:fide:13401319",
+            "personId": "fide:13401319",
+            "name": "Shakhriyar Mamedyarov",
+            "year": 2018,
+            "rating": 2804
+          },
+          {
+            "id": "FRA-2022:fide:12573981",
+            "personId": "fide:12573981",
+            "name": "Alireza Firouzja",
+            "year": 2022,
+            "rating": 2804
+          },
+          {
+            "id": "CHN-2022:fide:8603677",
+            "personId": "fide:8603677",
+            "name": "Liren Ding",
+            "year": 2022,
+            "rating": 2799
+          },
+          {
+            "id": "FRA-2018:fide:623539",
+            "personId": "fide:623539",
+            "name": "Maxime Vachier-Lagrave",
+            "year": 2018,
+            "rating": 2793
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "name": "baseline",
+        "sourceRef": "68a4ff679b453a4dc79ed79bed84edb177aed9d0",
+        "hashes": {
+          "engine.js": "3783bba6e5d0a4583a43ba260b543c6e78e6d34555bea52ad2674868fc8f5f3e",
+          "player-profile.js": "03a6938d7168173e727ba8cd08fe5811d57b5fd69416dd182f8b0855c6ab4208",
+          "traits.js": "040c6165b849bfed93b7d698371cbf1889b82fd7b761f49367632c9dedb23853"
+        },
+        "rules": "career-traits-3/squad-profiles-3/olympiad-4/competitive-draft-1",
+        "eloScale": 400,
+        "formElo": 12,
+        "dailySwings": [
+          32,
+          24,
+          16,
+          8,
+          4
+        ],
+        "maxFatiguePenalty": 76
+      },
+      {
+        "name": "profiles",
+        "sourceRef": "working tree",
+        "hashes": {
+          "engine.js": "1ab02a6e6a4a9c82a64d7ce8e99ae67a0b714c3233bdd350045a4cad8b63150c",
+          "player-profile.js": "ac8a36d1b439b9c5e5ce6c84d33e17ae6b9bab210f10d4e71929d6b292bf6a86",
+          "traits.js": "040c6165b849bfed93b7d698371cbf1889b82fd7b761f49367632c9dedb23853"
+        },
+        "rules": "career-traits-3/squad-profiles-4/olympiad-5/competitive-draft-1",
+        "eloScale": 400,
+        "formElo": 6,
+        "dailySwings": [
+          16,
+          12,
+          8,
+          4,
+          2
+        ],
+        "maxFatiguePenalty": 38
+      },
+      {
+        "name": "steeper",
+        "sourceRef": "working tree",
+        "hashes": {
+          "engine.js": "bb32e862313838f05b751f615d2dc148543303053c6c01b794702c0c8de4cede",
+          "player-profile.js": "ac8a36d1b439b9c5e5ce6c84d33e17ae6b9bab210f10d4e71929d6b292bf6a86",
+          "traits.js": "040c6165b849bfed93b7d698371cbf1889b82fd7b761f49367632c9dedb23853"
+        },
+        "rules": "career-traits-3/squad-profiles-4/olympiad-5/competitive-draft-1",
+        "eloScale": 320,
+        "formElo": 6,
+        "dailySwings": [
+          16,
+          12,
+          8,
+          4,
+          2
+        ],
+        "maxFatiguePenalty": 38
+      }
+    ],
+    "method": "Fixed best-observed rosters near target ratings, identical seeds across variants, automatic rotation for every team. Forecast sums describe each encountered adaptive Swiss path; they are not unconditional tournament expectations. Poor means at most 10 match points (2-6-3 scores 10). Numeric profiles and alternative Elo scales are fictional game balance, not empirical chess calibration."
+  },
+  "summaries": {
+    "2800": {
+      "baseline": {
+        "runs": 1000,
+        "meanWins": 6.281,
+        "meanDraws": 2.35,
+        "meanLosses": 2.369,
+        "matchPoints": {
+          "mean": 14.912,
+          "interval95": [
+            14.769478,
+            15.054522
+          ],
+          "p05": 11,
+          "median": 15,
+          "p95": 19
+        },
+        "meanRank": 4.987,
+        "titles": {
+          "count": 222,
+          "rate": 0.222,
+          "interval95": [
+            0.197333,
+            0.248795
+          ]
+        },
+        "perfect": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.003827
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.003827
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 16,
+          "rate": 0.016,
+          "interval95": [
+            0.009872,
+            0.025832
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.003827
+          ]
+        },
+        "meanForecastMatchPoints": 14.887857,
+        "meanOutcomeMinusForecast": 0.024143,
+        "poorRunForecast": {
+          "runs": 16,
+          "meanActualMP": 9.8125,
+          "meanForecastMP": 15.45917,
+          "meanOutcomeMinusForecast": -5.64667
+        },
+        "meanSourceGap": 67.115682,
+        "meanEffectiveGap": 67.868591,
+        "meanModifierGaps": {
+          "fatigue": 0.297534,
+          "form": -1.726909,
+          "performance": -0.031136,
+          "trait": 2.307966,
+          "style": -0.094545
+        },
+        "sourceFavouriteOverturnRate": 0.151836,
+        "records": {
+          "10-0-1": 7,
+          "10-1-0": 5,
+          "3-3-5": 1,
+          "3-4-4": 3,
+          "3-5-3": 7,
+          "3-6-2": 7,
+          "3-7-1": 1,
+          "4-1-6": 2,
+          "4-2-5": 9,
+          "4-3-4": 24,
+          "4-4-3": 22,
+          "4-5-2": 15,
+          "4-6-1": 7,
+          "4-7-0": 2,
+          "5-0-6": 1,
+          "5-1-5": 20,
+          "5-2-4": 45,
+          "5-3-3": 67,
+          "5-4-2": 46,
+          "5-5-1": 15,
+          "5-6-0": 6,
+          "6-0-5": 16,
+          "6-1-4": 41,
+          "6-2-3": 90,
+          "6-3-2": 68,
+          "6-4-1": 40,
+          "6-5-0": 9,
+          "7-0-4": 20,
+          "7-1-3": 76,
+          "7-2-2": 88,
+          "7-3-1": 58,
+          "7-4-0": 12,
+          "8-0-3": 12,
+          "8-1-2": 41,
+          "8-2-1": 46,
+          "8-3-0": 13,
+          "9-0-2": 13,
+          "9-1-1": 37,
+          "9-2-0": 8
+        }
+      },
+      "profiles": {
+        "runs": 1000,
+        "meanWins": 6.246,
+        "meanDraws": 2.336,
+        "meanLosses": 2.418,
+        "matchPoints": {
+          "mean": 14.828,
+          "interval95": [
+            14.686341,
+            14.969659
+          ],
+          "p05": 11,
+          "median": 15,
+          "p95": 19
+        },
+        "meanRank": 5.095,
+        "titles": {
+          "count": 202,
+          "rate": 0.202,
+          "interval95": [
+            0.178277,
+            0.228004
+          ]
+        },
+        "perfect": {
+          "count": 2,
+          "rate": 0.002,
+          "interval95": [
+            0.000549,
+            0.007263
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 2,
+          "rate": 0.002,
+          "interval95": [
+            0.000549,
+            0.007263
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 23,
+          "rate": 0.023,
+          "interval95": [
+            0.015374,
+            0.034277
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.003827
+          ]
+        },
+        "meanForecastMatchPoints": 14.904389,
+        "meanOutcomeMinusForecast": -0.076389,
+        "poorRunForecast": {
+          "runs": 23,
+          "meanActualMP": 9.478261,
+          "meanForecastMP": 15.655664,
+          "meanOutcomeMinusForecast": -6.177403
+        },
+        "meanSourceGap": 65.677773,
+        "meanEffectiveGap": 67.951256,
+        "meanModifierGaps": {
+          "fatigue": 0.587381,
+          "form": -0.6975,
+          "performance": -0.014727,
+          "trait": 2.412557,
+          "style": -0.014227
+        },
+        "sourceFavouriteOverturnRate": 0.143887,
+        "records": {
+          "10-0-1": 4,
+          "10-1-0": 7,
+          "11-0-0": 2,
+          "2-3-6": 1,
+          "2-5-4": 1,
+          "3-2-6": 1,
+          "3-3-5": 4,
+          "3-4-4": 2,
+          "3-5-3": 8,
+          "3-6-2": 4,
+          "3-7-1": 2,
+          "4-1-6": 2,
+          "4-2-5": 10,
+          "4-3-4": 17,
+          "4-4-3": 24,
+          "4-5-2": 15,
+          "4-6-1": 9,
+          "5-0-6": 2,
+          "5-1-5": 21,
+          "5-2-4": 50,
+          "5-3-3": 60,
+          "5-4-2": 46,
+          "5-5-1": 20,
+          "5-6-0": 1,
+          "6-0-5": 11,
+          "6-1-4": 47,
+          "6-2-3": 93,
+          "6-3-2": 77,
+          "6-4-1": 44,
+          "6-5-0": 6,
+          "7-0-4": 19,
+          "7-1-3": 67,
+          "7-2-2": 79,
+          "7-3-1": 64,
+          "7-4-0": 11,
+          "8-0-3": 25,
+          "8-1-2": 54,
+          "8-2-1": 42,
+          "8-3-0": 9,
+          "9-0-2": 10,
+          "9-1-1": 22,
+          "9-2-0": 7
+        }
+      },
+      "steeper": {
+        "runs": 1000,
+        "meanWins": 6.575,
+        "meanDraws": 2.266,
+        "meanLosses": 2.159,
+        "matchPoints": {
+          "mean": 15.416,
+          "interval95": [
+            15.279195,
+            15.552805
+          ],
+          "p05": 12,
+          "median": 15,
+          "p95": 19
+        },
+        "meanRank": 4.017,
+        "titles": {
+          "count": 254,
+          "rate": 0.254,
+          "interval95": [
+            0.227997,
+            0.281886
+          ]
+        },
+        "perfect": {
+          "count": 1,
+          "rate": 0.001,
+          "interval95": [
+            0.000177,
+            0.005643
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.003827
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 6,
+          "rate": 0.006,
+          "interval95": [
+            0.002753,
+            0.013028
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.003827
+          ]
+        },
+        "meanForecastMatchPoints": 15.364766,
+        "meanOutcomeMinusForecast": 0.051234,
+        "poorRunForecast": {
+          "runs": 6,
+          "meanActualMP": 10,
+          "meanForecastMP": 16.389524,
+          "meanOutcomeMinusForecast": -6.389524
+        },
+        "meanSourceGap": 60.621114,
+        "meanEffectiveGap": 62.691585,
+        "meanModifierGaps": {
+          "fatigue": 0.526063,
+          "form": -0.825682,
+          "performance": -0.044886,
+          "trait": 2.319977,
+          "style": 0.095
+        },
+        "sourceFavouriteOverturnRate": 0.155396,
+        "records": {
+          "10-0-1": 4,
+          "10-1-0": 11,
+          "11-0-0": 1,
+          "3-4-4": 1,
+          "3-5-3": 2,
+          "3-6-2": 4,
+          "3-7-1": 1,
+          "4-2-5": 4,
+          "4-3-4": 9,
+          "4-4-3": 15,
+          "4-5-2": 17,
+          "4-6-1": 2,
+          "4-7-0": 2,
+          "5-0-6": 1,
+          "5-1-5": 9,
+          "5-2-4": 39,
+          "5-3-3": 51,
+          "5-4-2": 45,
+          "5-5-1": 15,
+          "5-6-0": 6,
+          "6-0-5": 7,
+          "6-1-4": 49,
+          "6-2-3": 88,
+          "6-3-2": 81,
+          "6-4-1": 40,
+          "6-5-0": 7,
+          "7-0-4": 13,
+          "7-1-3": 68,
+          "7-2-2": 93,
+          "7-3-1": 61,
+          "7-4-0": 15,
+          "8-0-3": 19,
+          "8-1-2": 74,
+          "8-2-1": 61,
+          "8-3-0": 15,
+          "9-0-2": 16,
+          "9-1-1": 36,
+          "9-2-0": 18
+        }
+      }
+    }
+  },
+  "paired": {
+    "2800:baseline->profiles": {
+      "meanMatchPointChange": -0.084,
+      "interval95": [
+        -0.273972,
+        0.105972
+      ]
+    },
+    "2800:profiles->steeper": {
+      "meanMatchPointChange": 0.588,
+      "interval95": [
+        0.395801,
+        0.780199
+      ]
+    }
+  },
+  "calibration": {
+    "baseline": {
+      "boards": {
+        "count": 704000,
+        "meanBrier": 0.620289,
+        "maxSumError": 1.1102230246251565e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.306527,
+            "observed": 0.30642,
+            "residualStandardErrors": -0.200162
+          },
+          "draw": {
+            "predicted": 0.427099,
+            "observed": 0.427919,
+            "residualStandardErrors": 1.407814
+          },
+          "loss": {
+            "predicted": 0.266374,
+            "observed": 0.265661,
+            "residualStandardErrors": -1.399214
+          }
+        }
+      },
+      "userMatches": {
+        "count": 11000,
+        "meanBrier": 0.552261,
+        "maxSumError": 4.440892098500626e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.569358,
+            "observed": 0.571,
+            "residualStandardErrors": 0.361025
+          },
+          "draw": {
+            "predicted": 0.214725,
+            "observed": 0.213636,
+            "residualStandardErrors": -0.279054
+          },
+          "loss": {
+            "predicted": 0.215917,
+            "observed": 0.215364,
+            "residualStandardErrors": -0.145431
+          }
+        }
+      },
+      "userMatchesByCohort": {
+        "2800": {
+          "count": 11000,
+          "meanBrier": 0.552261,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.569358,
+              "observed": 0.571,
+              "residualStandardErrors": 0.361025
+            },
+            "draw": {
+              "predicted": 0.214725,
+              "observed": 0.213636,
+              "residualStandardErrors": -0.279054
+            },
+            "loss": {
+              "predicted": 0.215917,
+              "observed": 0.215364,
+              "residualStandardErrors": -0.145431
+            }
+          }
+        }
+      }
+    },
+    "profiles": {
+      "boards": {
+        "count": 704000,
+        "meanBrier": 0.621749,
+        "maxSumError": 1.1102230246251565e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.305377,
+            "observed": 0.305547,
+            "residualStandardErrors": 0.318816
+          },
+          "draw": {
+            "predicted": 0.428736,
+            "observed": 0.428695,
+            "residualStandardErrors": -0.071448
+          },
+          "loss": {
+            "predicted": 0.265886,
+            "observed": 0.265759,
+            "residualStandardErrors": -0.250327
+          }
+        }
+      },
+      "userMatches": {
+        "count": 11000,
+        "meanBrier": 0.556413,
+        "maxSumError": 5.551115123125783e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.570178,
+            "observed": 0.567818,
+            "residualStandardErrors": -0.518594
+          },
+          "draw": {
+            "predicted": 0.214589,
+            "observed": 0.212364,
+            "residualStandardErrors": -0.570562
+          },
+          "loss": {
+            "predicted": 0.215233,
+            "observed": 0.219818,
+            "residualStandardErrors": 1.205793
+          }
+        }
+      },
+      "userMatchesByCohort": {
+        "2800": {
+          "count": 11000,
+          "meanBrier": 0.556413,
+          "maxSumError": 5.551115123125783e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.570178,
+              "observed": 0.567818,
+              "residualStandardErrors": -0.518594
+            },
+            "draw": {
+              "predicted": 0.214589,
+              "observed": 0.212364,
+              "residualStandardErrors": -0.570562
+            },
+            "loss": {
+              "predicted": 0.215233,
+              "observed": 0.219818,
+              "residualStandardErrors": 1.205793
+            }
+          }
+        }
+      }
+    },
+    "steeper": {
+      "boards": {
+        "count": 704000,
+        "meanBrier": 0.611938,
+        "maxSumError": 1.1102230246251565e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.311561,
+            "observed": 0.311469,
+            "residualStandardErrors": -0.174927
+          },
+          "draw": {
+            "predicted": 0.429588,
+            "observed": 0.43072,
+            "residualStandardErrors": 1.942307
+          },
+          "loss": {
+            "predicted": 0.258851,
+            "observed": 0.257811,
+            "residualStandardErrors": -2.080827
+          }
+        }
+      },
+      "userMatches": {
+        "count": 11000,
+        "meanBrier": 0.524787,
+        "maxSumError": 4.440892098500626e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.594609,
+            "observed": 0.597727,
+            "residualStandardErrors": 0.701746
+          },
+          "draw": {
+            "predicted": 0.207578,
+            "observed": 0.206,
+            "residualStandardErrors": -0.410775
+          },
+          "loss": {
+            "predicted": 0.197812,
+            "observed": 0.196273,
+            "residualStandardErrors": -0.422762
+          }
+        }
+      },
+      "userMatchesByCohort": {
+        "2800": {
+          "count": 11000,
+          "meanBrier": 0.524787,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.594609,
+              "observed": 0.597727,
+              "residualStandardErrors": 0.701746
+            },
+            "draw": {
+              "predicted": 0.207578,
+              "observed": 0.206,
+              "residualStandardErrors": -0.410775
+            },
+            "loss": {
+              "predicted": 0.197812,
+              "observed": 0.196273,
+              "residualStandardErrors": -0.422762
+            }
+          }
+        }
+      }
+    }
+  },
+  "poorRunExamples": [
+    {
+      "variant": "profiles",
+      "seed": 723118625,
+      "cohort": "2800",
+      "w": 2,
+      "d": 3,
+      "l": 6,
+      "mp": 7,
+      "bp": 21.5,
+      "rank": 29,
+      "expectedMP": 15.886178,
+      "sourceGap": 82.590909,
+      "effectiveGap": 84.829545,
+      "modifierGaps": {
+        "fatigue": -4.420455,
+        "form": 1.363636,
+        "performance": -0.431818,
+        "trait": 5.227273,
+        "style": 0.5
+      },
+      "sourceFavourites": 43,
+      "sourceFavouriteOverturned": 4,
+      "favouriteLosses": 6,
+      "rounds": [
+        {
+          "round": 1,
+          "opponent": "alltime:GER:A",
+          "points": 3,
+          "win": 0.698725,
+          "draw": 0.184123,
+          "loss": 0.117152,
+          "sourceGap": 90.75,
+          "effectiveGap": 110.25
+        },
+        {
+          "round": 2,
+          "opponent": "alltime:UKR:B",
+          "points": 2,
+          "win": 0.727397,
+          "draw": 0.167256,
+          "loss": 0.105347,
+          "sourceGap": 112.25,
+          "effectiveGap": 120.75
+        },
+        {
+          "round": 3,
+          "opponent": "alltime:UKR:A",
+          "points": 2,
+          "win": 0.542735,
+          "draw": 0.238149,
+          "loss": 0.219116,
+          "sourceGap": 66.75,
+          "effectiveGap": 55.75
+        },
+        {
+          "round": 4,
+          "opponent": "alltime:CUB:A",
+          "points": 3.5,
+          "win": 0.772197,
+          "draw": 0.148533,
+          "loss": 0.07927,
+          "sourceGap": 133.75,
+          "effectiveGap": 143.5
+        },
+        {
+          "round": 5,
+          "opponent": "alltime:CHN:A",
+          "points": 2,
+          "win": 0.506384,
+          "draw": 0.23585,
+          "loss": 0.257766,
+          "sourceGap": 40,
+          "effectiveGap": 44.375
+        },
+        {
+          "round": 6,
+          "opponent": "alltime:IND:A",
+          "points": 1.5,
+          "win": 0.505991,
+          "draw": 0.240164,
+          "loss": 0.253846,
+          "sourceGap": 32.75,
+          "effectiveGap": 44.25
+        },
+        {
+          "round": 7,
+          "opponent": "alltime:HUN:A",
+          "points": 1.5,
+          "win": 0.501122,
+          "draw": 0.240911,
+          "loss": 0.257967,
+          "sourceGap": 79.75,
+          "effectiveGap": 44.5
+        },
+        {
+          "round": 8,
+          "opponent": "alltime:FRA:A",
+          "points": 1.5,
+          "win": 0.590257,
+          "draw": 0.22164,
+          "loss": 0.188104,
+          "sourceGap": 44.75,
+          "effectiveGap": 75.125
+        },
+        {
+          "round": 9,
+          "opponent": "alltime:NOR:A",
+          "points": 1.5,
+          "win": 0.617954,
+          "draw": 0.209282,
+          "loss": 0.172764,
+          "sourceGap": 104.5,
+          "effectiveGap": 83.375
+        },
+        {
+          "round": 10,
+          "opponent": "alltime:UZB:A",
+          "points": 1.5,
+          "win": 0.603038,
+          "draw": 0.21421,
+          "loss": 0.182752,
+          "sourceGap": 85.5,
+          "effectiveGap": 78.125
+        },
+        {
+          "round": 11,
+          "opponent": "alltime:CZE:A",
+          "points": 1.5,
+          "win": 0.74934,
+          "draw": 0.155781,
+          "loss": 0.094879,
+          "sourceGap": 117.75,
+          "effectiveGap": 133.125
+        }
+      ]
+    },
+    {
+      "variant": "profiles",
+      "seed": 722805567,
+      "cohort": "2800",
+      "w": 3,
+      "d": 2,
+      "l": 6,
+      "mp": 8,
+      "bp": 22,
+      "rank": 27,
+      "expectedMP": 16.432589,
+      "sourceGap": 86.818182,
+      "effectiveGap": 96.284091,
+      "modifierGaps": {
+        "fatigue": 1.988636,
+        "form": 3.681818,
+        "performance": -2.068182,
+        "trait": 4.090909,
+        "style": 1.772727
+      },
+      "sourceFavourites": 41,
+      "sourceFavouriteOverturned": 2,
+      "favouriteLosses": 6,
+      "rounds": [
+        {
+          "round": 1,
+          "opponent": "alltime:GER:A",
+          "points": 1.5,
+          "win": 0.599833,
+          "draw": 0.21901,
+          "loss": 0.181157,
+          "sourceGap": 93.5,
+          "effectiveGap": 78
+        },
+        {
+          "round": 2,
+          "opponent": "alltime:UZB:A",
+          "points": 4,
+          "win": 0.677042,
+          "draw": 0.188908,
+          "loss": 0.13405,
+          "sourceGap": 82.75,
+          "effectiveGap": 104
+        },
+        {
+          "round": 3,
+          "opponent": "alltime:BUL:A",
+          "points": 0.5,
+          "win": 0.608902,
+          "draw": 0.208585,
+          "loss": 0.182513,
+          "sourceGap": 97.75,
+          "effectiveGap": 81
+        },
+        {
+          "round": 4,
+          "opponent": "alltime:ESP:A",
+          "points": 3,
+          "win": 0.716239,
+          "draw": 0.168973,
+          "loss": 0.114788,
+          "sourceGap": 125.5,
+          "effectiveGap": 121.5
+        },
+        {
+          "round": 5,
+          "opponent": "alltime:URS:B",
+          "points": 2,
+          "win": 0.638998,
+          "draw": 0.197021,
+          "loss": 0.163981,
+          "sourceGap": 40.25,
+          "effectiveGap": 91.875
+        },
+        {
+          "round": 6,
+          "opponent": "alltime:UKR:B",
+          "points": 1,
+          "win": 0.69443,
+          "draw": 0.18636,
+          "loss": 0.11921,
+          "sourceGap": 113.25,
+          "effectiveGap": 111.375
+        },
+        {
+          "round": 7,
+          "opponent": "alltime:ARM:A",
+          "points": 3.5,
+          "win": 0.574732,
+          "draw": 0.219536,
+          "loss": 0.205732,
+          "sourceGap": 88.25,
+          "effectiveGap": 69.625
+        },
+        {
+          "round": 8,
+          "opponent": "alltime:CUB:A",
+          "points": 1.5,
+          "win": 0.764445,
+          "draw": 0.153524,
+          "loss": 0.082031,
+          "sourceGap": 131.5,
+          "effectiveGap": 136.625
+        },
+        {
+          "round": 9,
+          "opponent": "alltime:URS:A",
+          "points": 2,
+          "win": 0.424909,
+          "draw": 0.2692,
+          "loss": 0.305891,
+          "sourceGap": -9.5,
+          "effectiveGap": 20.125
+        },
+        {
+          "round": 10,
+          "opponent": "alltime:ENG:A",
+          "points": 1.5,
+          "win": 0.732228,
+          "draw": 0.162473,
+          "loss": 0.105298,
+          "sourceGap": 94.5,
+          "effectiveGap": 128.875
+        },
+        {
+          "round": 11,
+          "opponent": "alltime:POL:A",
+          "points": 1.5,
+          "win": 0.709298,
+          "draw": 0.176884,
+          "loss": 0.113818,
+          "sourceGap": 97.25,
+          "effectiveGap": 116.125
+        }
+      ]
+    },
+    {
+      "variant": "steeper",
+      "seed": 722545350,
+      "cohort": "2800",
+      "w": 4,
+      "d": 2,
+      "l": 5,
+      "mp": 10,
+      "bp": 23.5,
+      "rank": 20,
+      "expectedMP": 18.414783,
+      "sourceGap": 116.522727,
+      "effectiveGap": 110.943182,
+      "modifierGaps": {
+        "fatigue": 2.715909,
+        "form": -4.5,
+        "performance": 1.068182,
+        "trait": -4.727273,
+        "style": -0.136364
+      },
+      "sourceFavourites": 43,
+      "sourceFavouriteOverturned": 3,
+      "favouriteLosses": 5,
+      "rounds": [
+        {
+          "round": 1,
+          "opponent": "alltime:GER:A",
+          "points": 1,
+          "win": 0.705708,
+          "draw": 0.176511,
+          "loss": 0.117782,
+          "sourceGap": 90.75,
+          "effectiveGap": 92
+        },
+        {
+          "round": 2,
+          "opponent": "alltime:ISR:A",
+          "points": 2,
+          "win": 0.74915,
+          "draw": 0.156902,
+          "loss": 0.093947,
+          "sourceGap": 91.75,
+          "effectiveGap": 105.5
+        },
+        {
+          "round": 3,
+          "opponent": "alltime:CZE:A",
+          "points": 3.5,
+          "win": 0.764599,
+          "draw": 0.158919,
+          "loss": 0.076481,
+          "sourceGap": 122.75,
+          "effectiveGap": 114
+        },
+        {
+          "round": 4,
+          "opponent": "alltime:UZB:A",
+          "points": 1.5,
+          "win": 0.804714,
+          "draw": 0.139105,
+          "loss": 0.056181,
+          "sourceGap": 109.5,
+          "effectiveGap": 122.75
+        },
+        {
+          "round": 5,
+          "opponent": "alltime:UKR:B",
+          "points": 1.5,
+          "win": 0.681368,
+          "draw": 0.197269,
+          "loss": 0.121362,
+          "sourceGap": 109.25,
+          "effectiveGap": 83
+        },
+        {
+          "round": 6,
+          "opponent": "alltime:IRI:A",
+          "points": 3.5,
+          "win": 0.846714,
+          "draw": 0.114141,
+          "loss": 0.039145,
+          "sourceGap": 149.75,
+          "effectiveGap": 148.5
+        },
+        {
+          "round": 7,
+          "opponent": "alltime:GEO:A",
+          "points": 2.5,
+          "win": 0.79777,
+          "draw": 0.13777,
+          "loss": 0.06446,
+          "sourceGap": 145,
+          "effectiveGap": 125.875
+        },
+        {
+          "round": 8,
+          "opponent": "alltime:BUL:A",
+          "points": 1,
+          "win": 0.671018,
+          "draw": 0.192609,
+          "loss": 0.136373,
+          "sourceGap": 97.5,
+          "effectiveGap": 85.875
+        },
+        {
+          "round": 9,
+          "opponent": "alltime:IND:B",
+          "points": 1.5,
+          "win": 0.756196,
+          "draw": 0.169992,
+          "loss": 0.073812,
+          "sourceGap": 122.75,
+          "effectiveGap": 111.25
+        },
+        {
+          "round": 10,
+          "opponent": "alltime:CHN:B",
+          "points": 2,
+          "win": 0.726045,
+          "draw": 0.177131,
+          "loss": 0.096824,
+          "sourceGap": 110.5,
+          "effectiveGap": 93.625
+        },
+        {
+          "round": 11,
+          "opponent": "alltime:CUB:A",
+          "points": 3.5,
+          "win": 0.834676,
+          "draw": 0.118516,
+          "loss": 0.046809,
+          "sourceGap": 132.25,
+          "effectiveGap": 138
+        }
+      ]
+    },
+    {
+      "variant": "profiles",
+      "seed": 723151526,
+      "cohort": "2800",
+      "w": 3,
+      "d": 3,
+      "l": 5,
+      "mp": 9,
+      "bp": 22.5,
+      "rank": 23,
+      "expectedMP": 17.073151,
+      "sourceGap": 86.159091,
+      "effectiveGap": 110.943182,
+      "modifierGaps": {
+        "fatigue": 0.761364,
+        "form": 1.909091,
+        "performance": -0.181818,
+        "trait": 20.386364,
+        "style": 1.909091
+      },
+      "sourceFavourites": 39,
+      "sourceFavouriteOverturned": 0,
+      "favouriteLosses": 5,
+      "rounds": [
+        {
+          "round": 1,
+          "opponent": "alltime:GER:A",
+          "points": 2,
+          "win": 0.759319,
+          "draw": 0.152726,
+          "loss": 0.087955,
+          "sourceGap": 94.25,
+          "effectiveGap": 134.25
+        },
+        {
+          "round": 2,
+          "opponent": "alltime:CHN:A",
+          "points": 1.5,
+          "win": 0.588083,
+          "draw": 0.214784,
+          "loss": 0.197132,
+          "sourceGap": 48.5,
+          "effectiveGap": 71.75
+        },
+        {
+          "round": 3,
+          "opponent": "alltime:NOR:A",
+          "points": 1.5,
+          "win": 0.669361,
+          "draw": 0.207992,
+          "loss": 0.122647,
+          "sourceGap": 99.25,
+          "effectiveGap": 105.5
+        },
+        {
+          "round": 4,
+          "opponent": "alltime:ARM:A",
+          "points": 2,
+          "win": 0.726532,
+          "draw": 0.165384,
+          "loss": 0.108084,
+          "sourceGap": 88.25,
+          "effectiveGap": 125.375
+        },
+        {
+          "round": 5,
+          "opponent": "alltime:URS:A",
+          "points": 2.5,
+          "win": 0.512472,
+          "draw": 0.235682,
+          "loss": 0.251845,
+          "sourceGap": -8,
+          "effectiveGap": 46.5
+        },
+        {
+          "round": 6,
+          "opponent": "alltime:USA:B",
+          "points": 1.5,
+          "win": 0.622386,
+          "draw": 0.221355,
+          "loss": 0.156259,
+          "sourceGap": 88.75,
+          "effectiveGap": 83.375
+        },
+        {
+          "round": 7,
+          "opponent": "alltime:CHN:B",
+          "points": 3.5,
+          "win": 0.815944,
+          "draw": 0.121712,
+          "loss": 0.062344,
+          "sourceGap": 121.25,
+          "effectiveGap": 165.5
+        },
+        {
+          "round": 8,
+          "opponent": "alltime:SLO:A",
+          "points": 3,
+          "win": 0.809241,
+          "draw": 0.131249,
+          "loss": 0.05951,
+          "sourceGap": 135.75,
+          "effectiveGap": 156.375
+        },
+        {
+          "round": 9,
+          "opponent": "alltime:ESP:A",
+          "points": 1.5,
+          "win": 0.731745,
+          "draw": 0.16151,
+          "loss": 0.106745,
+          "sourceGap": 118.75,
+          "effectiveGap": 127.375
+        },
+        {
+          "round": 10,
+          "opponent": "alltime:IRI:A",
+          "points": 1.5,
+          "win": 0.83702,
+          "draw": 0.119951,
+          "loss": 0.043029,
+          "sourceGap": 149.5,
+          "effectiveGap": 171
+        },
+        {
+          "round": 11,
+          "opponent": "alltime:USA:A",
+          "points": 2,
+          "win": 0.473946,
+          "draw": 0.248705,
+          "loss": 0.277349,
+          "sourceGap": 11.5,
+          "effectiveGap": 33.375
+        }
+      ]
+    },
+    {
+      "variant": "baseline",
+      "seed": 722991009,
+      "cohort": "2800",
+      "w": 4,
+      "d": 1,
+      "l": 6,
+      "mp": 9,
+      "bp": 22,
+      "rank": 27,
+      "expectedMP": 16.658784,
+      "sourceGap": 99.818182,
+      "effectiveGap": 105.738636,
+      "modifierGaps": {
+        "fatigue": 2.988636,
+        "form": 0.818182,
+        "performance": 0.159091,
+        "trait": 2.909091,
+        "style": -0.954545
+      },
+      "sourceFavourites": 42,
+      "sourceFavouriteOverturned": 6,
+      "favouriteLosses": 5,
+      "rounds": [
+        {
+          "round": 1,
+          "opponent": "alltime:GER:A",
+          "points": 1.5,
+          "win": 0.578804,
+          "draw": 0.224204,
+          "loss": 0.196991,
+          "sourceGap": 92,
+          "effectiveGap": 69.25
+        },
+        {
+          "round": 2,
+          "opponent": "alltime:IND:A",
+          "points": 1.5,
+          "win": 0.530323,
+          "draw": 0.23502,
+          "loss": 0.234657,
+          "sourceGap": 40.75,
+          "effectiveGap": 51.75
+        },
+        {
+          "round": 3,
+          "opponent": "alltime:SLO:A",
+          "points": 3.5,
+          "win": 0.866132,
+          "draw": 0.098137,
+          "loss": 0.035731,
+          "sourceGap": 149.75,
+          "effectiveGap": 185.75
+        },
+        {
+          "round": 4,
+          "opponent": "alltime:IND:B",
+          "points": 1.5,
+          "win": 0.717958,
+          "draw": 0.173928,
+          "loss": 0.108114,
+          "sourceGap": 105,
+          "effectiveGap": 122.25
+        },
+        {
+          "round": 5,
+          "opponent": "alltime:RUS:A",
+          "points": 1.5,
+          "win": 0.397432,
+          "draw": 0.248727,
+          "loss": 0.353841,
+          "sourceGap": 6,
+          "effectiveGap": 7.75
+        },
+        {
+          "round": 6,
+          "opponent": "alltime:ESP:A",
+          "points": 3,
+          "win": 0.777507,
+          "draw": 0.151433,
+          "loss": 0.07106,
+          "sourceGap": 124,
+          "effectiveGap": 148
+        },
+        {
+          "round": 7,
+          "opponent": "alltime:NED:B",
+          "points": 2.5,
+          "win": 0.865214,
+          "draw": 0.095247,
+          "loss": 0.039539,
+          "sourceGap": 143.75,
+          "effectiveGap": 191
+        },
+        {
+          "round": 8,
+          "opponent": "alltime:HUN:A",
+          "points": 0.5,
+          "win": 0.63248,
+          "draw": 0.200773,
+          "loss": 0.166747,
+          "sourceGap": 69.25,
+          "effectiveGap": 87.75
+        },
+        {
+          "round": 9,
+          "opponent": "alltime:IRI:A",
+          "points": 3,
+          "win": 0.821739,
+          "draw": 0.126773,
+          "loss": 0.051488,
+          "sourceGap": 171.25,
+          "effectiveGap": 165.5
+        },
+        {
+          "round": 10,
+          "opponent": "alltime:ENG:A",
+          "points": 2,
+          "win": 0.562338,
+          "draw": 0.223813,
+          "loss": 0.213849,
+          "sourceGap": 99,
+          "effectiveGap": 62.625
+        },
+        {
+          "round": 11,
+          "opponent": "alltime:UZB:A",
+          "points": 1.5,
+          "win": 0.576169,
+          "draw": 0.228537,
+          "loss": 0.195294,
+          "sourceGap": 97.25,
+          "effectiveGap": 71.5
+        }
+      ]
+    },
+    {
+      "variant": "steeper",
+      "seed": 723411743,
+      "cohort": "2800",
+      "w": 5,
+      "d": 0,
+      "l": 6,
+      "mp": 10,
+      "bp": 25.5,
+      "rank": 19,
+      "expectedMP": 16.903899,
+      "sourceGap": 82.363636,
+      "effectiveGap": 87.556818,
+      "modifierGaps": {
+        "fatigue": -0.784091,
+        "form": 0.681818,
+        "performance": -0.113636,
+        "trait": 4.363636,
+        "style": 1.045455
+      },
+      "sourceFavourites": 42,
+      "sourceFavouriteOverturned": 3,
+      "favouriteLosses": 5,
+      "rounds": [
+        {
+          "round": 1,
+          "opponent": "alltime:GER:A",
+          "points": 3.5,
+          "win": 0.83004,
+          "draw": 0.119132,
+          "loss": 0.050828,
+          "sourceGap": 92,
+          "effectiveGap": 137
+        },
+        {
+          "round": 2,
+          "opponent": "alltime:IND:A",
+          "points": 1.5,
+          "win": 0.617618,
+          "draw": 0.210983,
+          "loss": 0.171399,
+          "sourceGap": 42.25,
+          "effectiveGap": 65.5
+        },
+        {
+          "round": 3,
+          "opponent": "alltime:URS:A",
+          "points": 1.5,
+          "win": 0.330607,
+          "draw": 0.266409,
+          "loss": 0.402984,
+          "sourceGap": -6.5,
+          "effectiveGap": -9.25
+        },
+        {
+          "round": 4,
+          "opponent": "alltime:SLO:A",
+          "points": 4,
+          "win": 0.833104,
+          "draw": 0.116078,
+          "loss": 0.050819,
+          "sourceGap": 133,
+          "effectiveGap": 139
+        },
+        {
+          "round": 5,
+          "opponent": "alltime:CHN:A",
+          "points": 4,
+          "win": 0.636905,
+          "draw": 0.197709,
+          "loss": 0.165386,
+          "sourceGap": 51.25,
+          "effectiveGap": 73
+        },
+        {
+          "round": 6,
+          "opponent": "alltime:CHN:B",
+          "points": 1.5,
+          "win": 0.827172,
+          "draw": 0.123329,
+          "loss": 0.049498,
+          "sourceGap": 121.25,
+          "effectiveGap": 134.875
+        },
+        {
+          "round": 7,
+          "opponent": "alltime:NOR:A",
+          "points": 3.5,
+          "win": 0.744243,
+          "draw": 0.19605,
+          "loss": 0.059708,
+          "sourceGap": 103.75,
+          "effectiveGap": 101.5
+        },
+        {
+          "round": 8,
+          "opponent": "alltime:UZB:A",
+          "points": 1,
+          "win": 0.700266,
+          "draw": 0.178786,
+          "loss": 0.120949,
+          "sourceGap": 85.5,
+          "effectiveGap": 90.75
+        },
+        {
+          "round": 9,
+          "opponent": "alltime:POL:A",
+          "points": 1.5,
+          "win": 0.768736,
+          "draw": 0.162624,
+          "loss": 0.06864,
+          "sourceGap": 123.25,
+          "effectiveGap": 116.625
+        },
+        {
+          "round": 10,
+          "opponent": "alltime:AZE:A",
+          "points": 2.5,
+          "win": 0.603687,
+          "draw": 0.220418,
+          "loss": 0.175895,
+          "sourceGap": 68.5,
+          "effectiveGap": 66.5
+        },
+        {
+          "round": 11,
+          "opponent": "alltime:ISR:A",
+          "points": 1,
+          "win": 0.543875,
+          "draw": 0.239877,
+          "loss": 0.216248,
+          "sourceGap": 91.75,
+          "effectiveGap": 47.625
+        }
+      ]
+    },
+    {
+      "variant": "baseline",
+      "seed": 722954120,
+      "cohort": "2800",
+      "w": 3,
+      "d": 3,
+      "l": 5,
+      "mp": 9,
+      "bp": 21,
+      "rank": 25,
+      "expectedMP": 15.733445,
+      "sourceGap": 90.681818,
+      "effectiveGap": 82.295455,
+      "modifierGaps": {
+        "fatigue": -1.454545,
+        "form": -5.454545,
+        "performance": -4.227273,
+        "trait": 1.159091,
+        "style": 1.590909
+      },
+      "sourceFavourites": 42,
+      "sourceFavouriteOverturned": 5,
+      "favouriteLosses": 4,
+      "rounds": [
+        {
+          "round": 1,
+          "opponent": "alltime:GER:A",
+          "points": 3,
+          "win": 0.640896,
+          "draw": 0.211383,
+          "loss": 0.14772,
+          "sourceGap": 93.5,
+          "effectiveGap": 95.75
+        },
+        {
+          "round": 2,
+          "opponent": "alltime:UZB:A",
+          "points": 2.5,
+          "win": 0.73251,
+          "draw": 0.163831,
+          "loss": 0.103659,
+          "sourceGap": 97.25,
+          "effectiveGap": 129.5
+        },
+        {
+          "round": 3,
+          "opponent": "alltime:UKR:A",
+          "points": 2,
+          "win": 0.599457,
+          "draw": 0.217776,
+          "loss": 0.182767,
+          "sourceGap": 67,
+          "effectiveGap": 74
+        },
+        {
+          "round": 4,
+          "opponent": "alltime:NED:A",
+          "points": 1,
+          "win": 0.561184,
+          "draw": 0.23123,
+          "loss": 0.207586,
+          "sourceGap": 90,
+          "effectiveGap": 68
+        },
+        {
+          "round": 5,
+          "opponent": "alltime:IND:B",
+          "points": 2,
+          "win": 0.685166,
+          "draw": 0.179886,
+          "loss": 0.134948,
+          "sourceGap": 125.5,
+          "effectiveGap": 107.5
+        },
+        {
+          "round": 6,
+          "opponent": "alltime:ESP:A",
+          "points": 1.5,
+          "win": 0.555764,
+          "draw": 0.228951,
+          "loss": 0.215285,
+          "sourceGap": 105.5,
+          "effectiveGap": 59.75
+        },
+        {
+          "round": 7,
+          "opponent": "alltime:ARM:A",
+          "points": 2,
+          "win": 0.591715,
+          "draw": 0.212552,
+          "loss": 0.195732,
+          "sourceGap": 86.25,
+          "effectiveGap": 72.25
+        },
+        {
+          "round": 8,
+          "opponent": "alltime:AZE:A",
+          "points": 1.5,
+          "win": 0.518613,
+          "draw": 0.23151,
+          "loss": 0.249877,
+          "sourceGap": 68.25,
+          "effectiveGap": 49
+        },
+        {
+          "round": 9,
+          "opponent": "alltime:IND:A",
+          "points": 1.5,
+          "win": 0.443924,
+          "draw": 0.242976,
+          "loss": 0.3131,
+          "sourceGap": 42.25,
+          "effectiveGap": 22.75
+        },
+        {
+          "round": 10,
+          "opponent": "alltime:CHN:B",
+          "points": 3,
+          "win": 0.747818,
+          "draw": 0.159962,
+          "loss": 0.09222,
+          "sourceGap": 124.5,
+          "effectiveGap": 130.75
+        },
+        {
+          "round": 11,
+          "opponent": "alltime:BUL:A",
+          "points": 1,
+          "win": 0.64747,
+          "draw": 0.204351,
+          "loss": 0.148179,
+          "sourceGap": 97.5,
+          "effectiveGap": 96
+        }
+      ]
+    },
+    {
+      "variant": "steeper",
+      "seed": 722960102,
+      "cohort": "2800",
+      "w": 4,
+      "d": 2,
+      "l": 5,
+      "mp": 10,
+      "bp": 22.5,
+      "rank": 21,
+      "expectedMP": 16.645644,
+      "sourceGap": 88.704545,
+      "effectiveGap": 83.5,
+      "modifierGaps": {
+        "fatigue": -1.852273,
+        "form": -2.318182,
+        "performance": 0.795455,
+        "trait": -2.147727,
+        "style": 0.318182
+      },
+      "sourceFavourites": 39,
+      "sourceFavouriteOverturned": 4,
+      "favouriteLosses": 4,
+      "rounds": [
+        {
+          "round": 1,
+          "opponent": "alltime:GER:A",
+          "points": 3,
+          "win": 0.710076,
+          "draw": 0.19041,
+          "loss": 0.099514,
+          "sourceGap": 93.5,
+          "effectiveGap": 96.5
+        },
+        {
+          "round": 2,
+          "opponent": "alltime:IND:A",
+          "points": 2.5,
+          "win": 0.495023,
+          "draw": 0.241891,
+          "loss": 0.263086,
+          "sourceGap": 32.75,
+          "effectiveGap": 34.75
+        },
+        {
+          "round": 3,
+          "opponent": "alltime:RUS:A",
+          "points": 1,
+          "win": 0.356403,
+          "draw": 0.258509,
+          "loss": 0.385088,
+          "sourceGap": 3.75,
+          "effectiveGap": -0.75
+        },
+        {
+          "round": 4,
+          "opponent": "alltime:NED:B",
+          "points": 1.5,
+          "win": 0.691645,
+          "draw": 0.188436,
+          "loss": 0.119919,
+          "sourceGap": 145,
+          "effectiveGap": 85.875
+        },
+        {
+          "round": 5,
+          "opponent": "alltime:UZB:A",
+          "points": 2,
+          "win": 0.750556,
+          "draw": 0.160534,
+          "loss": 0.08891,
+          "sourceGap": 100,
+          "effectiveGap": 111.75
+        },
+        {
+          "round": 6,
+          "opponent": "alltime:NED:A",
+          "points": 1.5,
+          "win": 0.559713,
+          "draw": 0.22695,
+          "loss": 0.213338,
+          "sourceGap": 87.25,
+          "effectiveGap": 49.375
+        },
+        {
+          "round": 7,
+          "opponent": "alltime:UKR:A",
+          "points": 1.5,
+          "win": 0.629512,
+          "draw": 0.206957,
+          "loss": 0.163531,
+          "sourceGap": 70.5,
+          "effectiveGap": 67.125
+        },
+        {
+          "round": 8,
+          "opponent": "alltime:CUB:A",
+          "points": 3.5,
+          "win": 0.878738,
+          "draw": 0.090914,
+          "loss": 0.030348,
+          "sourceGap": 143.75,
+          "effectiveGap": 157
+        },
+        {
+          "round": 9,
+          "opponent": "alltime:ARM:A",
+          "points": 3,
+          "win": 0.758766,
+          "draw": 0.155547,
+          "loss": 0.085687,
+          "sourceGap": 88.25,
+          "effectiveGap": 114.5
+        },
+        {
+          "round": 10,
+          "opponent": "alltime:BUL:A",
+          "points": 1,
+          "win": 0.727878,
+          "draw": 0.177899,
+          "loss": 0.094222,
+          "sourceGap": 111.75,
+          "effectiveGap": 104.375
+        },
+        {
+          "round": 11,
+          "opponent": "alltime:NOR:A",
+          "points": 2,
+          "win": 0.723915,
+          "draw": 0.183146,
+          "loss": 0.092939,
+          "sourceGap": 99.25,
+          "effectiveGap": 98
+        }
+      ]
+    },
+    {
+      "variant": "baseline",
+      "seed": 723156511,
+      "cohort": "2800",
+      "w": 4,
+      "d": 2,
+      "l": 5,
+      "mp": 10,
+      "bp": 22,
+      "rank": 22,
+      "expectedMP": 16.501707,
+      "sourceGap": 99.068182,
+      "effectiveGap": 100.590909,
+      "modifierGaps": {
+        "fatigue": 0.636364,
+        "form": -0.272727,
+        "performance": -1.840909,
+        "trait": 2.454545,
+        "style": 0.545455
+      },
+      "sourceFavourites": 43,
+      "sourceFavouriteOverturned": 5,
+      "favouriteLosses": 5,
+      "rounds": [
+        {
+          "round": 1,
+          "opponent": "alltime:GER:A",
+          "points": 1.5,
+          "win": 0.825925,
+          "draw": 0.116762,
+          "loss": 0.057313,
+          "sourceGap": 95.5,
+          "effectiveGap": 167
+        },
+        {
+          "round": 2,
+          "opponent": "alltime:IND:A",
+          "points": 2.5,
+          "win": 0.456736,
+          "draw": 0.248651,
+          "loss": 0.294613,
+          "sourceGap": 40.75,
+          "effectiveGap": 27.5
+        },
+        {
+          "round": 3,
+          "opponent": "alltime:CHN:B",
+          "points": 1.5,
+          "win": 0.748151,
+          "draw": 0.158699,
+          "loss": 0.093151,
+          "sourceGap": 110.5,
+          "effectiveGap": 129
+        },
+        {
+          "round": 4,
+          "opponent": "alltime:SLO:A",
+          "points": 3,
+          "win": 0.831849,
+          "draw": 0.117883,
+          "loss": 0.050268,
+          "sourceGap": 156.75,
+          "effectiveGap": 170
+        },
+        {
+          "round": 5,
+          "opponent": "alltime:FRA:A",
+          "points": 1.5,
+          "win": 0.512153,
+          "draw": 0.237842,
+          "loss": 0.250006,
+          "sourceGap": 46,
+          "effectiveGap": 47
+        },
+        {
+          "round": 6,
+          "opponent": "alltime:NED:B",
+          "points": 3,
+          "win": 0.823542,
+          "draw": 0.124463,
+          "loss": 0.051995,
+          "sourceGap": 145.25,
+          "effectiveGap": 162
+        },
+        {
+          "round": 7,
+          "opponent": "alltime:ISR:A",
+          "points": 2,
+          "win": 0.642562,
+          "draw": 0.198481,
+          "loss": 0.158957,
+          "sourceGap": 88.75,
+          "effectiveGap": 89.25
+        },
+        {
+          "round": 8,
+          "opponent": "alltime:CUB:A",
+          "points": 1.5,
+          "win": 0.773731,
+          "draw": 0.146813,
+          "loss": 0.079456,
+          "sourceGap": 169,
+          "effectiveGap": 143.75
+        },
+        {
+          "round": 9,
+          "opponent": "alltime:CHN:A",
+          "points": 2.5,
+          "win": 0.456776,
+          "draw": 0.233442,
+          "loss": 0.309782,
+          "sourceGap": 48.5,
+          "effectiveGap": 26
+        },
+        {
+          "round": 10,
+          "opponent": "alltime:USA:B",
+          "points": 2,
+          "win": 0.516271,
+          "draw": 0.244565,
+          "loss": 0.239164,
+          "sourceGap": 88.25,
+          "effectiveGap": 48
+        },
+        {
+          "round": 11,
+          "opponent": "alltime:BUL:A",
+          "points": 1,
+          "win": 0.651926,
+          "draw": 0.194862,
+          "loss": 0.153212,
+          "sourceGap": 100.5,
+          "effectiveGap": 97
+        }
+      ]
+    }
+  ]
+}

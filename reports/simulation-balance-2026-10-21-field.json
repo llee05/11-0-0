@@ -1,0 +1,1710 @@
+{
+  "metadata": {
+    "baselineRef": "68a4ff679b453a4dc79ed79bed84edb177aed9d0",
+    "catalogueRelease": "a0fdb700d517ce26894c43a6a85f6f8b4325621db06369b805f08387605b8db2",
+    "runsPerCohort": 250,
+    "seedOffset": 1000,
+    "totalTournaments": 2250,
+    "workers": 10,
+    "seconds": 309.793,
+    "cohorts": [
+      {
+        "name": "2700",
+        "target": 2700,
+        "sourceRating": 2701.75,
+        "roster": [
+          {
+            "id": "NED-2026:fide:1039784",
+            "personId": "fide:1039784",
+            "name": "Jorden Van Foreest",
+            "year": 2026,
+            "rating": 2703
+          },
+          {
+            "id": "ISR-2002:fide:2801990",
+            "personId": "fide:2801990",
+            "name": "Ilia Smirin",
+            "year": 2002,
+            "rating": 2702
+          },
+          {
+            "id": "UZB-2010:fide:14200244",
+            "personId": "fide:14200244",
+            "name": "Rustam Kasimdzhanov",
+            "year": 2010,
+            "rating": 2702
+          },
+          {
+            "id": "IRI-2026:fide:12521213",
+            "personId": "fide:12521213",
+            "name": "M. Amin Tabatabaei",
+            "year": 2026,
+            "rating": 2700
+          },
+          {
+            "id": "RUS-2026:fide:24175439",
+            "personId": "fide:24175439",
+            "name": "Andrey Esipenko",
+            "year": 2026,
+            "rating": 2698
+          }
+        ]
+      },
+      {
+        "name": "2750",
+        "target": 2750,
+        "sourceRating": 2749.75,
+        "roster": [
+          {
+            "id": "UZB-2026:fide:14204118",
+            "personId": "fide:14204118",
+            "name": "Nodirbek Abdusattorov",
+            "year": 2026,
+            "rating": 2751
+          },
+          {
+            "id": "URS-1950:chessmetrics:68293",
+            "personId": "chessmetrics:68293",
+            "name": "Alexander Kotov",
+            "year": 1950,
+            "rating": 2750
+          },
+          {
+            "id": "CHN-2010:fide:8601429",
+            "personId": "fide:8601429",
+            "name": "Yue Wang",
+            "year": 2010,
+            "rating": 2749
+          },
+          {
+            "id": "CZE-2018:fide:309095",
+            "personId": "fide:309095",
+            "name": "David Navara",
+            "year": 2018,
+            "rating": 2749
+          },
+          {
+            "id": "UKR-2010:fide:14100010",
+            "personId": "fide:14100010",
+            "name": "Vasyl Ivanchuk",
+            "year": 2010,
+            "rating": 2749
+          }
+        ]
+      },
+      {
+        "name": "2850",
+        "target": 2850,
+        "sourceRating": 2851.25,
+        "roster": [
+          {
+            "id": "URS-1946:chessmetrics:15154",
+            "personId": "chessmetrics:15154",
+            "name": "Mikhail Botvinnik",
+            "year": 1946,
+            "rating": 2883
+          },
+          {
+            "id": "NOR-2014:fide:1503014",
+            "personId": "fide:1503014",
+            "name": "Magnus Carlsen",
+            "year": 2014,
+            "rating": 2872
+          },
+          {
+            "id": "RUS-2002:fide:4100018",
+            "personId": "fide:4100018",
+            "name": "Garry Kasparov",
+            "year": 2002,
+            "rating": 2838
+          },
+          {
+            "id": "ARM-2014:fide:13300474",
+            "personId": "fide:13300474",
+            "name": "Levon Aronian",
+            "year": 2014,
+            "rating": 2812
+          },
+          {
+            "id": "USA-2018:fide:2020009",
+            "personId": "fide:2020009",
+            "name": "Fabiano Caruana",
+            "year": 2018,
+            "rating": 2811
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "name": "baseline",
+        "sourceRef": "68a4ff679b453a4dc79ed79bed84edb177aed9d0",
+        "hashes": {
+          "engine.js": "3783bba6e5d0a4583a43ba260b543c6e78e6d34555bea52ad2674868fc8f5f3e",
+          "player-profile.js": "03a6938d7168173e727ba8cd08fe5811d57b5fd69416dd182f8b0855c6ab4208",
+          "traits.js": "040c6165b849bfed93b7d698371cbf1889b82fd7b761f49367632c9dedb23853"
+        },
+        "rules": "career-traits-3/squad-profiles-3/olympiad-4/competitive-draft-1",
+        "eloScale": 400,
+        "formElo": 12,
+        "dailySwings": [
+          32,
+          24,
+          16,
+          8,
+          4
+        ],
+        "maxFatiguePenalty": 76
+      },
+      {
+        "name": "profiles",
+        "sourceRef": "working tree",
+        "hashes": {
+          "engine.js": "1ab02a6e6a4a9c82a64d7ce8e99ae67a0b714c3233bdd350045a4cad8b63150c",
+          "player-profile.js": "ac8a36d1b439b9c5e5ce6c84d33e17ae6b9bab210f10d4e71929d6b292bf6a86",
+          "traits.js": "040c6165b849bfed93b7d698371cbf1889b82fd7b761f49367632c9dedb23853"
+        },
+        "rules": "career-traits-3/squad-profiles-4/olympiad-5/competitive-draft-1",
+        "eloScale": 400,
+        "formElo": 6,
+        "dailySwings": [
+          16,
+          12,
+          8,
+          4,
+          2
+        ],
+        "maxFatiguePenalty": 38
+      },
+      {
+        "name": "steeper",
+        "sourceRef": "working tree",
+        "hashes": {
+          "engine.js": "bb32e862313838f05b751f615d2dc148543303053c6c01b794702c0c8de4cede",
+          "player-profile.js": "ac8a36d1b439b9c5e5ce6c84d33e17ae6b9bab210f10d4e71929d6b292bf6a86",
+          "traits.js": "040c6165b849bfed93b7d698371cbf1889b82fd7b761f49367632c9dedb23853"
+        },
+        "rules": "career-traits-3/squad-profiles-4/olympiad-5/competitive-draft-1",
+        "eloScale": 320,
+        "formElo": 6,
+        "dailySwings": [
+          16,
+          12,
+          8,
+          4,
+          2
+        ],
+        "maxFatiguePenalty": 38
+      }
+    ],
+    "method": "Fixed best-observed rosters near target ratings, identical seeds across variants, automatic rotation for every team. Forecast sums describe each encountered adaptive Swiss path; they are not unconditional tournament expectations. Poor means at most 10 match points (2-6-3 scores 10). Numeric profiles and alternative Elo scales are fictional game balance, not empirical chess calibration."
+  },
+  "summaries": {
+    "2700": {
+      "baseline": {
+        "runs": 250,
+        "meanWins": 4.068,
+        "meanDraws": 2.58,
+        "meanLosses": 4.352,
+        "matchPoints": {
+          "mean": 10.716,
+          "interval95": [
+            10.454647,
+            10.977353
+          ],
+          "p05": 7,
+          "median": 11,
+          "p95": 14
+        },
+        "meanRank": 17.436,
+        "titles": {
+          "count": 1,
+          "rate": 0.004,
+          "interval95": [
+            0.000706,
+            0.022306
+          ]
+        },
+        "perfect": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 25,
+          "rate": 0.1,
+          "interval95": [
+            0.068654,
+            0.143453
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 117,
+          "rate": 0.468,
+          "interval95": [
+            0.407099,
+            0.52987
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 3,
+          "rate": 0.012,
+          "interval95": [
+            0.004089,
+            0.034681
+          ]
+        },
+        "meanForecastMatchPoints": 10.81395,
+        "meanOutcomeMinusForecast": -0.09795,
+        "poorRunForecast": {
+          "runs": 117,
+          "meanActualMP": 8.923077,
+          "meanForecastMP": 11.149533,
+          "meanOutcomeMinusForecast": -2.226456
+        },
+        "meanSourceGap": -11.982909,
+        "meanEffectiveGap": -3.724114,
+        "meanModifierGaps": {
+          "fatigue": 1.195909,
+          "form": 0.051273,
+          "performance": 0.084182,
+          "trait": 5.351795,
+          "style": 1.575636
+        },
+        "sourceFavouriteOverturnRate": 0.234819,
+        "records": {
+          "1-2-8": 1,
+          "1-4-6": 1,
+          "2-2-7": 6,
+          "2-3-6": 5,
+          "2-4-5": 4,
+          "2-5-4": 5,
+          "2-6-3": 3,
+          "3-1-7": 3,
+          "3-2-6": 9,
+          "3-3-5": 24,
+          "3-4-4": 11,
+          "3-5-3": 5,
+          "3-6-2": 2,
+          "4-0-7": 1,
+          "4-1-6": 11,
+          "4-2-5": 30,
+          "4-3-4": 26,
+          "4-4-3": 10,
+          "4-5-2": 3,
+          "5-0-6": 3,
+          "5-1-5": 14,
+          "5-2-4": 22,
+          "5-3-3": 18,
+          "5-4-2": 5,
+          "6-0-5": 4,
+          "6-1-4": 7,
+          "6-2-3": 8,
+          "6-3-2": 2,
+          "6-4-1": 1,
+          "6-5-0": 1,
+          "7-0-4": 1,
+          "7-1-3": 3,
+          "7-2-2": 1
+        }
+      },
+      "profiles": {
+        "runs": 250,
+        "meanWins": 4.036,
+        "meanDraws": 2.744,
+        "meanLosses": 4.22,
+        "matchPoints": {
+          "mean": 10.816,
+          "interval95": [
+            10.557412,
+            11.074588
+          ],
+          "p05": 7,
+          "median": 11,
+          "p95": 14
+        },
+        "meanRank": 17.076,
+        "titles": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "perfect": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 25,
+          "rate": 0.1,
+          "interval95": [
+            0.068654,
+            0.143453
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 108,
+          "rate": 0.432,
+          "interval95": [
+            0.372082,
+            0.493976
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 1,
+          "rate": 0.004,
+          "interval95": [
+            0.000706,
+            0.022306
+          ]
+        },
+        "meanForecastMatchPoints": 10.788084,
+        "meanOutcomeMinusForecast": 0.027916,
+        "poorRunForecast": {
+          "runs": 108,
+          "meanActualMP": 8.916667,
+          "meanForecastMP": 11.10403,
+          "meanOutcomeMinusForecast": -2.187363
+        },
+        "meanSourceGap": -13.232818,
+        "meanEffectiveGap": -4.127784,
+        "meanModifierGaps": {
+          "fatigue": 1.492909,
+          "form": 0.03,
+          "performance": 0.018091,
+          "trait": 5.766398,
+          "style": 1.797636
+        },
+        "sourceFavouriteOverturnRate": 0.225754,
+        "records": {
+          "0-4-7": 1,
+          "1-4-6": 2,
+          "1-5-5": 1,
+          "1-6-4": 1,
+          "2-3-6": 6,
+          "2-4-5": 6,
+          "2-5-4": 7,
+          "2-6-3": 1,
+          "3-1-7": 3,
+          "3-2-6": 8,
+          "3-3-5": 22,
+          "3-4-4": 16,
+          "3-5-3": 10,
+          "3-6-2": 1,
+          "4-0-7": 2,
+          "4-1-6": 10,
+          "4-2-5": 19,
+          "4-3-4": 27,
+          "4-4-3": 19,
+          "4-5-2": 1,
+          "4-6-1": 1,
+          "5-0-6": 3,
+          "5-1-5": 12,
+          "5-2-4": 22,
+          "5-3-3": 14,
+          "5-4-2": 2,
+          "5-5-1": 2,
+          "6-0-5": 4,
+          "6-1-4": 12,
+          "6-2-3": 4,
+          "6-3-2": 4,
+          "6-4-1": 1,
+          "7-1-3": 3,
+          "7-2-2": 1,
+          "8-0-3": 1,
+          "8-2-1": 1
+        }
+      },
+      "steeper": {
+        "runs": 250,
+        "meanWins": 4.048,
+        "meanDraws": 2.7,
+        "meanLosses": 4.252,
+        "matchPoints": {
+          "mean": 10.796,
+          "interval95": [
+            10.560512,
+            11.031488
+          ],
+          "p05": 8,
+          "median": 11,
+          "p95": 14
+        },
+        "meanRank": 17.212,
+        "titles": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "perfect": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 22,
+          "rate": 0.088,
+          "interval95": [
+            0.058831,
+            0.129639
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 109,
+          "rate": 0.436,
+          "interval95": [
+            0.375957,
+            0.49798
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 3,
+          "rate": 0.012,
+          "interval95": [
+            0.004089,
+            0.034681
+          ]
+        },
+        "meanForecastMatchPoints": 10.854618,
+        "meanOutcomeMinusForecast": -0.058618,
+        "poorRunForecast": {
+          "runs": 109,
+          "meanActualMP": 9.06422,
+          "meanForecastMP": 11.23105,
+          "meanOutcomeMinusForecast": -2.16683
+        },
+        "meanSourceGap": -12.191727,
+        "meanEffectiveGap": -2.821909,
+        "meanModifierGaps": {
+          "fatigue": 1.424386,
+          "form": 0.058909,
+          "performance": -0.004273,
+          "trait": 5.942795,
+          "style": 1.948
+        },
+        "sourceFavouriteOverturnRate": 0.215045,
+        "records": {
+          "1-3-7": 1,
+          "1-4-6": 1,
+          "1-5-5": 1,
+          "1-6-4": 2,
+          "2-1-8": 1,
+          "2-3-6": 4,
+          "2-4-5": 4,
+          "2-5-4": 4,
+          "2-6-3": 3,
+          "2-7-2": 1,
+          "3-1-7": 3,
+          "3-2-6": 8,
+          "3-3-5": 14,
+          "3-4-4": 15,
+          "3-5-3": 7,
+          "3-6-2": 3,
+          "4-0-7": 3,
+          "4-1-6": 12,
+          "4-2-5": 29,
+          "4-3-4": 30,
+          "4-4-3": 14,
+          "4-5-2": 7,
+          "5-0-6": 4,
+          "5-1-5": 16,
+          "5-2-4": 16,
+          "5-3-3": 21,
+          "5-4-2": 1,
+          "6-0-5": 2,
+          "6-1-4": 8,
+          "6-2-3": 11,
+          "6-3-2": 2,
+          "7-1-3": 1,
+          "8-0-3": 1
+        }
+      }
+    },
+    "2750": {
+      "baseline": {
+        "runs": 250,
+        "meanWins": 5.128,
+        "meanDraws": 2.656,
+        "meanLosses": 3.216,
+        "matchPoints": {
+          "mean": 12.912,
+          "interval95": [
+            12.619743,
+            13.204257
+          ],
+          "p05": 9,
+          "median": 13,
+          "p95": 17
+        },
+        "meanRank": 10.16,
+        "titles": {
+          "count": 15,
+          "rate": 0.06,
+          "interval95": [
+            0.036694,
+            0.096624
+          ]
+        },
+        "perfect": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 4,
+          "rate": 0.016,
+          "interval95": [
+            0.006239,
+            0.04041
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 35,
+          "rate": 0.14,
+          "interval95": [
+            0.102416,
+            0.188481
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 2,
+          "rate": 0.008,
+          "interval95": [
+            0.002197,
+            0.028695
+          ]
+        },
+        "meanForecastMatchPoints": 12.871497,
+        "meanOutcomeMinusForecast": 0.040503,
+        "poorRunForecast": {
+          "runs": 35,
+          "meanActualMP": 9.6,
+          "meanForecastMP": 13.736575,
+          "meanOutcomeMinusForecast": -4.136575
+        },
+        "meanSourceGap": 24.814636,
+        "meanEffectiveGap": 30.503886,
+        "meanModifierGaps": {
+          "fatigue": 0.444636,
+          "form": -1.407273,
+          "performance": -0.046909,
+          "trait": 4.529523,
+          "style": 2.169273
+        },
+        "sourceFavouriteOverturnRate": 0.163283,
+        "records": {
+          "10-0-1": 1,
+          "2-5-4": 1,
+          "2-6-3": 2,
+          "2-7-2": 1,
+          "3-3-5": 9,
+          "3-4-4": 9,
+          "3-5-3": 8,
+          "3-6-2": 5,
+          "3-7-1": 1,
+          "4-1-6": 4,
+          "4-2-5": 10,
+          "4-3-4": 23,
+          "4-4-3": 15,
+          "4-5-2": 4,
+          "5-1-5": 9,
+          "5-2-4": 21,
+          "5-3-3": 15,
+          "5-4-2": 8,
+          "5-5-1": 3,
+          "6-0-5": 4,
+          "6-1-4": 15,
+          "6-2-3": 27,
+          "6-3-2": 13,
+          "6-4-1": 3,
+          "7-0-4": 3,
+          "7-1-3": 5,
+          "7-2-2": 8,
+          "7-3-1": 6,
+          "7-4-0": 1,
+          "8-0-3": 3,
+          "8-1-2": 5,
+          "8-2-1": 2,
+          "8-3-0": 3,
+          "9-1-1": 3
+        }
+      },
+      "profiles": {
+        "runs": 250,
+        "meanWins": 5.032,
+        "meanDraws": 2.58,
+        "meanLosses": 3.388,
+        "matchPoints": {
+          "mean": 12.644,
+          "interval95": [
+            12.362801,
+            12.925199
+          ],
+          "p05": 9,
+          "median": 13,
+          "p95": 16
+        },
+        "meanRank": 10.64,
+        "titles": {
+          "count": 10,
+          "rate": 0.04,
+          "interval95": [
+            0.02187,
+            0.072053
+          ]
+        },
+        "perfect": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 10,
+          "rate": 0.04,
+          "interval95": [
+            0.02187,
+            0.072053
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 42,
+          "rate": 0.168,
+          "interval95": [
+            0.126758,
+            0.219291
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 2,
+          "rate": 0.008,
+          "interval95": [
+            0.002197,
+            0.028695
+          ]
+        },
+        "meanForecastMatchPoints": 12.933741,
+        "meanOutcomeMinusForecast": -0.289741,
+        "poorRunForecast": {
+          "runs": 42,
+          "meanActualMP": 9.357143,
+          "meanForecastMP": 13.510226,
+          "meanOutcomeMinusForecast": -4.153083
+        },
+        "meanSourceGap": 23.571727,
+        "meanEffectiveGap": 31.374795,
+        "meanModifierGaps": {
+          "fatigue": 1.024727,
+          "form": -0.628364,
+          "performance": -0.008455,
+          "trait": 4.980977,
+          "style": 2.434182
+        },
+        "sourceFavouriteOverturnRate": 0.144281,
+        "records": {
+          "10-0-1": 1,
+          "2-3-6": 1,
+          "2-4-5": 5,
+          "2-5-4": 2,
+          "2-6-3": 2,
+          "3-1-7": 1,
+          "3-3-5": 5,
+          "3-4-4": 5,
+          "3-5-3": 6,
+          "3-6-2": 3,
+          "3-7-1": 1,
+          "4-0-7": 1,
+          "4-1-6": 2,
+          "4-2-5": 13,
+          "4-3-4": 17,
+          "4-4-3": 15,
+          "4-5-2": 5,
+          "4-7-0": 1,
+          "5-0-6": 5,
+          "5-1-5": 11,
+          "5-2-4": 25,
+          "5-3-3": 29,
+          "5-4-2": 7,
+          "5-5-1": 3,
+          "6-0-5": 3,
+          "6-1-4": 12,
+          "6-2-3": 20,
+          "6-3-2": 11,
+          "6-4-1": 2,
+          "7-0-4": 3,
+          "7-1-3": 12,
+          "7-2-2": 8,
+          "7-3-1": 3,
+          "7-4-0": 1,
+          "8-0-3": 3,
+          "8-1-2": 1,
+          "8-2-1": 3,
+          "8-3-0": 2
+        }
+      },
+      "steeper": {
+        "runs": 250,
+        "meanWins": 5.228,
+        "meanDraws": 2.428,
+        "meanLosses": 3.344,
+        "matchPoints": {
+          "mean": 12.884,
+          "interval95": [
+            12.635129,
+            13.132871
+          ],
+          "p05": 10,
+          "median": 13,
+          "p95": 16
+        },
+        "meanRank": 9.436,
+        "titles": {
+          "count": 7,
+          "rate": 0.028,
+          "interval95": [
+            0.013628,
+            0.056658
+          ]
+        },
+        "perfect": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 2,
+          "rate": 0.008,
+          "interval95": [
+            0.002197,
+            0.028695
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 29,
+          "rate": 0.116,
+          "interval95": [
+            0.081991,
+            0.161632
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 1,
+          "rate": 0.004,
+          "interval95": [
+            0.000706,
+            0.022306
+          ]
+        },
+        "meanForecastMatchPoints": 12.961233,
+        "meanOutcomeMinusForecast": -0.077233,
+        "poorRunForecast": {
+          "runs": 29,
+          "meanActualMP": 9.517241,
+          "meanForecastMP": 13.903175,
+          "meanOutcomeMinusForecast": -4.385934
+        },
+        "meanSourceGap": 19.506,
+        "meanEffectiveGap": 26.065034,
+        "meanModifierGaps": {
+          "fatigue": 0.717614,
+          "form": -0.775636,
+          "performance": 0.057091,
+          "trait": 4.326875,
+          "style": 2.233091
+        },
+        "sourceFavouriteOverturnRate": 0.164777,
+        "records": {
+          "2-5-4": 1,
+          "2-6-3": 1,
+          "3-1-7": 1,
+          "3-2-6": 1,
+          "3-3-5": 7,
+          "3-4-4": 4,
+          "3-5-3": 3,
+          "3-6-2": 1,
+          "4-1-6": 1,
+          "4-2-5": 11,
+          "4-3-4": 14,
+          "4-4-3": 18,
+          "4-5-2": 9,
+          "4-6-1": 4,
+          "5-0-6": 2,
+          "5-1-5": 12,
+          "5-2-4": 25,
+          "5-3-3": 13,
+          "5-4-2": 7,
+          "5-5-1": 3,
+          "6-0-5": 9,
+          "6-1-4": 25,
+          "6-2-3": 25,
+          "6-3-2": 17,
+          "6-4-1": 1,
+          "6-5-0": 1,
+          "7-0-4": 2,
+          "7-1-3": 10,
+          "7-2-2": 12,
+          "7-3-1": 2,
+          "8-0-3": 1,
+          "8-1-2": 4,
+          "8-2-1": 3
+        }
+      }
+    },
+    "2850": {
+      "baseline": {
+        "runs": 250,
+        "meanWins": 7.42,
+        "meanDraws": 1.952,
+        "meanLosses": 1.628,
+        "matchPoints": {
+          "mean": 16.792,
+          "interval95": [
+            16.511694,
+            17.072306
+          ],
+          "p05": 13,
+          "median": 17,
+          "p95": 20
+        },
+        "meanRank": 2.5,
+        "titles": {
+          "count": 125,
+          "rate": 0.5,
+          "interval95": [
+            0.43849,
+            0.56151
+          ]
+        },
+        "perfect": {
+          "count": 4,
+          "rate": 0.016,
+          "interval95": [
+            0.006239,
+            0.04041
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "meanForecastMatchPoints": 16.719882,
+        "meanOutcomeMinusForecast": 0.072118,
+        "poorRunForecast": null,
+        "meanSourceGap": 106.930091,
+        "meanEffectiveGap": 101.961136,
+        "meanModifierGaps": {
+          "fatigue": 2.558227,
+          "form": -1.862182,
+          "performance": -0.059364,
+          "trait": -5.294727,
+          "style": -0.310909
+        },
+        "sourceFavouriteOverturnRate": 0.061016,
+        "records": {
+          "10-0-1": 8,
+          "10-1-0": 8,
+          "11-0-0": 4,
+          "4-3-4": 2,
+          "4-4-3": 1,
+          "5-1-5": 3,
+          "5-2-4": 1,
+          "5-3-3": 10,
+          "5-4-2": 7,
+          "5-5-1": 4,
+          "5-6-0": 2,
+          "6-0-5": 1,
+          "6-1-4": 3,
+          "6-2-3": 8,
+          "6-3-2": 12,
+          "6-4-1": 8,
+          "6-5-0": 3,
+          "7-0-4": 1,
+          "7-1-3": 11,
+          "7-2-2": 26,
+          "7-3-1": 22,
+          "7-4-0": 1,
+          "8-0-3": 8,
+          "8-1-2": 27,
+          "8-2-1": 25,
+          "8-3-0": 9,
+          "9-0-2": 9,
+          "9-1-1": 16,
+          "9-2-0": 10
+        }
+      },
+      "profiles": {
+        "runs": 250,
+        "meanWins": 7.428,
+        "meanDraws": 1.944,
+        "meanLosses": 1.628,
+        "matchPoints": {
+          "mean": 16.8,
+          "interval95": [
+            16.515888,
+            17.084112
+          ],
+          "p05": 13,
+          "median": 17,
+          "p95": 20
+        },
+        "meanRank": 2.576,
+        "titles": {
+          "count": 119,
+          "rate": 0.476,
+          "interval95": [
+            0.414923,
+            0.537803
+          ]
+        },
+        "perfect": {
+          "count": 7,
+          "rate": 0.028,
+          "interval95": [
+            0.013628,
+            0.056658
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 1,
+          "rate": 0.004,
+          "interval95": [
+            0.000706,
+            0.022306
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "meanForecastMatchPoints": 16.706354,
+        "meanOutcomeMinusForecast": 0.093646,
+        "poorRunForecast": {
+          "runs": 1,
+          "meanActualMP": 10,
+          "meanForecastMP": 16.450166,
+          "meanOutcomeMinusForecast": -6.450166
+        },
+        "meanSourceGap": 106.852091,
+        "meanEffectiveGap": 101.324864,
+        "meanModifierGaps": {
+          "fatigue": 1.618818,
+          "form": -1.030909,
+          "performance": 0.004545,
+          "trait": -5.719318,
+          "style": -0.400364
+        },
+        "sourceFavouriteOverturnRate": 0.057198,
+        "records": {
+          "10-0-1": 2,
+          "10-1-0": 5,
+          "11-0-0": 7,
+          "3-6-2": 1,
+          "4-2-5": 1,
+          "4-4-3": 2,
+          "4-5-2": 2,
+          "5-2-4": 1,
+          "5-3-3": 5,
+          "5-4-2": 2,
+          "5-5-1": 7,
+          "5-6-0": 2,
+          "6-0-5": 1,
+          "6-1-4": 11,
+          "6-2-3": 10,
+          "6-3-2": 12,
+          "6-4-1": 5,
+          "6-5-0": 1,
+          "7-0-4": 2,
+          "7-1-3": 18,
+          "7-2-2": 23,
+          "7-3-1": 19,
+          "7-4-0": 6,
+          "8-0-3": 3,
+          "8-1-2": 22,
+          "8-2-1": 20,
+          "8-3-0": 14,
+          "9-0-2": 15,
+          "9-1-1": 20,
+          "9-2-0": 11
+        }
+      },
+      "steeper": {
+        "runs": 250,
+        "meanWins": 7.812,
+        "meanDraws": 1.752,
+        "meanLosses": 1.436,
+        "matchPoints": {
+          "mean": 17.376,
+          "interval95": [
+            17.0903,
+            17.6617
+          ],
+          "p05": 14,
+          "median": 17,
+          "p95": 21
+        },
+        "meanRank": 2.132,
+        "titles": {
+          "count": 134,
+          "rate": 0.536,
+          "interval95": [
+            0.474103,
+            0.596808
+          ]
+        },
+        "perfect": {
+          "count": 9,
+          "rate": 0.036,
+          "interval95": [
+            0.019053,
+            0.066991
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "meanForecastMatchPoints": 17.467157,
+        "meanOutcomeMinusForecast": -0.091157,
+        "poorRunForecast": null,
+        "meanSourceGap": 102.096909,
+        "meanEffectiveGap": 96.255318,
+        "meanModifierGaps": {
+          "fatigue": 1.482955,
+          "form": -1.135636,
+          "performance": 0.028909,
+          "trait": -5.865636,
+          "style": -0.352182
+        },
+        "sourceFavouriteOverturnRate": 0.06031,
+        "records": {
+          "10-0-1": 8,
+          "10-1-0": 15,
+          "11-0-0": 9,
+          "4-4-3": 1,
+          "5-2-4": 1,
+          "5-3-3": 5,
+          "5-4-2": 8,
+          "5-5-1": 3,
+          "6-1-4": 4,
+          "6-2-3": 11,
+          "6-3-2": 7,
+          "6-4-1": 5,
+          "6-5-0": 5,
+          "7-0-4": 1,
+          "7-1-3": 13,
+          "7-2-2": 27,
+          "7-3-1": 11,
+          "7-4-0": 4,
+          "8-0-3": 7,
+          "8-1-2": 17,
+          "8-2-1": 29,
+          "8-3-0": 4,
+          "9-0-2": 11,
+          "9-1-1": 28,
+          "9-2-0": 16
+        }
+      }
+    }
+  },
+  "paired": {
+    "2700:baseline->profiles": {
+      "meanMatchPointChange": 0.1,
+      "interval95": [
+        -0.263449,
+        0.463449
+      ]
+    },
+    "2700:profiles->steeper": {
+      "meanMatchPointChange": -0.02,
+      "interval95": [
+        -0.348337,
+        0.308337
+      ]
+    },
+    "2750:baseline->profiles": {
+      "meanMatchPointChange": -0.268,
+      "interval95": [
+        -0.647444,
+        0.111444
+      ]
+    },
+    "2750:profiles->steeper": {
+      "meanMatchPointChange": 0.24,
+      "interval95": [
+        -0.121841,
+        0.601841
+      ]
+    },
+    "2850:baseline->profiles": {
+      "meanMatchPointChange": 0.008,
+      "interval95": [
+        -0.361635,
+        0.377635
+      ]
+    },
+    "2850:profiles->steeper": {
+      "meanMatchPointChange": 0.576,
+      "interval95": [
+        0.213523,
+        0.938477
+      ]
+    }
+  },
+  "calibration": {
+    "baseline": {
+      "boards": {
+        "count": 528000,
+        "meanBrier": 0.620671,
+        "maxSumError": 1.1102230246251565e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.30496,
+            "observed": 0.305275,
+            "residualStandardErrors": 0.512772
+          },
+          "draw": {
+            "predicted": 0.42916,
+            "observed": 0.428907,
+            "residualStandardErrors": -0.375016
+          },
+          "loss": {
+            "predicted": 0.26588,
+            "observed": 0.265818,
+            "residualStandardErrors": -0.104834
+          }
+        }
+      },
+      "userMatches": {
+        "count": 8250,
+        "meanBrier": 0.56435,
+        "maxSumError": 4.440892098500626e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.49995,
+            "observed": 0.503515,
+            "residualStandardErrors": 0.693492
+          },
+          "draw": {
+            "predicted": 0.224505,
+            "observed": 0.217818,
+            "residualStandardErrors": -1.463076
+          },
+          "loss": {
+            "predicted": 0.275546,
+            "observed": 0.278667,
+            "residualStandardErrors": 0.673886
+          }
+        }
+      },
+      "userMatchesByCohort": {
+        "2700": {
+          "count": 2750,
+          "meanBrier": 0.617651,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.368641,
+              "observed": 0.369818,
+              "residualStandardErrors": 0.132503
+            },
+            "draw": {
+              "predicted": 0.245805,
+              "observed": 0.234545,
+              "residualStandardErrors": -1.373015
+            },
+            "loss": {
+              "predicted": 0.385555,
+              "observed": 0.395636,
+              "residualStandardErrors": 1.129521
+            }
+          }
+        },
+        "2750": {
+          "count": 2750,
+          "meanBrier": 0.605294,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.465367,
+              "observed": 0.466182,
+              "residualStandardErrors": 0.089019
+            },
+            "draw": {
+              "predicted": 0.239403,
+              "observed": 0.241455,
+              "residualStandardErrors": 0.252498
+            },
+            "loss": {
+              "predicted": 0.29523,
+              "observed": 0.292364,
+              "residualStandardErrors": -0.341755
+            }
+          }
+        },
+        "2850": {
+          "count": 2750,
+          "meanBrier": 0.470104,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.665841,
+              "observed": 0.674545,
+              "residualStandardErrors": 1.00434
+            },
+            "draw": {
+              "predicted": 0.188307,
+              "observed": 0.177455,
+              "residualStandardErrors": -1.467086
+            },
+            "loss": {
+              "predicted": 0.145852,
+              "observed": 0.148,
+              "residualStandardErrors": 0.327545
+            }
+          }
+        }
+      }
+    },
+    "profiles": {
+      "boards": {
+        "count": 528000,
+        "meanBrier": 0.621912,
+        "maxSumError": 1.1102230246251565e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.303857,
+            "observed": 0.304727,
+            "residualStandardErrors": 1.419698
+          },
+          "draw": {
+            "predicted": 0.43092,
+            "observed": 0.428869,
+            "residualStandardErrors": -3.044141
+          },
+          "loss": {
+            "predicted": 0.265223,
+            "observed": 0.266403,
+            "residualStandardErrors": 2.002221
+          }
+        }
+      },
+      "userMatches": {
+        "count": 8250,
+        "meanBrier": 0.564338,
+        "maxSumError": 4.440892098500626e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.500233,
+            "observed": 0.499879,
+            "residualStandardErrors": -0.06873
+          },
+          "draw": {
+            "predicted": 0.224631,
+            "observed": 0.220242,
+            "residualStandardErrors": -0.95994
+          },
+          "loss": {
+            "predicted": 0.275136,
+            "observed": 0.279879,
+            "residualStandardErrors": 1.023863
+          }
+        }
+      },
+      "userMatchesByCohort": {
+        "2700": {
+          "count": 2750,
+          "meanBrier": 0.625482,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.367312,
+              "observed": 0.366909,
+              "residualStandardErrors": -0.045376
+            },
+            "draw": {
+              "predicted": 0.24611,
+              "observed": 0.249455,
+              "residualStandardErrors": 0.407614
+            },
+            "loss": {
+              "predicted": 0.386577,
+              "observed": 0.383636,
+              "residualStandardErrors": -0.329003
+            }
+          }
+        },
+        "2750": {
+          "count": 2750,
+          "meanBrier": 0.60287,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.468424,
+              "observed": 0.457455,
+              "residualStandardErrors": -1.196448
+            },
+            "draw": {
+              "predicted": 0.238946,
+              "observed": 0.234545,
+              "residualStandardErrors": -0.541816
+            },
+            "loss": {
+              "predicted": 0.29263,
+              "observed": 0.308,
+              "residualStandardErrors": 1.836527
+            }
+          }
+        },
+        "2850": {
+          "count": 2750,
+          "meanBrier": 0.464662,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.664961,
+              "observed": 0.675273,
+              "residualStandardErrors": 1.187914
+            },
+            "draw": {
+              "predicted": 0.188838,
+              "observed": 0.176727,
+              "residualStandardErrors": -1.634995
+            },
+            "loss": {
+              "predicted": 0.146201,
+              "observed": 0.148,
+              "residualStandardErrors": 0.273814
+            }
+          }
+        }
+      }
+    },
+    "steeper": {
+      "boards": {
+        "count": 528000,
+        "meanBrier": 0.611314,
+        "maxSumError": 1.1102230246251565e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.310241,
+            "observed": 0.309409,
+            "residualStandardErrors": -1.365515
+          },
+          "draw": {
+            "predicted": 0.431691,
+            "observed": 0.432528,
+            "residualStandardErrors": 1.242506
+          },
+          "loss": {
+            "predicted": 0.258067,
+            "observed": 0.258062,
+            "residualStandardErrors": -0.008462
+          }
+        }
+      },
+      "userMatches": {
+        "count": 8250,
+        "meanBrier": 0.540088,
+        "maxSumError": 4.440892098500626e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.516978,
+            "observed": 0.517818,
+            "residualStandardErrors": 0.167806
+          },
+          "draw": {
+            "predicted": 0.217044,
+            "observed": 0.208485,
+            "residualStandardErrors": -1.902028
+          },
+          "loss": {
+            "predicted": 0.265978,
+            "observed": 0.273697,
+            "residualStandardErrors": 1.72347
+          }
+        }
+      },
+      "userMatchesByCohort": {
+        "2700": {
+          "count": 2750,
+          "meanBrier": 0.609999,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.371141,
+              "observed": 0.368,
+              "residualStandardErrors": -0.357873
+            },
+            "draw": {
+              "predicted": 0.244502,
+              "observed": 0.245455,
+              "residualStandardErrors": 0.116503
+            },
+            "loss": {
+              "predicted": 0.384357,
+              "observed": 0.386545,
+              "residualStandardErrors": 0.249161
+            }
+          }
+        },
+        "2750": {
+          "count": 2750,
+          "meanBrier": 0.587029,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.471492,
+              "observed": 0.475273,
+              "residualStandardErrors": 0.420494
+            },
+            "draw": {
+              "predicted": 0.23531,
+              "observed": 0.220727,
+              "residualStandardErrors": -1.807205
+            },
+            "loss": {
+              "predicted": 0.293198,
+              "observed": 0.304,
+              "residualStandardErrors": 1.315131
+            }
+          }
+        },
+        "2850": {
+          "count": 2750,
+          "meanBrier": 0.423235,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.708301,
+              "observed": 0.710182,
+              "residualStandardErrors": 0.228508
+            },
+            "draw": {
+              "predicted": 0.171321,
+              "observed": 0.159273,
+              "residualStandardErrors": -1.699412
+            },
+            "loss": {
+              "predicted": 0.120378,
+              "observed": 0.130545,
+              "residualStandardErrors": 1.695518
+            }
+          }
+        }
+      }
+    }
+  },
+  "poorRunExamples": [
+    {
+      "variant": "profiles",
+      "seed": 722672966,
+      "cohort": "2850",
+      "w": 4,
+      "d": 2,
+      "l": 5,
+      "mp": 10,
+      "bp": 22.5,
+      "rank": 16,
+      "expectedMP": 16.450166,
+      "sourceGap": 109.454545,
+      "effectiveGap": 95.625,
+      "modifierGaps": {
+        "fatigue": 0.727273,
+        "form": 0.409091,
+        "performance": -1.227273,
+        "trait": -12.465909,
+        "style": -1.272727
+      },
+      "sourceFavourites": 43,
+      "sourceFavouriteOverturned": 4,
+      "favouriteLosses": 2,
+      "rounds": [
+        {
+          "round": 1,
+          "opponent": "alltime:ISR:A",
+          "points": 3.5,
+          "win": 0.784492,
+          "draw": 0.139829,
+          "loss": 0.075679,
+          "sourceGap": 128.5,
+          "effectiveGap": 146.75
+        },
+        {
+          "round": 2,
+          "opponent": "alltime:USA:A",
+          "points": 1.5,
+          "win": 0.499619,
+          "draw": 0.252941,
+          "loss": 0.24744,
+          "sourceGap": 64,
+          "effectiveGap": 42.375
+        },
+        {
+          "round": 3,
+          "opponent": "alltime:RUS:B",
+          "points": 2,
+          "win": 0.602552,
+          "draw": 0.22266,
+          "loss": 0.174789,
+          "sourceGap": 106.5,
+          "effectiveGap": 75.25
+        },
+        {
+          "round": 4,
+          "opponent": "alltime:URS:A",
+          "points": 1.5,
+          "win": 0.471403,
+          "draw": 0.263022,
+          "loss": 0.265575,
+          "sourceGap": 41.5,
+          "effectiveGap": 33.125
+        },
+        {
+          "round": 5,
+          "opponent": "alltime:BUL:A",
+          "points": 2.5,
+          "win": 0.796709,
+          "draw": 0.135678,
+          "loss": 0.067612,
+          "sourceGap": 156.25,
+          "effectiveGap": 148.3125
+        },
+        {
+          "round": 6,
+          "opponent": "alltime:GER:A",
+          "points": 1.5,
+          "win": 0.771927,
+          "draw": 0.154371,
+          "loss": 0.073702,
+          "sourceGap": 141.5,
+          "effectiveGap": 137.625
+        },
+        {
+          "round": 7,
+          "opponent": "alltime:FRA:A",
+          "points": 2.5,
+          "win": 0.523146,
+          "draw": 0.24985,
+          "loss": 0.227004,
+          "sourceGap": 98.75,
+          "effectiveGap": 49.9375
+        },
+        {
+          "round": 8,
+          "opponent": "alltime:CHN:A",
+          "points": 1.5,
+          "win": 0.482264,
+          "draw": 0.243904,
+          "loss": 0.273831,
+          "sourceGap": 67.75,
+          "effectiveGap": 37.625
+        },
+        {
+          "round": 9,
+          "opponent": "alltime:POL:A",
+          "points": 2.5,
+          "win": 0.781327,
+          "draw": 0.140657,
+          "loss": 0.078016,
+          "sourceGap": 139,
+          "effectiveGap": 144.9375
+        },
+        {
+          "round": 10,
+          "opponent": "alltime:UKR:A",
+          "points": 1.5,
+          "win": 0.640356,
+          "draw": 0.215377,
+          "loss": 0.144267,
+          "sourceGap": 121.5,
+          "effectiveGap": 86.625
+        },
+        {
+          "round": 11,
+          "opponent": "alltime:CHN:B",
+          "points": 2,
+          "win": 0.793591,
+          "draw": 0.137103,
+          "loss": 0.069306,
+          "sourceGap": 138.75,
+          "effectiveGap": 149.3125
+        }
+      ]
+    }
+  ]
+}
