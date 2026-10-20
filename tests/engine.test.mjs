@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,setCaptain,RULES_VERSION} from '../dist/engine.js';
+import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,setCaptain,RULES_VERSION,planLineup,previewTeams,applyRecommendedLineup} from '../dist/engine.js';
 
 import {rollTraits,careerProfile} from '../dist/traits.js';
-import {fixedProfile,rollProfiles,profileFatigue,performanceSeed,performanceSwing,restedForm} from '../dist/player-profile.js';
+import {fixedProfile,rollProfiles,profileFatigue,nextFatigue,performanceSeed,performanceSwing,restedForm} from '../dist/player-profile.js';
 import {openDatabase} from '../server/sqlite.mjs';
 import {readCatalogue} from '../server/catalog.mjs';
 const db=openDatabase(':memory:');
@@ -180,20 +180,23 @@ test('same draft and seed produce the same tournament',()=>{
   assert.deepEqual(play(),play());
 });
 
-test('reserve rotates into active boards and resting resets fatigue',()=>{
+test('reserve rotates into active boards and sitting out recovers fatigue only after the round',()=>{
   const s=draft(3);let t=startTournament(s.squad,'Rested',20,s.traits,s.profiles,s.captain);
   for(let i=0;i<5;i++)t=simulateRound(t);
   const id=t.squad[0],reserve=t.squad[4];
   assert.equal(t.streaks[id],5);
   const match=t.rounds.at(-1).find(m=>m.a==='YOU'||m.b==='YOU');
   const player=match.boards.map(b=>match.a==='YOU'?b.a:b.b).find(p=>p.id===id);
-  assert.equal(player.fatigue,profileFatigue(s.traits[id],4,s.profiles[id]));
+  assert.equal(player.fatigue,profileFatigue(s.traits[id],player.fatigueLoad));
   assert.equal(player.rating,playerById(id).rating-player.fatigue+player.traitBonus+player.styleBonus+player.formBonus+player.performance+player.captainBonus);
+  const beforeRest=t.loads[id];
   t=rotateReserve(t,0);
+  assert.equal(t.loads[id],beforeRest);
   assert.equal(t.squad[4],id);
   assert.ok(t.squad.slice(0,4).includes(reserve));
   t=simulateRound(t);
   assert.equal(t.streaks[id],0);
+  assert.equal(t.loads[id],Math.max(0,beforeRest-30));
   assert.equal(t.streaks[reserve],1);
 });
 
@@ -202,7 +205,44 @@ test('save validation rejects corrupt and incompatible browser data',()=>{
   const previousRules={...initialState(),rulesVersion:RULES_VERSION.replace('career-traits-2','career-traits-1')};
   assert.notEqual(previousRules.rulesVersion,RULES_VERSION);
   assert.equal(validSave(previousRules),false);
+  assert.equal(validSave({...initialState(),rulesVersion:RULES_VERSION.replace('squad-profiles-2','squad-profiles-1')}),false);
   for(const broken of [null,{},[],{...initialState(),version:9},{...initialState(),squad:['invalid',null,null,null,null]},{...initialState(),rerolls:-1},{...initialState(),phase:'results'},{...initialState(),offer:{nation:'IND',players:['fake']}}]) assert.equal(validSave(broken),false);
+});
+
+test('every team accumulates fatigue, rests a reserve and retains partial recovery across the Olympiad',()=>{
+  const s=draft(18);let t=startTournament(s.squad,s.teamName,55,s.traits,s.profiles,s.captain),partialRecovery=false;
+  const played=new Map(t.teams.map(team=>[team.id,new Set()]));
+  for(let round=0;round<11;round++){
+    t=applyRecommendedLineup(t);
+    const before=structuredClone(t),planned=previewTeams(t);
+    assert.deepEqual(t,before);
+    t=simulateRound(t);
+    for(const team of t.teams){
+      const previous=before.teams.find(p=>p.id===team.id);
+      assert.deepEqual(team.lineup,planned.find(p=>p.id===team.id).lineup);
+      for(const id of team.players){
+        const playing=team.lineup.slice(0,4).includes(id);
+        assert.equal(team.loads[id],nextFatigue(previous.loads[id],playing,team.profiles[id]));
+        if(playing)played.get(team.id).add(id);
+        else {assert.equal(team.streaks[id],0);if(team.loads[id]>0)partialRecovery=true;}
+      }
+    }
+  }
+  assert.ok(partialRecovery);
+  assert.ok([...played.values()].every(players=>players.size===5));
+  assert.ok(validSave({...s,phase:'results',tournament:t}));
+  assert.strictEqual(applyRecommendedLineup(t),t);
+  assert.deepEqual(previewTeams(t),t.teams);
+});
+
+test('reserve planning can rest a strong tired player before the reserve overtakes them',()=>{
+  const s=draft(55),t=startTournament(s.squad,s.teamName,55,s.traits,s.profiles,s.captain);
+  const team=structuredClone(t.teams.find(team=>team.id==='alltime:USA:A'));
+  team.players.forEach((id,i)=>{team.loads[id]=[18,58,39,5,4][i];team.forms[id]=0;});
+  const before=structuredClone(team);
+  assert.equal(playerById(planLineup(team,1)[4]).personId,'chessmetrics:37943');
+  assert.equal(playerById(planLineup(team,3)[4]).personId,'fide:2016192');
+  assert.deepEqual(team,before);
 });
 
 
@@ -231,7 +271,7 @@ test('the forecast is pure, matches the next round, and both sides keep seeded t
   assert.deepEqual(previewRound(t),preview);assert.deepEqual(t,before);
   const next=simulateRound(t),match=next.rounds[0].find(m=>m.a==='YOU'||m.b==='YOU');
   assert.equal(match.a,preview.a);assert.equal(match.b,preview.b);
-  match.boards.forEach((board,i)=>{const copy=structuredClone(board);delete copy.score;delete copy.a.afterForm;delete copy.b.afterForm;assert.deepEqual(copy,preview.boards[i]);});
+  match.boards.forEach((board,i)=>{const copy=structuredClone(board);delete copy.score;delete copy.a.afterForm;delete copy.b.afterForm;delete copy.a.afterFatigue;delete copy.b.afterFatigue;assert.deepEqual(copy,preview.boards[i]);});
   for(const team of next.teams)assert.deepEqual(team.traits,t.teams.find(x=>x.id===team.id).traits);
   assert.deepEqual(simulateRound(JSON.parse(JSON.stringify(t))),next);
   assert.equal(validSave({...s,teamName:t.teams[0].name,phase:'tournament',tournament:next}),true);
@@ -288,10 +328,10 @@ test('every AI player retains both their old trait and new profile throughout th
       const team=t.teams.find(team=>team.id===teamId),profile=team.profiles[p.id];
       assert.equal(p.trait,team.traits[p.id]);
       assert.equal(p.stamina,profile.stamina);assert.equal(p.style,profile.style);assert.equal(p.consistency,profile.consistency);
-      assert.equal(p.fatigue,profileFatigue(p.trait,p.streak,profile));
+      assert.equal(p.fatigue,profileFatigue(p.trait,p.fatigueLoad));
       assert.equal(p.performance,performanceSwing(p.consistency,random(performanceSeed(t.seed,round,teamId,p.id))));
       assert.ok(team.players.includes(p.captainId));assert.ok(p.captainBonus>=0&&p.captainBonus<=12);
-      assert.equal(team.forms[p.id],p.afterForm);
+      assert.equal(team.forms[p.id],p.afterForm);assert.equal(team.loads[p.id],p.afterFatigue);
     }
     const match=t.rounds.at(-1).find(m=>m.a==='YOU'||m.b==='YOU');
     for(let i=0;i<4;i++)assert.equal(match.boards[i].a.rating,preview.boards[i].a.rating);
@@ -335,5 +375,9 @@ test('form and fatigue histories survive rest, reload and changes of captain',()
     copy=>copy.tournament.rounds[0][0].boards[0].a.styleBonus++,
     copy=>copy.tournament.rounds[0][0].boards[0].a.captainBonus++,
     copy=>copy.tournament.rounds[0][0].boards[0].a.afterForm=3,
+    copy=>copy.tournament.loads[copy.squad[0]]=101,
+    copy=>copy.tournament.teams[1].loads[copy.tournament.teams[1].players[0]]++,
+    copy=>copy.tournament.rounds[0][0].boards[0].a.fatigueLoad++,
+    copy=>copy.tournament.rounds[0][0].boards[0].a.afterFatigue++,
   ]){const copy=structuredClone(before);mutate(copy);assert.equal(validSave(copy),false);}
 });

@@ -49,3 +49,16 @@ h1 em{margin-left:10px}.candidate:disabled{opacity:.5}
 .captain-options{display:grid;gap:10px;margin:22px 0}.captain-options>button{text-align:left;padding:15px;border:1px solid #d7dfcd;background:#f9fbf5;border-radius:6px}.captain-options>button[aria-pressed=true]{border-color:#839d69;box-shadow:0 0 0 1px #839d69}.captain-options strong{font-size:13px}.captain-influence{display:block;font-size:11px;margin-top:9px;color:#6c7d5b}.profile-guide{font-size:12px;color:#6c7961;line-height:1.8}.profile-guide p{margin:12px 0}.profile-guide strong{color:#344d2b}.style-guide{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}.style-guide article{border:1px solid #dce2d2;border-radius:5px;padding:14px}.style-guide h3{font-size:13px;margin-bottom:6px}.style-guide p{font-size:11px;line-height:1.7;color:#6c7961}.preview-captains{font-size:12px;color:#6c7961;line-height:1.8}.forecast-pair .player-profile{display:flex}.forecast-pair .profile-levels{font-size:9px}.rotation-option .player-profile{font-weight:400}
 @media(max-width:720px){.squad-slot:not(.reserve-slot){height:282px}.squad-slot .compact-profile .style-chip,.squad-slot .compact-profile .form-chip{font-size:7px}.draft-captain{font-size:8px;padding:13px 16px}.draft-captain .text-button{font-size:8px}.reserve-slot{width:200px}.board-result .profile-levels,.board-result .style-chip,.board-result .form-chip{font-size:7px}.board-result small{font-size:7px}.style-guide{grid-template-columns:1fr}}
 @media(max-width:390px){.squad-slot:not(.reserve-slot){height:292px}.reserve-slot{width:220px}.compact-profile{gap:3px}.draft-captain>span{max-width:50%}.profile-levels{font-size:9px}.captain-options .profile-levels{font-size:10px}}
+
+/* Shared fatigue readouts in live squads, national rosters and rotation choices. */
+.fatigue-status{display:flex;flex-direction:column;gap:4px;margin-top:7px;font:400 9px/1.5 var(--sans);letter-spacing:0;color:#69795f;text-transform:none;min-width:0}
+.fatigue-meter{display:block;width:100%;height:7px;border:0;border-radius:4px;background:#e2e8d9;overflow:hidden}
+.fatigue-meter::-webkit-meter-bar{border:0;border-radius:4px;background:#e2e8d9}
+.fatigue-meter::-webkit-meter-optimum-value{background:#87a36b}
+.fatigue-meter::-webkit-meter-suboptimum-value{background:#c5a35b}
+.fatigue-meter::-webkit-meter-even-less-good-value{background:#b56d55}
+.fatigue-meter::-moz-meter-bar{background:#87a36b}
+.reserve-readiness{margin:16px 0;padding:13px;border:1px solid var(--line);border-radius:5px;font-size:11px}
+.preview-reserves{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;padding:15px;border:1px solid var(--line);border-radius:5px;font-size:10px}
+.preview-reserves strong{display:block;margin:5px 0;font-size:11px}
+@media(max-width:480px){.preview-reserves{grid-template-columns:1fr}.fatigue-status{font-size:9px}}

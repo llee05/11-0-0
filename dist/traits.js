@@ -143,7 +143,6 @@ export function validTraits(ids, traits, lookup) {
   return !!traits && typeof traits === 'object' && !Array.isArray(traits) && Object.keys(traits).length === ids.length &&
     ids.every(id => Object.hasOwn(traits, id) && validTrait(traits[id]) && (!careerProfile(lookup(id)) || traits[id] === careerProfile(lookup(id)).trait));
 }
-export const fatiguePenalty = (trait, streak) => Math.min(40, Math.max(0, streak - 3) * 8) * (trait === 'grinder' ? 0.5 : 1);
 const attacking = new Set(['attacker', 'sacrificer', 'dynamic', 'tactician']);
 const theory = new Set(['preparation', 'specialist', 'innovator']);
 export const CONTEXTS = ['theory', 'sharp', 'quiet', 'technical'];

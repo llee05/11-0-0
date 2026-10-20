@@ -140,6 +140,8 @@ try {
   await page.locator('[data-action="field-team"][data-id="alltime:USA:A"]').click();
   assert.equal(await page.locator('.field-roster .profile-levels').count(),5);
   assert.equal(await page.locator('.field-roster .form-chip').count(),5);
+  assert.equal(await page.locator('.field-roster .fatigue-status').count(),5);
+  assert.ok((await page.locator('.field-roster').textContent()).includes('Resting next round'));
   assert.equal(await page.locator('.field-roster .captain-marker').count(),1);
   await page.keyboard.press('Escape');
   const aiProfiles=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.teams.slice(1).map(t=>t.profiles));
@@ -161,7 +163,13 @@ try {
   assert.equal(await page.locator('.board-condition').count(),4);
   assert.equal(await page.locator('.board-result .profile-levels').count(),8);
   await page.getByRole('button',{name:'Rotate reserve'}).click();
+  assert.equal(await page.locator('.rotation-option').count(),4);
+  const loadsBefore=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.loads);
+  await page.getByRole('button',{name:'Use recommended lineup'}).click();
+  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.loads),loadsBefore);
+  await page.getByRole('button',{name:'Rotate reserve'}).click();
   await page.locator('.rotation-option').first().click();
+  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.loads),loadsBefore);
   await page.getByRole('button',{name:'Play round 2'}).click();
   await page.getByRole('button',{name:'Play round 3'}).waitFor();
   await page.getByRole('button',{name:/Round 1, /}).click();
@@ -174,7 +182,7 @@ try {
   await page.getByRole('button',{name:'Play round 3'}).waitFor();
   assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.teams.slice(1).map(t=>t.traits)),aiTraits);
   assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.teams.slice(1).map(t=>t.profiles)),aiProfiles);
-  await page.getByRole('button',{name:'Simulate remaining rounds'}).click();
+  await page.getByRole('button',{name:'Auto-rotate & finish'}).click();
   await page.getByRole('button',{name:'Copy result'}).waitFor();
   assert.equal(await page.locator('.round-tabs button:not([disabled])').count(),11);
   await page.getByRole('button',{name:'Copy result'}).click();
@@ -223,7 +231,7 @@ try {
   await page.getByRole('button',{name:'Preview next match'}).click();
   await page.getByRole('button',{name:'Choose a reserve rotation'}).click();
   await page.locator('.rotation-option').first().click();
-  await page.getByRole('button',{name:'Simulate remaining rounds'}).click();
+  await page.getByRole('button',{name:'Auto-rotate & finish'}).click();
   await page.getByRole('button',{name:'Copy result'}).waitFor();
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
   await page.getByRole('button',{name:'Full standings',exact:true}).click();
@@ -234,6 +242,8 @@ try {
   await page.setViewportSize({width:320,height:740});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
   const results=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
+  assert.ok(results.tournament.teams.every(team=>team.players.every(id=>team.loads[id]>=0&&team.loads[id]<=100)));
+  assert.ok(results.tournament.teams.slice(1).some(team=>{const played=new Set(results.tournament.rounds.flatMap(round=>round.filter(m=>m.a===team.id||m.b===team.id).flatMap(m=>m.boards.map(b=>m.a===team.id?b.a.id:b.b.id))));return played.size===5;}));
   await page.reload();await page.getByRole('button',{name:'Copy result'}).waitFor();
   assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4'))),results);
   const legacyContext=await browser.newContext();
@@ -244,7 +254,7 @@ try {
   assert.equal(await legacyPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).version),4);
   await legacyContext.close();
   const oldRulesContext=await browser.newContext();
-  const oldRulesSave=JSON.stringify({...results,rulesVersion:results.rulesVersion.replace('career-traits-2','career-traits-1')});
+  const oldRulesSave=JSON.stringify({...results,rulesVersion:results.rulesVersion.replace('squad-profiles-2','squad-profiles-1')});
   assert.notEqual(JSON.parse(oldRulesSave).rulesVersion,results.rulesVersion);
   await oldRulesContext.addInitScript(saved=>localStorage.setItem('11-0-0:save:v4',saved),oldRulesSave);
   const oldRulesPage=await oldRulesContext.newPage();await oldRulesPage.goto(url);await oldRulesPage.getByRole('button',{name:'Quick draft'}).waitFor();

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {STYLES,SWINGS,fixedProfile,rollProfile,rollProfiles,validProfile,validProfiles,profileFatigue,performanceSwing,styleEffect,captainBonus,bestCaptain,nextForm,restedForm,performanceSeed} from '../dist/player-profile.js';
+import {STYLES,SWINGS,fixedProfile,rollProfile,rollProfiles,validProfile,validProfiles,profileFatigue,nextFatigue,validFatigue,performanceSwing,styleEffect,captainBonus,bestCaptain,nextForm,restedForm,performanceSeed} from '../dist/player-profile.js';
 import {random} from '../dist/engine.js';
 
 const unknown={id:'u',personId:'unprofiled',rating:2600};
@@ -22,13 +22,17 @@ test('profiles roll bounded attributes and form, while career presets stay fixed
   assert.equal(validProfiles(['u'],{},()=>unknown),false);
   assert.equal(validProfile({...rollProfile(magnus,()=>0),stamina:1},magnus),false);
 });
-test('stamina delays fatigue and the existing grinder resistance still applies',()=>{
-  assert.equal(profileFatigue(null,2,{stamina:1}),8);
-  assert.equal(profileFatigue(null,4,{stamina:3}),8);
-  assert.equal(profileFatigue(null,5,{stamina:5}),0);
-  assert.equal(profileFatigue(null,6,{stamina:5}),8);
-  assert.equal(profileFatigue('grinder',6,{stamina:5}),4);
-  assert.equal(profileFatigue(null,99,{stamina:5}),40);
+test('fatigue accumulates by stamina, persists across rest and has bounded penalties',()=>{
+  assert.equal(nextFatigue(0,true,{stamina:1}),13);
+  assert.equal(nextFatigue(0,true,{stamina:5}),9);
+  assert.equal(nextFatigue(95,true,{stamina:1}),100);
+  assert.equal(nextFatigue(70,false,{stamina:1}),40);
+  assert.equal(nextFatigue(20,false,{stamina:5}),0);
+  assert.equal(profileFatigue(null,24),0);
+  assert.equal(profileFatigue(null,70),46);
+  assert.equal(profileFatigue('grinder',70),23);
+  assert.equal(profileFatigue(null,100),76);
+  for(const invalid of [-1,101,1.5,NaN,'20'])assert.equal(validFatigue(invalid),false);
 });
 test('only one captain supplies a bounded team bonus, with half influence from the reserve',()=>{
   const lineup=['a','b','c','d','e'],profiles=Object.fromEntries(lineup.map(id=>[id,{captaincy:3}]));

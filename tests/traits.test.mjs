@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {TRAITS, CAREER_PROFILES, traitById, rollTrait, rollTraits, careerProfile, validTraits, fatiguePenalty, matchContext, validContext, matchupEffects} from '../dist/traits.js';
+import {TRAITS, CAREER_PROFILES, traitById, rollTrait, rollTraits, careerProfile, validTraits, matchContext, validContext, matchupEffects} from '../dist/traits.js';
 import {fixedProfile, rollProfile, validProfile} from '../dist/player-profile.js';
 import {random} from '../dist/engine.js';
 import {openDatabase} from '../server/sqlite.mjs';
@@ -77,7 +77,4 @@ test('traits enable a lower-rated specialist to overtake a higher-rated player i
   assert.ok(2600+effects.a.bonus > 2620+effects.b.bonus);
   assert.equal(matchupEffects('rook','prophylaxis',c,2600,2620).a.bonus,18);
   assert.equal(matchupEffects('rook',null,{...c,ending:'minor'},2600,2620).a.bonus,0);
-  assert.equal(fatiguePenalty(null,5),16);
-  assert.equal(fatiguePenalty('grinder',5),8);
-  assert.equal(fatiguePenalty(null,30),40);
 });
