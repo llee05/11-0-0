@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,RULES_VERSION,planLineup,previewTeams,applyRecommendedLineup,completeDraft,quickSim,roundFixtures,sortBoards,lineupExpectation,expectedMatchPoints,recommendedLineup} from '../dist/engine.js';
+import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,RULES_VERSION,planLineup,previewTeams,applyRecommendedLineup,completeDraft,quickSim,roundFixtures,sortBoards,lineupExpectation,expectedMatchPoints,recommendedLineup,offerWeight,rankedCandidates,draftValue} from '../dist/engine.js';
 
 import {rollTraits,careerProfile} from '../dist/traits.js';
 import {fixedProfile,rollProfiles,profileFatigue,nextFatigue,performanceSeed,performanceSwing,restedForm} from '../dist/player-profile.js';
@@ -43,7 +43,7 @@ test('automatic drafting keeps existing picks and the current offer assignments 
   s.offer=createOffer(s.squad,random(4));
   const reserve=s.offer.players[0];s=selectPlayer(s,reserve,4);
   s.offer=createOffer(s.squad,random(7));
-  const offered=s.offer.players.find(id=>canDraft(playerById(id),s.squad)),before=structuredClone(s);
+  const offered=rankedCandidates(s.offer,s.squad)[0],before=structuredClone(s);
   const completed=completeDraft(s,()=>0);
   assert.deepEqual(s,before);
   assert.ok(validSave(completed));
@@ -104,7 +104,9 @@ test('early estimates and modern country-year versions are independently rollabl
   for(const id of ['URS-1927','USA-1930','HUN-1938','USA-2022','USA-2026']){
     const index=NATIONS.findIndex(n=>n.id===id);
     assert.ok(index>=0);
-    const offer=createOffer([null,null,null,null,null],()=> (index+0.5)/NATIONS.length);
+    const squad=Array(5).fill(null),weights=NATIONS.map(n=>offerWeight(n,squad));
+    const ticket=(weights.slice(0,index).reduce((sum,w)=>sum+w,0)+weights[index]/2)/weights.reduce((sum,w)=>sum+w,0);
+    const offer=createOffer(squad,()=>ticket);
     assert.equal(offer.nation,id);
     assert.deepEqual(offer.players,NATIONS[index].players);
   }
@@ -489,4 +491,25 @@ test('match-aware planning selects a lower-rated specialist and maximises final-
   lineup[0]='modified';assert.notEqual(planLineup(team,1,matchup)[0],'modified');
   const recommended=recommendedLineup(t),rotated=rotateReserve(t,0);
   assert.deepEqual(recommendedLineup(rotated),recommended);
+});
+
+
+test('competitive offers retain every snapshot and respond to already-drafted leaders',()=>{
+  const squad=Array(5).fill(null),weights=NATIONS.map(n=>offerWeight(n,squad));
+  assert.ok(weights.every(weight=>Number.isFinite(weight)&&weight>0));
+  const expectedLeader=NATIONS.reduce((sum,n,i)=>sum+playerById(n.players[0]).rating*weights[i],0)/weights.reduce((sum,w)=>sum+w,0);
+  assert.ok(expectedLeader>2710&&expectedLeader<2760);
+  const usa=NATIONS.find(n=>n.id==='USA-2026');
+  assert.ok(offerWeight(usa,[usa.players[0],null,null,null,null])<=offerWeight(usa,squad));
+});
+
+test('automatic picks use complete profiles and never reroll an existing offer',()=>{
+  const s={...initialState(),offer:createOffer(Array(5).fill(null),random(261))};
+  const expected=rankedCandidates(s.offer,s.squad)[0],before=structuredClone(s);
+  const finished=completeDraft(s,random(119));
+  assert.equal(finished.squad.includes(expected),true);
+  assert.equal(finished.traits[expected],s.offer.traits[expected]);
+  assert.deepEqual(finished.profiles[expected],s.offer.profiles[expected]);assert.deepEqual(s,before);
+  const p={rating:2650},base={style:'universal',stamina:1,consistency:3,form:0};
+  assert.ok(draftValue(p,null,{...base,stamina:5})>draftValue(p,null,base));
 });

@@ -23,7 +23,8 @@ export function configureCatalogue(catalogue){
 export const ROUND_COUNT = 11;
 export const SAVE_VERSION = 4;
 export const SIMULATION_RULESET = 'olympiad-3';
-export const RULES_VERSION = `${TRAIT_RULESET}/${PROFILE_RULESET}/${SIMULATION_RULESET}`;
+export const DRAFT_RULESET = 'competitive-draft-1';
+export const RULES_VERSION = `${TRAIT_RULESET}/${PROFILE_RULESET}/${SIMULATION_RULESET}/${DRAFT_RULESET}`;
 export const nationById = id => nationIndex.get(id);
 export const playerById = id => playerIndex.get(id);
 export const average = squad => { const p=squad.filter(Boolean).map(playerById); return p.length ? Math.round(p.reduce((n,p)=>n+p.rating,0)/p.length) : 0; };
@@ -37,10 +38,45 @@ export function canDraft(player,squad) {
 export function createOffer(squad,rng=Math.random) {
   const nations=NATIONS.filter(n=>n.players.some(id=>canDraft(playerById(id),squad)));
   if(!nations.length)return null;
-  const nation=nations[Math.floor(rng()*nations.length)];
+  const weights=nations.map(n=>offerWeight(n,squad));
+  let ticket=rng()*weights.reduce((sum,weight)=>sum+weight,0),nation=nations.at(-1);
+  for(let i=0;i<nations.length;i++){ticket-=weights[i];if(ticket<0){nation=nations[i];break;}}
   // Always reveal the source list's full top five. Ineligible picks are shown
   // disabled by the UI; no lower-ranked player replaces an already drafted person.
   return {nation:nation.id,players:[...nation.players],traits:rollTraits(nation.players.map(playerById),rng),profiles:rollProfiles(nation.players.map(playerById),rng)};
+}
+// Every eligible snapshot remains rollable. Stronger available leaders receive
+// extra weight for strength and depth, matching the all-time field better.
+export function offerWeight(nation,squad){
+  const available=nation.players.map(playerById).filter(player=>canDraft(player,squad));
+  if(!available.length)return 0;
+  const ratings=available.map(player=>player.rating).sort((a,b)=>b-a),top=ratings.slice(0,3);
+  const strength=(ratings[0]+top.reduce((sum,rating)=>sum+rating,0)/top.length)/2;
+  return 2**((strength-2600)/50);
+}
+export function draftValue(player,trait,profile){
+  const outlook=profileOutlook(trait,profile.style,player.rating);
+  const swing=[0,32,24,16,8,4][profile.consistency];
+  let load=0,score=0,games=0;
+  for(let round=0;round<ROUND_COUNT;round++){
+    const playing=round%5!==4;
+    if(playing){
+      const rating=player.rating-profileFatigue(trait,load)+outlook.bonus+profile.form*FORM_ELO*0.65**round;
+      // Integrate the real rounded uniform daily swing; do not favour a lucky
+      // sampled day or treat high consistency as an unconditional Elo bonus.
+      for(let daily=-swing;daily<=swing;daily++){
+        const weight=(Math.abs(daily)===swing?0.5:1)/(2*swing);
+        for(const white of [false,true]){const p=boardProbabilities(rating+daily,2720,white,outlook.draw);score+=weight/2*(p.win+p.draw/2);}
+      }
+      games++;
+    }
+    load=nextFatigue(load,playing,profile);
+  }
+  return score/games;
+}
+export function rankedCandidates(offer,squad){
+  return offer.players.filter(id=>canDraft(playerById(id),squad)).map(id=>({id,value:draftValue(playerById(id),offer.traits[id],offer.profiles[id])}))
+    .sort((a,b)=>b.value-a.value||playerById(b.id).rating-playerById(a.id).rating||a.id.localeCompare(b.id)).map(candidate=>candidate.id);
 }
 export function initialState() { return {version:SAVE_VERSION,rulesVersion:RULES_VERSION,catalogueRelease:CATALOGUE.release,phase:'draft',mode:'classic',squad:[null,null,null,null,null],traits:{},profiles:{},offer:null,rerolls:2,tournament:null,teamName:'The Dream Team'}; }
 export function selectPlayer(state,id,slot) {
@@ -57,9 +93,9 @@ export function completeDraft(state,rng=Math.random) {
     if(s.squad[slot])continue;
     const offer=s.offer||createOffer(s.squad,rng);
     if(!offer)throw new Error('No eligible country-year offer.');
-    const candidates=offer.players.filter(id=>canDraft(playerById(id),s.squad));
+    const candidates=rankedCandidates(offer,s.squad);
     if(!candidates.length)throw new Error('No eligible player in this offer.');
-    const current={...s,offer},id=candidates[Math.floor(rng()*candidates.length)];
+    const current={...s,offer},id=candidates[0];
     s=selectPlayer(current,id,slot);
     if(s===current)throw new Error('Invalid draft offer.');
   }
