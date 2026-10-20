@@ -47,7 +47,7 @@ export function validProfiles(ids,profiles,lookup) {
 }
 export const validForm = form=>Number.isInteger(form)&&form>=-2&&form<=2;
 export const profileFatigue = (trait,streak,profile)=>fatiguePenalty(trait,Math.max(0,streak+3-profile.stamina));
-export const performanceSwing = (consistency,rng)=>Math.round((rng()*2-1)*SWINGS[consistency]);
+export const performanceSwing = (consistency,rng)=>Math.round((rng()*2-1)*SWINGS[consistency])||0;
 export function styleEffect(style,other,context) {
   switch(style){
     case 'attacking':return {bonus:context.kind==='sharp'?16:context.kind==='quiet'?-8:0,draw:-0.04};
