@@ -22,7 +22,7 @@ export function configureCatalogue(catalogue){
 }
 export const ROUND_COUNT = 11;
 export const SAVE_VERSION = 4;
-export const SIMULATION_RULESET = 'olympiad-3';
+export const SIMULATION_RULESET = 'olympiad-4';
 export const DRAFT_RULESET = 'competitive-draft-1';
 export const RULES_VERSION = `${TRAIT_RULESET}/${PROFILE_RULESET}/${SIMULATION_RULESET}/${DRAFT_RULESET}`;
 export const nationById = id => nationIndex.get(id);
@@ -161,12 +161,18 @@ function colourHistory(t,team){
     reference=match.boards.map(board=>board[side].id);
     match.boards.forEach(board=>record(players.get(board[side].id),side==='a'?board.white:!board.white));
   }
+  // Predict the next four from readiness, independently of manual proposals.
+  // This also anticipates board shifts when a reserve is likely to rotate in.
+  reference=planLineup(team,1).slice(0,4);
   return {players,first,reference};
 }
-function colourCost(history,firstWhite){
-  const penalty=(entry,white)=>2*(entry.balance+(white?1:-1))**2+(entry.last===white&&entry.run>=2?25*(entry.run-1):0);
-  let cost=4*penalty(history.first,firstWhite);
-  history.reference.forEach((id,i)=>cost+=penalty(history.players.get(id),i%2===0?firstWhite:!firstWhite));
+function colourCost(history,firstWhite,reference=history.reference){
+  const penalty=(entry,white)=>{
+    const imbalance=Math.abs(entry.balance+(white?1:-1));
+    return 2*imbalance**2+16*Math.max(0,imbalance-2)**2+(entry.last===white&&entry.run>=2?25*(entry.run-1)**2:0);
+  };
+  let cost=0.5*penalty(history.first,firstWhite);
+  reference.forEach((id,i)=>cost+=penalty(history.players.get(id),i%2===0?firstWhite:!firstWhite));
   return cost;
 }
 // Pairings, colours and abstract conditions depend on played history, never on
@@ -175,11 +181,19 @@ function matchSetup(t,aid,bid){
   const a=t.teams.find(team=>team.id===aid),b=t.teams.find(team=>team.id===bid);
   const ah=colourHistory(t,a),bh=colourHistory(t,b);
   const key=[aid,bid].sort().join('|');
-  const whiteCost=colourCost(ah,true)+colourCost(bh,false),blackCost=colourCost(ah,false)+colourCost(bh,true);
+  const contexts=Array.from({length:4},(_,i)=>matchContext(random(performanceSeed(t.seed,t.round,key,`context:${i}`))));
+  const projectedA={...a,lineup:planLineup(a,1)},projectedB={...b,lineup:planLineup(b,1)};
+  const cost=firstWhite=>{
+    const boards=contexts.map((context,i)=>({context,white:i%2===0?firstWhite:!firstWhite}));
+    const al=planLineup(a,ROUND_COUNT-t.round,{opponent:projectedB,boards,side:'a'});
+    const bl=planLineup(b,ROUND_COUNT-t.round,{opponent:projectedA,boards,side:'b'});
+    return colourCost(ah,firstWhite,al.slice(0,4))+colourCost(bh,!firstWhite,bl.slice(0,4));
+  };
+  const whiteCost=cost(true),blackCost=cost(false);
   const firstWhite=whiteCost===blackCost?random(performanceSeed(t.seed,t.round,key,'colour'))()<0.5:whiteCost<blackCost;
   return Array.from({length:4},(_,i)=>({
     white:i%2===0?firstWhite:!firstWhite,
-    context:matchContext(random(performanceSeed(t.seed,t.round,key,`context:${i}`))),
+    context:contexts[i],
   }));
 }
 export const roundFixtures=t=>pairTeams(t).map(([a,b])=>({a,b,boards:matchSetup(t,a,b)}));
@@ -372,7 +386,7 @@ function validateSave(s) {
     const lineup=side=>{const ids=m.boards.map(board=>board[side].id),team=side==='a'?a:b;return [...ids,...team.players.filter(id=>!ids.includes(id))];};
     const lineups={a:lineup('a'),b:lineup('b')};
     for(const side of ['a','b'])if(!same(lineups[side],sortBoards(lineups[side])))return false;
-    const setup=matchSetup({seed:t.seed,round,rounds:t.rounds.slice(0,round),teams:t.teams},a.id,b.id);
+    const setup=matchSetup({seed:t.seed,round,rounds:t.rounds.slice(0,round),teams:[{...a,...tracked.get(a.id)},{...b,...tracked.get(b.id)}]},a.id,b.id);
     const valid=m.boards.every((board,i)=>{
       if(!validContext(board.context)||Object.keys(setup[i].context).some(key=>board.context[key]!==setup[i].context[key])||board.white!==setup[i].white||![0,0.5,1].includes(board.score))return false;
       const before={};
