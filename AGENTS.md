@@ -26,7 +26,7 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 | `scripts/ratings/`, `scripts/import-ratings.mjs` | Reproducible, checksum-verified source extraction. |
 | `tests/engine.test.mjs` | Node's built-in test suite for game rules, simulations and save validation. |
 | `scripts/browser-qa.mjs` | Optional Playwright Core flow using an existing Chromium installation. |
-| `scripts/audit-simulation.mjs`, `reports/` | Read-only seeded simulation experiments, counterfactual substitution probes and dated findings; use an in-memory catalogue and keep measured results tied to their audited rules and release. |
+| `scripts/audit-simulation.mjs`, `scripts/audit-balance.mjs`, `reports/` | Read-only seeded simulation experiments, substitution probes, paired balance variants, forecast diagnostics and dated findings; use an in-memory catalogue and keep measured results tied to their audited rules and release. Balance experiments snapshot modules into temporary directories; preserve source hashes, explicit fixed rosters and seed offsets. Forecast sums along adaptive Swiss paths are diagnostics, not unconditional tournament expectations. |
 | `.openai/hosting.json`, `scripts/build-hosted.mjs` | Existing Site identity, D1 binding `DB`, and non-destructive hosted build. |
 | `scripts/build-pages.mjs`, `release/pages/` | Dependency-free static release with canonical SQL catalogue JSON; allowlisted browser assets and font licenses, no Worker or hosting metadata. Generated output is ignored by Git. |
 | `scripts/preview-pages.mjs`, `scripts/browser-pages-qa.mjs` | Static-only preview under a configurable repository path and focused release checks; no API fallback. |

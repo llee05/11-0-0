@@ -140,6 +140,16 @@ node scripts/audit-simulation.mjs --runs 200 --output /tmp/11-0-0-simulation-aud
 
 This compares five drafting/rotation policies across 1,000 complete tournaments, probes substitution effects and checks probability arithmetic, colour allocation and fatigue. It changes no game rules, persistent database or browser saves. See the [original investigation](reports/simulation-audit-2026-10-20.md) and [follow-up fixes and measurements](reports/simulation-fixes-2026-10-20.md). The follow-up uses `--runs 100 --probe-seeds 10` (500 tournaments, 880 substitutions); `--skip-probes` is available for isolated balance experiments. Regenerate measurements after changing the engine or catalogue.
 
+To diagnose strong squads and compare balance settings, run:
+
+```bash
+node scripts/audit-balance.mjs --runs 500 --workers 4 --baseline-ref 68a4ff6 --output /tmp/11-0-0-balance.json
+```
+
+This runs 6,000 complete tournaments: four fixed squads near 2700/2750/2800/2850, 500 paired seeds and three variants. `baseline` loads the recorded Git revision; `profiles` uses current profiles with Elo scale 400; `steeper` uses the same profiles with scale 320. Copies run in temporary directories against an in-memory catalogue, leaving the app, persistent database and saves untouched. Reports include exact four-board match forecasts, sampler calibration, modifier contributions, paired score differences, W–D–L distributions, titles, perfect runs and poor-run frequencies with confidence intervals. A poor run means at most 10 match points, the score of 2–6–3. Summed forecasts describe the opponents actually encountered; Swiss pairings and form adapt to results, so those sums are not unconditional tournament expectations.
+
+Use `--cohorts 2800`, `--variants baseline,profiles`, `--offset 1000` or `--include-samples` for focused comparisons, fresh evaluation seeds or individual records. The four squads are explicit benchmarks, not representative samples of every squad with those ratings. Runtime depends on the machine and worker count; the default performs thousands of tournaments.
+
 Optional browser QA, with the local app running:
 
 ```bash
