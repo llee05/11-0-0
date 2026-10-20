@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,spent,canAfford,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,setCaptain,RULES_VERSION} from '../dist/engine.js';
 
 import {rollTraits,signatureProfile} from '../dist/traits.js';
-import {rollProfiles,profileFatigue,performanceSeed,performanceSwing,restedForm} from '../dist/player-profile.js';
+import {fixedProfile,rollProfiles,profileFatigue,performanceSeed,performanceSwing,restedForm} from '../dist/player-profile.js';
 import {openDatabase} from '../server/sqlite.mjs';
 import {readCatalogue} from '../server/catalog.mjs';
 const db=openDatabase(':memory:');
@@ -191,6 +191,9 @@ test('reserve rotates into active boards and resting resets fatigue',()=>{
 
 test('save validation rejects corrupt and incompatible browser data',()=>{
   assert.ok(validSave(initialState()));
+  const previousRules={...initialState(),rulesVersion:RULES_VERSION.replace('career-traits-2','career-traits-1')};
+  assert.notEqual(previousRules.rulesVersion,RULES_VERSION);
+  assert.equal(validSave(previousRules),false);
   for(const broken of [null,{},[],{...initialState(),version:9},{...initialState(),squad:['invalid',null,null,null,null]},{...initialState(),rerolls:-1},{...initialState(),phase:'results'},{...initialState(),offer:{nation:'IND',players:['fake']}}]) assert.equal(validSave(broken),false);
 });
 
@@ -262,6 +265,13 @@ test('save validation rejects changed signatures, effect data, contexts and trai
 
 test('every AI player retains both their old trait and new profile throughout the Olympiad',()=>{
   const s=draft(72);let t=startTournament(s.squad,'Full profiles',89,s.traits,s.profiles,s.captain);
+  for(const team of t.teams.slice(1))for(const id of team.players){
+    const player=playerById(id),signature=signatureProfile(player);
+    if(signature){
+      assert.equal(team.traits[id],signature.trait,player.name);
+      for(const [key,value] of Object.entries(fixedProfile(player)))assert.equal(team.profiles[id][key],value,player.name);
+    }
+  }
   const before=t.teams.map(team=>({traits:team.traits,profiles:team.profiles}));
   for(let round=0;round<11;round++){
     const preview=previewRound(t);t=simulateRound(t);

@@ -24,8 +24,9 @@ try {
   assert.equal(await page.locator('.profile-guide').count(),1);
   assert.equal(await page.locator('.style-guide article').count(),4);
   assert.equal(await page.locator('.trait-guide article').count(),25);
-  assert.equal(await page.locator('.signature-list article').count(),28);
+  assert.equal(await page.locator('.signature-list article').count(),94);
   assert.ok((await page.locator('.signature-list').textContent()).includes('Bobby Fischer'));
+  for(const name of ['Ian Nepomniachtchi','Alireza Firouzja','Paul Keres','Yasser Seirawan'])assert.ok((await page.locator('.signature-list').textContent()).includes(name));
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'COUNTRIES & YEARS'}).click();
   assert.equal(await page.locator('#archive-year option').count(),26);
@@ -41,6 +42,13 @@ try {
   assert.ok((await page.locator('.source-roster').textContent()).includes('Hikaru Nakamura'));
   assert.ok((await page.locator('.source-roster').textContent()).includes('2810'));
   assert.ok((await page.locator('.source-roster').textContent()).includes('Signature · Resourceful defender'));
+  for(const [country,name,trait] of [['FRA','Firouzja','Intuitive player'],['RUS','Nepomniachtchi','Dynamic player'],['ENG','Adams','Positional technician'],['IND','Erigaisi','Initiative hunter']]){
+    await page.getByRole('button',{name:'Explore other years'}).click();
+    await page.locator(`[data-id="${country}-2026"][data-action="archive-country"]`).click();
+    const row=page.locator('.source-roster>div').filter({hasText:name});
+    assert.equal(await row.count(),1);
+    assert.ok((await row.textContent()).includes(`Signature · ${trait}`));
+  }
   await page.getByRole('button',{name:'Explore other years'}).click();
   await page.getByLabel('EXPLORE A SNAPSHOT YEAR').selectOption('2022');
   await page.locator('[data-id="USA-2022"][data-action="archive-country"]').click();
@@ -232,6 +240,15 @@ try {
   assert.equal(await legacyPage.evaluate(()=>localStorage.getItem('11-0-0:save:v4:backup')),'{broken');
   assert.equal(await legacyPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).version),4);
   await legacyContext.close();
+  const oldRulesContext=await browser.newContext();
+  const oldRulesSave=JSON.stringify({...results,rulesVersion:results.rulesVersion.replace('career-traits-2','career-traits-1')});
+  assert.notEqual(JSON.parse(oldRulesSave).rulesVersion,results.rulesVersion);
+  await oldRulesContext.addInitScript(saved=>localStorage.setItem('11-0-0:save:v4',saved),oldRulesSave);
+  const oldRulesPage=await oldRulesContext.newPage();await oldRulesPage.goto(url);await oldRulesPage.getByRole('button',{name:'Quick draft'}).waitFor();
+  assert.equal(await oldRulesPage.evaluate(()=>localStorage.getItem('11-0-0:save:v4:backup')),oldRulesSave);
+  assert.equal(await oldRulesPage.locator('.squad-slot.filled').count(),0);
+  assert.equal(await oldRulesPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).rulesVersion),results.rulesVersion);
+  await oldRulesContext.close();
   assert.deepEqual(errors,[]);
   console.log('Browser QA passed: stamina/captaincy/style/form/consistency, captain choice and opponent profiles, trait guide and signatures, saved offer/pick traits, seeded AI traits, match previews and effects, legacy save preservation, unchanged source ratings, inclusive 2600 country cutoff, all-time A/B roster and source dialogs, manual and quick drafts, expert mode, rerolls, team name, board targeting, persistence, reserve rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
   console.log(`Screenshots: ${artifacts}`);
