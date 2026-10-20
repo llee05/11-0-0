@@ -1,6 +1,7 @@
 import {ROUND_COUNT,standings,playerById,nationById} from './engine.js';
 import {careerProfile,traitLabel,traitById} from './traits.js';
 import {FORM_ELO} from './player-profile.js';
+import {RATING_RULESET} from './rating-rules.js';
 
 export const HISTORY_KEY='11-0-0:best-runs:v1';
 export const HISTORY_VERSION=1;
@@ -14,7 +15,7 @@ export function snapshotRun(game,completedAt=new Date().toISOString()){
   if(game.phase!=='results'||t?.round!==ROUND_COUNT||t.rounds.length!==ROUND_COUNT)throw new Error('Only completed tournaments enter the records.');
   const rows=standings(t),own=rows.find(team=>team.id==='YOU');
   const run={version:HISTORY_VERSION,completedAt,teamName:game.teamName,mode:game.mode,seed:t.seed,
-    catalogueRelease:game.catalogueRelease,rulesVersion:game.rulesVersion,formElo:FORM_ELO,rank:rows.indexOf(own)+1,
+    catalogueRelease:game.catalogueRelease,rulesVersion:game.rulesVersion,ratingRules:RATING_RULESET,formElo:FORM_ELO,rank:rows.indexOf(own)+1,
     summary:Object.fromEntries(['w','d','l','mp','bp','sb'].map(key=>[key,own[key]])),
     squad:t.squad.map(id=>{
       const p=playerById(id);
@@ -45,6 +46,7 @@ const number=(value,min,max)=>Number.isFinite(value)&&value>=min&&value<=max;
 const integer=(value,min,max)=>Number.isInteger(value)&&number(value,min,max);
 const half=(value,min,max)=>number(value,min,max)&&Number.isInteger(value*2);
 const validTraitInfo=info=>info&&typeof info.career==='boolean'&&text(info.name)&&text(info.description);
+const balancedBase=p=>integer(p.rawRating,100,4000)&&integer(p.eraAdjustment,-150,150)&&p.rawRating+p.eraAdjustment===(p.baseRating??p.rating);
 const profile=p=>p&&['attacking','positional','defensive','universal'].includes(p.style)&&integer(p.stamina,1,5)&&integer(p.consistency,1,5)&&integer(p.form,-2,2);
 const record=r=>r&&['w','d','l'].every(key=>integer(r[key],0,11))&&r.w+r.d+r.l===11&&r.mp===r.w*2+r.d&&half(r.bp,0,44)&&half(r.sb,0,968);
 function boardPlayer(p){
@@ -57,10 +59,10 @@ export function validRun(run){
   try{
     if(!run||run.version!==HISTORY_VERSION||!text(run.id)||!text(run.teamName)||!['classic','expert'].includes(run.mode)||
       !text(run.completedAt)||!Number.isFinite(Date.parse(run.completedAt))||!integer(run.seed,0,4294967295)||
-      !text(run.catalogueRelease)||!text(run.rulesVersion)||!number(run.formElo,0,1000)||!integer(run.rank,1,32)||!record(run.summary))return false;
+      !text(run.catalogueRelease)||!text(run.rulesVersion)||(run.ratingRules!==undefined&&!text(run.ratingRules))||!number(run.formElo,0,1000)||!integer(run.rank,1,32)||!record(run.summary))return false;
     if(!Array.isArray(run.squad)||run.squad.length!==5||new Set(run.squad.map(p=>p.id)).size!==5||run.squad.some(p=>
       !text(p.id)||!text(p.personId)||!text(p.name)||!text(p.flag)||!(text(p.federation)||p.offerKind==='legends'&&p.federation===null)||!integer(p.year,1800,3000)||
-      !integer(p.rating,100,4000)||!profile(p.profile)||(p.trait!==null&&!text(p.trait))||!validTraitInfo(p.traitInfo)||!integer(p.form,-2,2)||!integer(p.load,0,100)||
+      !integer(p.rating,100,4000)||(run.ratingRules===RATING_RULESET&&!balancedBase(p))||!profile(p.profile)||(p.trait!==null&&!text(p.trait))||!validTraitInfo(p.traitInfo)||!integer(p.form,-2,2)||!integer(p.load,0,100)||
       !text(p.source?.url)||!/^https?:\/\//.test(p.source.url)||!text(p.source.date)))return false;
     if(!Array.isArray(run.standings)||run.standings.length!==32||new Set(run.standings.map(t=>t.id)).size!==32||
       run.standings.some(t=>!text(t.id)||!text(t.name)||!text(t.flag)||!record(t)||!number(t.seedingRating,100,4000)))return false;
@@ -81,7 +83,7 @@ export function validRun(run){
       const match=round.match,fixture=round.matches.find(m=>m.a==='YOU'||m.b==='YOU');
       if(!match||match.a!==fixture.a||match.b!==fixture.b||match.points!==fixture.points||!Array.isArray(match.boards)||match.boards.length!==4)return false;
       if(new Set(match.boards.map(b=>(match.a==='YOU'?b.a:b.b)?.id)).size!==4)return false;
-      if(match.boards.some(b=>!boardPlayer(b.a)||!boardPlayer(b.b)||!squadIds.has((match.a==='YOU'?b.a:b.b).id)||
+      if(match.boards.some(b=>!boardPlayer(b.a)||!boardPlayer(b.b)||(run.ratingRules===RATING_RULESET&&(!balancedBase(b.a)||!balancedBase(b.b)))||!squadIds.has((match.a==='YOU'?b.a:b.b).id)||
         ![0,0.5,1].includes(b.score)||typeof b.white!=='boolean'||!['theory','sharp','quiet','technical'].includes(b.context?.kind)||
         typeof b.context.timePressure!=='boolean'||(b.context.kind==='technical'?!['rook','minor'].includes(b.context.ending):b.context.ending!==null)))return false;
       if(match.boards.reduce((sum,b)=>sum+b.score,0)!==match.points)return false;

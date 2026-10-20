@@ -36,7 +36,7 @@ test('SQLite persists sourced top-five country snapshots and reopens without dup
       assert.deepEqual(players.map(p=>p.rank),[1,2,3,4,5]);
       assert.ok(players.every((p,i)=>!i||players[i-1].rawRating>=p.rawRating));
       assert.equal(nation.adjustment,0);
-      assert.ok(players.every(p=>p.rating===p.rawRating));
+      assert.ok(players.every(p=>p.rating===p.rawRating+p.eraAdjustment));
       assert.ok(players.some(p=>p.rawRating>=2600));
     }
     assert.ok(!catalogue.metadata.missingYears.includes(1927));
@@ -45,7 +45,7 @@ test('SQLite persists sourced top-five country snapshots and reopens without dup
     assert.deepEqual(catalogue.metadata.years,catalogue.metadata.requestedYears.filter(y=>y!==1944));
     assert.deepEqual(catalogue.metadata.years.filter(y=>y>=1972),Array.from({length:28},(_,i)=>2026-i*2));
     const early=catalogue.players.filter(p=>p.nation==='URS-1927');
-    assert.ok(early.every(p=>p.estimated&&p.rating===p.rawRating));
+    assert.ok(early.every(p=>p.estimated&&p.rating===p.rawRating+p.eraAdjustment));
     assert.deepEqual(catalogue.opponents,buildAllTimeTeams(catalogue.nations,catalogue.players).slice(0,31));
     db.close();db=openDatabase(filename);
     assert.deepEqual(await readCatalogue(db),catalogue);

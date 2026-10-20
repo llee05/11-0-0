@@ -21,7 +21,7 @@ mkdirSync(release,{recursive:true});
 const staging=mkdtempSync(join(release,'.pages-'));
 try{
   // Explicit assets exclude generated Workers, databases and hosting metadata.
-  for(const name of ['app.js','engine.js','traits.js','player-profile.js','run-history.js','styles.css','favicon.svg','king.svg','knight.svg','fonts']){
+  for(const name of ['app.js','engine.js','rating-rules.js','traits.js','player-profile.js','run-history.js','styles.css','favicon.svg','king.svg','knight.svg','fonts']){
     cpSync(new URL(name,source),join(staging,name),{recursive:true});
   }
   writeFileSync(join(staging,'index.html'),html.replace(marker,'<meta name="catalogue-url" content="./catalog.json">'));
@@ -32,4 +32,4 @@ try{
   renameSync(staging,output);
 }finally{rmSync(staging,{recursive:true,force:true});}
 console.log(`GitHub Pages release: ${output}`);
-console.log(`${catalogue.metadata.snapshotCount} country-year rolls, ${catalogue.players.length} player editions, ${catalogue.opponents.length} opponents · catalogue ${catalogue.metadata.release}`);
+console.log(`${catalogue.metadata.snapshotCount} draft offers, ${catalogue.players.length} player editions, ${catalogue.opponents.length} opponents · catalogue ${catalogue.metadata.release}`);

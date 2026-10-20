@@ -4,7 +4,7 @@
 
 Reproduce the official-list extraction with `npm run data:import` (Python 3 required), then update the local persistent SQLite catalogue with `npm run db:seed`. Normal startup imports checked-in observations without fetching third-party sites. `RATINGS_CACHE` selects the source archive cache; `DATABASE_PATH` selects the local SQL file.
 
-Gameplay uses published ratings unchanged, without any era adjustment. The playable SQL catalogue excludes country-year snapshots unless at least one player has a source rating at least 2600. All five players in qualifying snapshots are retained. The checked-in observations keep the excluded snapshots and top-100 statistics for provenance.
+Published ratings remain immutable in `rawRating`. Gameplay uses the shared `era-balanced-1` rank mapping to January 2026, capped at ±150, stored separately as `eraAdjustment` and game `rating`. These are fictional balance values, not measured modern playing strengths. The same policy applies to both sides, including Legends; source-ranked country fives and the source-2600 cutoff are preserved. The playable SQL catalogue excludes country-year snapshots unless at least one player has a source rating at least 2600. All five players in qualifying snapshots are retained. The checked-in observations keep the excluded snapshots and top-100 statistics for provenance.
 
 The January lists are used except July 1972 and May 1974, the available archive dates. Explicitly inactive players are excluded. All sexes and titles are eligible, but the early archive omits much of the women's list and does not consistently supply activity flags. These limitations are preserved in each source's notes. No Olympiad roster or participation filter is used.
 
@@ -17,9 +17,9 @@ Original sources: [FIDE downloads](https://ratings.fide.com/download_lists.phtml
 
 ## All-time national lineups and identities
 
-`server/all-time.mjs` derives national A/B opponents from the playable SQL editions. Each person contributes only their highest source rating, with the latest year breaking ties; their federation at that edition determines their one opposing nation. Russia and the Soviet Union remain separate. A teams use the first five ranked people, B teams the next five. Rank both divisions together by their four starters' total and select 31 opponents for a 32-team tournament including the user. The fifth player is a reserve and does not enter the strength calculation.
+`server/all-time.mjs` derives national A/B opponents from the playable SQL editions. Each person contributes only their highest era-balanced country rating, with the latest year breaking ties; their federation at that edition determines their one opposing nation. Russia and the Soviet Union remain separate. A teams use the first five ranked people, B teams the next five. Rank both divisions together by their four starters' total and select 31 opponents for a 32-team tournament including the user. The fifth player is a reserve and does not enter the strength calculation.
 
-The field uses the best editions in these observations; two-year sampling, country top-five limits and selective early coverage make it incomplete as an all-time record. No unsourced career peaks or inferred nationalities are added.
+Legends are excluded from national allocation. The field uses the best game-rated country editions in these observations; two-year sampling, country top-five limits and selective early coverage make it incomplete as an all-time record. No unsourced career peaks or inferred nationalities are added.
 
 `identity-links.json` records explicit source-name/ID crosswalks with archival player-history links. Its name guards keep unrelated reuses of IDs separate. Confirmed namesakes such as French GM Andrei Sokolov (627089) and Latvian IM Andrei Sokolov (11600306) remain distinct. Historical ID 4500024 under Lembit Oll is separated from modern Ottomar Ladva; Fernando Braga's old ID 800015 is linked to 811408 only under Braga's name, preserving Marco Codenotti's modern 800015. Raw source IDs remain in the observations. The crosswalk contents are part of the catalogue release fingerprint.
 

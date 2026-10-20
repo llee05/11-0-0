@@ -44,6 +44,11 @@ try {
   await otherTab.getByRole('button',{name:'Dark mode',exact:true}).click();
   await page.waitForFunction(()=>document.documentElement.dataset.theme==='light');
   await otherTab.close();
+  assert.ok((await page.locator('.rating-notice').textContent()).includes('not estimates'));
+  await page.getByRole('button',{name:'How ratings work'}).click();
+  assert.ok((await page.getByRole('dialog').textContent()).includes('2743'));
+  assert.ok((await page.getByRole('dialog').textContent()).includes('2840'));
+  await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Best runs',exact:true}).click();
   assert.equal(await page.locator('.run-card').count(),0);
   assert.ok((await page.getByRole('dialog').textContent()).includes('Your first record is waiting'));
@@ -75,6 +80,7 @@ try {
   assert.equal(catalogue.metadata.snapshotCount,782);
   assert.equal(catalogue.metadata.countryCount,71);
   assert.equal(catalogue.metadata.legendCount,8);
+  assert.equal(catalogue.metadata.normalization,'era-balanced-1');
   assert.equal(await page.locator('.legends-grid button').count(),8);
   await page.locator('[data-id="LEGENDS-4"][data-action="archive-country"]').click();
   assert.ok((await page.getByRole('dialog').textContent()).includes('not a historical national team'));
@@ -89,7 +95,7 @@ try {
   await page.locator('[data-id="USA-2024"][data-action="archive-country"]').click();
   assert.ok((await page.locator('.source-roster').textContent()).includes('2804'));
   await page.getByRole('button',{name:'Explore other years'}).click();
-  assert.ok(catalogue.nations.every(n=>n.players.some(id=>catalogue.players.find(p=>p.id===id).rating>=2600)));
+  assert.ok(catalogue.nations.every(n=>n.players.some(id=>catalogue.players.find(p=>p.id===id).rawRating>=2600)));
   assert.equal(await page.locator('[data-id="AUS-2026"][data-action="archive-country"]').count(),0);
   assert.equal(await page.locator('[data-id="MGL-2026"][data-action="archive-country"]').count(),0);
   await page.locator('[data-id="USA-2026"][data-action="archive-country"]').click();
@@ -114,7 +120,7 @@ try {
   await page.locator('[data-id="URS-1927"][data-action="archive-country"]').click();
   assert.equal(await page.locator('.source-roster>div').count(),5);
   assert.ok((await page.locator('.source-roster').textContent()).includes('Peter Romanovsky'));
-  assert.equal(await page.locator('.source-roster small').first().textContent(),'ESTIMATE');
+  assert.equal(await page.locator('.source-roster small').first().textContent(),'SOURCE ESTIMATE');
   for(const [year,country,name] of [['1930','USA','Frank Marshall'],['1938','HUN','Lajos Steiner'],['1942','USA','Reuben Fine']]){
     await page.getByRole('button',{name:'Explore other years'}).click();
     await page.getByLabel('EXPLORE A SNAPSHOT YEAR').selectOption(year);
@@ -138,8 +144,9 @@ try {
   assert.equal(await page.locator('.field-roster>div').count(),5);
   assert.ok((await page.locator('.field-roster').textContent()).includes('Fischer'));
   assert.ok((await page.locator('.field-roster').textContent()).includes('Caruana'));
+  const usaLeader=catalogue.players.find(p=>p.id===catalogue.opponents.find(t=>t.id==='alltime:USA:A').players[0]);
   await page.locator('.field-roster [data-action="archive-country"]').first().click();
-  assert.ok((await page.locator('.source-roster').textContent()).includes('Caruana'));
+  assert.ok((await page.locator('.source-roster').textContent()).includes(usaLeader.name));
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Rename team'}).click();
   await page.getByLabel('TEAM NAME',{exact:true}).fill('Queensland Knights');
@@ -429,25 +436,25 @@ try {
   assert.equal(await oldRulesPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).rulesVersion),results.rulesVersion);
   await oldRulesContext.close();
   const compatibleContext=await browser.newContext();
-  const compatibleSave={...beforeOrdering,rulesVersion:beforeOrdering.rulesVersion.replace(/olympiad-\d+/,'olympiad-5')};
+  const compatibleSave={...beforeOrdering,rulesVersion:beforeOrdering.rulesVersion.replace(/olympiad-\d+/,'olympiad-6')};
   await compatibleContext.addInitScript(saved=>localStorage.setItem('11-0-0:save:v4',JSON.stringify(saved)),compatibleSave);
-  const compatiblePage=await compatibleContext.newPage();await compatiblePage.goto(url);await compatiblePage.getByRole('button',{name:'Play round 1'}).waitFor();
+  const compatiblePage=await compatibleContext.newPage();await compatiblePage.goto(url);await compatiblePage.getByRole('button',{name:'Quick draft'}).waitFor();
   const upgraded=await compatiblePage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
-  assert.equal(upgraded.rulesVersion,beforeOrdering.rulesVersion);assert.deepEqual(upgraded.tournament,beforeOrdering.tournament);
-  assert.equal(await compatiblePage.evaluate(()=>localStorage.getItem('11-0-0:save:v4:backup')),null);
+  assert.equal(upgraded.rulesVersion,beforeOrdering.rulesVersion);assert.equal(upgraded.phase,'draft');assert.equal(upgraded.tournament,null);
+  assert.deepEqual(JSON.parse(await compatiblePage.evaluate(()=>localStorage.getItem('11-0-0:save:v4:backup'))),compatibleSave);
   await compatibleContext.close();
   const completedLegacy=await page.evaluate(async saved=>{
     const {simulateRound}=await import('/engine.js'),{snapshotRun}=await import('/run-history.js');
     let tournament=saved.tournament;while(tournament.round<11)tournament=simulateRound(tournament);
-    const game={...saved,phase:'results',tournament,rulesVersion:saved.rulesVersion.replace(/olympiad-\d+/,'olympiad-5')};
+    const game={...saved,phase:'results',tournament,rulesVersion:saved.rulesVersion.replace(/olympiad-\d+/,'olympiad-6')};
     return {game,record:snapshotRun(game,'2026-10-20T12:00:00.000Z')};
   },beforeOrdering);
   const completedContext=await browser.newContext();
   await completedContext.addInitScript(({game,record})=>{localStorage.setItem('11-0-0:save:v4',JSON.stringify(game));localStorage.setItem('11-0-0:best-runs:v1',JSON.stringify({version:1,runs:[record]}));},completedLegacy);
-  const completedPage=await completedContext.newPage();await completedPage.goto(url);await completedPage.getByRole('button',{name:'Copy result'}).waitFor();
-  assert.equal(await completedPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).rulesVersion),completedLegacy.game.rulesVersion);
+  const completedPage=await completedContext.newPage();await completedPage.goto(url);await completedPage.getByRole('button',{name:'Quick draft'}).waitFor();
+  assert.notEqual(await completedPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).rulesVersion),completedLegacy.game.rulesVersion);
   assert.deepEqual(await completedPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs),[completedLegacy.record]);
-  assert.equal(await completedPage.evaluate(()=>localStorage.getItem('11-0-0:save:v4:backup')),null);
+  assert.deepEqual(JSON.parse(await completedPage.evaluate(()=>localStorage.getItem('11-0-0:save:v4:backup'))),completedLegacy.game);
   await completedContext.close();
   // Quick Sim is available before drafting and preserves partial or full squads.
   const quickContext=await browser.newContext({viewport:{width:1440,height:1100}});
@@ -543,6 +550,6 @@ try {
   await quotaPage.getByRole('button',{name:'Best runs',exact:true}).click();assert.equal(await quotaPage.locator('.run-card').count(),1);
   await quotaContext.close();
   assert.deepEqual(errors,[]);
-  console.log('Browser QA passed: manual board order, native keyboard controls and focus return, stable fixtures, reloads, exact-slot substitutions and compatible old-save/report restoration; system theme, keyboard theme toggle, preference persistence, cross-tab updates and responsive theme controls; top-three personal records, complete archived reports/standings/squads, reset and reload persistence, deduplication, old-catalogue independence, corrupt-history backup and storage failure recovery; stamina/style/form/consistency, profiles, traits, saves, previews, source catalogue, manual and quick drafts/simulation, expert mode, rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
+  console.log('Browser QA passed: manual board order, native keyboard controls and focus return, stable fixtures, reloads, exact-slot substitutions and era-rating disclaimers, incompatible-save backups and independent old-report preservation; system theme, keyboard theme toggle, preference persistence, cross-tab updates and responsive theme controls; top-three personal records, complete archived reports/standings/squads, reset and reload persistence, deduplication, old-catalogue independence, corrupt-history backup and storage failure recovery; stamina/style/form/consistency, profiles, traits, saves, previews, source catalogue, manual and quick drafts/simulation, expert mode, rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
   console.log(`Screenshots: ${artifacts}`);
 } finally {await browser.close();}

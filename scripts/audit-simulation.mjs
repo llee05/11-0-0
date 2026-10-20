@@ -149,8 +149,9 @@ for(let run=0;run<runs;run++){
     for(let round=0;round<11;round++)tournament=game.simulateRound(auto?game.applyRecommendedLineup(tournament):tournament);
     const ranked=game.standings(tournament),own=tournament.teams.find(team=>team.id==='YOU');
     const firstMatch=tournament.rounds[0].find(match=>[match.a,match.b].includes('YOU'));
-    const openingRating=mean(firstMatch.boards.map(board=>firstMatch.a==='YOU'?board.a.baseRating:board.b.baseRating));
-    samples[name].push({seed,mp:own.mp,bp:own.bp,rank:ranked.findIndex(team=>team.id==='YOU')+1,wins:own.w,perfect:own.w===11,sourceRating:openingRating,milliseconds:performance.now()-start,mirrorPlayers:state.squad.filter(id=>game.OPPONENTS.some(team=>team.players.some(other=>game.playerById(other).personId===game.playerById(id).personId))).length});
+    const openingRating=mean(firstMatch.boards.map(board=>(firstMatch.a==='YOU'?board.a:board.b).rawRating));
+    const openingGameRating=mean(firstMatch.boards.map(board=>(firstMatch.a==='YOU'?board.a:board.b).baseRating));
+    samples[name].push({seed,mp:own.mp,bp:own.bp,rank:ranked.findIndex(team=>team.id==='YOU')+1,wins:own.w,perfect:own.w===11,sourceRating:openingRating,gameRating:openingGameRating,milliseconds:performance.now()-start,mirrorPlayers:state.squad.filter(id=>game.OPPONENTS.some(team=>team.players.some(other=>game.playerById(other).personId===game.playerById(id).personId))).length});
     if(run===0&&!game.validSave({...state,phase:'results',tournament}))throw new Error(`Invalid audited ${name} save.`);
     if(name==='rating-auto'){
       const colors=new Map();
@@ -173,19 +174,19 @@ for(let run=0;run<runs;run++){
 }
 const policies=Object.fromEntries(names.map(name=>{
   const rows=samples[name],titles=rows.filter(row=>row.rank===1).length,perfect=rows.filter(row=>row.perfect).length;
-  return [name,{runs,titles,titleRate:titles/runs,titleRate95:wilson(titles,runs),podiumRate:rows.filter(row=>row.rank<=3).length/runs,perfect,meanWins:rounded(mean(rows.map(row=>row.wins))),rank:summary(rows.map(row=>row.rank)),matchPoints:summary(rows.map(row=>row.mp)),matchPoints95:interval(rows.map(row=>row.mp)),sourceRating:summary(rows.map(row=>row.sourceRating)),meanMirrorPlayers:rounded(mean(rows.map(row=>row.mirrorPlayers))),runtimeMs:summary(rows.map(row=>row.milliseconds))}];
+  return [name,{runs,titles,titleRate:titles/runs,titleRate95:wilson(titles,runs),podiumRate:rows.filter(row=>row.rank<=3).length/runs,perfect,meanWins:rounded(mean(rows.map(row=>row.wins))),rank:summary(rows.map(row=>row.rank)),matchPoints:summary(rows.map(row=>row.mp)),matchPoints95:interval(rows.map(row=>row.mp)),sourceRating:summary(rows.map(row=>row.sourceRating)),gameRating:summary(rows.map(row=>row.gameRating)),meanMirrorPlayers:rounded(mean(rows.map(row=>row.mirrorPlayers))),runtimeMs:summary(rows.map(row=>row.milliseconds))}];
 }));
 const rotationGains=samples['rating-auto'].map((row,i)=>row.mp-samples['rating-manual'][i].mp),profileGains=samples['profile-auto'].map((row,i)=>row.mp-samples['rating-auto'][i].mp);
 const result={
   source:{
     node:process.version,
-    sourceRatings:'Unchanged published ratings and labelled historical estimates; sampled best observed editions.',
+    sourceRatings:'Immutable published ratings and labelled historical estimates. Gameplay uses the separately recorded era-balanced game base; sampled best observed editions.',
     catalogueRelease:game.CATALOGUE.release,rules:game.RULES_VERSION,
     snapshots:game.NATIONS.length,careerProfiles:CAREER_PROFILES.length,
     fixedOpponentPlayers:game.OPPONENTS.flatMap(team=>team.players).filter(id=>careerProfile(game.playerById(id))).length,
     opponentsAtLeast2700:game.OPPONENTS.filter(team=>team.rating>=2700).length,
-    meanOfferLeader:mean(game.NATIONS.map(n=>game.playerById(n.players[0]).rating)),
-    meanLeaderToSecondGap:mean(game.NATIONS.map(n=>game.playerById(n.players[0]).rating-game.playerById(n.players[1]).rating)),
+    meanOfferLeader:mean(game.NATIONS.map(n=>Math.max(...n.players.map(id=>game.playerById(id).rating)))),
+    meanLeaderToSecondGap:mean(game.NATIONS.map(n=>{const ratings=n.players.map(id=>game.playerById(id).rating).sort((a,b)=>b-a);return ratings[0]-ratings[1];})),
     opponentMean:mean(game.OPPONENTS.map(team=>team.rating)),
     opponentRange:[game.OPPONENTS.at(-1).rating,game.OPPONENTS[0].rating],
     elitePlayers:elite.map(p=>({name:p.name,rating:p.rating,year:p.year})),
@@ -194,7 +195,7 @@ const result={
     counterfactualsSkipped:args['skip-probes'],
     counterfactuals:`${probeSeeds} seeds per random/rating draft policy, 11 rounds, four reserve substitutions; no user rotation on the baseline path.`,
     rerollsUsed:0,
-    sourceRating:'Unrounded mean source rating of the four players actually fielded in round one.',
+    sourceRating:'Unrounded mean original source rating of the four players fielded in round one.',gameRating:'Unrounded mean era-balanced game base of those four players.',
     runsPerPolicy:runs,totalTournaments:runs*names.length,
     pairedSeeds:'(0x1BFDA550 + (run + 1) * 997) >>> 0',
     profilePolicyReferenceRating:2720,

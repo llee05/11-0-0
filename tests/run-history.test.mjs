@@ -69,14 +69,13 @@ test('reloading a result never duplicates it or changes its recorded date',()=>{
   assert.notEqual(snapshotRun({...game,tournament:t}).id,runs[0].id);
 });
 
-test('compatible completed saves retain their original report identity after board-order support',()=>{
-  const game=games[0];let tournament=startTournament(game.squad,game.teamName,92,game.traits,game.profiles);
-  while(tournament.round<11)tournament=simulateRound(tournament);
-  const legacy={...game,rulesVersion:game.rulesVersion.replace('olympiad-6','olympiad-5'),tournament};
-  const original=snapshotRun(legacy,'2026-10-20T12:00:00.000Z'),existing=[original];
-  const restored=restoreSave(legacy);assert.ok(restored);
-  const reloaded=snapshotRun(restored,'2026-10-21T12:00:00.000Z');
-  assert.equal(reloaded.id,original.id);assert.strictEqual(keepBestRuns(existing,reloaded),existing);
+test('reports from earlier rating rules stay independently readable after active saves become incompatible',()=>{
+  const legacy={...games[0],rulesVersion:games[0].rulesVersion.replace('olympiad-7','olympiad-6')};
+  assert.equal(restoreSave(legacy),null);
+  const original=structuredClone(runs[0]);original.rulesVersion=legacy.rulesVersion;delete original.ratingRules;
+  assert.ok(validRun(original));const existing=[original];
+  const [reloaded]=parseRunHistory(serializeRunHistory(existing));
+  assert.deepEqual(reloaded,original);assert.strictEqual(keepBestRuns(existing,reloaded),existing);
 });
 
 test('reports round-trip independently of the active catalogue and game rules',()=>{

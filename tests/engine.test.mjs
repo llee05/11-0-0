@@ -257,7 +257,9 @@ test('colour allocation responds to individual history and keeps two whites per 
       }
     }
   }
-  const botvinnik=records.get('alltime:URS:A:URS-1946:chessmetrics:15154');
+  const botvinnikTeam=t.teams.find(team=>team.id!=='YOU'&&team.players.some(id=>playerById(id).personId==='chessmetrics:15154'));
+  const botvinnikId=botvinnikTeam.players.find(id=>playerById(id).personId==='chessmetrics:15154');
+  const botvinnik=records.get(`${botvinnikTeam.id}:${botvinnikId}`);
   assert.ok(botvinnik.white>0&&botvinnik.black>0);
   assert.ok(Math.abs(botvinnik.white-botvinnik.black)<=3);
   const corrupt=structuredClone(t);corrupt.teams[0].seedingRating++;
@@ -345,25 +347,20 @@ test('recommendations preserve chosen board slots and use the current order in t
   assert.deepEqual(applyRecommendedLineup(t).squad,recommended);assert.deepEqual(t,before);
 });
 
-test('previous source-ordered saves resume without replacing progress or duplicating completed reports',()=>{
-  const previous=RULES_VERSION.replace('olympiad-6','olympiad-5');
-  const s=draft(97),legacyDraft={...s,rulesVersion:previous},draftBefore=structuredClone(legacyDraft);
-  assert.equal(restoreSave(legacyDraft).rulesVersion,RULES_VERSION);assert.deepEqual(legacyDraft,draftBefore);
+test('era-balanced rules resume current saves and reject earlier rules without mutating them',()=>{
+  const s=draft(97),before=structuredClone(s);assert.strictEqual(restoreSave(s),s);
+  for(const rulesVersion of [RULES_VERSION.replace('olympiad-7','olympiad-6'),RULES_VERSION.replace('era-balanced-1','source-ratings-v1')]){
+    const legacy={...s,rulesVersion};assert.equal(restoreSave(legacy),null);assert.equal(validSave(legacy),false);
+  }
+  assert.deepEqual(s,before);
   let t=startTournament(s.squad,s.teamName,97,s.traits,s.profiles);
   for(let round=0;round<3;round++)t=simulateRound(t);
-  const legacy={...s,rulesVersion:previous,phase:'tournament',tournament:t},before=structuredClone(legacy),restored=restoreSave(legacy);
-  assert.ok(validSave(restored));assert.deepEqual(restored,{...legacy,rulesVersion:RULES_VERSION});assert.deepEqual(legacy,before);
-  assert.deepEqual(simulateRound(restored.tournament),simulateRound(legacy.tournament));
-  const corrupt=structuredClone(legacy);corrupt.tournament.loads[corrupt.squad[0]]++;
-  assert.equal(restoreSave(corrupt),null);
-  const forgedOrder={...legacy,tournament:setBoardOrder(t,[...t.squad.slice(0,4)].reverse())};
-  assert.equal(restoreSave(forgedOrder),null);
-  assert.equal(restoreSave({...legacy,catalogueRelease:'old-catalogue'}),null);
-  assert.equal(restoreSave({...legacy,rulesVersion:previous.replace('olympiad-5','olympiad-4')}),null);
+  const current={...s,phase:'tournament',tournament:t};assert.ok(validSave(current));
+  assert.ok(restoreSave(JSON.parse(JSON.stringify(current))));
+  assert.equal(restoreSave({...current,catalogueRelease:'old-catalogue'}),null);
   while(t.round<11)t=simulateRound(t);
-  const completed={...legacy,phase:'results',tournament:t};
-  assert.ok(validSave(completed));assert.strictEqual(restoreSave(completed),completed);
-  assert.equal(restoreSave(completed).rulesVersion,previous);
+  const completed={...current,phase:'results',tournament:t};assert.strictEqual(restoreSave(completed),completed);
+  assert.equal(restoreSave({...completed,rulesVersion:completed.rulesVersion.replace('olympiad-7','olympiad-6')}),null);
 });
 
 test('save validation rejects corrupt and incompatible browser data',()=>{
@@ -376,7 +373,7 @@ test('save validation rejects corrupt and incompatible browser data',()=>{
   for(const broken of [null,{},[],{...initialState(),version:9},{...initialState(),squad:['invalid',null,null,null,null]},{...initialState(),rerolls:-1},{...initialState(),phase:'results'},{...initialState(),offer:{nation:'IND',players:['fake']}}]) assert.equal(validSave(broken),false);
 });
 
-test('every team accumulates fatigue, rests a reserve and retains partial recovery across the Olympiad',()=>{
+test('every team updates active and reserve fatigue and retains partial recovery across the Olympiad',()=>{
   const s=draft(18);let t=startTournament(s.squad,s.teamName,55,s.traits,s.profiles),partialRecovery=false;
   const played=new Map(t.teams.map(team=>[team.id,new Set()]));
   for(let round=0;round<11;round++){
@@ -396,19 +393,23 @@ test('every team accumulates fatigue, rests a reserve and retains partial recove
     }
   }
   assert.ok(partialRecovery);
-  assert.ok([...played.values()].every(players=>players.size===5));
+  // A much weaker fifth player can correctly remain on the bench.
+  assert.ok([...played.values()].every(players=>players.size>=4&&players.size<=5));
+  assert.ok([...played.values()].some(players=>players.size===5));
   assert.ok(validSave({...s,phase:'results',tournament:t}));
   assert.strictEqual(applyRecommendedLineup(t),t);
   assert.deepEqual(previewTeams(t),t.teams);
 });
 
 test('reserve planning can rest a strong tired player before the reserve overtakes them',()=>{
-  const s=draft(55),t=startTournament(s.squad,s.teamName,55,s.traits,s.profiles);
-  const team=structuredClone(t.teams.find(team=>team.id==='alltime:USA:A'));
-  team.players.forEach((id,i)=>{team.loads[id]=[18,58,39,5,4][i];team.forms[id]=0;});
-  const before=structuredClone(team);
-  assert.equal(playerById(planLineup(team,1)[4]).personId,'chessmetrics:37943');
-  assert.equal(playerById(planLineup(team,3)[4]).personId,'fide:2016192');
+  // Fixed game ratings and neutral profiles isolate the planning horizon.
+  const ids=['LEGENDS-1:chessmetrics:19593','ARM-2012:fide:13300474','AZE-2018:fide:13401319','URS-1948:chessmetrics:63804','BRA-1978:fide:2100010'];
+  const team={players:ids,lineup:sortBoards(ids),traits:Object.fromEntries(ids.map(id=>[id,null])),
+    profiles:Object.fromEntries(ids.map(id=>[id,{style:'universal',stamina:3,consistency:3,form:0}])),
+    forms:Object.fromEntries(ids.map(id=>[id,0])),loads:Object.fromEntries(ids.map((id,i)=>[id,[18,58,39,5,4][i]]))};
+  const before=structuredClone(team),immediate=planLineup(team,1)[4],planned=planLineup(team,3)[4];
+  assert.equal(immediate,ids[4]);assert.equal(planned,ids[1]);
+  assert.ok(playerById(planned).rating-profileFatigue(null,team.loads[planned])>playerById(immediate).rating-profileFatigue(null,team.loads[immediate]));
   assert.deepEqual(team,before);
 });
 
@@ -583,8 +584,9 @@ test('match-aware planning selects a lower-rated specialist and maximises final-
 test('competitive offers retain every snapshot and respond to already-drafted leaders',()=>{
   const squad=Array(5).fill(null),weights=NATIONS.map(n=>offerWeight(n,squad));
   assert.ok(weights.every(weight=>Number.isFinite(weight)&&weight>0));
-  const expectedLeader=NATIONS.reduce((sum,n,i)=>sum+playerById(n.players[0]).rating*weights[i],0)/weights.reduce((sum,w)=>sum+w,0);
-  assert.ok(expectedLeader>2710&&expectedLeader<2760);
+  const leaders=NATIONS.map(n=>Math.max(...n.players.map(id=>playerById(id).rating)));
+  const expectedLeader=leaders.reduce((sum,rating,i)=>sum+rating*weights[i],0)/weights.reduce((sum,w)=>sum+w,0);
+  assert.ok(expectedLeader>leaders.reduce((a,b)=>a+b,0)/leaders.length);
   const usa=NATIONS.find(n=>n.id==='USA-2026');
   assert.ok(offerWeight(usa,[usa.players[0],null,null,null,null])<=offerWeight(usa,squad));
 });

@@ -1,5 +1,5 @@
-// Rank teams from observed country-year editions, rather than inventing peaks.
-// A transferred player belongs to the federation of their strongest recorded
+// Rank teams from observed country-year editions, using game ratings while preserving source values.
+// A transferred player belongs to the federation of their strongest era-balanced
 // edition; ties prefer the latest year, then stable federation and edition IDs.
 const compareEditions=(a,b)=>b.rating-a.rating||b.year-a.year||a.federation.localeCompare(b.federation)||a.id.localeCompare(b.id);
 

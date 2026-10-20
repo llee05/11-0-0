@@ -43,3 +43,15 @@ test('field ranking uses exact board totals before display rounding and excludes
   assert.deepEqual(teams.map(t=>t.id),['alltime:BBB:A','alltime:AAA:A']);
   assert.equal(teams[0].rating,teams[1].rating);
 });
+
+test('national allocation chooses the strongest game edition while keeping source values and Legends separate',()=>{
+  const a=fixture('AAA',[2800,2790,2780,2770,2760,2750],1972),b=fixture('BBB',[2840,2780,2770,2760,2750,2740]);
+  a.players[0].rawRating=2900;b.players[0].rawRating=2700;b.players[0].personId=a.players[0].personId;
+  const legend={id:'LEGENDS-1',code:'LEG1',name:'Legends I',flag:'✦',kind:'legends'};
+  const copy={...a.players[1],id:'legend-copy',nation:legend.id,federation:null,rating:3000};
+  const teams=buildAllTimeTeams([a.nation,b.nation,legend],[...a.players,...b.players,copy]);
+  assert.ok(teams.find(t=>t.code==='BBB').players.includes(b.players[0].id));
+  assert.ok(!teams.flatMap(t=>t.players).includes(a.players[0].id));
+  assert.ok(!teams.flatMap(t=>t.players).includes(copy.id));
+  assert.equal(a.players[0].rawRating,2900);
+});

@@ -1,5 +1,6 @@
 import {TRAIT_RULESET, rollTraits, validTraits, matchContext, validContext, matchupEffects} from './traits.js';
 import {PROFILE_RULESET,rollProfiles,validProfiles,validForm,profileFatigue,nextFatigue,validFatigue,styleEffect,performanceSwing,performanceSeed,nextForm,restedForm,FORM_ELO,SWINGS,profileOutlook} from './player-profile.js';
+import {RATING_RULESET,ERA_ADJUSTMENT_CAP} from './rating-rules.js';
 // SQL supplies the versioned catalogue through an API or a static build export.
 export let NATIONS=[],PLAYERS=[],OPPONENTS=[],CATALOGUE={release:null};
 const planningCache=new Map(),outlookCache=new Map();
@@ -7,6 +8,7 @@ let playerIndex=new Map(),nationIndex=new Map(),opponentIndex=new Map();
 export function configureCatalogue(catalogue){
   if(!catalogue?.metadata?.release||!Array.isArray(catalogue.nations)||!Array.isArray(catalogue.players)||catalogue.nations.length<1)throw new Error('Invalid rating catalogue.');
   const players=new Map(catalogue.players.map(p=>[p.id,p]));
+  if(catalogue.metadata.normalization!==RATING_RULESET||catalogue.players.some(p=>!Number.isInteger(p.rawRating)||!Number.isInteger(p.rating)||!Number.isInteger(p.eraAdjustment)||Math.abs(p.eraAdjustment)>ERA_ADJUSTMENT_CAP||p.rating!==p.rawRating+p.eraAdjustment))throw new Error('Invalid era-balanced ratings.');
   if(players.size!==catalogue.players.length||catalogue.nations.some(n=>n.players.length!==5||new Set(n.players).size!==5||n.players.some(id=>players.get(id)?.nation!==n.id)))throw new Error('Incomplete country-year roster.');
   const opponents=catalogue.opponents;
   const usedPeople=new Set();
@@ -22,12 +24,10 @@ export function configureCatalogue(catalogue){
 }
 export const ROUND_COUNT = 11;
 export const SAVE_VERSION = 4;
-export const SIMULATION_RULESET = 'olympiad-6';
+export const SIMULATION_RULESET = 'olympiad-7';
 export const ELO_SCALE = 320;
 export const DRAFT_RULESET = 'competitive-draft-1';
-export const RULES_VERSION = `${TRAIT_RULESET}/${PROFILE_RULESET}/${SIMULATION_RULESET}/${DRAFT_RULESET}`;
-// The previous rules share the same board arithmetic and neutral fixtures.
-const SOURCE_ORDER_RULES = `${TRAIT_RULESET}/${PROFILE_RULESET}/olympiad-5/${DRAFT_RULESET}`;
+export const RULES_VERSION = `${TRAIT_RULESET}/${PROFILE_RULESET}/${SIMULATION_RULESET}/${DRAFT_RULESET}/${RATING_RULESET}`;
 export const nationById = id => nationIndex.get(id);
 export const playerById = id => playerIndex.get(id);
 export const average = squad => { const p=squad.filter(Boolean).map(playerById); return p.length ? Math.round(p.reduce((n,p)=>n+p.rating,0)/p.length) : 0; };
@@ -370,13 +370,10 @@ export function validSave(s) {
   try { return validateSave(s); } catch { return false; }
 }
 export function restoreSave(saved){
-  if(validSave(saved))return saved;
-  if(saved?.rulesVersion!==SOURCE_ORDER_RULES)return null;
-  try{return validateSave(saved,true)?{...saved,rulesVersion:RULES_VERSION}:null;}catch{return null;}
+  return validSave(saved)?saved:null;
 }
-function validateSave(s,allowSourceOrderUpgrade=false) {
-  if(!s||Object.hasOwn(s,'captain')||s.version!==SAVE_VERSION||(s.rulesVersion!==RULES_VERSION&&!(s.rulesVersion===SOURCE_ORDER_RULES&&(s.phase==='results'||allowSourceOrderUpgrade)))||s.catalogueRelease!==CATALOGUE.release||!['draft','tournament','results'].includes(s.phase)||!['classic','expert'].includes(s.mode)||!Array.isArray(s.squad)||s.squad.length!==5||s.squad.some(id=>id!==null&&!playerById(id))||new Set(s.squad.filter(Boolean).map(id=>playerById(id).personId)).size!==s.squad.filter(Boolean).length||!validTraits(s.squad.filter(Boolean),s.traits,playerById)||!validProfiles(s.squad.filter(Boolean),s.profiles,playerById)||!Number.isInteger(s.rerolls)||s.rerolls<0||s.rerolls>2||typeof s.teamName!=='string'||s.teamName.length>30)return false;
-  const sourceOrder=s.rulesVersion===SOURCE_ORDER_RULES;
+function validateSave(s) {
+  if(!s||Object.hasOwn(s,'captain')||s.version!==SAVE_VERSION||s.rulesVersion!==RULES_VERSION||s.catalogueRelease!==CATALOGUE.release||!['draft','tournament','results'].includes(s.phase)||!['classic','expert'].includes(s.mode)||!Array.isArray(s.squad)||s.squad.length!==5||s.squad.some(id=>id!==null&&!playerById(id))||new Set(s.squad.filter(Boolean).map(id=>playerById(id).personId)).size!==s.squad.filter(Boolean).length||!validTraits(s.squad.filter(Boolean),s.traits,playerById)||!validProfiles(s.squad.filter(Boolean),s.profiles,playerById)||!Number.isInteger(s.rerolls)||s.rerolls<0||s.rerolls>2||typeof s.teamName!=='string'||s.teamName.length>30)return false;
   if(s.phase==='draft') {
     const nation=nationById(s.offer?.nation);
     return !s.tournament&&(!s.offer||!!nation&&Array.isArray(s.offer.players)&&s.offer.players.length===5&&s.offer.players.every((id,i)=>id===nation.players[i])&&validTraits(s.offer.players,s.offer.traits,playerById)&&validProfiles(s.offer.players,s.offer.profiles,playerById)&&s.offer.players.some(id=>canDraft(playerById(id),s.squad)));
@@ -386,11 +383,11 @@ function validateSave(s,allowSourceOrderUpgrade=false) {
   const same=(a,b)=>a.length===b.length&&a.every((id,i)=>id===b[i]);
   const streaks=(ids,values)=>values&&Object.keys(values).length===5&&ids.every(id=>Number.isInteger(values[id])&&values[id]>=0&&values[id]<=t.round);
   const loads=(ids,values)=>values&&Object.keys(values).length===5&&ids.every(id=>validFatigue(values[id]));
-  if(!Array.isArray(t.squad)||!same([...t.squad].sort(),[...s.squad].sort())||(sourceOrder&&!same(t.squad,sortBoards(t.squad)))||!streaks(t.squad,t.streaks)||!loads(t.squad,t.loads))return false;
+  if(!Array.isArray(t.squad)||!same([...t.squad].sort(),[...s.squad].sort())||!streaks(t.squad,t.streaks)||!loads(t.squad,t.loads))return false;
   for(const team of t.teams){
     const source=opponentIndex.get(team.id),own=team.id==='YOU';
     const canonical=own?sortBoards(s.squad):source?.players;
-    if(!canonical||typeof team.name!=='string'||typeof team.flag!=='string'||(own?team.name!==s.teamName||team.flag!=='✦':team.name!==source.name||team.flag!==source.flag)||!Array.isArray(team.players)||!same(team.players,canonical)||!Array.isArray(team.lineup)||!same([...team.lineup].sort(),[...canonical].sort())||((!own||sourceOrder)&&!same(team.lineup,sortBoards(team.lineup)))||team.rating!==average(team.lineup.slice(0,4))||team.seedingRating!==rosterRating(team.players)||!validTraits(team.players,team.traits,playerById)||!validProfiles(team.players,team.profiles,playerById)||Object.hasOwn(team,'captain')||!team.forms||Object.keys(team.forms).length!==5||team.players.some(id=>!validForm(team.forms[id]))||!streaks(team.players,team.streaks)||!loads(team.players,team.loads)||!Array.isArray(team.history)||team.history.length!==t.round)return false;
+    if(!canonical||typeof team.name!=='string'||typeof team.flag!=='string'||(own?team.name!==s.teamName||team.flag!=='✦':team.name!==source.name||team.flag!==source.flag)||!Array.isArray(team.players)||!same(team.players,canonical)||!Array.isArray(team.lineup)||!same([...team.lineup].sort(),[...canonical].sort())||(!own&&!same(team.lineup,sortBoards(team.lineup)))||team.rating!==average(team.lineup.slice(0,4))||team.seedingRating!==rosterRating(team.players)||!validTraits(team.players,team.traits,playerById)||!validProfiles(team.players,team.profiles,playerById)||Object.hasOwn(team,'captain')||!team.forms||Object.keys(team.forms).length!==5||team.players.some(id=>!validForm(team.forms[id]))||!streaks(team.players,team.streaks)||!loads(team.players,team.loads)||!Array.isArray(team.history)||team.history.length!==t.round)return false;
     if(own&&(!same(team.lineup,t.squad)||team.players.some(id=>team.traits[id]!==s.traits[id]||team.streaks[id]!==t.streaks[id]||team.loads[id]!==t.loads[id]||Object.keys(s.profiles[id]).some(k=>s.profiles[id][k]!==team.profiles[id][k]))))return false;
     const opponents=new Set();let mp=0,bp=0,w=0,d=0,l=0;
     for(const h of team.history){
@@ -408,14 +405,14 @@ function validateSave(s,allowSourceOrderUpgrade=false) {
     if(new Set(m.boards.map(board=>board.a?.id)).size!==4||new Set(m.boards.map(board=>board.b?.id)).size!==4)return false;
     const lineup=side=>{const ids=m.boards.map(board=>board[side].id),team=side==='a'?a:b;return [...ids,...team.players.filter(id=>!ids.includes(id))];};
     const lineups={a:lineup('a'),b:lineup('b')};
-    for(const [side,team] of [['a',a],['b',b]])if((team.id!=='YOU'||sourceOrder)&&!same(lineups[side],sortBoards(lineups[side])))return false;
+    for(const [side,team] of [['a',a],['b',b]])if(team.id!=='YOU'&&!same(lineups[side],sortBoards(lineups[side])))return false;
     const setup=matchSetup({seed:t.seed,round,rounds:t.rounds.slice(0,round),teams:[{...a,...tracked.get(a.id)},{...b,...tracked.get(b.id)}]},a.id,b.id);
     const valid=m.boards.every((board,i)=>{
       if(!validContext(board.context)||Object.keys(setup[i].context).some(key=>board.context[key]!==setup[i].context[key])||board.white!==setup[i].white||![0,0.5,1].includes(board.score))return false;
       const before={};
       for(const [p,team,side,other] of [[board.a,a,'a',board.b],[board.b,b,'b',board.a]]){
         const source=playerById(p?.id),profile=team.profiles[p?.id],track=tracked.get(team.id);
-        if(!source||!team.players.includes(p.id)||p.name!==source.name||p.year!==source.year||p.baseRating!==source.rating||p.trait!==team.traits[p.id]||['captainId','captainBonus','captaincy'].some(key=>Object.hasOwn(p,key))||!['style','stamina','consistency'].every(k=>p[k]===profile[k])||p.form!==track.forms[p.id]||p.streak!==track.streaks[p.id]||p.fatigueLoad!==track.loads[p.id]||p.fatigue!==profileFatigue(p.trait,p.fatigueLoad))return false;
+        if(!source||!team.players.includes(p.id)||p.name!==source.name||p.year!==source.year||p.baseRating!==source.rating||p.rawRating!==source.rawRating||p.eraAdjustment!==source.eraAdjustment||p.source?.id!==source.source.id||p.trait!==team.traits[p.id]||['captainId','captainBonus','captaincy'].some(key=>Object.hasOwn(p,key))||!['style','stamina','consistency'].every(k=>p[k]===profile[k])||p.form!==track.forms[p.id]||p.streak!==track.streaks[p.id]||p.fatigueLoad!==track.loads[p.id]||p.fatigue!==profileFatigue(p.trait,p.fatigueLoad))return false;
         const style=styleEffect(p.style,other.style,board.context),performance=performanceSwing(p.consistency,random(performanceSeed(t.seed,round,team.id,p.id)));
         if(p.styleBonus!==style.bonus||p.performance!==performance||p.formBonus!==p.form*FORM_ELO)return false;
         before[side]=p.baseRating-p.fatigue+p.formBonus+p.performance+p.styleBonus;

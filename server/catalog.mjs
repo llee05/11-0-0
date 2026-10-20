@@ -3,9 +3,10 @@ import {buildAllTimeTeams} from './all-time.mjs';
 import identities from '../data/identity-links.json' with {type:'json'};
 import legendObservations from '../data/legends-observations.json' with {type:'json'};
 import {selectLegends,LEGENDS_POLICY} from './legends.mjs';
+import {rankEquivalent,RATING_RULESET,ERA_ADJUSTMENT_CAP,ERA_DISCLAIMER} from '../dist/rating-rules.js';
 export const LEGENDS_DATA=legendObservations;
-export const NORMALIZATION = 'source-ratings-v1';
-export const CATALOGUE_FORMAT = `country-year-v7-${LEGENDS_POLICY}-raw-alltime-1-identities-${JSON.stringify(identities)}-legends-${JSON.stringify(legendObservations)}`;
+export const NORMALIZATION = RATING_RULESET;
+export const CATALOGUE_FORMAT = `country-year-v8-${LEGENDS_POLICY}-${RATING_RULESET}-balanced-alltime-2-identities-${JSON.stringify(identities)}-legends-${JSON.stringify(legendObservations)}`;
 export const EXCLUDED_FEDERATIONS = new Set(['FID']);
 const historicNames = {CSR:['Czechoslovakia',null],GDR:['East Germany',null],SCG:['Serbia and Montenegro',null],URS:['Soviet Union',null],YUG:['Yugoslavia',null]};
 const aliases = {LIB:'LBN',ROM:'ROU',SIN:'SGP',TRI:'TTO'};
@@ -55,7 +56,7 @@ export function buildSeed(dataset, federations, historic = null, legends = null)
         const personId=explicit?.personId||player.personId||(fideId?`fide:${fideId}`:`historical:${canonicalName(player.name)}`);
         const linked=player.personId?persons.get(personId):null;
         persons.set(personId,{id:personId,fide_id:linked?.fide_id||(fideId?String(fideId):null),name:linked?.name||displayName(player.name)});
-        editionRows.push({id:`${snapshotId}:${personId}`,snapshot_id:snapshotId,person_id:personId,rank:player.rank,raw_rating:player.rawRating,rating:player.rawRating,title:player.title||null,edition_year:null,source_id:null});
+        editionRows.push({id:`${snapshotId}:${personId}`,snapshot_id:snapshotId,person_id:personId,rank:player.rank,raw_rating:player.rawRating,rating:rankEquivalent(player.rawRating,period.reference.top100Ratings,reference.reference.top100Ratings),title:player.title||null,edition_year:null,source_id:null});
       }
     }
   }
@@ -74,12 +75,13 @@ export function buildSeed(dataset, federations, historic = null, legends = null)
           sourceRows.push({id:sourceId,kind:'historical-estimate',url:p.source,list_date:p.sourceMonth+'-01',sha256:p.sha256,notes:JSON.stringify(['Chessmetrics retrospective estimate, not an official FIDE rating.','Selected for a mixed-country Legends collection; no national top-five or period federation is asserted.','Source coverage is selective; this is a best observed edition, not a proven career peak.'])});sources.add(sourceId);
         }
         if(!persons.has(personId))persons.set(personId,{id:personId,fide_id:null,name:p.name});
-        editionRows.push({id:`${group.id}:${personId}`,snapshot_id:group.id,person_id:personId,rank:i+1,raw_rating:p.rawRating,rating:p.rawRating,title:null,edition_year:Number(p.sourceMonth.slice(0,4)),source_id:sourceId});
+        const distribution=legends.find(list=>list.sourceSha256===p.sha256).players.map(row=>row.sourceRating);
+        editionRows.push({id:`${group.id}:${personId}`,snapshot_id:group.id,person_id:personId,rank:i+1,raw_rating:p.rawRating,rating:rankEquivalent(p.rawRating,distribution,reference.reference.top100Ratings),title:null,edition_year:Number(p.sourceMonth.slice(0,4)),source_id:sourceId});
       });
     }
   }
   const requestedYears=[...Array.from({length:50},(_,i)=>2026-i*2),1927];
-  return {sources:sourceRows,periods:periodRows,snapshots:snapshotRows,people:[...persons.values()],editions:editionRows,metadata:{schemaVersion:2,normalization:NORMALIZATION,minimumTopRating:2600,minimumTopRatingInclusive:true,referenceDate:reference.source.listDate,referenceMedian:baseline,selection:dataset.selection+' Only country-year snapshots with at least one source rating at least 2600 are playable. Pre-FIDE snapshots use labelled Chessmetrics estimates and separately audited historical country affiliations.',years,requestedYears,missingYears:requestedYears.filter(y=>!years.includes(y)),coverageNotes:['Ratings are used exactly as published, without an era adjustment.','Country-year snapshots require at least one player rated at least 2600; their complete top fives are retained.','Before 1971 there were no official FIDE ratings. Historical estimates are labelled separately.','Missing or incomplete country-year records are excluded; no Olympiad roster substitutions are made.','1972 uses the July list and 1974 uses May; other imported FIDE snapshots use January.','Early FIDE archives have incomplete activity flags and women’s coverage. See each source note.','FID represents unaffiliated players, so it is excluded from country rolls.']}};
+  return {sources:sourceRows,periods:periodRows,snapshots:snapshotRows,people:[...persons.values()],editions:editionRows,metadata:{schemaVersion:3,normalization:NORMALIZATION,ratingPolicy:{rules:RATING_RULESET,referenceDate:reference.source.listDate,cap:ERA_ADJUSTMENT_CAP,method:'Equal-world-rank interpolation, tied source ratings share the corresponding reference mean; preserve gaps beyond observed endpoints; round to whole points.',disclaimer:ERA_DISCLAIMER},minimumTopRating:2600,minimumTopRatingInclusive:true,referenceDate:reference.source.listDate,referenceMedian:baseline,selection:dataset.selection+' Only country-year snapshots with at least one source rating at least 2600 are playable. Pre-FIDE snapshots use labelled Chessmetrics estimates and separately audited historical country affiliations.',years,requestedYears,missingYears:requestedYears.filter(y=>!years.includes(y)),coverageNotes:[ERA_DISCLAIMER,'Game bases map each source list’s published ranks to January 2026, capped at ±150; source ratings and source-ranked country top fives remain unchanged.','Sparse Legends lists use only their published ranks; no top-100 distribution is invented.','Country-year snapshots require at least one player rated at least 2600; their complete top fives are retained.','Before 1971 there were no official FIDE ratings. Historical estimates are labelled separately.','Missing or incomplete country-year records are excluded; no Olympiad roster substitutions are made.','1972 uses the July list and 1974 uses May; other imported FIDE snapshots use January.','Early FIDE archives have incomplete activity flags and women’s coverage. See each source note.','FID represents unaffiliated players, so it is excluded from country rolls.']}};
 }
 
 const tableNames={sources:'rating_sources',periods:'rating_periods',snapshots:'country_snapshots',people:'players',editions:'snapshot_players'};
@@ -113,9 +115,9 @@ export async function readCatalogue(db){
   const players=editions.map(e=>{
     const nation=nationMap.get(e.snapshot_id);nation.players.push(e.id);
     const source=sourceMap.get(e.source_id)||nation.source;
-    return {id:e.id,personId:e.person_id,fideId:e.fide_id,name:e.name,nation:nation.id,offerKind:nation.kind,federation:nation.kind==='legends'?null:nation.code,flag:nation.flag,year:e.edition_year??nation.year,source,rank:e.rank,rawRating:e.raw_rating,rating:e.rating,estimated:source.kind==='historical-estimate',title:e.title};
+    return {id:e.id,personId:e.person_id,fideId:e.fide_id,name:e.name,nation:nation.id,offerKind:nation.kind,federation:nation.kind==='legends'?null:nation.code,flag:nation.flag,year:e.edition_year??nation.year,source,rank:e.rank,rawRating:e.raw_rating,eraAdjustment:e.rating-e.raw_rating,rating:e.rating,estimated:source.kind==='historical-estimate',title:e.title};
   });
   if(nations.some(n=>n.players.length!==5))throw new Error('The database contains an incomplete country snapshot.');
   const opponents=buildAllTimeTeams(nations,players).slice(0,31);
-  return {metadata:{...metadata,snapshotCount:nations.length,playerCount:players.length,countryCount:new Set(nations.filter(n=>n.kind==='country').map(n=>n.code)).size,countrySnapshotCount:nations.filter(n=>n.kind==='country').length,legendCount:nations.filter(n=>n.kind==='legends').length,legendPolicy:LEGENDS_POLICY,earliestEditionYear:Math.min(...players.map(p=>p.year)),opponentPolicy:'Best observed source edition per person; federation at that edition; latest year breaks ties. A team = first five, B = next five. Strongest 31 teams by four-board mean; Russia and Soviet Union separate.'},nations,players,opponents};
+  return {metadata:{...metadata,snapshotCount:nations.length,playerCount:players.length,countryCount:new Set(nations.filter(n=>n.kind==='country').map(n=>n.code)).size,countrySnapshotCount:nations.filter(n=>n.kind==='country').length,legendCount:nations.filter(n=>n.kind==='legends').length,legendPolicy:LEGENDS_POLICY,earliestEditionYear:Math.min(...players.map(p=>p.year)),opponentPolicy:'Best observed era-balanced country edition per person; federation at that edition; latest year breaks ties. A team = first five, B = next five. Strongest 31 teams by four-board mean; Russia and Soviet Union separate.'},nations,players,opponents};
 }

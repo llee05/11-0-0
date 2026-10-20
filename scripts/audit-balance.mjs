@@ -48,7 +48,7 @@ export function summarizeSamples(rows){
     atMostTwoWins:rate(r=>r.w<=2),atMostTenMatchPoints:rate(r=>r.mp<=10),exactTwoSixThree:rate(r=>r.w===2&&r.d===6&&r.l===3),
     meanForecastMatchPoints:rounded(mean(rows.map(r=>r.expectedMP))),meanOutcomeMinusForecast:rounded(mean(rows.map(r=>r.mp-r.expectedMP))),
     poorRunForecast:poor.length?{runs:poor.length,meanActualMP:rounded(mean(poor.map(r=>r.mp))),meanForecastMP:rounded(mean(poor.map(r=>r.expectedMP))),meanOutcomeMinusForecast:rounded(mean(poor.map(r=>r.mp-r.expectedMP)))}:null,
-    meanSourceGap:rounded(mean(rows.map(r=>r.sourceGap))),meanEffectiveGap:rounded(mean(rows.map(r=>r.effectiveGap))),
+    meanSourceGap:rounded(mean(rows.map(r=>r.sourceGap))),...(!Object.hasOwn(rows[0],'gameBaseGap')?{}:{meanGameBaseGap:rounded(mean(rows.map(r=>r.gameBaseGap)))}),meanEffectiveGap:rounded(mean(rows.map(r=>r.effectiveGap))),
     ...(!rows[0].modifierGaps?{}:{meanModifierGaps:Object.fromEntries(Object.keys(rows[0].modifierGaps).map(key=>[key,rounded(mean(rows.map(r=>r.modifierGaps[key])))]))}),
     sourceFavouriteOverturnRate:rows[0].sourceFavourites?rounded(rows.reduce((n,r)=>n+r.sourceFavouriteOverturned,0)/rows.reduce((n,r)=>n+r.sourceFavourites,0)):0,
     records:Object.fromEntries([...new Set(rows.map(r=>`${r.w}-${r.d}-${r.l}`))].sort().map(record=>[record,rows.filter(r=>`${r.w}-${r.d}-${r.l}`===record).length])),
@@ -70,7 +70,7 @@ function calibrationReport(c){
 }
 function diagnose(game,tournament,seed,cohort){
   const own=tournament.teams.find(t=>t.id==='YOU'),boards=calibration(),matches=calibration(),rounds=[];
-  let expectedMP=0,sourceGap=0,effectiveGap=0,fatigueGap=0,formGap=0,performanceGap=0,traitGap=0,styleGap=0,sourceFavouriteOverturned=0,sourceFavourites=0,favouriteLosses=0;
+  let expectedMP=0,sourceGap=0,gameBaseGap=0,eraGap=0,effectiveGap=0,fatigueGap=0,formGap=0,performanceGap=0,traitGap=0,styleGap=0,sourceFavouriteOverturned=0,sourceFavourites=0,favouriteLosses=0;
   for(const fixtures of tournament.rounds){
     for(const match of fixtures)for(const board of match.boards)observe(boards,board.probabilities,board.score===1?0:board.score===0.5?1:2);
     const match=fixtures.find(m=>m.a==='YOU'||m.b==='YOU'),side=match.a==='YOU'?'a':'b',other=side==='a'?'b':'a';
@@ -81,16 +81,16 @@ function diagnose(game,tournament,seed,cohort){
     let roundSource=0,roundEffective=0;
     for(const board of match.boards){
       const a=board[side],b=board[other],colour=(side==='a'?board.white:!board.white)?28:-28;
-      const sg=a.baseRating-b.baseRating,eg=a.rating-b.rating+colour;
-      sourceGap+=sg;effectiveGap+=eg;roundSource+=sg;roundEffective+=eg;
+      const sg=(a.rawRating??a.baseRating)-(b.rawRating??b.baseRating),gb=a.baseRating-b.baseRating,eg=a.rating-b.rating+colour;
+      sourceGap+=sg;gameBaseGap+=gb;eraGap+=gb-sg;effectiveGap+=eg;roundSource+=sg;roundEffective+=eg;
       fatigueGap+=b.fatigue-a.fatigue;formGap+=a.formBonus-b.formBonus;performanceGap+=a.performance-b.performance;traitGap+=a.traitBonus-b.traitBonus;styleGap+=a.styleBonus-b.styleBonus;
       if(sg>0){sourceFavourites++;if(eg<0)sourceFavouriteOverturned++;}
     }
     rounds.push({round:rounds.length+1,opponent:match[other],points,win:rounded(chances.win),draw:rounded(chances.draw),loss:rounded(chances.loss),sourceGap:rounded(roundSource/4),effectiveGap:rounded(roundEffective/4)});
   }
   const count=44,rank=game.standings(tournament).findIndex(t=>t.id==='YOU')+1;
-  return {sample:{seed,cohort,w:own.w,d:own.d,l:own.l,mp:own.mp,bp:own.bp,rank,expectedMP:rounded(expectedMP),sourceGap:rounded(sourceGap/count),effectiveGap:rounded(effectiveGap/count),
-    modifierGaps:Object.fromEntries(Object.entries({fatigue:fatigueGap,form:formGap,performance:performanceGap,trait:traitGap,style:styleGap}).map(([k,v])=>[k,rounded(v/count)])),
+  return {sample:{seed,cohort,w:own.w,d:own.d,l:own.l,mp:own.mp,bp:own.bp,rank,expectedMP:rounded(expectedMP),sourceGap:rounded(sourceGap/count),gameBaseGap:rounded(gameBaseGap/count),effectiveGap:rounded(effectiveGap/count),
+    modifierGaps:Object.fromEntries(Object.entries({era:eraGap,fatigue:fatigueGap,form:formGap,performance:performanceGap,trait:traitGap,style:styleGap}).map(([k,v])=>[k,rounded(v/count)])),
     sourceFavourites,sourceFavouriteOverturned,favouriteLosses,...(own.mp<=10&&Number(cohort)>=2800?{rounds}:{})},boards,matches};
 }
 function changeScale(source,scale){
@@ -103,6 +103,7 @@ async function buildVariants(temp,ref,names){
   const baseline=(await git('git',['rev-parse','--verify',`${ref}^{commit}`],{cwd:root})).stdout.trim();
   const files=['engine.js','player-profile.js','traits.js'];
   const originals=Object.fromEntries(await Promise.all(files.map(async file=>[file,(await git('git',['show',`${baseline}:dist/${file}`],{cwd:root})).stdout])));
+  const baselineRatings=originals['engine.js'].includes('./rating-rules.js')?(await git('git',['show',`${baseline}:dist/rating-rules.js`],{cwd:root})).stdout:null;
   return names.map(name=>{
     const directory=join(temp,name);mkdirSync(directory);writeFileSync(join(directory,'package.json'),' {"type":"module"}\n');
     const hashes={};
@@ -111,7 +112,15 @@ async function buildVariants(temp,ref,names){
       if(file==='engine.js'&&name!=='baseline')source=changeScale(source,name==='steeper'?320:400);
       hashes[file]=hash(source);writeFileSync(join(directory,file),source);
     }
-    return {name,url:pathToFileURL(join(directory,'engine.js')).href,sourceRef:name==='baseline'?baseline:'working tree',hashes,eloScale:name==='steeper'?320:400};
+    const ratingModule='./rating-rules.js';
+    if(readFileSync(join(directory,'engine.js'),'utf8').includes(ratingModule)){
+      const source=name==='baseline'?baselineRatings:readFileSync(join(root,'dist','rating-rules.js'),'utf8');
+      hashes['rating-rules.js']=hash(source);writeFileSync(join(directory,'rating-rules.js'),source);
+    }
+    const engineSource=readFileSync(join(directory,'engine.js'),'utf8');
+    const scale=engineSource.match(/export const ELO_SCALE = (\d+);/)||engineSource.match(/10\*\*\(-difference\/(\d+)\)/);
+    if(!scale)throw new Error('Cannot identify the audited Elo scale.');
+    return {name,url:pathToFileURL(join(directory,'engine.js')).href,sourceRef:name==='baseline'?baseline:'working tree',hashes,eloScale:Number(scale[1])};
   });
 }
 function fixedCohorts(players,targets){

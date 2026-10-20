@@ -1,0 +1,63 @@
+{
+  "catalogueRelease": "db4ffb77ebec2b8aef9c51c29a1fe71e05d3f65678ae55170f6dd5500065c811",
+  "rules": "career-traits-5/squad-profiles-4/olympiad-7/competitive-draft-1/era-balanced-1",
+  "ratingPolicy": {
+    "rules": "era-balanced-1",
+    "referenceDate": "2026-01-01",
+    "cap": 150,
+    "method": "Equal-world-rank interpolation, tied source ratings share the corresponding reference mean; preserve gaps beyond observed endpoints; round to whole points.",
+    "disclaimer": "Game ratings are era-balanced for fantasy competition, not estimates of how historical players would perform today. Original source ratings remain visible."
+  },
+  "countries": 71,
+  "countrySnapshots": 774,
+  "legendCollections": 8,
+  "editions": 3910,
+  "changes": {
+    "increased": 1952,
+    "decreased": 1749,
+    "unchanged": 209,
+    "maximumAbsoluteAdjustment": 150
+  },
+  "examples": [
+    {
+      "name": "Paul Morphy",
+      "date": "1859-06-01",
+      "source": 2743,
+      "era": 97,
+      "game": 2840,
+      "url": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000185906111000000000000010100",
+      "sha256": "495ca370017a42d29b7bef2cdca34196c9b0947d160bd1f3a7d6126106717b29"
+    },
+    {
+      "name": "José Capablanca",
+      "date": "1920-01-01",
+      "source": 2873,
+      "era": -33,
+      "game": 2840,
+      "url": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000192001111000000000000010100",
+      "sha256": "01c3035f1f56f29ea53e0a4720c1f08a89cf2b6fe2f15e89794c608969e15432"
+    },
+    {
+      "name": "Emanuel Lasker",
+      "date": "1900-01-01",
+      "source": 2858,
+      "era": -18,
+      "game": 2840,
+      "url": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000190001111000000000000010100",
+      "sha256": "058630cbb2f0f3a2173016cbdf7503f1fdb586f102068af7e3ff6ced90708bd1"
+    }
+  ],
+  "sourceHashes": {
+    "dist/rating-rules.js": "844efbf2f2475a45bb9505a6ca014078797f13d9581999ec2abe103407c3a65f",
+    "server/catalog.mjs": "dbd2ab6fc78f21e7befeb4c66c64035d5e479ca130baf4363691c273ba9e502a",
+    "server/legends.mjs": "bd2de93abf1823ae3fe45e6d230a6a7a394a856f85b5861d5a3166d7123df71b",
+    "data/fide-snapshots.json": "99be529c95a81ba4348bc22245e50099799c0eb5535949beef054eae2814bdf7",
+    "data/historical-snapshots.json": "48b485c0d0e533c3ed173da76896b6d360665d94a10dae57ddd7e7dfc1450f58",
+    "data/legends-observations.json": "9b6c1420d6c0373760f7469309397a980452aa11641db0d512d0f40d29d71fe3",
+    "dist/engine.js": "7d94761ead8423abc33e7ade7f8edd6b3c12a64311ae0bb0f94e2edc9ebea956",
+    "dist/traits.js": "d538529ff14dce3660eb231c58ffb1fa934361039a165b91dd81c043bcbc1c68",
+    "dist/player-profile.js": "ac8a36d1b439b9c5e5ce6c84d33e17ae6b9bab210f10d4e71929d6b292bf6a86",
+    "scripts/audit-simulation.mjs": "ae5c3667535f8c6caf4d2a1540e8085909f8f4a94550d4191618e38d42274732",
+    "scripts/audit-balance.mjs": "0d6330637ae813a03b0a28fbd7e08d0a5cec7a837a5c457e190eee5d8436aa03"
+  }
+}

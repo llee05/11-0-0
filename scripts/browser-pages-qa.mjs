@@ -18,7 +18,7 @@ try{
   assert.ok(responses.every(status=>status===200));assert.deepEqual(errors,[]);
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
 
-  for(const asset of ['catalog.json','app.js','engine.js','traits.js','player-profile.js','run-history.js','styles.css','favicon.svg','king.svg','knight.svg','fonts/manrope.ttf','fonts/dm-sans.ttf','fonts/manrope-LICENSE.txt','fonts/dm-sans-LICENSE.txt']){
+  for(const asset of ['catalog.json','app.js','engine.js','rating-rules.js','traits.js','player-profile.js','run-history.js','styles.css','favicon.svg','king.svg','knight.svg','fonts/manrope.ttf','fonts/dm-sans.ttf','fonts/manrope-LICENSE.txt','fonts/dm-sans-LICENSE.txt']){
     const response=await context.request.get(new URL(asset,home).href);
     assert.equal(response.status(),200,asset);
     if(asset==='catalog.json')assert.match(response.headers()['content-type'],/^application\/json/);

@@ -1,5 +1,7 @@
 # Historical rating modes · 21 October 2026
 
+Subsequent decision: era balance has been implemented in the main game, without a new mode. See the [release details](era-balanced-release-2026-10-21.md). The proposal and measured source study below retain their original research scope.
+
 Recommendation: develop **Era-balanced** as a clearly fictional game mode, and investigate **Analysed strength** separately. Keep the current sourced-rating mode available. Classic/Expert should continue to control rating visibility independently. This report and its executable study introduce no gameplay adjustments or new mode controls.
 
 ## Why a fixed bonus per decade is insufficient
