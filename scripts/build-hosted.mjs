@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, cpSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { buildSeed, CATALOGUE_FORMAT } from '../server/catalog.mjs';
+import { buildSeed, CATALOGUE_FORMAT, LEGENDS_DATA } from '../server/catalog.mjs';
 
 // Keep maintained dist/*.js and artwork intact. Framework output is built in
 // backend/dist and copied only into the generated dist/server and dist/client.
@@ -10,7 +10,7 @@ const dataset=readFileSync(new URL('data/fide-snapshots.json',root),'utf8');
 const federations=readFileSync(new URL('data/federations.json',root),'utf8');
 let historic='null';try{historic=readFileSync(new URL('data/historical-snapshots.json',root),'utf8');}catch{}
 const release=createHash('sha256').update(CATALOGUE_FORMAT+dataset+federations+historic).digest('hex');
-writeFileSync(new URL('catalogue-seed.json',backend),JSON.stringify({release,data:buildSeed(JSON.parse(dataset),JSON.parse(federations),JSON.parse(historic))}));
+writeFileSync(new URL('catalogue-seed.json',backend),JSON.stringify({release,data:buildSeed(JSON.parse(dataset),JSON.parse(federations),JSON.parse(historic),LEGENDS_DATA)}));
 const manifest=JSON.parse(readFileSync(new URL('.openai/hosting.json',root),'utf8'));
 delete manifest.static;manifest.d1='DB';manifest.r2=null;
 writeFileSync(new URL('.openai/hosting.json',backend),JSON.stringify(manifest,null,2)+'\n');

@@ -18,7 +18,7 @@ export function snapshotRun(game,completedAt=new Date().toISOString()){
     summary:Object.fromEntries(['w','d','l','mp','bp','sb'].map(key=>[key,own[key]])),
     squad:t.squad.map(id=>{
       const p=playerById(id);
-      return {...p,source:nationById(p.nation).source,trait:game.traits[id],traitInfo:traitInfo(p,game.traits[id]),profile:game.profiles[id],form:own.forms[id],load:own.loads[id]};
+      return {...p,source:p.source||nationById(p.nation).source,trait:game.traits[id],traitInfo:traitInfo(p,game.traits[id]),profile:game.profiles[id],form:own.forms[id],load:own.loads[id]};
     }),
     standings:rows.map(team=>Object.fromEntries(['id','name','flag','w','d','l','mp','bp','sb','seedingRating'].map(key=>[key,team[key]]))),
     rounds:t.rounds.map(matches=>{
@@ -59,7 +59,7 @@ export function validRun(run){
       !text(run.completedAt)||!Number.isFinite(Date.parse(run.completedAt))||!integer(run.seed,0,4294967295)||
       !text(run.catalogueRelease)||!text(run.rulesVersion)||!number(run.formElo,0,1000)||!integer(run.rank,1,32)||!record(run.summary))return false;
     if(!Array.isArray(run.squad)||run.squad.length!==5||new Set(run.squad.map(p=>p.id)).size!==5||run.squad.some(p=>
-      !text(p.id)||!text(p.personId)||!text(p.name)||!text(p.flag)||!text(p.federation)||!integer(p.year,1800,3000)||
+      !text(p.id)||!text(p.personId)||!text(p.name)||!text(p.flag)||!(text(p.federation)||p.offerKind==='legends'&&p.federation===null)||!integer(p.year,1800,3000)||
       !integer(p.rating,100,4000)||!profile(p.profile)||(p.trait!==null&&!text(p.trait))||!validTraitInfo(p.traitInfo)||!integer(p.form,-2,2)||!integer(p.load,0,100)||
       !text(p.source?.url)||!/^https?:\/\//.test(p.source.url)||!text(p.source.date)))return false;
     if(!Array.isArray(run.standings)||run.standings.length!==32||new Set(run.standings.map(t=>t.id)).size!==32||

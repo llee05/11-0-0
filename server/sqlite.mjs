@@ -2,7 +2,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
-import { buildSeed, seedStatements, CATALOGUE_FORMAT } from './catalog.mjs';
+import { buildSeed, seedStatements, CATALOGUE_FORMAT, LEGENDS_DATA } from './catalog.mjs';
 
 const root=new URL('../',import.meta.url);
 export function openDatabase(filename=process.env.DATABASE_PATH||resolve('.data/catalogue.sqlite')){
@@ -23,7 +23,7 @@ export function openDatabase(filename=process.env.DATABASE_PATH||resolve('.data/
   const release=createHash('sha256').update(CATALOGUE_FORMAT+dataset+federations+historical).digest('hex');
   const current=sqlite.prepare("SELECT value FROM catalogue_metadata WHERE key='catalogue'").get();
   if(!current||JSON.parse(current.value).release!==release){
-    const seed=buildSeed(JSON.parse(dataset),JSON.parse(federations),JSON.parse(historical));
+    const seed=buildSeed(JSON.parse(dataset),JSON.parse(federations),JSON.parse(historical),LEGENDS_DATA);
     sqlite.exec('BEGIN');
     try{for(const {sql,params} of seedStatements(seed,release))sqlite.prepare(sql).run(...params);sqlite.exec('COMMIT');}
     catch(error){sqlite.exec('ROLLBACK');sqlite.close();throw error;}

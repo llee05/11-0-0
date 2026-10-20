@@ -6,7 +6,7 @@ const compareEditions=(a,b)=>b.rating-a.rating||b.year-a.year||a.federation.loca
 export function buildAllTimeTeams(nations,players){
   const snapshots=new Map(nations.map(n=>[n.id,n]));
   const best=new Map();
-  for(const player of [...players].sort(compareEditions)){
+  for(const player of players.filter(p=>snapshots.get(p.nation)?.kind!=='legends').sort(compareEditions)){
     if(!best.has(player.personId))best.set(player.personId,player);
   }
   const federations=new Map();

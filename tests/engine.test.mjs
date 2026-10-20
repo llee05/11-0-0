@@ -24,7 +24,7 @@ function draft(seed=1) {
 }
 
 test('the entire player pool has unique identities and valid nations',()=>{
-  assert.equal(PLAYERS.length,3870);
+  assert.equal(PLAYERS.length,3910);
   assert.equal(new Set(PLAYERS.map(p=>p.id)).size,PLAYERS.length);
   assert.ok(PLAYERS.every(p=>NATIONS.some(n=>n.id===p.nation)&&!Object.hasOwn(p,'cost')));
 });

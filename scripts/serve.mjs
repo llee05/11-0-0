@@ -24,5 +24,5 @@ const server=createServer(async(req,res)=>{
     const data=await readFile(path);
     res.writeHead(200,{'Content-Type':({'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.ttf':'font/ttf','.txt':'text/plain; charset=utf-8'})[extname(path)]||'application/octet-stream','Cache-Control':'no-cache'});res.end(data);
   } catch {res.writeHead(404,{'Content-Type':'text/plain'}).end('Not found');}
-}).listen(port,'127.0.0.1',()=>console.log(`11–0–0 is ready at http://localhost:${port} · ${catalogue.metadata.snapshotCount} country-year rolls from SQLite`));
+}).listen(port,'127.0.0.1',()=>console.log(`11–0–0 is ready at http://localhost:${port} · ${catalogue.metadata.snapshotCount} draft offers from SQLite`));
 for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>server.close(()=>{db.close();process.exit(0);}));

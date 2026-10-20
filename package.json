@@ -8,13 +8,14 @@
     "dev": "node scripts/serve.mjs",
     "start": "node scripts/serve.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check dist/app.js && node --check dist/engine.js && node --check dist/traits.js && node --check dist/player-profile.js && node --check dist/run-history.js && node --check server/catalog.mjs && node --check server/sqlite.mjs && node --check server/all-time.mjs && node --check scripts/build-pages.mjs && node --check scripts/preview-pages.mjs && node --check scripts/browser-pages-qa.mjs && node --check scripts/audit-balance.mjs && node --check scripts/audit-era-ratings.mjs",
+    "check": "node --check dist/app.js && node --check dist/engine.js && node --check dist/traits.js && node --check dist/player-profile.js && node --check dist/run-history.js && node --check server/catalog.mjs && node --check server/sqlite.mjs && node --check server/all-time.mjs && node --check server/legends.mjs && node --check scripts/build-pages.mjs && node --check scripts/preview-pages.mjs && node --check scripts/browser-pages-qa.mjs && node --check scripts/audit-balance.mjs && node --check scripts/audit-era-ratings.mjs",
     "build": "node scripts/build-hosted.mjs",
     "build:pages": "node scripts/build-pages.mjs",
     "preview:pages": "node scripts/preview-pages.mjs",
     "db:generate": "node backend/node_modules/drizzle-kit/bin.cjs generate --config drizzle.config.ts",
     "db:seed": "node scripts/seed-database.mjs",
     "data:import": "node scripts/import-ratings.mjs",
-    "data:historical": "node scripts/import-historical.mjs"
+    "data:historical": "node scripts/import-historical.mjs",
+    "data:legends": "python3 -B scripts/import-legends.py"
   }
 }

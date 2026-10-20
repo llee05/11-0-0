@@ -10,7 +10,7 @@ const {players} = await readCatalogue(db);
 db.close();
 
 test('curated profiles identify real catalogue people, across editions and without namesake leakage', () => {
-  assert.equal(CAREER_PROFILES.length, 98);
+  assert.equal(CAREER_PROFILES.length, 115);
   assert.equal(new Set(CAREER_PROFILES.map(p => p.personId)).size, CAREER_PROFILES.length);
   for (const profile of CAREER_PROFILES) {
     const editions = players.filter(p => p.personId === profile.personId);
@@ -36,7 +36,7 @@ test('curated profiles identify real catalogue people, across editions and witho
 
 test('elite catalogue editions and recognizable historical players have fixed career traits', () => {
   // A coverage floor for future catalogue updates, not an automatic assignment rule.
-  for (const p of players.filter(p => p.rating >= 2750)) assert.ok(careerProfile(p), `${p.name} ${p.year}`);
+  for (const p of players.filter(p => p.rawRating >= 2750)) assert.ok(careerProfile(p), `${p.name} ${p.year}`);
   for (const personId of ['fide:4168119', 'fide:12573981', 'fide:13401319', 'fide:738590', 'fide:4102142',
     'chessmetrics:63804', 'chessmetrics:16711', 'historical:reshevsky samuel h', 'fide:2000032', 'fide:703303', 'fide:400041']) {
     assert.ok(careerProfile({personId}), personId);

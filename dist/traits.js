@@ -1,5 +1,5 @@
 // Career-inspired labels; the numerical effects are fictional game rules.
-export const TRAIT_RULESET = 'career-traits-4';
+export const TRAIT_RULESET = 'career-traits-5';
 export const TRAIT_BONUS_CAP = 80;
 export const TRAITS = [
   ['attacker', 'Initiative hunter', 'Sharp: +64. Quiet: −16. Draw chance −6 points.'],
@@ -36,6 +36,23 @@ export const traitLabel = id => traitById(id)?.name || 'No trait';
 const museum = name => `https://museum.fide.com/champions/${name}`;
 // Match canonical person IDs, never display names (there are two Tigran Petrosians).
 export const CAREER_PROFILES = [
+  ["chessmetrics:19593", "José Capablanca", "endgame", "https://museum.fide.com/champions/jose-raul-capablanca", "FIDE’s museum records Capablanca’s emphasis on endgame study and Tal’s career assessment of his subtle technique."],
+  ["chessmetrics:73076", "Emanuel Lasker", "practical", "https://museum.fide.com/champions/emanuel-lasker", "FIDE’s career portrait highlights strategic judgement and psychological skill; the practical trait is a game interpretation of that competitive approach."],
+  ["chessmetrics:81520", "Géza Maróczy", "defender", "https://www.scribd.com/document/576547315/Reti-Richard-Masters-of-the-Chessboard", "Réti, Masters of the Chess Board, pp. 108–112, identifies defence and endgames as Maróczy’s recurring strengths."],
+  ["chessmetrics:129791", "Siegbert Tarrasch", "positional", "https://www.scribd.com/document/576547315/Reti-Richard-Masters-of-the-Chessboard", "Réti’s Tarrasch chapter explains his classical positional methods through several annotated games."],
+  ["chessmetrics:101422", "Harry Pillsbury", "attacker", "https://www.scribd.com/document/576547315/Reti-Richard-Masters-of-the-Chessboard", "Réti, pp. 100–106, describes repeated attacking breakthroughs and illustrates them across several games."],
+  ["chessmetrics:126127", "Wilhelm Steinitz", "positional", "https://www.scribd.com/document/576547315/Reti-Richard-Masters-of-the-Chessboard", "Réti’s Steinitz chapter explains his mature positional principles. This highlights that phase rather than his earlier sacrificial style."],
+  ["chessmetrics:2138", "Alexander Alekhine", "tactician", "https://museum.fide.com/champions/alexander-alekhin", "FIDE’s career profile describes energetic combinations, successive attacks and their careful preparation."],
+  ["chessmetrics:112008", "Akiba Rubinstein", "endgame", "https://www.newinchess.com/media/wysiwyg/product_pdf/9159.pdf", "GM Joel Benjamin’s Chessboard Combat describes Rubinstein’s established endgame skill, alongside examples of his attacking play."],
+  ["chessmetrics:147051", "Johannes Zukertort", "dynamic", "https://www.newinchess.com/media/wysiwyg/product_pdf/998.pdf", "Jimmy Adams’s introduction describes Zukertort’s tactical ability combined with modern positional methods across his career."],
+  ["chessmetrics:22318", "Mikhail Chigorin", "tactician", "https://ruchess.ru/en/persons_of_day/alexander_alekhine/", "The Russian federation’s Alekhine biography identifies Chigorin among his models of combinational play; this highlights that recurring artistic influence."],
+  ["chessmetrics:58966", "Dawid Janowsky", "attacker", "https://www.chesshistory.com/winter/extra/janowsky.html", "Ossip Bernstein’s first-hand 1956 assessment, reproduced with its source by Edward Winter, describes persistent attacking play and intuitive use of the bishop pair."],
+  ["chessmetrics:81701", "Frank Marshall", "sacrificer", "https://www.scribd.com/document/576547315/Reti-Richard-Masters-of-the-Chessboard", "Réti, pp. 113–115, presents Marshall’s imaginative attacking methods across several games."],
+  ["chessmetrics:13879", "Efim Bogoljubow", "coordinator", "https://www.scribd.com/document/576547315/Reti-Richard-Masters-of-the-Chessboard", "Réti, pp. 169–179, analyses his connected manoeuvres across both wings in several games."],
+  ["chessmetrics:116667", "Carl Schlechter", "positional", "https://www.scribd.com/document/576547315/Reti-Richard-Masters-of-the-Chessboard", "Réti, pp. 91–99, presents his classical foundation alongside combinations; the trait does not imply he only played for draws."],
+  ["chessmetrics:88959", "Paul Morphy", "coordinator", "https://www.scribd.com/document/576547315/Reti-Richard-Masters-of-the-Chessboard", "Réti’s Morphy chapter emphasizes development and piece cooperation as foundations of his attacks."],
+  ["chessmetrics:3629", "Adolf Anderssen", "sacrificer", "https://www.scribd.com/document/576547315/Reti-Richard-Masters-of-the-Chessboard", "Réti’s Anderssen chapter uses several combinations to explain his sacrificial attacking play."],
+  ["chessmetrics:93234", "Aron Nimzowitsch", "prophylaxis", "https://www.qualitychess.co.uk/ebooks/MySystem-excerpt.pdf", "Nimzowitsch’s own My System develops prophylaxis and restraint as recurring strategic methods."],
   ['chessmetrics:37943', 'Reuben Fine', 'universal', 'https://compulsivereader.com/2007/03/23/a-review-of-reuben-fine-by-aidan-woodger/', 'Fine’s own annotations emphasize precision across tactical and positional play; the review of Aidan Woodger’s career biography also quotes Euwe on his persistent positional accuracy.'],
   ['fide:8604436', 'Li Chao', 'attacker', 'https://chessbase.in/news/How-Kevin-Goh-Wei-Ming-became-a-Grandmaster/1000', 'GM Kevin Goh describes Li Chao’s recurring aggressive attacking play and opening preparation across his open-tournament career.'],
   ['fide:8602883', 'Wang Hao', 'positional', 'https://www.bielchessfestival.ch/dam/jcr:4e74c507-1d78-4913-987f-feaa477aa376/2012_gmt-bio.pdf', 'The Biel organiser’s 2012 player dossier describes primarily positional play, with preparation and tactical vision serving strategy. This highlights that documented phase of his career rather than claiming an unchanging style.'],

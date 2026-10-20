@@ -59,7 +59,7 @@ try {
   assert.equal(await page.locator('.profile-guide').count(),1);
   assert.equal(await page.locator('.style-guide article').count(),4);
   assert.equal(await page.locator('.trait-guide article').count(),25);
-  assert.equal(await page.locator('.career-list article').count(),98);
+  assert.equal(await page.locator('.career-list article').count(),115);
   const profileGuide=await page.locator('.profile-guide').textContent();
   assert.ok(profileGuide.includes('0.5 effective Elo per point'));
   assert.ok(profileGuide.includes('6 Elo per level'));
@@ -72,8 +72,16 @@ try {
   assert.ok((await page.getByRole('dialog').textContent()).includes('rated at least 2600'));
   const catalogue=await page.evaluate(async()=>await (await fetch(document.querySelector('meta[name="catalogue-url"]')?.content||'/api/catalog')).json());
   assert.ok(catalogue.players.every(p=>!Object.hasOwn(p,'cost')));
-  assert.equal(catalogue.metadata.snapshotCount,774);
+  assert.equal(catalogue.metadata.snapshotCount,782);
   assert.equal(catalogue.metadata.countryCount,71);
+  assert.equal(catalogue.metadata.legendCount,8);
+  assert.equal(await page.locator('.legends-grid button').count(),8);
+  await page.locator('[data-id="LEGENDS-4"][data-action="archive-country"]').click();
+  assert.ok((await page.getByRole('dialog').textContent()).includes('not a historical national team'));
+  const morphy=page.locator('.source-roster>div').filter({hasText:'Paul Morphy'});
+  assert.ok((await morphy.textContent()).includes('2743'));
+  assert.ok((await morphy.textContent()).includes('1859-06-01'));
+  await page.getByRole('button',{name:'Explore other years'}).click();
   await page.getByLabel('EXPLORE A SNAPSHOT YEAR').selectOption('1944');
   assert.ok((await page.locator('.archive-summary').textContent()).includes('No audited country top five'));
   assert.equal(await page.locator('#archive-countries [data-action="archive-country"]').count(),0);

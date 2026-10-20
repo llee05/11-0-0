@@ -8,6 +8,13 @@
       "when": 1792397721955,
       "tag": "0000_modern_hardball",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1792536636741,
+      "tag": "0001_panoramic_living_mummy",
+      "breakpoints": true
     }
   ]
 }

@@ -21,6 +21,8 @@ export const snapshots = sqliteTable('country_snapshots', {
   flag: text('flag').notNull(),
   year: integer('year').notNull().references(() => periods.year),
   listedCount: integer('listed_count').notNull(),
+  kind: text('kind').notNull().default('country'),
+  periodLabel: text('period_label'),
 });
 export const people = sqliteTable('players', {
   id: text('id').primaryKey(),
@@ -35,6 +37,8 @@ export const editions = sqliteTable('snapshot_players', {
   rawRating: integer('raw_rating').notNull(),
   rating: integer('rating').notNull(),
   title: text('title'),
+  editionYear: integer('edition_year'),
+  sourceId: text('source_id').references(() => sources.id),
 }, table => [uniqueIndex('snapshot_rank_unique').on(table.snapshotId, table.rank), uniqueIndex('snapshot_person_unique').on(table.snapshotId, table.personId)]);
 export const metadata = sqliteTable('catalogue_metadata', {
   key: text('key').primaryKey(),
