@@ -14,6 +14,7 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 | `dist/app.js` | Loads the SQL catalogue, renders country-year drafts and archive/source dialogs, handles UI events, clipboard and browser saves. |
 | `dist/engine.js` | Configurable catalogue indexes, budget and person-uniqueness rules, complete top-five offers, all-time opponent field, seeded simulation, pairings, scoring, fatigue and save validation. Independent of DOM, storage and SQL APIs. |
 | `dist/traits.js`, `data/traits.md` | Sourced career-inspired signature profiles, random trait rolls and pure matchup effects. Numerical modifiers are fictional game rules, separate from source ratings. |
+| `dist/player-profile.js` | Pure style, stamina, captaincy, form and consistency rules and game presets shared by all teams. |
 | `dist/styles.css` | Responsive presentation, interaction states and reduced-motion behavior. |
 | `dist/*.svg`, `dist/fonts/` | Local artwork and fonts, including font licenses. |
 | `scripts/serve.mjs`, `server/sqlite.mjs` | Local static server and read-only `/api/catalog` backed by persistent SQLite, schema migrations and source imports. Bound to `127.0.0.1:4173`; configure `PORT` and `DATABASE_PATH`. |

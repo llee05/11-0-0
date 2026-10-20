@@ -11,3 +11,13 @@ Unprofiled players have a 25% chance of no trait and otherwise an equal chance o
 The match resolver evaluates both sides' abilities simultaneously. Positive Elo bonuses are capped at 40 per side; defensive counters only reduce positive bonuses. Draw changes are percentage-point changes, combined from both players and bounded to keep probabilities valid. They change result variance while preserving the expected score implied by effective Elo and color. Source Elo, fatigue loss and trait modifiers are displayed separately. Both user and opponent players follow the same trait and fatigue rules.
 
 Trait rules have a separate version marker from the SQL catalogue. Saved assignments must include an explicit `null` for no trait; missing or unknown traits and altered signature traits are rejected. Increment the trait rules marker and deliberately handle save compatibility when changing rules or assignments.
+
+## Player profiles
+
+`dist/player-profile.js` adds a playing style plus stamina, captaincy and consistency on a 1–5 scale. Famous signatures map to fixed game-archetype presets, shared across their editions. These numerical presets are balance choices, **not sourced measurements of the real players' endurance, leadership or reliability**. The existing career evidence supports the signature/style interpretation only. Other players roll each attribute and style independently on each new offer. All players, including famous players, roll starting form for that run.
+
+Stamina `s` allows `s + 1` consecutive games without fatigue. Later appearances lose 8 Elo each, capped at 40; the existing grinder trait halves this loss. A captain supplies `3 × (captaincy − 1)` Elo to other active players, with half influence when the captain is the reserve. There is one captain per team, and the captain never buffs themself.
+
+Attacking styles favor sharp play and reduce draws; positional styles favor quiet and technical conditions; defensive styles counter attacking styles and increase draws; universal styles give a small constant bonus. These effects stack separately with the existing individual trait.
+
+Form ranges from −2 to +2, worth 12 Elo per level. After a played game, beating the board's expected score by more than 0.15 raises form one level; falling short by more than 0.15 lowers it. Rest moves form one level toward neutral. Consistency controls the daily performance swing: levels 1–5 allow up to ±32, ±24, ±16, ±8 and ±4 Elo respectively. Performance is independently seeded by tournament, round, team and player; previewing or changing captain/board does not reroll it. Both sides use the same rules.
