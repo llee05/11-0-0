@@ -1,4 +1,4 @@
-import {signatureProfile, fatiguePenalty} from './traits.js';
+import {careerProfile, fatiguePenalty} from './traits.js';
 
 export const PROFILE_RULESET = 'squad-profiles-1';
 export const STYLES = [
@@ -11,7 +11,7 @@ export const styleById = id => STYLES.find(s=>s.id===id);
 export const FORM_ELO = 12;
 export const SWINGS = [0,32,24,16,8,4];
 export const formLabel = form => ['Cold','Below par','Neutral','In form','Hot'][form+2];
-// These are balance presets derived from the signature's game archetype, not
+// These are balance presets derived from the career trait’s game archetype, not
 // sourced measurements of a real person's stamina, leadership or consistency.
 const presets = {
   attacker:['attacking',3,2,2], sacrificer:['attacking',3,3,1], dynamic:['attacking',3,3,2],
@@ -25,15 +25,15 @@ const presets = {
   materialist:['defensive',5,3,4],
 };
 export function fixedProfile(player) {
-  const signature=signatureProfile(player);
-  if(!signature)return null;
-  const [style,stamina,captaincy,consistency]=presets[signature.trait];
+  const career=careerProfile(player);
+  if(!career)return null;
+  const [style,stamina,captaincy,consistency]=presets[career.trait];
   return {style,stamina,captaincy,consistency};
 }
 export function rollProfile(player,rng=Math.random) {
   const level=()=>1+Math.floor(rng()*5);
   const profile=fixedProfile(player)||{style:STYLES[Math.floor(rng()*STYLES.length)].id,stamina:level(),captaincy:level(),consistency:level()};
-  // Form belongs to this run, including for signature players.
+  // Form belongs to this run, including for profiled players.
   return {...profile,form:Math.floor(rng()*5)-2};
 }
 export const rollProfiles = (players,rng=Math.random)=>Object.fromEntries(players.map(p=>[p.id,rollProfile(p,rng)]));

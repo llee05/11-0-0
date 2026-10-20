@@ -4,7 +4,7 @@ import {STYLES,SWINGS,fixedProfile,rollProfile,rollProfiles,validProfile,validPr
 import {random} from '../dist/engine.js';
 
 const unknown={id:'u',personId:'unprofiled',rating:2600};
-test('profiles roll bounded attributes and form, while signature presets stay fixed across editions',()=>{
+test('profiles roll bounded attributes and form, while career presets stay fixed across editions',()=>{
   const magnus={id:'magnus-2026',personId:'fide:1503014'};
   const expected=fixedProfile(magnus);
   assert.equal(expected.stamina,5);

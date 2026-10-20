@@ -34,7 +34,7 @@ export const traitLabel = id => traitById(id)?.name || 'No trait';
 
 const museum = name => `https://museum.fide.com/champions/${name}`;
 // Match canonical person IDs, never display names (there are two Tigran Petrosians).
-export const SIGNATURE_PROFILES = [
+export const CAREER_PROFILES = [
   ['historical:tal mikhail n', 'Mikhail Tal', 'sacrificer', museum('mikhail-tal'), 'FIDE’s career profile describes his combinations, sacrifices and pursuit of the initiative.'],
   ['historical:petrosian tigran', 'Tigran Petrosian', 'prophylaxis', museum('tigran-petrosian'), 'FIDE’s career profile describes his preventive, defensive style.'],
   ['fide:4100026', 'Anatoly Karpov', 'positional', 'https://bigthink.com/videos/big-think-interview-with-anatoly-karpov/', 'Karpov discusses his lasting preference for positional play and endgames.'],
@@ -74,12 +74,12 @@ export const SIGNATURE_PROFILES = [
   ["fide:1170546", "Jan-Krzysztof Duda", "flexible", "https://www.chess.com/article/view/dawid-czerw-duda-interview", "Duda explains his preference for variety, trying new openings and deliberately maintaining a broad repertoire."],
   ["fide:14204118", "Nodirbek Abdusattorov", "positional", "https://en.chessbase.com/post/sokolov-interview-2022", "Coach Ivan Sokolov describes active positional play, sound decisions and strong technique. This characterizes his career so far."],
   ["fide:12940690", "Vincent Keymer", "coordinator", "https://indianexpress.com/article/sports/chess/vincent-keymer-peter-leko-trainer-gukesh-pragg-success-motivates-10199523/", "His longtime coach Peter Leko describes strategic ambition guided by harmonious positions. This characterizes his career so far."],
-  ["fide:35009192", "Arjun Erigaisi", "attacker", "https://indianexpress.com/article/sports/chess/grandmaster-arjun-erigaisi-interview-results-respect-9386316/", "Erigaisi explains adopting ambitious, uncompromising play around the pandemic. He describes a more technical childhood style; this signature highlights his later approach."],
+  ["fide:35009192", "Arjun Erigaisi", "attacker", "https://indianexpress.com/article/sports/chess/grandmaster-arjun-erigaisi-interview-results-respect-9386316/", "Erigaisi explains adopting ambitious, uncompromising play around the pandemic. He describes a more technical childhood style; this trait highlights his later approach."],
   ["fide:25059530", "Praggnanandhaa", "universal", "https://www.fide.com/fide-candidates-2026-eight-contenders-one-dream/", "FIDE’s general profile credits calculation, tactical precision and positional understanding together. This describes his career so far."],
   ["fide:5029465", "Vidit Gujrathi", "preparation", "https://en.chessbase.com/post/blindfold-challenge-with-vidit-gujrathi", "IM Sagar Shah describes Vidit’s established thoroughness in opening preparation, alongside a direct interview and assessment."],
   ["fide:25092340", "Nihal Sarin", "endgame", "https://en.chessbase.com/post/sokolov-interview-2022", "GM Ivan Sokolov highlights technique when converting favorable endings, without claiming equally strong defense of inferior endings. This describes his career so far."],
   ["fide:12539929", "Parham Maghsoodloo", "defender", "https://chessbase.in/news/Sokolov-on-Iran-chess", "Former coach Ivan Sokolov describes repeated resourcefulness and continuing chances from inferior positions in games and analysis."],
-  ["fide:24126055", "Daniil Dubov", "innovator", "https://www.fide.com/world-championship-match-venue-commentators-schedule/", "FIDE’s general commentator introduction highlights his creative approach; this signature represents that recurring search for new ideas."],
+  ["fide:24126055", "Daniil Dubov", "innovator", "https://www.fide.com/world-championship-match-venue-commentators-schedule/", "FIDE’s general commentator introduction highlights his creative approach; this trait represents that recurring search for new ideas."],
   ["fide:13601520", "Baadur Jobava", "unorthodox", "https://en.chessbase.com/post/living-life-the-jobi-way-1-2", "Jobava discusses a multi-year shift toward surprising systems, independent ideas and avoiding predictable theory."],
   ["fide:8603405", "Wei Yi", "attacker", "https://www.fide.com/fide-world-cup-a-quick-draw-sets-up-tiebreaks-for-title-as-esipenko-wins-third-place/", "FIDE’s career portrait describes naturally gifted attacking play, calculation and creativity across his development."],
   ["fide:14205483", "Javokhir Sindarov", "dynamic", "https://candidates2026.fide.com/tpost/8ns92kg9t1-candidates-clash-sindarov-breaks-away-ca", "Sindarov describes his general enjoyment of dynamic positions from either side. This characterizes his career so far, rather than an unchanging lifetime style."],
@@ -130,18 +130,18 @@ export const SIGNATURE_PROFILES = [
   ['fide:400017', 'John Nunn', 'attacker', 'https://mitpressbookstore.mit.edu/book/9781904600343', 'The publisher description of Nunn’s own career collection Grandmaster Chess Move by Move identifies his direct, aggressive approach.'],
   ['fide:400173', 'Matthew Sadler', 'preparation', 'https://www.chessdom.com/matthew-sadler-explains-how-to-maintain-your-chess-strength/', 'In his own ChessMoves article, Sadler describes sustained enjoyment of preparation and developing fresh opening ideas through engine matches.'],
 ].map(([personId, name, trait, source, reason]) => Object.freeze({personId, name, trait, source, reason}));
-const profiles = new Map(SIGNATURE_PROFILES.map(p => [p.personId, p]));
-export const signatureProfile = player => profiles.get(player?.personId);
+const profiles = new Map(CAREER_PROFILES.map(p => [p.personId, p]));
+export const careerProfile = player => profiles.get(player?.personId);
 export function rollTrait(player, rng = Math.random) {
-  const signature = signatureProfile(player);
-  if (signature) return signature.trait;
+  const career = careerProfile(player);
+  if (career) return career.trait;
   const roll = rng();
   return roll < 0.25 ? null : TRAITS[Math.min(TRAITS.length - 1, Math.floor((roll - 0.25) / 0.75 * TRAITS.length))].id;
 }
 export const rollTraits = (players, rng = Math.random) => Object.fromEntries(players.map(p => [p.id, rollTrait(p, rng)]));
 export function validTraits(ids, traits, lookup) {
   return !!traits && typeof traits === 'object' && !Array.isArray(traits) && Object.keys(traits).length === ids.length &&
-    ids.every(id => Object.hasOwn(traits, id) && validTrait(traits[id]) && (!signatureProfile(lookup(id)) || traits[id] === signatureProfile(lookup(id)).trait));
+    ids.every(id => Object.hasOwn(traits, id) && validTrait(traits[id]) && (!careerProfile(lookup(id)) || traits[id] === careerProfile(lookup(id)).trait));
 }
 export const fatiguePenalty = (trait, streak) => Math.min(40, Math.max(0, streak - 3) * 8) * (trait === 'grinder' ? 0.5 : 1);
 const attacking = new Set(['attacker', 'sacrificer', 'dynamic', 'tactician']);

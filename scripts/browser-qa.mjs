@@ -14,6 +14,7 @@ try {
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto(url);await page.evaluate(()=>document.fonts.ready);
   await page.getByRole('button',{name:'Quick draft'}).waitFor();
+  assert.equal(await page.locator('.squad-budget,.slot-cost,.price').count(),0);
   assert.equal(await page.title(),'11–0–0 · The Fantasy Chess Olympiad');
   await page.screenshot({path:`${artifacts}/desktop-draft.png`,fullPage:true});
   await page.getByRole('button',{name:'How to play'}).click();
@@ -24,14 +25,15 @@ try {
   assert.equal(await page.locator('.profile-guide').count(),1);
   assert.equal(await page.locator('.style-guide article').count(),4);
   assert.equal(await page.locator('.trait-guide article').count(),25);
-  assert.equal(await page.locator('.signature-list article').count(),94);
-  assert.ok((await page.locator('.signature-list').textContent()).includes('Bobby Fischer'));
-  for(const name of ['Ian Nepomniachtchi','Alireza Firouzja','Paul Keres','Yasser Seirawan'])assert.ok((await page.locator('.signature-list').textContent()).includes(name));
+  assert.equal(await page.locator('.career-list article').count(),94);
+  assert.ok((await page.locator('.career-list').textContent()).includes('Bobby Fischer'));
+  for(const name of ['Ian Nepomniachtchi','Alireza Firouzja','Paul Keres','Yasser Seirawan'])assert.ok((await page.locator('.career-list').textContent()).includes(name));
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'COUNTRIES & YEARS'}).click();
   assert.equal(await page.locator('#archive-year option').count(),26);
   assert.ok((await page.getByRole('dialog').textContent()).includes('rated at least 2600'));
   const catalogue=await page.evaluate(async()=>await (await fetch('/api/catalog')).json());
+  assert.ok(catalogue.players.every(p=>!Object.hasOwn(p,'cost')));
   assert.equal(catalogue.metadata.snapshotCount,396);
   assert.equal(catalogue.metadata.countryCount,69);
   assert.ok(catalogue.nations.every(n=>n.players.some(id=>catalogue.players.find(p=>p.id===id).rating>=2600)));
@@ -41,13 +43,13 @@ try {
   assert.equal(await page.locator('.source-roster>div').count(),5);
   assert.ok((await page.locator('.source-roster').textContent()).includes('Hikaru Nakamura'));
   assert.ok((await page.locator('.source-roster').textContent()).includes('2810'));
-  assert.ok((await page.locator('.source-roster').textContent()).includes('Signature · Resourceful defender'));
+  assert.ok((await page.locator('.source-roster').textContent()).includes('Career · Resourceful defender'));
   for(const [country,name,trait] of [['FRA','Firouzja','Intuitive player'],['RUS','Nepomniachtchi','Dynamic player'],['ENG','Adams','Positional technician'],['IND','Erigaisi','Initiative hunter']]){
     await page.getByRole('button',{name:'Explore other years'}).click();
     await page.locator(`[data-id="${country}-2026"][data-action="archive-country"]`).click();
     const row=page.locator('.source-roster>div').filter({hasText:name});
     assert.equal(await row.count(),1);
-    assert.ok((await row.textContent()).includes(`Signature · ${trait}`));
+    assert.ok((await row.textContent()).includes(`Career · ${trait}`));
   }
   await page.getByRole('button',{name:'Explore other years'}).click();
   await page.getByLabel('EXPLORE A SNAPSHOT YEAR').selectOption('2022');
@@ -97,6 +99,7 @@ try {
   const firstOffer=await page.locator('.nation-code').textContent();
   assert.ok(firstOffer.length===3);
   assert.equal(await page.locator('.candidate').count(),5);
+  assert.equal(await page.locator('.price,.slot-cost').count(),0);
   assert.equal(await page.locator('.candidate .trait-badge').count(),5);
   assert.equal(await page.locator('.candidate .profile-levels').count(),5);
   assert.equal(await page.locator('.candidate .form-chip').count(),5);
@@ -250,6 +253,6 @@ try {
   assert.equal(await oldRulesPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).rulesVersion),results.rulesVersion);
   await oldRulesContext.close();
   assert.deepEqual(errors,[]);
-  console.log('Browser QA passed: stamina/captaincy/style/form/consistency, captain choice and opponent profiles, trait guide and signatures, saved offer/pick traits, seeded AI traits, match previews and effects, legacy save preservation, unchanged source ratings, inclusive 2600 country cutoff, all-time A/B roster and source dialogs, manual and quick drafts, expert mode, rerolls, team name, board targeting, persistence, reserve rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
+  console.log('Browser QA passed: stamina/captaincy/style/form/consistency, captain choice and opponent profiles, trait guide and career traits, saved offer/pick traits, seeded AI traits, match previews and effects, legacy save preservation, unchanged source ratings, inclusive 2600 country cutoff, all-time A/B roster and source dialogs, manual and quick drafts, expert mode, rerolls, team name, board targeting, persistence, reserve rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
   console.log(`Screenshots: ${artifacts}`);
 } finally {await browser.close();}

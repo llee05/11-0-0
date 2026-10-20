@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,spent,canAfford,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,setCaptain,RULES_VERSION} from '../dist/engine.js';
+import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,setCaptain,RULES_VERSION} from '../dist/engine.js';
 
-import {rollTraits,signatureProfile} from '../dist/traits.js';
+import {rollTraits,careerProfile} from '../dist/traits.js';
 import {fixedProfile,rollProfiles,profileFatigue,performanceSeed,performanceSwing,restedForm} from '../dist/player-profile.js';
 import {openDatabase} from '../server/sqlite.mjs';
 import {readCatalogue} from '../server/catalog.mjs';
@@ -15,7 +15,7 @@ function draft(seed=1) {
   for(let i=0;i<5;i++){
     s.offer=createOffer(s.squad,rng);
     assert.ok(s.offer?.players.length);
-    const available=s.offer.players.filter(id=>canAfford(PLAYERS.find(p=>p.id===id),s.squad));
+    const available=s.offer.players.filter(id=>canDraft(PLAYERS.find(p=>p.id===id),s.squad));
     const id=available[Math.floor(rng()*available.length)];
     s=selectPlayer(s,id,i);
     assert.equal(s.squad.filter(Boolean).length,i+1);
@@ -26,13 +26,12 @@ function draft(seed=1) {
 test('the entire player pool has unique identities and valid nations',()=>{
   assert.equal(PLAYERS.length,1980);
   assert.equal(new Set(PLAYERS.map(p=>p.id)).size,PLAYERS.length);
-  assert.ok(PLAYERS.every(p=>NATIONS.some(n=>n.id===p.nation)&&p.cost>0));
+  assert.ok(PLAYERS.every(p=>NATIONS.some(n=>n.id===p.nation)&&!Object.hasOwn(p,'cost')));
 });
 
-test('1,000 random drafts can finish within budget with no duplicates or dead ends',()=>{
+test('1,000 random drafts can finish with no duplicates or dead ends',()=>{
   for(let seed=0;seed<1000;seed++){
     const s=draft(seed);
-    assert.ok(spent(s.squad)<=100);
     assert.equal(new Set(s.squad).size,5);
     assert.equal(createOffer(s.squad),null);
     assert.ok(validSave(s));
@@ -44,7 +43,7 @@ test('draft rejects forged offers, occupied slots and repeated players',()=>{
   assert.strictEqual(selectPlayer(s,PLAYERS[0].id,0),s);
   s.offer=createOffer(s.squad,random(3));
   const picked=s.offer.players[0];s=selectPlayer(s,picked,0);
-  assert.ok(!canAfford(PLAYERS.find(p=>p.id===picked),s.squad));
+  assert.ok(!canDraft(PLAYERS.find(p=>p.id===picked),s.squad));
   s.offer=createOffer(s.squad,random(4));
   assert.strictEqual(selectPlayer(s,s.offer.players[0],0),s);
   assert.strictEqual(selectPlayer(s,picked,1),s);
@@ -58,7 +57,7 @@ test('country-year rolls always reveal the complete top five in source order',()
     const nation=NATIONS.find(n=>n.id===offer.nation);
     assert.deepEqual(offer.players,nation.players);
     assert.equal(offer.players.length,5);
-    assert.ok(offer.players.some(id=>canAfford(PLAYERS.find(p=>p.id===id),s.squad)));
+    assert.ok(offer.players.some(id=>canDraft(PLAYERS.find(p=>p.id===id),s.squad)));
     assert.deepEqual(offer.players.map(id=>PLAYERS.find(p=>p.id===id).rank),[1,2,3,4,5]);
   }
 });
@@ -78,7 +77,7 @@ test('the same person cannot be drafted from two different years',()=>{
   assert.ok(caruana.some(p=>p.year===2022)&&caruana.some(p=>p.year===2026));
   const picked=caruana.find(p=>p.year===2022),other=caruana.find(p=>p.year===2026);
   const squad=[picked.id,null,null,null,null];
-  assert.equal(canAfford(other,squad),false);
+  assert.equal(canDraft(other,squad),false);
   const state={...initialState(),squad,offer:{nation:other.nation,players:NATIONS.find(n=>n.id===other.nation).players}};
   assert.strictEqual(selectPlayer(state,other.id,1),state);
 });
@@ -88,7 +87,7 @@ test('historical identity links prevent duplicate former champions without mergi
   const later=PLAYERS.find(p=>p.year===2002&&p.name.includes('Korchnoi'));
   assert.ok(early&&later);
   assert.equal(early.personId,later.personId);
-  assert.equal(canAfford(later,[early.id,null,null,null,null]),false);
+  assert.equal(canDraft(later,[early.id,null,null,null,null]),false);
   const champion=PLAYERS.find(p=>p.nation==='URS-1954'&&p.name.includes('Petrosian'));
   const namesake=PLAYERS.find(p=>p.fideId==='13301616');
   assert.ok(champion&&namesake);
@@ -105,11 +104,20 @@ test('saved offers retain disabled top-five players and reject altered rankings 
   assert.equal(validSave({...s,offer:{...s.offer,players:[...s.offer.players].reverse()}}),false);
 });
 
-test('a tournament requires five unique affordable players',()=>{
+test('a tournament requires five unique players and accepts an elite squad without a budget',()=>{
   assert.throws(()=>startTournament([null,null,null,null,null],'Bad'));
   assert.throws(()=>startTournament(Array(5).fill(PLAYERS[0].id),'Bad'));
-  const expensive=[...PLAYERS].sort((a,b)=>b.rating-a.rating).slice(0,5).map(p=>p.id);
-  assert.throws(()=>startTournament(expensive,'Bad'));
+  const people=new Set();
+  const elite=[...PLAYERS].sort((a,b)=>b.rating-a.rating).filter(p=>{if(people.has(p.personId))return false;people.add(p.personId);return true;}).slice(0,5).map(p=>p.id);
+  let state=initialState();
+  for(const [slot,id] of elite.entries()){
+    assert.ok(canDraft(playerById(id),state.squad));
+    const nation=NATIONS.find(n=>n.id===playerById(id).nation),candidates=nation.players.map(playerById);
+    state=selectPlayer({...state,offer:{nation:nation.id,players:[...nation.players],traits:rollTraits(candidates,random(slot)),profiles:rollProfiles(candidates,random(slot))}},id,slot);
+    assert.equal(state.squad[slot],id);
+  }
+  assert.ok(validSave(state));
+  assert.equal(startTournament(elite,'Elite').teams.length,32);
 });
 
 test('the field contains 31 all-time opponents, separate Russia and USSR, mixed eras and qualifying B teams',()=>{
@@ -200,12 +208,12 @@ test('save validation rejects corrupt and incompatible browser data',()=>{
 
 test('traits roll once per offer, survive selection and JSON reload, and reroll only on a new offer',()=>{
   const squad=initialState().squad;
-  const nation=NATIONS.find(n=>n.players.some(id=>!signatureProfile(playerById(id))));
+  const nation=NATIONS.find(n=>n.players.some(id=>!careerProfile(playerById(id))));
   const nationRoll=(NATIONS.indexOf(nation)+0.5)/NATIONS.length;
   const rng=traitRoll=>{let first=true;return ()=>{if(first){first=false;return nationRoll;}return traitRoll;};};
   const empty=createOffer(squad,rng(0)),full=createOffer(squad,rng(0.9));
   assert.deepEqual(empty.players,full.players);
-  const id=empty.players.find(id=>!signatureProfile(playerById(id))&&canAfford(playerById(id),squad));
+  const id=empty.players.find(id=>!careerProfile(playerById(id))&&canDraft(playerById(id),squad));
   assert.ok(id);assert.equal(empty.traits[id],null);assert.notEqual(full.traits[id],null);
   let s={...initialState(),offer:empty};
   assert.ok(validSave(JSON.parse(JSON.stringify(s))));
@@ -243,7 +251,7 @@ test('AI teams use the same fatigue rule and can rest a tired starter',()=>{
   assert.ok(validSave({...s,teamName:t.teams[0].name,phase:'results',tournament:t}));
 });
 
-test('save validation rejects changed signatures, effect data, contexts and trait assignments',()=>{
+test('save validation rejects changed career traits, effect data, contexts and trait assignments',()=>{
   const s=draft(4),t=simulateRound(startTournament(s.squad,'Integrity',4,s.traits,s.profiles,s.captain));
   const state={...s,teamName:t.teams[0].name,phase:'tournament',tournament:t};
   for(const mutate of [
@@ -256,8 +264,8 @@ test('save validation rejects changed signatures, effect data, contexts and trai
     copy=>copy.tournament.rounds[0][0].boards[0].probabilities.draw=3,
     copy=>copy.tournament.streaks[copy.squad[0]]=-1,
   ]){const copy=structuredClone(state);mutate(copy);assert.equal(validSave(copy),false);}
-  const fixed=t.teams.find(team=>team.players.some(id=>signatureProfile(playerById(id))));
-  const id=fixed.players.find(id=>signatureProfile(playerById(id))),copy=structuredClone(state);
+  const fixed=t.teams.find(team=>team.players.some(id=>careerProfile(playerById(id))));
+  const id=fixed.players.find(id=>careerProfile(playerById(id))),copy=structuredClone(state);
   copy.tournament.teams.find(team=>team.id===fixed.id).traits[id]=null;
   assert.equal(validSave(copy),false);
 });
@@ -266,9 +274,9 @@ test('save validation rejects changed signatures, effect data, contexts and trai
 test('every AI player retains both their old trait and new profile throughout the Olympiad',()=>{
   const s=draft(72);let t=startTournament(s.squad,'Full profiles',89,s.traits,s.profiles,s.captain);
   for(const team of t.teams.slice(1))for(const id of team.players){
-    const player=playerById(id),signature=signatureProfile(player);
-    if(signature){
-      assert.equal(team.traits[id],signature.trait,player.name);
+    const player=playerById(id),career=careerProfile(player);
+    if(career){
+      assert.equal(team.traits[id],career.trait,player.name);
       for(const [key,value] of Object.entries(fixedProfile(player)))assert.equal(team.profiles[id][key],value,player.name);
     }
   }

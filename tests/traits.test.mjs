@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {TRAITS, SIGNATURE_PROFILES, traitById, rollTrait, rollTraits, signatureProfile, validTraits, fatiguePenalty, matchContext, validContext, matchupEffects} from '../dist/traits.js';
+import {TRAITS, CAREER_PROFILES, traitById, rollTrait, rollTraits, careerProfile, validTraits, fatiguePenalty, matchContext, validContext, matchupEffects} from '../dist/traits.js';
 import {fixedProfile, rollProfile, validProfile} from '../dist/player-profile.js';
 import {random} from '../dist/engine.js';
 import {openDatabase} from '../server/sqlite.mjs';
@@ -10,15 +10,15 @@ const {players} = await readCatalogue(db);
 db.close();
 
 test('curated profiles identify real catalogue people, across editions and without namesake leakage', () => {
-  assert.equal(SIGNATURE_PROFILES.length, 94);
-  assert.equal(new Set(SIGNATURE_PROFILES.map(p => p.personId)).size, SIGNATURE_PROFILES.length);
-  for (const profile of SIGNATURE_PROFILES) {
+  assert.equal(CAREER_PROFILES.length, 94);
+  assert.equal(new Set(CAREER_PROFILES.map(p => p.personId)).size, CAREER_PROFILES.length);
+  for (const profile of CAREER_PROFILES) {
     const editions = players.filter(p => p.personId === profile.personId);
     assert.ok(editions.length, profile.name);
     assert.ok(traitById(profile.trait), profile.name);
     const preset = fixedProfile(editions[0]);
     for (const p of editions) {
-      assert.equal(rollTrait(p, () => { throw Error('Do not reroll signatures'); }), profile.trait);
+      assert.equal(rollTrait(p, () => { throw Error('Do not reroll career traits'); }), profile.trait);
       assert.deepEqual(fixedProfile(p), preset);
       for (const formRoll of [0, 0.999]) {
         const rolled = rollProfile(p, () => formRoll);
@@ -30,16 +30,16 @@ test('curated profiles identify real catalogue people, across editions and witho
   }
   const modern = players.find(p => p.personId === 'fide:13301616');
   assert.ok(modern);
-  assert.equal(signatureProfile(modern), undefined);
-  assert.equal(signatureProfile({personId:'historical:petrosian tigran'}).trait, 'prophylaxis');
+  assert.equal(careerProfile(modern), undefined);
+  assert.equal(careerProfile({personId:'historical:petrosian tigran'}).trait, 'prophylaxis');
 });
 
-test('elite catalogue editions and recognizable historical players have fixed signatures', () => {
+test('elite catalogue editions and recognizable historical players have fixed career traits', () => {
   // A coverage floor for future catalogue updates, not an automatic assignment rule.
-  for (const p of players.filter(p => p.rating >= 2750)) assert.ok(signatureProfile(p), `${p.name} ${p.year}`);
+  for (const p of players.filter(p => p.rating >= 2750)) assert.ok(careerProfile(p), `${p.name} ${p.year}`);
   for (const personId of ['fide:4168119', 'fide:12573981', 'fide:13401319', 'fide:738590', 'fide:4102142',
     'chessmetrics:63804', 'chessmetrics:16711', 'historical:reshevsky samuel h', 'fide:2000032', 'fide:703303', 'fide:400041']) {
-    assert.ok(signatureProfile({personId}), personId);
+    assert.ok(careerProfile({personId}), personId);
   }
 });
 
@@ -51,7 +51,7 @@ test('unprofiled players can roll every trait or none, with a 25 percent empty i
   const rolls = rollTraits([p], () => 0);
   assert.ok(validTraits([p.id], rolls, () => p));
   for (const invalid of [{}, {unknown:undefined}, {unknown:'made-up'}, {unknown:null, extra:null}, []]) assert.equal(validTraits([p.id], invalid, () => p), false);
-  const fixed = players.find(p => signatureProfile(p));
+  const fixed = players.find(p => careerProfile(p));
   assert.equal(validTraits([fixed.id], {[fixed.id]:null}, () => fixed), false);
 });
 

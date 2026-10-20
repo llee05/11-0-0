@@ -1,6 +1,6 @@
 # 11–0–0 · The Fantasy Chess Olympiad
 
-Draft a team from historical country-year rating lists, spend up to 100 credits on five players, and chase eleven tournament wins.
+Draft a team from historical country-year rating lists, choose five players, and chase eleven tournament wins.
 
 ## Run locally
 
@@ -17,12 +17,12 @@ Edit the maintained HTML, CSS and ES modules in `dist/` directly. The app now ne
 ## Play
 
 - **Country-year rolls:** USA 2026 and USA 2022 are separate rollable options. Every offer shows its source list's five highest standard-rated players, ordered by the original rating. A snapshot is playable only if at least one of those players is rated at least 2600. Olympiad participation is never a selection filter.
-- **Draft:** Pick five distinct people within 100 credits. Two nation rerolls are available. Unaffordable or already-drafted players remain visible and disabled; lower-ranked players never replace them. Only snapshots with an eligible pick can be rolled. Quick Draft can complete an affordable squad.
-- **Player traits:** 94 famous players have fixed, sourced career-inspired signatures across their year editions. Everyone else rolls one of 25 abilities or no trait (25% chance) with each new draft offer. A picked trait stays for the game and survives reloads. The **Player traits** guide explains every effect and links the signature sources. Trait rolls are visible in both modes.
-- **Player profiles:** Each player has a playing style plus stamina, captaincy and consistency rated 1–5. Famous players use fixed game presets derived from their signature archetype; other players roll profiles with each offer. Everyone rolls starting form. These numerical values are fictional balance choices. Both your squad and all 31 opponents use the complete system.
+- **Draft:** Pick five distinct people. Two nation rerolls are available. Already-drafted players remain visible and disabled; lower-ranked players never replace them. Only snapshots with an eligible pick can be rolled. Quick Draft can complete a squad.
+- **Player traits:** 94 famous players have fixed, sourced career-inspired traits across their year editions. Everyone else rolls one of 25 abilities or no trait (25% chance) with each new draft offer. A picked trait stays for the game and survives reloads. The **Player traits** guide explains every effect and links the career trait sources. Trait rolls are visible in both modes.
+- **Player profiles:** Each player has a playing style plus stamina, captaincy and consistency rated 1–5. Famous players use fixed game presets derived from their career trait archetype; other players roll profiles with each offer. Everyone rolls starting form. These numerical values are fictional balance choices. Both your squad and all 31 opponents use the complete system.
 - **Captain:** Open **Team profiles & captain** during the draft, or change captain between rounds. One chosen player gives other starters `3 × (captaincy − 1)` effective Elo; influence is halved from the reserve, and captains never buff themselves. AI teams select a captain for their current lineup.
 - **Lineup:** Four active boards and one reserve. Choose an empty slot before picking; click two filled slots to swap. Active boards sort by source rating before the tournament and after substitutions.
-- **Modes:** Classic shows source ratings. Expert hides ratings on draft cards; prices hint at strength. The archive and source dialogs remain available as reference material.
+- **Modes:** Classic shows source ratings. Expert hides ratings on draft cards; use traits, styles and your chess knowledge. The archive and source dialogs remain available as reference material.
 - **Olympiad:** Face the 31 strongest all-time national A/B lineups derived from the catalogue, alongside your fantasy squad in a 32-team field. Each opposing roster can mix eras; Russia and the Soviet Union remain separate. Open **All-time field** to inspect the teams and their source editions. Play eleven rounds with no rematches. A match win gives 2 match points; a draw gives 1. All 32 teams play every round.
 - **Match preview:** Inspect the next opponent, both sides' traits, abstract match conditions and probabilities before choosing a reserve rotation. Conditions activate different abilities, allowing a lower-rated specialist to outperform a stronger player in favorable conditions. Published source ratings and board ordering stay unchanged.
 - **Stamina and fatigue:** Stamina permits `stamina + 1` consecutive appearances (2–6) before fatigue begins. Each later game reduces effective rating by 8, capped at 40. Grinders lose half as much. One round on the bench resets fatigue. AI teams compare fatigue and current form when choosing their four starters.
@@ -53,19 +53,19 @@ Top-five selection and gameplay both use the **published source rating unchanged
 
 Only country-year snapshots containing a player rated **at least 2600** are playable. A top rating of exactly 2600 qualifies; 2599 does not. Qualifying snapshots retain their complete top five, including players below the cutoff. The checked-in source observations retain excluded snapshots for reproducibility.
 
-Prices use `max(8, round((source Elo − 2320) / 20))`. No actual chess moves are played: each board samples an outcome from Elo expected score, a draw probability, color advantage, fatigue, traits, styles, captain influence, form and daily performance. Tournament randomness is seeded; the same squad, traits, profiles, seed, captain and reserve decisions produce repeatable results.
+No actual chess moves are played: each board samples an outcome from Elo expected score, a draw probability, color advantage, fatigue, traits, styles, captain influence, form and daily performance. Tournament randomness is seeded; the same squad, traits, profiles, seed, captain and reserve decisions produce repeatable results.
 
 ### Career-inspired traits
 
-The 94 curated signatures cover every person with a sampled catalogue edition rated at least 2750, plus many other recognizable players. They include Nepomniachtchi, Firouzja, Mamedyarov, Rapport, Svidler, Leko, Adams, Keres, Bronstein and Seirawan alongside the original champions. Each signature highlights a sourced recurring aspect of play; younger players' profiles describe their careers so far, and some sources explicitly describe changes in style. Profiles match canonical person IDs, including sourced cross-era links; the modern Tigran L. Petrosian remains a separate person. Sources and rationales are in `dist/traits.js`, the in-game guide and [the trait data notes](data/traits.md).
+The 94 curated career traits cover every person with a sampled catalogue edition rated at least 2750, plus many other recognizable players. They include Nepomniachtchi, Firouzja, Mamedyarov, Rapport, Svidler, Leko, Adams, Keres, Bronstein and Seirawan alongside the original champions. Each career trait highlights a sourced recurring aspect of play; younger players' profiles describe their careers so far, and some sources explicitly describe changes in style. Profiles match canonical person IDs, including sourced cross-era links; the modern Tigran L. Petrosian remains a separate person. Sources and rationales are in `dist/traits.js`, the in-game guide and [the trait data notes](data/traits.md).
 
 All numerical modifiers, drawbacks and conditions are **fictional balance rules**, not measured strengths or biographical weaknesses. Unprofiled players' random traits make no claims about their real styles. Match conditions (opening theory, sharp play, quiet maneuvering, technical endings and time pressure) are abstract, seeded inputs, not positions from simulated moves. Effects are resolved simultaneously for both sides; counters reduce positive bonuses, and Elo bonuses are bounded at 40 per side. Draw modifiers change variance while retaining the expected score implied by effective Elo and color. Match previews and reports distinguish source Elo, fatigue and trait bonuses.
 
 Roll each draft candidate's trait once when creating an offer. Save the offer and the selected player's assignment; rendering, opening dialogs and reloading never reroll them. A new offer can generate a different unprofiled trait. Opponents receive their own deterministic assignments at tournament start and retain them throughout. Traits live in browser game state and a versioned pure rules module; they do not change the shared SQL source catalogue.
 
-The expanded signatures use trait rules `career-traits-2`. Earlier version-4 saves are preserved under `11-0-0:save:v4:backup` before a fresh draft starts, so old random assignments cannot conflict with the new fixed traits and profile presets.
+The expanded career traits use trait rules `career-traits-2`. Earlier version-4 saves are preserved under `11-0-0:save:v4:backup` before a fresh draft starts, so old random assignments cannot conflict with the new fixed traits and profile presets.
 
-Playing style is separate from an individual ability: attacking favors sharp play, positional favors quiet/technical conditions, defensive counters attacking styles, and universal provides a small constant bonus. Fixed famous-player presets are interpretations of the signature's game archetype; stamina, captaincy and consistency are not sourced measurements of those real people. Other profiles are random game data. Current form evolves separately from immutable starting profiles, on both sides. Previews and reports show each modifier and the form after a game; the all-time roster dialog exposes opponents' current profiles and captains.
+Playing style is separate from an individual ability: attacking favors sharp play, positional favors quiet/technical conditions, defensive counters attacking styles, and universal provides a small constant bonus. Fixed famous-player presets are interpretations of the career trait's game archetype; stamina, captaincy and consistency are not sourced measurements of those real people. Other profiles are random game data. Current form evolves separately from immutable starting profiles, on both sides. Previews and reports show each modifier and the form after a game; the all-time roster dialog exposes opponents' current profiles and captains.
 
 ### Reproduce or extend the catalogue
 
@@ -98,8 +98,8 @@ These are **best observed editions**, not complete career peaks: four-year sampl
 | --- | --- |
 | `dist/index.html`, `dist/styles.css`, SVGs, `dist/fonts/` | Maintained browser shell, responsive presentation and local assets; retain font licenses. |
 | `dist/app.js` | Loads `/api/catalog`; renders the draft, archive, dialogs and tournament; handles browser saves. |
-| `dist/engine.js` | Configurable catalogue indexes, affordability, unique-player rules, full-five offers, seeded simulation, pairings, scoring, fatigue and save validation; independent of DOM and database APIs. |
-| `dist/traits.js`, `data/traits.md` | Career-inspired signature profiles, source citations, random trait assignment and pure matchup effects; numerical effects are fictional game rules. |
+| `dist/engine.js` | Configurable catalogue indexes, unique-player rules, full-five offers, seeded simulation, pairings, scoring, fatigue and save validation; independent of DOM and database APIs. |
+| `dist/traits.js`, `data/traits.md` | Career-inspired career profiles, source citations, random trait assignment and pure matchup effects; numerical effects are fictional game rules. |
 | `dist/player-profile.js` | Style presets, stamina, captain influence, form and consistency rules; pure game mechanics shared by user and opponent teams. |
 | `server/catalog.mjs`, `server/all-time.mjs` | Shared source selection, identity crosswalks, atomic import/query logic and ranked all-time A/B rosters for SQLite/D1. |
 | `server/sqlite.mjs`, `scripts/serve.mjs` | Local persistent database, migrations, seeding, read-only catalogue API and static assets. |

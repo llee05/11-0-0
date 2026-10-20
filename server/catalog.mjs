@@ -91,7 +91,7 @@ export async function readCatalogue(db){
   const nationMap=new Map(nations.map(n=>[n.id,n]));
   const players=editions.map(e=>{
     const nation=nationMap.get(e.snapshot_id);nation.players.push(e.id);
-    return {id:e.id,personId:e.person_id,fideId:e.fide_id,name:e.name,nation:nation.id,federation:nation.code,flag:nation.flag,year:nation.year,rank:e.rank,rawRating:e.raw_rating,rating:e.rating,estimated:nation.source.kind==='historical-estimate',title:e.title,cost:Math.max(8,Math.round((e.rating-2320)/20))};
+    return {id:e.id,personId:e.person_id,fideId:e.fide_id,name:e.name,nation:nation.id,federation:nation.code,flag:nation.flag,year:nation.year,rank:e.rank,rawRating:e.raw_rating,rating:e.rating,estimated:nation.source.kind==='historical-estimate',title:e.title};
   });
   if(nations.some(n=>n.players.length!==5))throw new Error('The database contains an incomplete country snapshot.');
   const opponents=buildAllTimeTeams(nations,players).slice(0,31);

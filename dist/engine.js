@@ -2,7 +2,7 @@ import {TRAIT_RULESET, rollTraits, validTraits, matchContext, validContext, matc
 import {PROFILE_RULESET,rollProfiles,validProfiles,validForm,profileFatigue,styleEffect,performanceSwing,performanceSeed,captainBonus,bestCaptain,nextForm,restedForm,FORM_ELO} from './player-profile.js';
 // The server supplies a validated, versioned country-year catalogue from SQL.
 export let NATIONS=[],PLAYERS=[],OPPONENTS=[],CATALOGUE={release:null};
-let playerIndex=new Map(),nationIndex=new Map(),opponentIndex=new Map(),cheapestPlayers=[];
+let playerIndex=new Map(),nationIndex=new Map(),opponentIndex=new Map();
 export function configureCatalogue(catalogue){
   if(!catalogue?.metadata?.release||!Array.isArray(catalogue.nations)||!Array.isArray(catalogue.players)||catalogue.nations.length<1)throw new Error('Invalid rating catalogue.');
   const players=new Map(catalogue.players.map(p=>[p.id,p]));
@@ -17,49 +17,38 @@ export function configureCatalogue(catalogue){
   NATIONS=catalogue.nations;PLAYERS=catalogue.players;OPPONENTS=opponents;CATALOGUE=catalogue.metadata;
   playerIndex=players;nationIndex=new Map(NATIONS.map(n=>[n.id,n]));
   opponentIndex=new Map(OPPONENTS.map(o=>[o.id,o]));
-  cheapestPlayers=[...PLAYERS].sort((a,b)=>a.cost-b.cost);
 }
-export const BUDGET = 100;
 export const ROUND_COUNT = 11;
 export const SAVE_VERSION = 4;
 export const RULES_VERSION = `${TRAIT_RULESET}/${PROFILE_RULESET}`;
 export const nationById = id => nationIndex.get(id);
 export const playerById = id => playerIndex.get(id);
-export const spent = squad => squad.filter(Boolean).reduce((sum,id) => sum + playerById(id).cost,0);
 export const average = squad => { const p=squad.filter(Boolean).map(playerById); return p.length ? Math.round(p.reduce((n,p)=>n+p.rating,0)/p.length) : 0; };
 export function random(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t=Math.imul(seed ^ seed >>> 15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
 export function shuffle(items,rng=Math.random) { const a=[...items]; for(let i=a.length-1;i>0;i--) { const j=Math.floor(rng()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
-export function canAfford(player,squad) {
+export function canDraft(player,squad) {
   if(!player||squad.filter(Boolean).length>=5)return false;
   const used=new Set(squad.filter(Boolean).map(id=>playerById(id)?.personId));
-  if(used.has(player.personId))return false;
-  used.add(player.personId);
-  let total=spent(squad)+player.cost,remaining=4-squad.filter(Boolean).length;
-  for(const candidate of cheapestPlayers){
-    if(!remaining)break;
-    if(used.has(candidate.personId))continue;
-    total+=candidate.cost;used.add(candidate.personId);remaining--;
-  }
-  return remaining===0&&total<=BUDGET;
+  return !used.has(player.personId);
 }
 export function createOffer(squad,rng=Math.random) {
-  const nations=NATIONS.filter(n=>n.players.some(id=>canAfford(playerById(id),squad)));
+  const nations=NATIONS.filter(n=>n.players.some(id=>canDraft(playerById(id),squad)));
   if(!nations.length)return null;
   const nation=nations[Math.floor(rng()*nations.length)];
   // Always reveal the source list's full top five. Ineligible picks are shown
-  // disabled by the UI; no lower-ranked player replaces an unaffordable star.
+  // disabled by the UI; no lower-ranked player replaces an already drafted person.
   return {nation:nation.id,players:[...nation.players],traits:rollTraits(nation.players.map(playerById),rng),profiles:rollProfiles(nation.players.map(playerById),rng)};
 }
 export function initialState() { return {version:SAVE_VERSION,rulesVersion:RULES_VERSION,catalogueRelease:CATALOGUE.release,phase:'draft',mode:'classic',squad:[null,null,null,null,null],traits:{},profiles:{},captain:null,offer:null,rerolls:2,tournament:null,teamName:'The Dream Team'}; }
 export function selectPlayer(state,id,slot) {
   const player=playerById(id);
-  if(state.phase!=='draft'||!nationById(state.offer?.nation)?.players.includes(id)||!state.offer?.players.includes(id)||!validTraits(state.offer.players,state.offer.traits,playerById)||!validProfiles(state.offer.players,state.offer.profiles,playerById)||!player||!canAfford(player,state.squad)||!Number.isInteger(slot)||slot<0||slot>4||state.squad[slot]) return state;
+  if(state.phase!=='draft'||!nationById(state.offer?.nation)?.players.includes(id)||!state.offer?.players.includes(id)||!validTraits(state.offer.players,state.offer.traits,playerById)||!validProfiles(state.offer.players,state.offer.profiles,playerById)||!player||!canDraft(player,state.squad)||!Number.isInteger(slot)||slot<0||slot>4||state.squad[slot]) return state;
   return {...state,squad:state.squad.map((p,i)=>i===slot?id:p),traits:{...state.traits,[id]:state.offer.traits[id]},profiles:{...state.profiles,[id]:{...state.offer.profiles[id]}},captain:state.captain||id,offer:null};
 }
 export function sortBoards(squad) { return [...squad.slice(0,4).filter(Boolean).sort((a,b)=>playerById(b).rating-playerById(a).rating),...Array(4-squad.slice(0,4).filter(Boolean).length).fill(null),squad[4]]; }
 
 export function startTournament(squad,teamName,seed=Date.now()>>>0,traits=null,profiles=null,captain=null) {
-  if(squad.length!==5||squad.some(id=>!playerById(id))||new Set(squad.map(id=>playerById(id).personId)).size!==5||spent(squad)>BUDGET) throw new Error('Complete a valid five-player squad first.');
+  if(squad.length!==5||squad.some(id=>!playerById(id))||new Set(squad.map(id=>playerById(id).personId)).size!==5) throw new Error('Complete a valid five-player squad first.');
   const rng=random(seed^0x54524149),lineup=sortBoards(squad);
   const ownTraits=traits===null?rollTraits(lineup.map(playerById),rng):traits;
   if(!validTraits(lineup,ownTraits,playerById))throw new Error('Invalid player traits.');
@@ -177,10 +166,10 @@ export function validSave(s) {
   try { return validateSave(s); } catch { return false; }
 }
 function validateSave(s) {
-  if(!s||s.version!==SAVE_VERSION||s.rulesVersion!==RULES_VERSION||s.catalogueRelease!==CATALOGUE.release||!['draft','tournament','results'].includes(s.phase)||!['classic','expert'].includes(s.mode)||!Array.isArray(s.squad)||s.squad.length!==5||s.squad.some(id=>id!==null&&!playerById(id))||new Set(s.squad.filter(Boolean).map(id=>playerById(id).personId)).size!==s.squad.filter(Boolean).length||spent(s.squad)>BUDGET||!validTraits(s.squad.filter(Boolean),s.traits,playerById)||!validProfiles(s.squad.filter(Boolean),s.profiles,playerById)||(s.squad.some(Boolean)?!s.squad.includes(s.captain)||!s.captain:s.captain!==null)||!Number.isInteger(s.rerolls)||s.rerolls<0||s.rerolls>2||typeof s.teamName!=='string'||s.teamName.length>30)return false;
+  if(!s||s.version!==SAVE_VERSION||s.rulesVersion!==RULES_VERSION||s.catalogueRelease!==CATALOGUE.release||!['draft','tournament','results'].includes(s.phase)||!['classic','expert'].includes(s.mode)||!Array.isArray(s.squad)||s.squad.length!==5||s.squad.some(id=>id!==null&&!playerById(id))||new Set(s.squad.filter(Boolean).map(id=>playerById(id).personId)).size!==s.squad.filter(Boolean).length||!validTraits(s.squad.filter(Boolean),s.traits,playerById)||!validProfiles(s.squad.filter(Boolean),s.profiles,playerById)||(s.squad.some(Boolean)?!s.squad.includes(s.captain)||!s.captain:s.captain!==null)||!Number.isInteger(s.rerolls)||s.rerolls<0||s.rerolls>2||typeof s.teamName!=='string'||s.teamName.length>30)return false;
   if(s.phase==='draft') {
     const nation=nationById(s.offer?.nation);
-    return !s.tournament&&(!s.offer||!!nation&&Array.isArray(s.offer.players)&&s.offer.players.length===5&&s.offer.players.every((id,i)=>id===nation.players[i])&&validTraits(s.offer.players,s.offer.traits,playerById)&&validProfiles(s.offer.players,s.offer.profiles,playerById)&&s.offer.players.some(id=>canAfford(playerById(id),s.squad)));
+    return !s.tournament&&(!s.offer||!!nation&&Array.isArray(s.offer.players)&&s.offer.players.length===5&&s.offer.players.every((id,i)=>id===nation.players[i])&&validTraits(s.offer.players,s.offer.traits,playerById)&&validProfiles(s.offer.players,s.offer.profiles,playerById)&&s.offer.players.some(id=>canDraft(playerById(id),s.squad)));
   }
   const t=s.tournament;
   if(s.offer||s.squad.some(id=>!id)||!t||!Number.isInteger(t.seed)||!Number.isInteger(t.round)||t.round<0||t.round>ROUND_COUNT||(s.phase==='results'?t.round!==ROUND_COUNT:t.round>=ROUND_COUNT)||!Array.isArray(t.teams)||t.teams.length!==32||new Set(t.teams.map(x=>x?.id)).size!==32||!t.teams.some(x=>x.id==='YOU')||OPPONENTS.some(o=>!t.teams.some(x=>x.id===o.id)))return false;
