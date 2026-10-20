@@ -20,4 +20,5 @@ dist/client/
 dist/.openai/
 release/
 *.tsbuildinfo
+__pycache__/
 .env*

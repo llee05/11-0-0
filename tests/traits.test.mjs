@@ -10,7 +10,7 @@ const {players} = await readCatalogue(db);
 db.close();
 
 test('curated profiles identify real catalogue people, across editions and without namesake leakage', () => {
-  assert.equal(CAREER_PROFILES.length, 94);
+  assert.equal(CAREER_PROFILES.length, 98);
   assert.equal(new Set(CAREER_PROFILES.map(p => p.personId)).size, CAREER_PROFILES.length);
   for (const profile of CAREER_PROFILES) {
     const editions = players.filter(p => p.personId === profile.personId);
@@ -92,4 +92,10 @@ test('specialist peaks can overcome a meaningful rating gap and remain condition
     const effective=rating+matchupEffects('defender',null,quiet,rating,2650).a.bonus;
     assert.ok(effective>=previous);previous=effective;
   }
+});
+
+test('small defender penalties survive JSON saves without negative zero',()=>{
+  const effects=matchupEffects('defender',null,{kind:'quiet',ending:null,timePressure:false},2711,2650);
+  assert.equal(effects.a.bonus,0);
+  assert.deepEqual(JSON.parse(JSON.stringify(effects)),effects);
 });

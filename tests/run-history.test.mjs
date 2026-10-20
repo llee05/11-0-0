@@ -72,7 +72,7 @@ test('reloading a result never duplicates it or changes its recorded date',()=>{
 test('compatible completed saves retain their original report identity after board-order support',()=>{
   const game=games[0];let tournament=startTournament(game.squad,game.teamName,92,game.traits,game.profiles);
   while(tournament.round<11)tournament=simulateRound(tournament);
-  const legacy={...game,rulesVersion:'career-traits-3/squad-profiles-4/olympiad-5/competitive-draft-1',tournament};
+  const legacy={...game,rulesVersion:game.rulesVersion.replace('olympiad-6','olympiad-5'),tournament};
   const original=snapshotRun(legacy,'2026-10-20T12:00:00.000Z'),existing=[original];
   const restored=restoreSave(legacy);assert.ok(restored);
   const reloaded=snapshotRun(restored,'2026-10-21T12:00:00.000Z');

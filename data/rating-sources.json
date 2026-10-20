@@ -46,5 +46,41 @@
     "sha256": "2e863ec15760f7f184e595ef510a3cf1fd0090b02a572955dd7b147b726c0684",
     "bytes": 12473276,
     "member": "standard_jan26frl.txt"
+  },
+  "jan04frl.zip": {
+    "url": "https://ratings.fide.com/download/jan04frl.zip",
+    "sha256": "d0c4401cc8e43d21c3b826fa0ca222c5e8d5e133e16eab8af16d349ca10871b1",
+    "bytes": 1094221,
+    "member": "JAN04FRL.TXT"
+  },
+  "jan08frl.zip": {
+    "url": "https://ratings.fide.com/download/jan08frl.zip",
+    "sha256": "981d9c4d18c8d3c28a75e6e4b636978572c3bcafc3815ac5174ba9388144644f",
+    "bytes": 1732026,
+    "member": "JAN08FRL.TXT"
+  },
+  "jan12frl.zip": {
+    "url": "https://ratings.fide.com/download/jan12frl.zip",
+    "sha256": "276e00567bd3c402977bc4d6abce5d2f527df9a3a638043f09621e2915824c8f",
+    "bytes": 2825171,
+    "member": "jan12frl.txt"
+  },
+  "standard_jan16frl.zip": {
+    "url": "https://ratings.fide.com/download/standard_jan16frl.zip",
+    "sha256": "6efea9e1d991aaef8ddf788b6c63e704c8a4f10aff5c2c1539161db7b70de4e6",
+    "bytes": 5426890,
+    "member": "standard_jan16frl.txt"
+  },
+  "standard_jan20frl.zip": {
+    "url": "https://ratings.fide.com/download/standard_jan20frl.zip",
+    "sha256": "da6e8b23dd45b44fc6fa78e95148d821e13b7ce6693be7e51a792b611de68818",
+    "bytes": 8298708,
+    "member": "standard_jan20frl.txt"
+  },
+  "standard_jan24frl.zip": {
+    "url": "https://ratings.fide.com/download/standard_jan24frl.zip",
+    "sha256": "c77abd35086fc8b00d3af2a1c54421d116f9961b6c482541aa648cca2fec6045",
+    "bytes": 10294252,
+    "member": "standard_jan24frl.txt"
   }
 }

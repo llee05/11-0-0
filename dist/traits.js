@@ -1,5 +1,5 @@
 // Career-inspired labels; the numerical effects are fictional game rules.
-export const TRAIT_RULESET = 'career-traits-3';
+export const TRAIT_RULESET = 'career-traits-4';
 export const TRAIT_BONUS_CAP = 80;
 export const TRAITS = [
   ['attacker', 'Initiative hunter', 'Sharp: +64. Quiet: −16. Draw chance −6 points.'],
@@ -36,6 +36,10 @@ export const traitLabel = id => traitById(id)?.name || 'No trait';
 const museum = name => `https://museum.fide.com/champions/${name}`;
 // Match canonical person IDs, never display names (there are two Tigran Petrosians).
 export const CAREER_PROFILES = [
+  ['chessmetrics:37943', 'Reuben Fine', 'universal', 'https://compulsivereader.com/2007/03/23/a-review-of-reuben-fine-by-aidan-woodger/', 'Fine’s own annotations emphasize precision across tactical and positional play; the review of Aidan Woodger’s career biography also quotes Euwe on his persistent positional accuracy.'],
+  ['fide:8604436', 'Li Chao', 'attacker', 'https://chessbase.in/news/How-Kevin-Goh-Wei-Ming-became-a-Grandmaster/1000', 'GM Kevin Goh describes Li Chao’s recurring aggressive attacking play and opening preparation across his open-tournament career.'],
+  ['fide:8602883', 'Wang Hao', 'positional', 'https://www.bielchessfestival.ch/dam/jcr:4e74c507-1d78-4913-987f-feaa477aa376/2012_gmt-bio.pdf', 'The Biel organiser’s 2012 player dossier describes primarily positional play, with preparation and tactical vision serving strategy. This highlights that documented phase of his career rather than claiming an unchanging style.'],
+  ['fide:14102951', 'Pavel Eljanov', 'endgame', 'https://thechessworld.com/articles/middle-game/opposite-color-bishop-middlegame-according-to-gm-pavel-eljanov/', 'WGM Raluca Sgircea and IM Renier Castellanos identify endgame technique as his chief quality and analyse multiple examples from his games.'],
   ['historical:tal mikhail n', 'Mikhail Tal', 'sacrificer', museum('mikhail-tal'), 'FIDE’s career profile describes his combinations, sacrifices and pursuit of the initiative.'],
   ['historical:petrosian tigran', 'Tigran Petrosian', 'prophylaxis', museum('tigran-petrosian'), 'FIDE’s career profile describes his preventive, defensive style.'],
   ['fide:4100026', 'Anatoly Karpov', 'positional', 'https://bigthink.com/videos/big-think-interview-with-anatoly-karpov/', 'Karpov discusses his lasting preference for positional play and endgames.'],
@@ -86,7 +90,7 @@ export const CAREER_PROFILES = [
   ["fide:14205483", "Javokhir Sindarov", "dynamic", "https://candidates2026.fide.com/tpost/8ns92kg9t1-candidates-clash-sindarov-breaks-away-ca", "Sindarov describes his general enjoyment of dynamic positions from either side. This characterizes his career so far, rather than an unchanging lifetime style."],
   ["fide:24651516", "Matthias Bluebaum", "positional", "https://candidates2026.fide.com/about", "FIDE’s general player profile highlights positional understanding and resilience across sustained competition."],
   ["fide:24175439", "Andrey Esipenko", "coordinator", "https://www.fide.com/fide-world-cup-a-quick-draw-sets-up-tiebreaks-for-title-as-esipenko-wins-third-place/", "FIDE describes his recurring harmonious, natural piece placement, often compared with Capablanca. This characterizes his career so far."],
-  ["historical:sax gyula", "Gyula Sax", "tactician", "https://old.fide.com/component/content/article/1-fide-news/7716-in-memoriam-gm-gyula-sax.html", "FIDE’s career account describes a move toward positional play while retaining a taste for tactical complexity."],
+  ["fide:700029", "Gyula Sax", "tactician", "https://old.fide.com/component/content/article/1-fide-news/7716-in-memoriam-gm-gyula-sax.html", "FIDE’s career account describes a move toward positional play while retaining a taste for tactical complexity."],
   ["fide:900010", "Ljubomir Ljubojevic", "dynamic", "https://www.fide.com/ljubomir-ljubojevic-turns-75/", "GM Emil Sutovsky’s first-hand career portrait describes his expressive, explosive approach across decades of elite play."],
   ["historical:adorjan andras", "Andras Adorjan", "specialist", "https://www.fide.com/andras-adorjan-1950-2023/", "FIDE’s career account identifies his longstanding Grünfeld expertise, reflected in his own work and preparation with other leading players."],
   ["fide:14200244", "Rustam Kasimdzhanov", "endgame", "https://shop.chessbase.com/en/products/endgames_for_experts", "His selected-game course explains strategic planning and technical decisions across several practical endings from his own play."],
@@ -195,7 +199,7 @@ function effect(id, other, c, difference) {
 // Resolve simultaneously, so counters do not depend on which side is evaluated first.
 export function matchupEffects(a, b, context, ratingA, ratingB) {
   const ae = effect(a, b, context, ratingA - ratingB), be = effect(b, a, context, ratingB - ratingA);
-  const clamp = n => Math.max(-TRAIT_BONUS_CAP, Math.min(TRAIT_BONUS_CAP, n));
+  const clamp = n => Math.max(-TRAIT_BONUS_CAP, Math.min(TRAIT_BONUS_CAP, n)) || 0;
   return {
     a: {bonus: clamp(ae.bonus > 0 ? ae.bonus * (1 - be.block) : ae.bonus), draw: ae.draw},
     b: {bonus: clamp(be.bonus > 0 ? be.bonus * (1 - ae.block) : be.bonus), draw: be.draw},

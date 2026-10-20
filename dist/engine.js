@@ -27,7 +27,7 @@ export const ELO_SCALE = 320;
 export const DRAFT_RULESET = 'competitive-draft-1';
 export const RULES_VERSION = `${TRAIT_RULESET}/${PROFILE_RULESET}/${SIMULATION_RULESET}/${DRAFT_RULESET}`;
 // The previous rules share the same board arithmetic and neutral fixtures.
-const SOURCE_ORDER_RULES = 'career-traits-3/squad-profiles-4/olympiad-5/competitive-draft-1';
+const SOURCE_ORDER_RULES = `${TRAIT_RULESET}/${PROFILE_RULESET}/olympiad-5/${DRAFT_RULESET}`;
 export const nationById = id => nationIndex.get(id);
 export const playerById = id => playerIndex.get(id);
 export const average = squad => { const p=squad.filter(Boolean).map(playerById); return p.length ? Math.round(p.reduce((n,p)=>n+p.rating,0)/p.length) : 0; };

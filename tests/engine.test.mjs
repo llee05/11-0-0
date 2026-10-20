@@ -24,7 +24,7 @@ function draft(seed=1) {
 }
 
 test('the entire player pool has unique identities and valid nations',()=>{
-  assert.equal(PLAYERS.length,1980);
+  assert.equal(PLAYERS.length,3870);
   assert.equal(new Set(PLAYERS.map(p=>p.id)).size,PLAYERS.length);
   assert.ok(PLAYERS.every(p=>NATIONS.some(n=>n.id===p.nation)&&!Object.hasOwn(p,'cost')));
 });
@@ -346,7 +346,7 @@ test('recommendations preserve chosen board slots and use the current order in t
 });
 
 test('previous source-ordered saves resume without replacing progress or duplicating completed reports',()=>{
-  const previous='career-traits-3/squad-profiles-4/olympiad-5/competitive-draft-1';
+  const previous=RULES_VERSION.replace('olympiad-6','olympiad-5');
   const s=draft(97),legacyDraft={...s,rulesVersion:previous},draftBefore=structuredClone(legacyDraft);
   assert.equal(restoreSave(legacyDraft).rulesVersion,RULES_VERSION);assert.deepEqual(legacyDraft,draftBefore);
   let t=startTournament(s.squad,s.teamName,97,s.traits,s.profiles);

@@ -22,6 +22,18 @@ test('an unaudited stronger player prevents publication of a historical country 
   assert.throws(()=>buildHistoricalSnapshots(observations,unsourced),/Unaudited higher-ranked player/);
 });
 
+test('two-year historical coverage retains an explicit gap instead of inventing a wartime roster',()=>{
+  assert.equal(observations.length,23);
+  const result=buildHistoricalSnapshots(observations,audit);
+  assert.equal(result.snapshots.length,22);
+  assert.deepEqual(result.snapshots.map(s=>s.year),[1927,...Array.from({length:22},(_,i)=>1928+i*2)].filter(y=>y!==1944));
+  assert.equal(audit.unpublishedPeriods[0].year,1944);
+  const usa=result.snapshots.find(s=>s.year===1932).countries[0];
+  assert.deepEqual(usa.players.map(p=>p.name),['Isaac Kashdan','Al Horowitz','Frank Marshall','Alexander Kevitz','Abraham Kupchik']);
+  const incomplete=structuredClone(audit);incomplete.affiliations=incomplete.affiliations.filter(r=>!(r.year===1932&&r.sourcePlayerId==='chessmetrics:72398'));
+  assert.throws(()=>buildHistoricalSnapshots(observations,incomplete),/Unaudited higher-ranked player: Salo Landau/);
+});
+
 test('historical imports reject incomplete or contradictory country evidence and corrupted ranks',()=>{
   const fewer=structuredClone(audit);fewer.affiliations=fewer.affiliations.filter(row=>row.sourcePlayerId!=='chessmetrics:75152');
   assert.throws(()=>buildHistoricalSnapshots(observations,fewer),/Fewer than five/);

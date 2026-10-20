@@ -2,7 +2,7 @@
 import {buildAllTimeTeams} from './all-time.mjs';
 import identities from '../data/identity-links.json' with {type:'json'};
 export const NORMALIZATION = 'source-ratings-v1';
-export const CATALOGUE_FORMAT = `country-year-v5-raw-atleast2600-alltime-1-identities-${JSON.stringify(identities)}`;
+export const CATALOGUE_FORMAT = `country-year-v6-biennial-raw-atleast2600-alltime-1-identities-${JSON.stringify(identities)}`;
 export const EXCLUDED_FEDERATIONS = new Set(['FID']);
 const historicNames = {CSR:['Czechoslovakia',null],GDR:['East Germany',null],SCG:['Serbia and Montenegro',null],URS:['Soviet Union',null],YUG:['Yugoslavia',null]};
 const aliases = {LIB:'LBN',ROM:'ROU',SIN:'SGP',TRI:'TTO'};
@@ -57,8 +57,8 @@ export function buildSeed(dataset, federations, historic = null) {
     }
   }
   const years=[...new Set(snapshotRows.map(s=>s.year))].sort((a,b)=>b-a);
-  const requestedYears=[...Array.from({length:25},(_,i)=>2026-i*4),1927];
-  return {sources:sourceRows,periods:periodRows,snapshots:snapshotRows,people:[...persons.values()],editions:editionRows,metadata:{schemaVersion:2,normalization:NORMALIZATION,minimumTopRating:2600,minimumTopRatingInclusive:true,referenceDate:reference.source.listDate,referenceMedian:baseline,selection:dataset.selection+' Only country-year snapshots with at least one source rating at least 2600 are playable. Pre-FIDE snapshots use labelled Chessmetrics estimates and separately audited historical country affiliations.',years,requestedYears,missingYears:requestedYears.filter(y=>!years.includes(y)),coverageNotes:['Ratings are used exactly as published, without an era adjustment.','Country-year snapshots require at least one player rated at least 2600; their complete top fives are retained.','Before 1971 there were no official FIDE ratings. Historical estimates are labelled separately.','Missing or incomplete country-year records are excluded; no Olympiad roster substitutions are made.','1974 uses the May list; other imported FIDE snapshots use January.','Early FIDE archives have incomplete activity flags and women’s coverage. See each source note.','FID represents unaffiliated players, so it is excluded from country rolls.']}};
+  const requestedYears=[...Array.from({length:50},(_,i)=>2026-i*2),1927];
+  return {sources:sourceRows,periods:periodRows,snapshots:snapshotRows,people:[...persons.values()],editions:editionRows,metadata:{schemaVersion:2,normalization:NORMALIZATION,minimumTopRating:2600,minimumTopRatingInclusive:true,referenceDate:reference.source.listDate,referenceMedian:baseline,selection:dataset.selection+' Only country-year snapshots with at least one source rating at least 2600 are playable. Pre-FIDE snapshots use labelled Chessmetrics estimates and separately audited historical country affiliations.',years,requestedYears,missingYears:requestedYears.filter(y=>!years.includes(y)),coverageNotes:['Ratings are used exactly as published, without an era adjustment.','Country-year snapshots require at least one player rated at least 2600; their complete top fives are retained.','Before 1971 there were no official FIDE ratings. Historical estimates are labelled separately.','Missing or incomplete country-year records are excluded; no Olympiad roster substitutions are made.','1972 uses the July list and 1974 uses May; other imported FIDE snapshots use January.','Early FIDE archives have incomplete activity flags and women’s coverage. See each source note.','FID represents unaffiliated players, so it is excluded from country rolls.']}};
 }
 
 const tableNames={sources:'rating_sources',periods:'rating_periods',snapshots:'country_snapshots',people:'players',editions:'snapshot_players'};

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract verifiable four-year standard-rating snapshots from original archives.
+"""Extract verifiable two-year standard-rating snapshots from original archives.
 
 Use only period-specific federation (historical CSV column 7). Exclude explicit
 inactive `i` flags; never infer inactivity from zero games. Retain all sexes and
@@ -8,6 +8,7 @@ requires five unique listed players. Historic missing flags are reported rather
 than reconstructed. No Olympiad participation filter is applied.
 """
 import argparse,csv,io,json,zipfile,collections,pathlib,hashlib,re,statistics,urllib.request
+from fide_formats import standard_fields
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--cache-dir',type=pathlib.Path,default=pathlib.Path('.cache/ratings'),help='Directory containing pinned source ZIP files')
 parser.add_argument('--output',type=pathlib.Path,default=pathlib.Path('data/fide-country-snapshots.json'),help='Output JSON file')
@@ -16,7 +17,8 @@ parser.add_argument('--download',action='store_true',help='Download source ZIPs 
 args=parser.parse_args()
 ROOT=args.cache_dir
 SOURCES=json.loads(args.source_manifest.read_text())
-YEARS=list(range(1974,2027,4))
+YEARS=list(range(1972,2027,2))
+PERIODS={year:('197207' if year==1972 else '197405' if year==1974 else f'{year}01') for year in YEARS if year<2002}
 HISTORIC='https://www.olimpbase.org/Elo/data/elo1967-2001.zip'
 
 def read_zip(filename):
@@ -40,31 +42,26 @@ historic=collections.defaultdict(list)
 for row in csv.reader(io.StringIO(historic_text),delimiter=';'):
  if len(row)!=15:raise ValueError(f'Unexpected historical row length {len(row)}')
  period=row[3]
- if period not in ['197405','197801','198201','198601','199001','199401','199801']:continue
+ if period not in PERIODS.values():continue
  if not row[8].isdigit():continue
  historic[period].append(entry(row[1],row[7],row[8],row[4],row[6],row[11],row[2]))
 
 snapshots=[];diagnostics=[]
 for year in YEARS:
- if year<2000:
-  period='197405' if year==1974 else f'{year}01';entries=historic[period]
-  source={'url':HISTORIC,'archiveUrl':f'https://www.olimpbase.org/Elo/Elo{period}n.html','type':'archived-fide','listDate':f'{year}-05-01' if year==1974 else f'{year}-01-01','archiveSha256':historic_sha,'member':historic_member,'period':period,'activityFlagsAvailable':year>=1994,'notes':[]}
+ if year<2002:
+  period=PERIODS[year];entries=historic[period]
+  if len(entries)<100:raise ValueError(f'Missing or incomplete historical source period: {period}')
+  source={'url':HISTORIC,'archiveUrl':f'https://www.olimpbase.org/Elo/Elo{period}n.html','type':'archived-fide','listDate':f'{period[:4]}-{period[4:]}-01','archiveSha256':historic_sha,'member':historic_member,'period':period,'activityFlagsAvailable':year>=1994,'notes':[]}
+  if year==1972:source['notes'].append('The available 1972 archive list is July. Women’s ratings were first computed from 1969–1972 results in this list.')
   if year==1974:source['notes'].append('Earliest 1974 archive list is May. Source archive omits almost all women (one recorded female player).')
   if year<1994:source['notes'].append('This archive does not consistently report activity status; unflagged listed players are retained, and inactivity is not inferred.')
   source['notes'].append('Historic names, FIDE IDs and federations are transcribed source records and may contain omissions or spelling errors.')
  else:
   short=str(year)[2:];filename=f'standard_jan{short}frl.zip' if year>=2014 else f'jan{short}frl.zip';txt,sha,member=read_zip(filename);entries=[]
-  for line in txt.splitlines()[1:]:
-   if not line.strip() or line.strip()=='\x1a':continue
-   if year>=2018:
-    parts=(line[15:76],line[76:80],line[113:119],line[:15],line[84:89],line[132:])
-   elif year==2014:
-    parts=(line[15:76],line[76:80],line[109:115],line[:15],line[84:89],line[128:])
-   elif year>=2006:
-    parts=(line[10:44],line[48:53],line[53:59],line[:10],line[44:48],line[70:])
-   else:
-    parts=(line[12:45],line[51:59],line[59:65],line[:12],line[45:51],line[80:])
-   if not parts[2].strip().isdigit():raise ValueError(f'Invalid rating in {filename}: {line!r}')
+  for line in txt.splitlines():
+   try:parts=standard_fields(line,year)
+   except ValueError as error:raise ValueError(f'{filename}: {error}: {line!r}') from error
+   if parts is None:continue
    entries.append(entry(*parts))
   source={'url':f'https://ratings.fide.com/download/{filename}','archiveUrl':'https://ratings.fide.com/download_lists.phtml','type':'official-fide','listDate':f'{year}-01-01','archiveSha256':sha,'member':member,'period':f'{year}01','activityFlagsAvailable':True,'notes':[]}
  # Deduplicate ID, or full archived name where IDs do not exist. Retain higher

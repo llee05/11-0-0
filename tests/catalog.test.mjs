@@ -13,13 +13,22 @@ test('SQLite persists sourced top-five country snapshots and reopens without dup
   try{
     const filename=join(directory,'catalogue.sqlite');db=openDatabase(filename);
     const catalogue=await readCatalogue(db);
-    assert.equal(catalogue.nations.length,396);
-    assert.equal(catalogue.players.length,1980);
+    assert.equal(catalogue.nations.length,774);
+    assert.equal(catalogue.players.length,3870);
     assert.ok(catalogue.nations.every(n=>n.players.length===5&&n.source.sha256.length===64));
     assert.ok(catalogue.nations.every(n=>n.code!=='FID'));
     const usa=year=>catalogue.players.filter(p=>p.nation===`USA-${year}`);
     assert.deepEqual(usa(2026).map(p=>p.rawRating),[2810,2795,2753,2738,2729]);
     assert.deepEqual(usa(2022).map(p=>p.rawRating),[2792,2772,2772,2752,2708]);
+    for(const [year,ratings,date] of [
+      [1972,[2785,2565,2560,2555,2545],'1972-07-01'],
+      [2000,[2647,2644,2601,2599,2596],'2000-01-01'],
+      [2004,[2652,2623,2623,2621,2616],'2004-01-01'],
+      [2024,[2804,2788,2757,2752,2725],'2024-01-01'],
+    ]){
+      assert.deepEqual(usa(year).map(p=>p.rawRating),ratings);
+      assert.equal(catalogue.nations.find(n=>n.id===`USA-${year}`).source.date,date);
+    }
     assert.ok(!usa(2022).some(p=>p.name.includes('Nakamura')));
     assert.equal(usa(2026)[1].personId,usa(2022)[0].personId);
     for(const nation of catalogue.nations){
@@ -31,8 +40,10 @@ test('SQLite persists sourced top-five country snapshots and reopens without dup
       assert.ok(players.some(p=>p.rawRating>=2600));
     }
     assert.ok(!catalogue.metadata.missingYears.includes(1927));
-    assert.deepEqual(catalogue.metadata.missingYears,[]);
-    assert.deepEqual(catalogue.metadata.years,catalogue.metadata.requestedYears);
+    assert.deepEqual(catalogue.metadata.missingYears,[1944]);
+    assert.equal(catalogue.metadata.requestedYears.length,51);
+    assert.deepEqual(catalogue.metadata.years,catalogue.metadata.requestedYears.filter(y=>y!==1944));
+    assert.deepEqual(catalogue.metadata.years.filter(y=>y>=1972),Array.from({length:28},(_,i)=>2026-i*2));
     const early=catalogue.players.filter(p=>p.nation==='URS-1927');
     assert.ok(early.every(p=>p.estimated&&p.rating===p.rawRating));
     assert.deepEqual(catalogue.opponents,buildAllTimeTeams(catalogue.nations,catalogue.players).slice(0,31));
@@ -51,6 +62,7 @@ test('sourced identity links handle transfers while preserving namesakes and reu
     assert.equal(new Set(editions('Boris Gelfand').map(p=>p.personId)).size,1);
     assert.equal(new Set(editions('Zurab Azmaiparashvili').map(p=>p.personId)).size,1);
     assert.ok(editions('Lembit Oll').every(p=>p.personId==='historical:oll lembit'));
+    assert.ok(editions('Gyula Sax').every(p=>p.personId==='fide:700029'));
     const sokolovs=editions('Andrei Sokolov');
     assert.ok(sokolovs.some(p=>p.personId==='fide:627089'));
     assert.ok(sokolovs.some(p=>p.personId==='fide:11600306'));
