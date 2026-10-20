@@ -1,31 +1,32 @@
 // Career-inspired labels; the numerical effects are fictional game rules.
-export const TRAIT_RULESET = 'career-traits-2';
+export const TRAIT_RULESET = 'career-traits-3';
+export const TRAIT_BONUS_CAP = 80;
 export const TRAITS = [
-  ['attacker', 'Initiative hunter', 'Sharp: +24. Quiet: −8. Draw chance −6 points.'],
-  ['sacrificer', 'Sacrificial attacker', 'Sharp as the underdog: +32. Technical: −12. Draw chance −8 points.'],
-  ['dynamic', 'Dynamic player', 'Sharp: +24. Technical: −8.'],
-  ['tactician', 'Tactical creator', 'Sharp: +24. Technical: −8. Draw chance −6 points.'],
-  ['positional', 'Positional technician', 'Quiet: +24. Sharp: −8.'],
-  ['prophylaxis', 'Prophylactic defender', 'Halves the opponent’s positive trait bonus. Draw chance +4 points.'],
-  ['counterattacker', 'Counterattacker', 'Against an attacking trait: +28.'],
-  ['defender', 'Resourceful defender', 'At least 40 Elo behind: +26. At least 80 ahead: −8. Draw chance +4 points.'],
-  ['endgame', 'Endgame technician', 'Technical: +26. Sharp: −8.'],
-  ['simplifier', 'Simplifier', 'Technical: +22. Quiet or technical: draw chance +6 points.'],
-  ['grinder', 'Relentless grinder', 'Halves fatigue loss. Technical: +12.'],
-  ['rook', 'Rook-ending specialist', 'Technical rook ending: +36.'],
-  ['exchange', 'Exchange-sacrifice specialist', 'Quiet: +28 and blocks a quarter of the opponent’s positive bonus. Sharp: −6.'],
-  ['universal', 'Universal player', 'Every match condition: +10.'],
-  ['coordinator', 'Piece coordinator', 'Quiet: +26. Theory: −6.'],
-  ['practical', 'Practical competitor', 'At least 40 behind: draw chance +8 points. At least 40 ahead: −8 points.'],
-  ['innovator', 'Opening innovator', 'Against a preparation or repertoire specialist: +28. Otherwise sharp: +8.'],
-  ['preparation', 'Deep preparation', 'Theory: +26.'],
-  ['specialist', 'Repertoire specialist', 'Theory: +32. Against an unorthodox player: −8.'],
-  ['flexible', 'Opening chameleon', 'Against a theory-focused trait: +22.'],
-  ['unorthodox', 'Unorthodox creator', 'Against a theory-focused trait: +24; otherwise sharp: +10. Technical: −12. Draw chance −4 points.'],
-  ['calculator', 'Deep calculator', 'Sharp: +28. Time pressure: −12.'],
-  ['intuitive', 'Intuitive player', 'Sharp or quiet: +18. Theory: −8.'],
-  ['time-trouble', 'Time-trouble fighter', 'Sharp or theory: +20. Time pressure: −24.'],
-  ['materialist', 'Material defender', 'Against an attacking trait: +22. Quiet: −8.'],
+  ['attacker', 'Initiative hunter', 'Sharp: +64. Quiet: −16. Draw chance −6 points.'],
+  ['sacrificer', 'Sacrificial attacker', 'Sharp: +64, or +80 as the underdog. Technical: −16. Draw chance −8 points.'],
+  ['dynamic', 'Dynamic player', 'Sharp: +64. Technical: −12.'],
+  ['tactician', 'Tactical creator', 'Sharp: +64. Technical: −12. Draw chance −6 points.'],
+  ['positional', 'Positional technician', 'Quiet: +56. Sharp: −12.'],
+  ['prophylaxis', 'Prophylactic defender', 'Quiet or technical: +12. Halves the opponent’s positive trait bonus. Draw chance +4 points.'],
+  ['counterattacker', 'Counterattacker', 'Against an attacking trait: +64.'],
+  ['defender', 'Resourceful defender', 'When outmatched: up to +48. Clear favourite: up to −8. Draw chance +4 points.'],
+  ['endgame', 'Endgame technician', 'Technical: +64. Sharp: −12.'],
+  ['simplifier', 'Simplifier', 'Technical: +40. Quiet or technical: draw chance +6 points.'],
+  ['grinder', 'Relentless grinder', 'Halves fatigue loss. Technical: +16.'],
+  ['rook', 'Rook-ending specialist', 'Technical rook ending: +80.'],
+  ['exchange', 'Exchange-sacrifice specialist', 'Quiet: +56 and blocks a quarter of the opponent’s positive bonus. Sharp: −12.'],
+  ['universal', 'Universal player', 'Every match condition: +8.'],
+  ['coordinator', 'Piece coordinator', 'Quiet: +56. Theory: −8.'],
+  ['practical', 'Practical competitor', 'Time pressure: +24. Quiet or technical: +8. At least 40 behind: draw chance +8 points; at least 40 ahead: −8 points.'],
+  ['innovator', 'Opening innovator', 'Against a preparation or repertoire specialist: +64. Otherwise sharp: +16.'],
+  ['preparation', 'Deep preparation', 'Theory: +56.'],
+  ['specialist', 'Repertoire specialist', 'Theory: +72. Against an unorthodox player: −16.'],
+  ['flexible', 'Opening chameleon', 'Against a theory-focused trait: +64.'],
+  ['unorthodox', 'Unorthodox creator', 'Against a theory-focused trait: +64; otherwise sharp: +32. Technical: −16. Draw chance −4 points.'],
+  ['calculator', 'Deep calculator', 'Sharp: +64. Time pressure: −16.'],
+  ['intuitive', 'Intuitive player', 'Sharp or quiet: +32. Theory: −12.'],
+  ['time-trouble', 'Time-trouble fighter', 'Sharp or theory: +40. Time pressure: −32.'],
+  ['materialist', 'Material defender', 'Against an attacking trait: +64. Quiet: −8.'],
 ].map(([id, name, description]) => Object.freeze({id, name, description}));
 const index = new Map(TRAITS.map(t => [t.id, t]));
 export const traitById = id => index.get(id);
@@ -161,38 +162,40 @@ function effect(id, other, c, difference) {
   const sharp = c.kind === 'sharp', quiet = c.kind === 'quiet', technical = c.kind === 'technical', opening = c.kind === 'theory';
   let bonus = 0, draw = 0, block = 0;
   switch (id) {
-    case 'attacker': bonus = sharp ? 24 : quiet ? -8 : 0; draw = -0.06; break;
-    case 'sacrificer': bonus = sharp && difference < 0 ? 32 : technical ? -12 : 0; draw = -0.08; break;
-    case 'dynamic': bonus = sharp ? 24 : technical ? -8 : 0; break;
-    case 'tactician': bonus = sharp ? 24 : technical ? -8 : 0; draw = -0.06; break;
-    case 'positional': bonus = quiet ? 24 : sharp ? -8 : 0; break;
-    case 'prophylaxis': block = 0.5; draw = 0.04; break;
-    case 'counterattacker': bonus = attacking.has(other) ? 28 : 0; break;
-    case 'defender': bonus = difference <= -40 ? 26 : difference >= 80 ? -8 : 0; draw = 0.04; break;
-    case 'endgame': bonus = technical ? 26 : sharp ? -8 : 0; break;
-    case 'simplifier': bonus = technical ? 22 : 0; draw = quiet || technical ? 0.06 : 0; break;
-    case 'grinder': bonus = technical ? 12 : 0; break;
-    case 'rook': bonus = technical && c.ending === 'rook' ? 36 : 0; break;
-    case 'exchange': bonus = quiet ? 28 : sharp ? -6 : 0; block = quiet ? 0.25 : 0; break;
-    case 'universal': bonus = 10; break;
-    case 'coordinator': bonus = quiet ? 26 : opening ? -6 : 0; break;
-    case 'practical': draw = difference <= -40 ? 0.08 : difference >= 40 ? -0.08 : 0; break;
-    case 'innovator': bonus = ['preparation','specialist'].includes(other) ? 28 : sharp ? 8 : 0; break;
-    case 'preparation': bonus = opening ? 26 : 0; break;
-    case 'specialist': bonus = (opening ? 32 : 0) - (other === 'unorthodox' ? 8 : 0); break;
-    case 'flexible': bonus = theory.has(other) ? 22 : 0; break;
-    case 'unorthodox': bonus = (theory.has(other) ? 24 : sharp ? 10 : 0) - (technical ? 12 : 0); draw = -0.04; break;
-    case 'calculator': bonus = (sharp ? 28 : 0) - (c.timePressure ? 12 : 0); break;
-    case 'intuitive': bonus = sharp || quiet ? 18 : opening ? -8 : 0; break;
-    case 'time-trouble': bonus = (sharp || opening ? 20 : 0) - (c.timePressure ? 24 : 0); break;
-    case 'materialist': bonus = (attacking.has(other) ? 22 : 0) - (quiet ? 8 : 0); break;
+    case 'attacker': bonus = sharp ? 64 : quiet ? -16 : 0; draw = -0.06; break;
+    case 'sacrificer': bonus = sharp ? (difference < 0 ? 80 : 64) : technical ? -16 : 0; draw = -0.08; break;
+    case 'dynamic': bonus = sharp ? 64 : technical ? -12 : 0; break;
+    case 'tactician': bonus = sharp ? 64 : technical ? -12 : 0; draw = -0.06; break;
+    case 'positional': bonus = quiet ? 56 : sharp ? -12 : 0; break;
+    case 'prophylaxis': bonus = quiet || technical ? 12 : 0; block = 0.5; draw = 0.04; break;
+    case 'counterattacker': bonus = attacking.has(other) ? 64 : 0; break;
+    case 'defender':
+      bonus = Math.round((48 * Math.max(0, Math.min(1, (-difference - 20) / 80)) - 8 * Math.max(0, Math.min(1, (difference - 60) / 80))) * 2) / 2;
+      draw = 0.04; break;
+    case 'endgame': bonus = technical ? 64 : sharp ? -12 : 0; break;
+    case 'simplifier': bonus = technical ? 40 : 0; draw = quiet || technical ? 0.06 : 0; break;
+    case 'grinder': bonus = technical ? 16 : 0; break;
+    case 'rook': bonus = technical && c.ending === 'rook' ? 80 : 0; break;
+    case 'exchange': bonus = quiet ? 56 : sharp ? -12 : 0; block = quiet ? 0.25 : 0; break;
+    case 'universal': bonus = 8; break;
+    case 'coordinator': bonus = quiet ? 56 : opening ? -8 : 0; break;
+    case 'practical': bonus = (quiet || technical ? 8 : 0) + (c.timePressure ? 24 : 0); draw = difference <= -40 ? 0.08 : difference >= 40 ? -0.08 : 0; break;
+    case 'innovator': bonus = ['preparation','specialist'].includes(other) ? 64 : sharp ? 16 : 0; break;
+    case 'preparation': bonus = opening ? 56 : 0; break;
+    case 'specialist': bonus = (opening ? 72 : 0) - (other === 'unorthodox' ? 16 : 0); break;
+    case 'flexible': bonus = theory.has(other) ? 64 : 0; break;
+    case 'unorthodox': bonus = (theory.has(other) ? 64 : sharp ? 32 : 0) - (technical ? 16 : 0); draw = -0.04; break;
+    case 'calculator': bonus = (sharp ? 64 : 0) - (c.timePressure ? 16 : 0); break;
+    case 'intuitive': bonus = sharp || quiet ? 32 : opening ? -12 : 0; break;
+    case 'time-trouble': bonus = (sharp || opening ? 40 : 0) - (c.timePressure ? 32 : 0); break;
+    case 'materialist': bonus = (attacking.has(other) ? 64 : 0) - (quiet ? 8 : 0); break;
   }
   return {bonus, draw, block};
 }
 // Resolve simultaneously, so counters do not depend on which side is evaluated first.
 export function matchupEffects(a, b, context, ratingA, ratingB) {
   const ae = effect(a, b, context, ratingA - ratingB), be = effect(b, a, context, ratingB - ratingA);
-  const clamp = n => Math.max(-40, Math.min(40, n));
+  const clamp = n => Math.max(-TRAIT_BONUS_CAP, Math.min(TRAIT_BONUS_CAP, n));
   return {
     a: {bonus: clamp(ae.bonus > 0 ? ae.bonus * (1 - be.block) : ae.bonus), draw: ae.draw},
     b: {bonus: clamp(be.bonus > 0 ? be.bonus * (1 - ae.block) : be.bonus), draw: be.draw},

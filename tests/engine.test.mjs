@@ -281,7 +281,7 @@ test('reserve rotates into active boards and sitting out recovers fatigue only a
 
 test('save validation rejects corrupt and incompatible browser data',()=>{
   assert.ok(validSave(initialState()));
-  const previousRules={...initialState(),rulesVersion:RULES_VERSION.replace('career-traits-2','career-traits-1')};
+  const previousRules={...initialState(),rulesVersion:RULES_VERSION.replace(/career-traits-\d+/,'career-traits-1')};
   assert.notEqual(previousRules.rulesVersion,RULES_VERSION);
   assert.equal(validSave(previousRules),false);
   assert.equal(validSave({...initialState(),rulesVersion:RULES_VERSION.replace('squad-profiles-3','squad-profiles-2')}),false);

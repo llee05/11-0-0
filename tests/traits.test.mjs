@@ -63,7 +63,7 @@ test('all matchup effects are finite, bounded and symmetric across traits and co
       const effects = matchupEffects(a,b,c,2600+difference,2600);
       const reverse = matchupEffects(b,a,c,2600,2600+difference);
       assert.deepEqual(effects.a, reverse.b);
-      for (const e of [effects.a,effects.b]) assert.ok(Number.isFinite(e.bonus) && Math.abs(e.bonus)<=40 && Math.abs(e.draw)<=0.08);
+      for (const e of [effects.a,effects.b]) assert.ok(Number.isFinite(e.bonus) && Math.abs(e.bonus)<=80 && Math.abs(e.draw)<=0.08);
     }
   }
   const rng = random(32);
@@ -73,8 +73,23 @@ test('all matchup effects are finite, bounded and symmetric across traits and co
 test('traits enable a lower-rated specialist to overtake a higher-rated player in a favorable condition', () => {
   const c = {kind:'technical', ending:'rook', timePressure:false};
   const effects = matchupEffects('rook',null,c,2600,2620);
-  assert.equal(effects.a.bonus,36);
+  assert.equal(effects.a.bonus,80);
   assert.ok(2600+effects.a.bonus > 2620+effects.b.bonus);
-  assert.equal(matchupEffects('rook','prophylaxis',c,2600,2620).a.bonus,18);
+  assert.equal(matchupEffects('rook','prophylaxis',c,2600,2620).a.bonus,40);
   assert.equal(matchupEffects('rook',null,{...c,ending:'minor'},2600,2620).a.bonus,0);
+});
+
+
+test('specialist peaks can overcome a meaningful rating gap and remain conditional',()=>{
+  const sharp={kind:'sharp',ending:null,timePressure:false},quiet={...sharp,kind:'quiet'};
+  assert.ok(2600+matchupEffects('attacker',null,sharp,2600,2650).a.bonus>2650);
+  assert.ok(matchupEffects('attacker',null,quiet,2600,2650).a.bonus<0);
+  assert.equal(matchupEffects('sacrificer',null,sharp,2600,2650).a.bonus,80);
+  assert.equal(matchupEffects('sacrificer',null,sharp,2650,2600).a.bonus,64);
+  assert.ok(matchupEffects('practical',null,{...quiet,timePressure:true},2600,2600).a.bonus>0);
+  let previous=-Infinity;
+  for(let rating=2450;rating<=2850;rating+=0.5){
+    const effective=rating+matchupEffects('defender',null,quiet,rating,2650).a.bonus;
+    assert.ok(effective>=previous);previous=effective;
+  }
 });
