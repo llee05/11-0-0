@@ -18,7 +18,7 @@ try{
   assert.ok(responses.every(status=>status===200));assert.deepEqual(errors,[]);
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
 
-  for(const asset of ['catalog.json','app.js','engine.js','traits.js','player-profile.js','styles.css','favicon.svg','king.svg','knight.svg','fonts/manrope.ttf','fonts/dm-sans.ttf','fonts/manrope-LICENSE.txt','fonts/dm-sans-LICENSE.txt']){
+  for(const asset of ['catalog.json','app.js','engine.js','traits.js','player-profile.js','run-history.js','styles.css','favicon.svg','king.svg','knight.svg','fonts/manrope.ttf','fonts/dm-sans.ttf','fonts/manrope-LICENSE.txt','fonts/dm-sans-LICENSE.txt']){
     const response=await context.request.get(new URL(asset,home).href);
     assert.equal(response.status(),200,asset);
     if(asset==='catalog.json')assert.match(response.headers()['content-type'],/^application\/json/);
@@ -35,19 +35,28 @@ try{
 
   await page.getByRole('button',{name:'Quick draft'}).click();
   assert.equal(await page.locator('.squad-slot.filled').count(),5);
+  await page.locator('[data-action="quick-sim"]').click();
+  await page.getByRole('button',{name:'Copy result'}).waitFor();
+  await page.getByRole('button',{name:'Best runs',exact:true}).click();
+  assert.equal(await page.locator('.run-card').count(),1);
+  await page.locator('[data-action="run-details"]').click();
+  assert.equal(await page.locator('.run-detail .board-result').count(),4);
+  await page.keyboard.press('Escape');
   const saved=await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
+  const records=await page.evaluate(()=>localStorage.getItem('11-0-0:best-runs:v1'));
   const catalogueURL=new URL('catalog.json',home).href;
   // Missing and malformed exports preserve saves and recover via the retry link.
   for(const [status,body] of [[503,'Unavailable'],[200,'{"metadata":null}']]){
     await page.route(catalogueURL,route=>route.fulfill({status,contentType:'application/json',body}));
     await page.reload();await page.getByRole('heading',{name:'The archive is taking a moment.'}).waitFor();
     assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),saved);
+    assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:best-runs:v1')),records);
     await page.unroute(catalogueURL);
     await page.getByRole('link',{name:'Try again'}).click();
-    await page.locator('.squad-slot.filled').first().waitFor();
-    assert.equal(await page.locator('.squad-slot.filled').count(),5);
+    await page.getByRole('button',{name:'Copy result'}).waitFor();
     assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),saved);
+    assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:best-runs:v1')),records);
   }
   assert.deepEqual(errors,['Catalogue unavailable','Invalid rating catalogue.']);
-  console.log(`Pages QA passed: ${home.href} · relative assets, JSON catalogue, no API/backend, mobile layout, save preservation and catalogue retry.`);
+  console.log(`Pages QA passed: ${home.href} · relative assets, JSON catalogue, no API/backend, mobile layout, best-run reports, game/record preservation and catalogue retry.`);
 }finally{await browser.close();}

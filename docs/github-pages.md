@@ -46,7 +46,7 @@ The workflow in [`.github/workflows/pages.yml`](../.github/workflows/pages.yml) 
 
 Pages serves a catalogue snapshot. Import and review source changes locally, commit the checked-in data, and push to `main` to rebuild. Visitors never run SQL or download source archives. Catalogue release IDs, source ratings, historical qualifications, trait rules and the 31 all-time opponents match the API version.
 
-Game saves remain in each browser's local storage. Saves on the previous Sites domain do not automatically transfer to the GitHub Pages domain. Hosting alone does not change the save format or rules; existing catalogue/rules incompatibilities still use the normal backup flow. Projects on the same Pages origin share browser storage, including this game's save key.
+Game saves and the three best completed-run reports remain in each browser's local storage. Saves and records on the previous Sites domain do not automatically transfer to the GitHub Pages domain. Hosting alone does not change the save format or rules; existing catalogue/rules incompatibilities still use the normal backup flow. Best-run reports remain readable across catalogue/rules updates. Projects on the same Pages origin share browser storage, including this game's save and record keys.
 
 The Sites deployment remains separately available through `npm run build`, using its existing D1 binding and Site identity. The Pages workflow never installs or publishes that backend.
 
@@ -59,4 +59,4 @@ QA_URL=http://localhost:4174/11-0-0/ node scripts/browser-pages-qa.mjs
 QA_URL=http://localhost:4174/11-0-0/ node scripts/browser-qa.mjs
 ```
 
-The focused hosting check verifies relative assets, JSON MIME type, absent backend routes, mobile layout, and preservation/recovery of saves when the catalogue is missing or malformed. The full browser flow covers drafting, eleven rounds, reserve rotation, Quick Sim, reloads and desktop/mobile layouts. Repeat the focused check with `QA_URL=http://localhost:4175/` against the root preview. Set `PLAYWRIGHT_MODULE`, `PLAYWRIGHT_CHROMIUM_PATH` and `QA_ARTIFACTS` as needed.
+The focused hosting check verifies relative assets, JSON MIME type, absent backend routes, mobile layout, best-run reports, and preservation/recovery of games and records when the catalogue is missing or malformed. The full browser flow covers drafting, eleven rounds, reserve rotation, Quick Sim, top-three records, reloads and desktop/mobile layouts. Repeat the focused check with `QA_URL=http://localhost:4175/` against the root preview. Set `PLAYWRIGHT_MODULE`, `PLAYWRIGHT_CHROMIUM_PATH` and `QA_ARTIFACTS` as needed.

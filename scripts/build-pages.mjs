@@ -21,7 +21,7 @@ mkdirSync(release,{recursive:true});
 const staging=mkdtempSync(join(release,'.pages-'));
 try{
   // Explicit assets exclude generated Workers, databases and hosting metadata.
-  for(const name of ['app.js','engine.js','traits.js','player-profile.js','styles.css','favicon.svg','king.svg','knight.svg','fonts']){
+  for(const name of ['app.js','engine.js','traits.js','player-profile.js','run-history.js','styles.css','favicon.svg','king.svg','knight.svg','fonts']){
     cpSync(new URL(name,source),join(staging,name),{recursive:true});
   }
   writeFileSync(join(staging,'index.html'),html.replace(marker,'<meta name="catalogue-url" content="./catalog.json">'));

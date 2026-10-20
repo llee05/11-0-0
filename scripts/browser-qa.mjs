@@ -14,6 +14,10 @@ try {
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto(url);await page.evaluate(()=>document.fonts.ready);
   await page.getByRole('button',{name:'Quick draft'}).waitFor();
+  await page.getByRole('button',{name:'Best runs',exact:true}).click();
+  assert.equal(await page.locator('.run-card').count(),0);
+  assert.ok((await page.getByRole('dialog').textContent()).includes('Your first record is waiting'));
+  await page.keyboard.press('Escape');
   assert.equal(await page.locator('.squad-budget,.slot-cost,.price').count(),0);
   assert.equal(await page.title(),'11–0–0 · The Fantasy Chess Olympiad');
   await page.screenshot({path:`${artifacts}/desktop-draft.png`,fullPage:true});
@@ -200,6 +204,34 @@ try {
   await page.getByRole('button',{name:'Auto-rotate & finish'}).click();
   await page.getByRole('button',{name:'Copy result'}).waitFor();
   assert.equal(await page.locator('.round-tabs button:not([disabled])').count(),11);
+  const completedSave=await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
+  const firstRecord=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs[0]);
+  assert.equal(firstRecord.teamName,'Queensland Knights');
+  assert.equal(firstRecord.rounds.length,11);
+  await page.getByRole('button',{name:'Best runs',exact:true}).click();
+  assert.equal(await page.locator('.run-card').count(),1);
+  await page.screenshot({path:`${artifacts}/desktop-best-runs.png`,fullPage:true});
+  await page.locator('[data-action="run-details"]').click();
+  assert.equal(await page.locator('.run-detail .board-result').count(),4);
+  assert.equal(await page.locator('[data-action="run-round"]').count(),11);
+  await page.locator('[data-action="run-round"][data-round="1"]').click();
+  assert.ok((await page.locator('.run-detail .match-heading').textContent()).includes('ROUND 01'));
+  const archivedBreakdown=page.locator('.run-detail .board-breakdown').first();
+  await archivedBreakdown.locator('summary').focus();await page.keyboard.press('Enter');
+  assert.equal(await archivedBreakdown.evaluate(el=>el.open),true);
+  assert.ok((await archivedBreakdown.textContent()).includes('FORM AFTER GAME'));
+  await page.locator('.run-fixtures summary').click();
+  assert.equal(await page.locator('.run-fixtures>div').count(),16);
+  await page.locator('[data-action="run-view"][data-view="standings"]').click();
+  assert.equal(await page.locator('.run-detail .standings-row.full').count(),32);
+  await page.locator('[data-action="run-view"][data-view="squad"]').click();
+  assert.equal(await page.locator('.run-detail .team-profiles>article').count(),5);
+  assert.equal(await page.locator('.run-detail .team-profiles a').count(),5);
+  await page.screenshot({path:`${artifacts}/desktop-best-run-squad.png`,fullPage:true});
+  await page.keyboard.press('Escape');
+  assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),completedSave);
+  await page.reload();await page.getByRole('button',{name:'Copy result'}).waitFor();
+  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs),[firstRecord]);
   await page.getByRole('button',{name:'Copy result'}).click();
   const copied=await page.evaluate(()=>navigator.clipboard.readText());
   assert.ok(copied.includes('Queensland Knights'));
@@ -210,8 +242,21 @@ try {
   await page.getByRole('button',{name:'Build another team'}).click();
   await page.getByRole('button',{name:'Start a new draft'}).click();
   assert.equal(await page.locator('.squad-slot.filled').count(),0);
+  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs),[firstRecord]);
   // Expert and auto-draft paths, plus mobile layout and a full playthrough.
   await page.setViewportSize({width:390,height:844});
+  await page.getByRole('button',{name:'Best runs',exact:true}).click();
+  await page.locator('[data-action="run-details"]').click();
+  for(const width of [320,390]){
+    await page.setViewportSize({width,height:844});
+    for(const view of ['matches','standings','squad']){
+      await page.locator(`[data-action="run-view"][data-view="${view}"]`).click();
+      assert.ok(await page.locator('#dialog').evaluate(el=>el.scrollWidth<=el.clientWidth),`saved ${view} at ${width}px`);
+      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+    }
+  }
+  await page.screenshot({path:`${artifacts}/mobile-best-run-squad.png`,fullPage:true});
+  await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'PLAYER TRAITS'}).click();
   assert.ok(await page.evaluate(()=>document.querySelector('#dialog').scrollWidth<=document.querySelector('#dialog').clientWidth));
   await page.keyboard.press('Escape');
@@ -286,6 +331,7 @@ try {
   await quickPage.locator('[data-action="quick-sim"]').click();
   await quickPage.getByRole('button',{name:'Copy result'}).waitFor();
   let quickSave=await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
+  assert.equal(await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs.length),1);
   assert.equal(quickSave.phase,'results');assert.equal(quickSave.tournament.round,11);
   assert.equal(quickSave.tournament.teams.length,32);
   assert.equal(await quickPage.locator('.round-tabs button:not([disabled])').count(),11);
@@ -321,8 +367,57 @@ try {
   assert.deepEqual(quickSave.squad,full.squad);
   assert.deepEqual(quickSave.traits,full.traits);assert.deepEqual(quickSave.profiles,full.profiles);
   assert.equal(quickSave.tournament.rounds.length,11);
+  assert.equal(await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs.length),3);
+  await quickPage.getByRole('button',{name:'Build another team'}).click();
+  await quickPage.getByRole('button',{name:'Start a new draft'}).click();
+  await quickPage.locator('[data-action="quick-sim"]').click();
+  await quickPage.getByRole('button',{name:'Copy result'}).waitFor();
+  const topThree=await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs);
+  assert.equal(topThree.length,3);assert.equal(new Set(topThree.map(r=>r.id)).size,3);
+  await quickPage.reload();await quickPage.getByRole('button',{name:'Copy result'}).waitFor();
+  assert.deepEqual(await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs),topThree);
   await quickContext.close();
+  // Old reports are independent of current player IDs and active-save rules.
+  const historicContext=await browser.newContext();
+  const historic=structuredClone(firstRecord);historic.catalogueRelease='retired-catalogue';historic.rulesVersion='retired-rules';
+  historic.formElo=9;
+  const retired=new Set(historic.squad.map(p=>p.id));
+  for(const p of historic.squad){p.id=`retired:${p.id}`;p.personId=`retired:${p.personId}`;}
+  for(const round of historic.rounds)for(const board of round.match.boards)for(const side of ['a','b']){
+    if(retired.has(board[side].id)){board[side].id=`retired:${board[side].id}`;board[side].personId=`retired:${board[side].personId}`;}
+  }
+  await historicContext.addInitScript(run=>localStorage.setItem('11-0-0:best-runs:v1',JSON.stringify({version:1,runs:[run]})),historic);
+  const historicPage=await historicContext.newPage();historicPage.on('pageerror',error=>errors.push(error.message));
+  await historicPage.goto(url);await historicPage.getByRole('button',{name:'Quick draft'}).waitFor();
+  const freshSave=await historicPage.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
+  await historicPage.getByRole('button',{name:'Best runs',exact:true}).click();
+  await historicPage.locator('[data-action="run-details"]').click();
+  assert.equal(await historicPage.locator('.run-detail .board-result').count(),4);
+  await historicPage.locator('[data-action="run-view"][data-view="squad"]').click();
+  assert.equal(await historicPage.locator('.run-detail .team-profiles>article').count(),5);
+  assert.equal(await historicPage.locator('.run-detail .career-trait').count(),historic.squad.filter(p=>p.traitInfo.career).length);
+  assert.equal(await historicPage.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),freshSave);
+  await historicContext.close();
+  const corruptContext=await browser.newContext();
+  await corruptContext.addInitScript(()=>localStorage.setItem('11-0-0:best-runs:v1','{broken-history'));
+  const corruptPage=await corruptContext.newPage();corruptPage.on('pageerror',error=>errors.push(error.message));
+  await corruptPage.goto(url);await corruptPage.getByRole('button',{name:'Quick draft'}).waitFor();
+  assert.equal(await corruptPage.evaluate(()=>localStorage.getItem('11-0-0:best-runs:v1:backup')),'{broken-history');
+  await corruptPage.locator('[data-action="quick-sim"]').click();await corruptPage.getByRole('button',{name:'Copy result'}).waitFor();
+  assert.equal(await corruptPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs.length),1);
+  await corruptContext.close();
+  const quotaContext=await browser.newContext();
+  await quotaContext.addInitScript(()=>{
+    const original=Storage.prototype.setItem;
+    Storage.prototype.setItem=function(key,value){if(key==='11-0-0:best-runs:v1')throw new DOMException('Quota exceeded','QuotaExceededError');return original.call(this,key,value);};
+  });
+  const quotaPage=await quotaContext.newPage();quotaPage.on('pageerror',error=>errors.push(error.message));
+  await quotaPage.goto(url);await quotaPage.locator('[data-action="quick-sim"]').click();await quotaPage.getByRole('button',{name:'Copy result'}).waitFor();
+  assert.ok((await quotaPage.locator('#toast').textContent()).includes('browser storage could not save it'));
+  assert.equal(await quotaPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).phase),'results');
+  await quotaPage.getByRole('button',{name:'Best runs',exact:true}).click();assert.equal(await quotaPage.locator('.run-card').count(),1);
+  await quotaContext.close();
   assert.deepEqual(errors,[]);
-  console.log('Browser QA passed: stamina/style/form/consistency, team profile inspection without captain attributes or bonuses, trait guide and career traits, saved offer/pick traits, seeded AI traits, match previews and effects, legacy save preservation, unchanged source ratings, inclusive 2600 country cutoff, all-time A/B roster and source dialogs, manual and quick drafts, expert mode, rerolls, team name, board targeting, persistence, reserve rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
+  console.log('Browser QA passed: top-three personal records, complete archived reports/standings/squads, reset and reload persistence, deduplication, old-catalogue independence, corrupt-history backup and storage failure recovery; stamina/style/form/consistency, profiles, traits, saves, previews, source catalogue, manual and quick drafts/simulation, expert mode, rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
   console.log(`Screenshots: ${artifacts}`);
 } finally {await browser.close();}
