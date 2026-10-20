@@ -1,6 +1,6 @@
 import {TRAIT_RULESET, rollTraits, validTraits, matchContext, validContext, matchupEffects} from './traits.js';
 import {PROFILE_RULESET,rollProfiles,validProfiles,validForm,profileFatigue,nextFatigue,validFatigue,styleEffect,performanceSwing,performanceSeed,nextForm,restedForm,FORM_ELO,profileOutlook} from './player-profile.js';
-// The server supplies a validated, versioned country-year catalogue from SQL.
+// SQL supplies the versioned catalogue through an API or a static build export.
 export let NATIONS=[],PLAYERS=[],OPPONENTS=[],CATALOGUE={release:null};
 const planningCache=new Map(),outlookCache=new Map();
 let playerIndex=new Map(),nationIndex=new Map(),opponentIndex=new Map();

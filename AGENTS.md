@@ -6,7 +6,7 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 
 11–0–0 is a fantasy Chess Olympiad game with a browser ES-module UI and a shared historical rating catalogue. Local development uses Node.js 22.13 or newer and built-in SQLite without runtime packages. Hosted Sites uses an isolated Vinext adapter and Cloudflare D1.
 
-`dist/` contains the maintained browser source. Edit its top-level files directly. Hosted builds generate only `dist/server/`, `dist/client/` and `dist/.openai/`; never replace or clean the entire directory. The app requires `/api/catalog` and cannot run on static-only hosting.
+`dist/` contains the maintained browser source. Edit its top-level files directly. Sites builds generate only `dist/server/`, `dist/client/` and `dist/.openai/`; never replace or clean the entire directory. Local development and Sites use `/api/catalog`. The separate GitHub Pages build exports the same SQL catalogue to `release/pages/catalog.json` and uses an explicit relative catalogue URL; static hosting must serve `release/pages/`, not the maintained `dist/` source.
 
 | File | Responsibility |
 | --- | --- |
@@ -27,10 +27,11 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 | `scripts/browser-qa.mjs` | Optional Playwright Core flow using an existing Chromium installation. |
 | `scripts/audit-simulation.mjs`, `reports/` | Read-only seeded simulation experiments, counterfactual substitution probes and dated findings; use an in-memory catalogue and keep measured results tied to their audited rules and release. |
 | `.openai/hosting.json`, `scripts/build-hosted.mjs` | Existing Site identity, D1 binding `DB`, and non-destructive hosted build. |
+| `scripts/build-pages.mjs`, `release/pages/` | Dependency-free static release with canonical SQL catalogue JSON; allowlisted browser assets and font licenses, no Worker or hosting metadata. Generated output is ignored by Git. |
 
 ### State and data flow
 
-- The page loads `app.js`, fetches `/api/catalog`, configures engine indexes, then creates `initialState()`. Catalogue failures show a retry view rather than stale placeholder players.
+- The page loads `app.js`, fetches the `catalogue-url` meta value (`/api/catalog` by default; `./catalog.json` in Pages releases), configures engine indexes, then creates `initialState()`. Catalogue failures show a retry view rather than stale placeholder players. Keep API and static exports identical, including source citations, canonical identities and the catalogue release.
 - The UI attempts to restore JSON from local storage under `11-0-0:save:v4`, accepting it only when `validSave` passes.
 - Game state progresses through `draft`, `tournament` and `results`. UI event handlers apply engine functions, then render and save the state.
 - Quick Sim completes the draft and all eleven rounds through the existing engine rules and reserve planner. Preserve existing picks, outstanding offer assignments and starting profiles; do not mutate the input draft or overwrite it before success. Quick Draft shares `completeDraft`; seeded `quickSim` reproduces the same squad and tournament for identical inputs. Its UI busy state is transient and its results use the normal save shape.
@@ -73,6 +74,7 @@ npm start       # Same server as npm run dev; http://localhost:4173
 npm run check  # Syntax checks for app.js and engine.js
 npm test       # SQL catalogue, rules and simulation tests
 npm run build  # Hosted Worker/assets; requires npm --prefix backend ci
+npm run build:pages # Static release/pages/; no backend dependencies or remote database
 ```
 
 For catalogue changes, test SQLite persistence, foreign keys, complete source-ranked top fives, known modern rosters, unchanged ratings, the inclusive 2600 cutoff, all-time A/B selection, cross-era identity links and atomic release replacement. For engine changes, run the syntax checks and engine suite; add or adjust tests for changed behavior. The suite covers 1,000 drafts, 100 complete tournaments, deterministic results, scoring, pairings, fatigue, invalid actions and saved-game validation.

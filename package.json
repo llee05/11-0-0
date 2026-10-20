@@ -10,6 +10,7 @@
     "test": "node --test tests/*.test.mjs",
     "check": "node --check dist/app.js && node --check dist/engine.js && node --check dist/traits.js && node --check dist/player-profile.js && node --check server/catalog.mjs && node --check server/sqlite.mjs && node --check server/all-time.mjs",
     "build": "node scripts/build-hosted.mjs",
+    "build:pages": "node scripts/build-pages.mjs",
     "db:generate": "node backend/node_modules/drizzle-kit/bin.cjs generate --config drizzle.config.ts",
     "db:seed": "node scripts/seed-database.mjs",
     "data:import": "node scripts/import-ratings.mjs",

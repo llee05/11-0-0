@@ -8,7 +8,7 @@ const icons={arrow:'↗',spin:'⟳',chevron:'→',check:'✓',close:'×',king:'�
 const pieces=['king','queen','rook','knight','pawn'];
 $('#main').innerHTML='<div class="content-wrap catalogue-loading" role="status">Opening the chess archive…</div>';
 try{
-  const response=await fetch('/api/catalog');
+  const response=await fetch(document.querySelector('meta[name="catalogue-url"]')?.content||'/api/catalog');
   if(!response.ok)throw new Error('Catalogue unavailable');
   configureCatalogue(await response.json());
 }catch(error){

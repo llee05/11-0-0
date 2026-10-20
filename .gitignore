@@ -18,5 +18,6 @@ backend/next-env.d.ts
 dist/server/
 dist/client/
 dist/.openai/
+release/
 *.tsbuildinfo
 .env*

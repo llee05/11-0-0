@@ -12,7 +12,7 @@ npm start
 
 Open http://localhost:4173. `npm run dev` starts the same server; set `PORT` for another port. The server creates `.data/catalogue.sqlite`, applies pending schema migrations and imports the checked-in rating catalogue. Override `DATABASE_PATH` to choose another database file. Game progress still saves in the browser; SQLite stores the shared historical player catalogue.
 
-Edit the maintained HTML, CSS and ES modules in `dist/` directly. The app now needs its `/api/catalog` endpoint, so a static-only web server is insufficient. Hosted builds add generated `dist/server/`, `dist/client/` and `dist/.openai/` directories without replacing the maintained source files.
+Edit the maintained HTML, CSS and ES modules in `dist/` directly. Local development and Sites load `/api/catalog`. For static hosting, `npm run build:pages` exports the same SQL catalogue to `release/pages/catalog.json` and builds a separate browser release in `release/pages/`. Serve that output over HTTP; serving `dist/` alone still requires the API. Sites builds add generated `dist/server/`, `dist/client/` and `dist/.openai/` directories without replacing the maintained source files.
 
 ## Play
 
@@ -100,7 +100,7 @@ These are **best observed editions**, not complete career peaks: four-year sampl
 | Path | Responsibility |
 | --- | --- |
 | `dist/index.html`, `dist/styles.css`, SVGs, `dist/fonts/` | Maintained browser shell, responsive presentation and local assets; retain font licenses. |
-| `dist/app.js` | Loads `/api/catalog`; renders the draft, archive, dialogs and tournament; handles browser saves. |
+| `dist/app.js` | Loads the catalogue URL declared in the page; renders the draft, archive, dialogs and tournament; handles browser saves. |
 | `dist/engine.js` | Configurable catalogue indexes, unique-player rules, full-five offers, seeded simulation, pairings, scoring, fatigue and save validation; independent of DOM and database APIs. |
 | `dist/traits.js`, `data/traits.md` | Career-inspired career profiles, source citations, random trait assignment and pure matchup effects; numerical effects are fictional game rules. |
 | `dist/player-profile.js` | Style presets, stamina, form and consistency rules; pure game mechanics shared by user and opponent teams. |
@@ -110,6 +110,7 @@ These are **best observed editions**, not complete career peaks: four-year sampl
 | `backend/` | Isolated Sites Vinext/D1 adapter using the supplied Sites build integration. Existing browser modules stay framework independent. |
 | `backend/db/schema.ts`, `drizzle/` | Drizzle schema and generated schema-only SQL migrations, snapshots and journal. |
 | `scripts/build-hosted.mjs`, `.openai/hosting.json` | Hosted build and D1 binding; preserves the existing Site identity and browser source. |
+| `scripts/build-pages.mjs`, `release/pages/` | Separate static build, exporting the canonical SQL catalogue as JSON with relative browser asset URLs; generated output is ignored by Git. |
 
 The game moves through `draft` → `tournament` → `results`. UI actions update state through the engine and re-render. Quick Sim automates that same sequence through pure `completeDraft` and `quickSim` engine functions, committing the completed result to browser state only after success. Existing offer assignments and picked traits/profiles are retained. Saves use `11-0-0:save:v4` and carry catalogue, trait and profile rules versions; selected dialogs and views are transient. Teams retain their starting profiles, current form, consecutive-game streaks and persistent fatigue loads. Validation reconstructs form, load and rest history from recorded boards. There are no application accounts or remote game saves.
 
