@@ -76,7 +76,7 @@ function matchOdds(match){
 
 const grid={cases:0,maxProbabilitySumError:0,maxExpectedScoreError:0,invalid:0};
 for(let difference=-1200;difference<=1200;difference+=5)for(let shift=-0.24;shift<=0.24001;shift+=0.02)for(const white of [false,true]){
-  const p=game.boardProbabilities(2650+difference,2650,white,shift),expected=1/(1+10**(-(difference+(white?28:-28))/400));
+  const p=game.boardProbabilities(2650+difference,2650,white,shift),expected=1/(1+10**(-(difference+(white?28:-28))/game.ELO_SCALE));
   grid.cases++;grid.maxProbabilitySumError=Math.max(grid.maxProbabilitySumError,Math.abs(p.win+p.draw+p.loss-1));grid.maxExpectedScoreError=Math.max(grid.maxExpectedScoreError,Math.abs(p.win+p.draw/2-expected));
   if(Object.values(p).some(value=>!Number.isFinite(value)||value<0||value>1))grid.invalid++;
 }

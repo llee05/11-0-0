@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,RULES_VERSION,planLineup,previewTeams,applyRecommendedLineup,completeDraft,quickSim,roundFixtures,sortBoards,lineupExpectation,expectedMatchPoints,recommendedLineup,offerWeight,rankedCandidates,draftValue} from '../dist/engine.js';
+import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,RULES_VERSION,ELO_SCALE,planLineup,previewTeams,applyRecommendedLineup,completeDraft,quickSim,roundFixtures,sortBoards,lineupExpectation,expectedMatchPoints,recommendedLineup,offerWeight,rankedCandidates,draftValue} from '../dist/engine.js';
 
 import {rollTraits,careerProfile} from '../dist/traits.js';
 import {fixedProfile,rollProfiles,profileFatigue,nextFatigue,performanceSeed,performanceSwing,restedForm} from '../dist/player-profile.js';
@@ -185,14 +185,20 @@ test('the field contains 31 all-time opponents, separate Russia and USSR, mixed 
 });
 
 test('board probabilities are normalized, unbiased in expectation and reward strength',()=>{
-  for(let diff=-900;diff<=900;diff+=25)for(const shift of [-0.16,0,0.16]){
-    const p=boardProbabilities(2700+diff,2700,true,shift);
+  assert.equal(ELO_SCALE,320);
+  for(let diff=-1200;diff<=1200;diff+=25)for(const shift of [-0.24,-0.16,0,0.16,0.24])for(const white of [true,false]){
+    const p=boardProbabilities(2700+diff,2700,white,shift);
     assert.ok([p.win,p.draw,p.loss].every(v=>v>=0&&v<=1));
     assert.ok(Math.abs(p.win+p.draw+p.loss-1)<1e-10);
-    assert.ok(Math.abs(p.win+p.draw/2-1/(1+10**(-(diff+28)/400)))<1e-10);
+    assert.ok(Math.abs(p.win+p.draw/2-1/(1+10**(-(diff+(white?28:-28))/ELO_SCALE)))<1e-10);
+    const opposite=boardProbabilities(2700,2700+diff,!white,shift);
+    assert.ok(Math.abs(p.win-opposite.loss)<1e-10&&Math.abs(p.draw-opposite.draw)<1e-10);
   }
   assert.ok(boardProbabilities(2850,2550).win>boardProbabilities(2550,2850).win);
   assert.ok(boardProbabilities(2700,2700,true).win>boardProbabilities(2700,2700,false).win);
+  const advantage=[true,false,true,false].map(white=>boardProbabilities(2800,2720,white));
+  assert.ok(expectedMatchPoints(advantage)>1.55&&expectedMatchPoints(advantage)<1.56);
+  assert.ok(advantage.every(p=>p.win>p.loss&&p.loss>0));
 });
 
 test('100 full Olympiads preserve scoring and pair every team once per round without rematches',()=>{
@@ -285,6 +291,7 @@ test('save validation rejects corrupt and incompatible browser data',()=>{
   assert.notEqual(previousRules.rulesVersion,RULES_VERSION);
   assert.equal(validSave(previousRules),false);
   assert.equal(validSave({...initialState(),rulesVersion:RULES_VERSION.replace(/squad-profiles-\d+/,'squad-profiles-3')}),false);
+  assert.equal(validSave({...initialState(),rulesVersion:RULES_VERSION.replace(/olympiad-\d+/,'olympiad-4')}),false);
   for(const broken of [null,{},[],{...initialState(),version:9},{...initialState(),squad:['invalid',null,null,null,null]},{...initialState(),rerolls:-1},{...initialState(),phase:'results'},{...initialState(),offer:{nation:'IND',players:['fake']}}]) assert.equal(validSave(broken),false);
 });
 

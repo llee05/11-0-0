@@ -22,7 +22,8 @@ export function configureCatalogue(catalogue){
 }
 export const ROUND_COUNT = 11;
 export const SAVE_VERSION = 4;
-export const SIMULATION_RULESET = 'olympiad-4';
+export const SIMULATION_RULESET = 'olympiad-5';
+export const ELO_SCALE = 320;
 export const DRAFT_RULESET = 'competitive-draft-1';
 export const RULES_VERSION = `${TRAIT_RULESET}/${PROFILE_RULESET}/${SIMULATION_RULESET}/${DRAFT_RULESET}`;
 export const nationById = id => nationIndex.get(id);
@@ -146,7 +147,7 @@ export function pairTeams(t) {
 }
 export function boardProbabilities(a,b,white=true,drawShift=0) {
   const difference=a-b+(white?28:-28);
-  const expected=1/(1+10**(-difference/400));
+  const expected=1/(1+10**(-difference/ELO_SCALE));
   const draw=Math.max(0,Math.min(0.5*Math.exp(-Math.abs(difference)/600)+drawShift,2*Math.min(expected,1-expected)));
   return {win:expected-draw/2,draw,loss:1-expected-draw/2};
 }
