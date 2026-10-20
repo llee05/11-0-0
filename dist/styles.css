@@ -64,3 +64,12 @@ h1 em{margin-left:10px}.candidate:disabled{opacity:.5}
 @media(max-width:480px){.preview-reserves{grid-template-columns:1fr}.fatigue-status{font-size:9px}}
 
 .team-profiles>article>small{display:block;margin:6px 0;font-size:10px;color:#6c7d5b}
+
+/* Quick Sim keeps the manual draft within reach at every viewport size. */
+.game-toolbar>.draft-shortcuts{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.draft-shortcut-buttons{display:flex;align-items:center;gap:15px}
+.draft-shortcuts>small{font-size:9px;line-height:1.5;color:#7a8770;text-align:right}
+.quick-sim-button{display:flex;align-items:center;gap:12px;padding:9px 13px;border:1px solid #bdcdaa;border-radius:4px;background:#e4edcf;color:var(--forest);font-size:11px;font-weight:600;white-space:nowrap}
+.quick-sim-button:hover{background:#d6e5b8;border-color:#a7bc8d}
+.quick-sim-button:disabled{opacity:.5;cursor:wait}
+@media(max-width:720px){.game-toolbar{flex-wrap:wrap}.game-toolbar>.draft-shortcuts{margin-left:auto}.draft-shortcut-buttons{gap:13px}.quick-sim-button{font-size:11px}.draft-shortcuts>small{font-size:9px}}

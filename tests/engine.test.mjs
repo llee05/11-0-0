@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,RULES_VERSION,planLineup,previewTeams,applyRecommendedLineup} from '../dist/engine.js';
+import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,RULES_VERSION,planLineup,previewTeams,applyRecommendedLineup,completeDraft,quickSim} from '../dist/engine.js';
 
 import {rollTraits,careerProfile} from '../dist/traits.js';
 import {fixedProfile,rollProfiles,profileFatigue,nextFatigue,performanceSeed,performanceSwing,restedForm} from '../dist/player-profile.js';
@@ -35,6 +35,44 @@ test('1,000 random drafts can finish with no duplicates or dead ends',()=>{
     assert.equal(new Set(s.squad).size,5);
     assert.equal(createOffer(s.squad),null);
     assert.ok(validSave(s));
+  }
+});
+
+test('automatic drafting keeps existing picks and the current offer assignments without mutating the draft',()=>{
+  let s=initialState();
+  s.offer=createOffer(s.squad,random(4));
+  const reserve=s.offer.players[0];s=selectPlayer(s,reserve,4);
+  s.offer=createOffer(s.squad,random(7));
+  const offered=s.offer.players.find(id=>canDraft(playerById(id),s.squad)),before=structuredClone(s);
+  const completed=completeDraft(s,()=>0);
+  assert.deepEqual(s,before);
+  assert.ok(validSave(completed));
+  assert.equal(completed.squad[4],reserve);
+  for(const id of [reserve,offered]){
+    assert.ok(completed.squad.includes(id));
+    assert.equal(completed.traits[id],id===reserve?s.traits[id]:s.offer.traits[id]);
+    assert.deepEqual(completed.profiles[id],id===reserve?s.profiles[id]:s.offer.profiles[id]);
+  }
+});
+
+test('Quick Sim completes a reproducible full Olympiad from an empty or completed draft',()=>{
+  for(const state of [initialState(),draft(61)]){
+    const before=structuredClone(state),result=quickSim(state,831);
+    assert.deepEqual(state,before);
+    assert.deepEqual(quickSim(state,831),result);
+    assert.equal(result.phase,'results');
+    assert.equal(result.tournament.round,11);
+    assert.equal(result.tournament.teams.length,32);
+    assert.equal(result.tournament.teams.reduce((sum,team)=>sum+team.mp,0),352);
+    assert.equal(result.tournament.teams.reduce((sum,team)=>sum+team.bp,0),704);
+    assert.ok(validSave(JSON.parse(JSON.stringify(result))));
+    for(const id of state.squad.filter(Boolean)){
+      assert.ok(result.squad.includes(id));
+      assert.equal(result.traits[id],state.traits[id]);
+      assert.deepEqual(result.profiles[id],state.profiles[id]);
+    }
+    assert.strictEqual(quickSim(result,12),result);
+    assert.strictEqual(completeDraft(result),result);
   }
 });
 

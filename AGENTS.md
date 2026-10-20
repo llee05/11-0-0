@@ -32,6 +32,7 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 - The page loads `app.js`, fetches `/api/catalog`, configures engine indexes, then creates `initialState()`. Catalogue failures show a retry view rather than stale placeholder players.
 - The UI attempts to restore JSON from local storage under `11-0-0:save:v4`, accepting it only when `validSave` passes.
 - Game state progresses through `draft`, `tournament` and `results`. UI event handlers apply engine functions, then render and save the state.
+- Quick Sim completes the draft and all eleven rounds through the existing engine rules and reserve planner. Preserve existing picks, outstanding offer assignments and starting profiles; do not mutate the input draft or overwrite it before success. Quick Draft shares `completeDraft`; seeded `quickSim` reproduces the same squad and tournament for identical inputs. Its UI busy state is transient and its results use the normal save shape.
 - Selection, busy flags, the viewed round and the chosen results view are transient UI state, separate from the saved game.
 - Draft offers use `Math.random` by default. Tournament simulation uses a stored seed and round number; preserve reproducibility for identical inputs and rotation decisions.
 - Game saves carry catalogue, trait and profile rules versions. Preserve version-1 through version-3 saves under their original keys; back up incompatible or malformed version-4 saves before replacing them.

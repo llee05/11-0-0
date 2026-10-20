@@ -47,6 +47,32 @@ export function selectPlayer(state,id,slot) {
 }
 export function sortBoards(squad) { return [...squad.slice(0,4).filter(Boolean).sort((a,b)=>playerById(b).rating-playerById(a).rating),...Array(4-squad.slice(0,4).filter(Boolean).length).fill(null),squad[4]]; }
 
+export function completeDraft(state,rng=Math.random) {
+  if(state.phase!=='draft')return state;
+  let s=state;
+  for(let slot=0;slot<5;slot++){
+    if(s.squad[slot])continue;
+    const offer=s.offer||createOffer(s.squad,rng);
+    if(!offer)throw new Error('No eligible country-year offer.');
+    const candidates=offer.players.filter(id=>canDraft(playerById(id),s.squad));
+    if(!candidates.length)throw new Error('No eligible player in this offer.');
+    const current={...s,offer},id=candidates[Math.floor(rng()*candidates.length)];
+    s=selectPlayer(current,id,slot);
+    if(s===current)throw new Error('Invalid draft offer.');
+  }
+  return {...s,squad:sortBoards(s.squad)};
+}
+
+// Quick Sim is the same full Olympiad, with drafting and rotations automated.
+// Keep the caller's draft untouched until every round has completed.
+export function quickSim(state,seed=Date.now()>>>0) {
+  if(state.phase!=='draft')return state;
+  const s=completeDraft(state,random(seed^0x5153494D));
+  let tournament=startTournament(s.squad,s.teamName,seed,s.traits,s.profiles);
+  while(tournament.round<ROUND_COUNT)tournament=simulateRound(applyRecommendedLineup(tournament));
+  return {...s,phase:'results',tournament};
+}
+
 export function startTournament(squad,teamName,seed=Date.now()>>>0,traits=null,profiles=null) {
   if(squad.length!==5||squad.some(id=>!playerById(id))||new Set(squad.map(id=>playerById(id).personId)).size!==5) throw new Error('Complete a valid five-player squad first.');
   const rng=random(seed^0x54524149),lineup=sortBoards(squad);
