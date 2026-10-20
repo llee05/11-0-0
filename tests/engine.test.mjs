@@ -24,7 +24,7 @@ function draft(seed=1) {
 }
 
 test('the entire player pool has unique identities and valid nations',()=>{
-  assert.equal(PLAYERS.length,3910);
+  assert.equal(PLAYERS.length,2210);
   assert.equal(new Set(PLAYERS.map(p=>p.id)).size,PLAYERS.length);
   assert.ok(PLAYERS.every(p=>NATIONS.some(n=>n.id===p.nation)&&!Object.hasOwn(p,'cost')));
 });
@@ -101,7 +101,7 @@ test('country-year rolls always reveal the complete top five in source order',()
 });
 
 test('early estimates and modern country-year versions are independently rollable',()=>{
-  for(const id of ['URS-1927','USA-1930','HUN-1938','USA-2022','USA-2026']){
+  for(const id of ['USA-1932','USA-1934','HUN-1938','USA-2022','USA-2026']){
     const index=NATIONS.findIndex(n=>n.id===id);
     assert.ok(index>=0);
     const squad=Array(5).fill(null),weights=NATIONS.map(n=>offerWeight(n,squad));
@@ -124,7 +124,7 @@ test('the same person cannot be drafted from two different years',()=>{
 
 test('historical identity links prevent duplicate former champions without merging later namesakes',()=>{
   const early=PLAYERS.find(p=>p.nation==='URS-1970'&&p.name.includes('Korchnoi'));
-  const later=PLAYERS.find(p=>p.year===2002&&p.name.includes('Korchnoi'));
+  const later=PLAYERS.find(p=>p.nation==='SUI-2000'&&p.name.includes('Korchnoi'));
   assert.ok(early&&later);
   assert.equal(early.personId,later.personId);
   assert.equal(canDraft(later,[early.id,null,null,null,null]),false);
@@ -403,7 +403,7 @@ test('every team updates active and reserve fatigue and retains partial recovery
 
 test('reserve planning can rest a strong tired player before the reserve overtakes them',()=>{
   // Fixed game ratings and neutral profiles isolate the planning horizon.
-  const ids=['LEGENDS-1:chessmetrics:19593','ARM-2012:fide:13300474','AZE-2018:fide:13401319','URS-1948:chessmetrics:63804','BRA-1978:fide:2100010'];
+  const ids=['LEGENDS-1:chessmetrics:19593','ARM-2012:fide:13300474','AZE-2018:fide:13401319','URS-1948:chessmetrics:63804','URS-1978:fide:600024'];
   const team={players:ids,lineup:sortBoards(ids),traits:Object.fromEntries(ids.map(id=>[id,null])),
     profiles:Object.fromEntries(ids.map(id=>[id,{style:'universal',stamina:3,consistency:3,form:0}])),
     forms:Object.fromEntries(ids.map(id=>[id,0])),loads:Object.fromEntries(ids.map((id,i)=>[id,[18,58,39,5,4][i]]))};

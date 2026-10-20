@@ -74,11 +74,11 @@ try {
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'COUNTRIES & YEARS'}).click();
   assert.equal(await page.locator('#archive-year option').count(),51);
-  assert.ok((await page.getByRole('dialog').textContent()).includes('rated at least 2600'));
+  assert.ok((await page.getByRole('dialog').textContent()).includes('source rating above 2650'));
   const catalogue=await page.evaluate(async()=>await (await fetch(document.querySelector('meta[name="catalogue-url"]')?.content||'/api/catalog')).json());
   assert.ok(catalogue.players.every(p=>!Object.hasOwn(p,'cost')));
-  assert.equal(catalogue.metadata.snapshotCount,782);
-  assert.equal(catalogue.metadata.countryCount,71);
+  assert.equal(catalogue.metadata.snapshotCount,442);
+  assert.equal(catalogue.metadata.countryCount,49);
   assert.equal(catalogue.metadata.legendCount,8);
   assert.equal(catalogue.metadata.normalization,'era-balanced-1');
   assert.equal(await page.locator('.legends-grid button').count(),8);
@@ -95,7 +95,7 @@ try {
   await page.locator('[data-id="USA-2024"][data-action="archive-country"]').click();
   assert.ok((await page.locator('.source-roster').textContent()).includes('2804'));
   await page.getByRole('button',{name:'Explore other years'}).click();
-  assert.ok(catalogue.nations.every(n=>n.players.some(id=>catalogue.players.find(p=>p.id===id).rawRating>=2600)));
+  assert.ok(catalogue.nations.every(n=>n.players.some(id=>catalogue.players.find(p=>p.id===id).rawRating>2650)));
   assert.equal(await page.locator('[data-id="AUS-2026"][data-action="archive-country"]').count(),0);
   assert.equal(await page.locator('[data-id="MGL-2026"][data-action="archive-country"]').count(),0);
   await page.locator('[data-id="USA-2026"][data-action="archive-country"]').click();
@@ -117,11 +117,14 @@ try {
   assert.ok((await page.locator('.source-roster').textContent()).includes('Fabiano Caruana'));
   await page.getByRole('button',{name:'Explore other years'}).click();
   await page.getByLabel('EXPLORE A SNAPSHOT YEAR').selectOption('1927');
-  await page.locator('[data-id="URS-1927"][data-action="archive-country"]').click();
+  assert.ok((await page.locator('.archive-summary').textContent()).includes('No country snapshot has a source rating above 2650'));
+  assert.equal(await page.locator('#archive-countries [data-action="archive-country"]').count(),0);
+  await page.getByLabel('EXPLORE A SNAPSHOT YEAR').selectOption('1932');
+  await page.locator('[data-id="USA-1932"][data-action="archive-country"]').click();
   assert.equal(await page.locator('.source-roster>div').count(),5);
-  assert.ok((await page.locator('.source-roster').textContent()).includes('Peter Romanovsky'));
+  assert.ok((await page.locator('.source-roster').textContent()).includes('Isaac Kashdan'));
   assert.equal(await page.locator('.source-roster small').first().textContent(),'SOURCE ESTIMATE');
-  for(const [year,country,name] of [['1930','USA','Frank Marshall'],['1938','HUN','Lajos Steiner'],['1942','USA','Reuben Fine']]){
+  for(const [year,country,name] of [['1934','USA','Frank Marshall'],['1938','HUN','Lajos Steiner'],['1942','USA','Reuben Fine']]){
     await page.getByRole('button',{name:'Explore other years'}).click();
     await page.getByLabel('EXPLORE A SNAPSHOT YEAR').selectOption(year);
     await page.locator(`[data-id="${country}-${year}"][data-action="archive-country"]`).click();

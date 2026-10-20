@@ -5,16 +5,22 @@ import {fixedProfile, rollProfile, validProfile} from '../dist/player-profile.js
 import {random} from '../dist/engine.js';
 import {openDatabase} from '../server/sqlite.mjs';
 import {readCatalogue} from '../server/catalog.mjs';
+import sourceRatings from '../data/fide-snapshots.json' with {type:'json'};
 const db = openDatabase(':memory:');
 const {players} = await readCatalogue(db);
 db.close();
 
-test('curated profiles identify real catalogue people, across editions and without namesake leakage', () => {
+test('curated profiles identify sourced people, across editions and without namesake leakage', () => {
   assert.equal(CAREER_PROFILES.length, 115);
   assert.equal(new Set(CAREER_PROFILES.map(p => p.personId)).size, CAREER_PROFILES.length);
   for (const profile of CAREER_PROFILES) {
     const editions = players.filter(p => p.personId === profile.personId);
-    assert.ok(editions.length, profile.name);
+    if(!editions.length){
+      // Raising the country cutoff can remove every playable edition of a
+      // sourced player; their curated trait and preset still remain valid.
+      assert.ok(sourceRatings.snapshots.some(s=>s.countries.some(c=>c.players.some(p=>`fide:${p.fideId}`===profile.personId))),profile.name);
+      editions.push({personId:profile.personId});
+    }
     assert.ok(traitById(profile.trait), profile.name);
     const preset = fixedProfile(editions[0]);
     for (const p of editions) {

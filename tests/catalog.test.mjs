@@ -13,8 +13,8 @@ test('SQLite persists sourced top-five country snapshots and reopens without dup
   try{
     const filename=join(directory,'catalogue.sqlite');db=openDatabase(filename);
     const catalogue=await readCatalogue(db);
-    assert.equal(catalogue.nations.length,782);
-    assert.equal(catalogue.players.length,3910);
+    assert.equal(catalogue.nations.length,442);
+    assert.equal(catalogue.players.length,2210);
     assert.ok(catalogue.nations.every(n=>n.players.length===5&&n.source.sha256.length===64));
     assert.ok(catalogue.nations.every(n=>n.code!=='FID'));
     const usa=year=>catalogue.players.filter(p=>p.nation===`USA-${year}`);
@@ -22,7 +22,6 @@ test('SQLite persists sourced top-five country snapshots and reopens without dup
     assert.deepEqual(usa(2022).map(p=>p.rawRating),[2792,2772,2772,2752,2708]);
     for(const [year,ratings,date] of [
       [1972,[2785,2565,2560,2555,2545],'1972-07-01'],
-      [2000,[2647,2644,2601,2599,2596],'2000-01-01'],
       [2004,[2652,2623,2623,2621,2616],'2004-01-01'],
       [2024,[2804,2788,2757,2752,2725],'2024-01-01'],
     ]){
@@ -37,14 +36,17 @@ test('SQLite persists sourced top-five country snapshots and reopens without dup
       assert.ok(players.every((p,i)=>!i||players[i-1].rawRating>=p.rawRating));
       assert.equal(nation.adjustment,0);
       assert.ok(players.every(p=>p.rating===p.rawRating+p.eraAdjustment));
-      assert.ok(players.some(p=>p.rawRating>=2600));
+      assert.ok(players.some(p=>p.rawRating>2650));
     }
-    assert.ok(!catalogue.metadata.missingYears.includes(1927));
-    assert.deepEqual(catalogue.metadata.missingYears,[1944]);
+    assert.deepEqual(catalogue.metadata.belowCutoffYears,[1930,1928,1927]);
+    assert.equal(usa(2000).length,0);
+    assert.deepEqual(JSON.parse(readFileSync(new URL('../data/fide-snapshots.json',import.meta.url))).snapshots.find(s=>s.year===2000).countries.find(c=>c.federation==='USA').players.map(p=>p.rawRating),[2647,2644,2601,2599,2596]);
+    assert.deepEqual(catalogue.metadata.missingYears,[1944,1930,1928,1927]);
     assert.equal(catalogue.metadata.requestedYears.length,51);
-    assert.deepEqual(catalogue.metadata.years,catalogue.metadata.requestedYears.filter(y=>y!==1944));
+    assert.deepEqual(catalogue.metadata.years,catalogue.metadata.requestedYears.filter(y=>![1944,1930,1928,1927].includes(y)));
     assert.deepEqual(catalogue.metadata.years.filter(y=>y>=1972),Array.from({length:28},(_,i)=>2026-i*2));
-    const early=catalogue.players.filter(p=>p.nation==='URS-1927');
+    const early=catalogue.players.filter(p=>p.nation==='USA-1932');
+    assert.equal(early.length,5);
     assert.ok(early.every(p=>p.estimated&&p.rating===p.rawRating+p.eraAdjustment));
     assert.deepEqual(catalogue.opponents,buildAllTimeTeams(catalogue.nations,catalogue.players).slice(0,31));
     db.close();db=openDatabase(filename);
@@ -63,9 +65,9 @@ test('sourced identity links handle transfers while preserving namesakes and reu
     assert.equal(new Set(editions('Zurab Azmaiparashvili').map(p=>p.personId)).size,1);
     assert.ok(editions('Lembit Oll').every(p=>p.personId==='historical:oll lembit'));
     assert.ok(editions('Gyula Sax').every(p=>p.personId==='fide:700029'));
-    const sokolovs=editions('Andrei Sokolov');
+    const sokolovs=players.filter(p=>p.name.includes('Andrei')&&p.name.includes('Sokolov'));
     assert.ok(sokolovs.some(p=>p.personId==='fide:627089'));
-    assert.ok(sokolovs.some(p=>p.personId==='fide:11600306'));
+    assert.ok(sokolovs.some(p=>p.personId==='fide:11600306')); // The surviving 1994 source names him Andrei (2) Sokolov.
     const fieldPeople=opponents.flatMap(t=>t.players.map(id=>players.find(p=>p.id===id).personId));
     assert.equal(new Set(fieldPeople).size,155);
   }finally{db.close();}
@@ -88,6 +90,7 @@ test('a name-qualified historic ID link never captures an unrelated modern playe
   estonia.countries[0].players[0].rawRating=2700;
   const earlier=structuredClone(dataset.snapshots.find(s=>s.year===1994));
   earlier.countries=earlier.countries.filter(c=>c.federation==='EST');
+  earlier.countries[0].players[0].rawRating=2700;
   const seed=buildSeed({...dataset,snapshots:[reference,estonia,earlier]},federations);
   assert.equal(seed.people.find(p=>p.name==='Marco Codenotti').id,'fide:800015');
   assert.equal(seed.people.find(p=>p.name==='Fernando Braga').id,'fide:811408');
@@ -111,21 +114,40 @@ test('a new catalogue release replaces stale database rows atomically',async()=>
   }finally{db.close();}
 });
 
-test('the cutoff includes 2600 and excludes 2599 and retains all five unadjusted source ratings',()=>{
+test('the source cutoff excludes 2650, includes 2651 and retains all five source ratings',()=>{
   const dataset=JSON.parse(readFileSync(new URL('../data/fide-snapshots.json',import.meta.url)));
   const federations=JSON.parse(readFileSync(new URL('../data/federations.json',import.meta.url)));
   const reference=structuredClone(dataset.snapshots.find(s=>s.year===2026));
   const usa=reference.countries.find(c=>c.federation==='USA');
-  const ratings=[2599,2400,2300,2200,2100];
+  const ratings=[2650,2400,2300,2200,2100];
   usa.players.forEach((p,i)=>p.rawRating=ratings[i]);
   reference.countries=[usa];
   assert.equal(buildSeed({...dataset,snapshots:[reference]},federations).snapshots.length,0);
-  usa.players[0].rawRating=2600;
+  usa.players[0].rawRating=2651;
   const seed=buildSeed({...dataset,snapshots:[reference]},federations);
   assert.equal(seed.snapshots.length,1);
-  assert.equal(seed.metadata.minimumTopRating,2600);
-  assert.equal(seed.metadata.minimumTopRatingInclusive,true);
-  assert.deepEqual(seed.editions.map(p=>p.rating),[2600,2400,2300,2200,2100]);
+  assert.equal(seed.metadata.minimumTopRating,2650);
+  assert.equal(seed.metadata.minimumTopRatingInclusive,false);
+  assert.deepEqual(seed.editions.map(p=>p.rating),[2651,2400,2300,2200,2100]);
   assert.ok(seed.editions.every(p=>p.rating===p.raw_rating));
   assert.equal(seed.periods[0].adjustment,0);
+});
+
+test('era adjustments cannot admit a country below the source cutoff or exclude one above it',()=>{
+  const dataset=JSON.parse(readFileSync(new URL('../data/fide-snapshots.json',import.meta.url)));
+  const federations=JSON.parse(readFileSync(new URL('../data/federations.json',import.meta.url)));
+  const reference=structuredClone(dataset.snapshots.find(s=>s.year===2026));reference.countries=[];
+  const period=structuredClone(dataset.snapshots.find(s=>s.year===2000));
+  const country=period.countries.find(c=>c.federation==='USA');period.countries=[country];
+  country.players.forEach((p,i)=>p.rawRating=[2650,2400,2300,2200,2100][i]);
+  period.reference.top100Ratings=reference.reference.top100Ratings.map(r=>r-100);
+  const observations={...dataset,snapshots:[reference,period]};
+  assert.equal(buildSeed(observations,federations).snapshots.length,0);
+  country.players[0].rawRating=2651;
+  const boosted=buildSeed(observations,federations);
+  assert.equal(boosted.snapshots.length,1);assert.ok(boosted.editions[0].rating>2651);
+  period.reference.top100Ratings=reference.reference.top100Ratings.map(r=>r+100);
+  const reduced=buildSeed(observations,federations);
+  assert.equal(reduced.snapshots.length,1);assert.ok(reduced.editions[0].rating<2650);
+  assert.deepEqual(reduced.editions.map(p=>p.raw_rating),[2651,2400,2300,2200,2100]);
 });
