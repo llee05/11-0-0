@@ -129,11 +129,13 @@ try {
     await page.locator('.candidate:not([disabled])').first().click();
   }
   assert.equal(await page.locator('.squad-slot.filled').count(),5);
-  await page.getByRole('button',{name:'Team profiles & captain'}).click();
-  assert.equal(await page.locator('.captain-options>button').count(),5);
-  const captainId=await page.locator('.captain-options>button').last().getAttribute('data-id');
-  await page.locator('.captain-options>button').last().click();
-  assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).captain),captainId);
+  await page.getByRole('button',{name:'Team profiles'}).click();
+  assert.equal(await page.locator('.team-profiles>article').count(),5);
+  assert.equal(await page.locator('.team-profiles .profile-levels').count(),5);
+  assert.ok(!(await page.getByRole('dialog').textContent()).includes('Captaincy'));
+  await page.keyboard.press('Escape');
+  assert.equal(await page.locator('[data-action="captain"],[data-action="captain-pick"],.captain-marker').count(),0);
+  assert.equal(await page.evaluate(()=>Object.hasOwn(JSON.parse(localStorage.getItem('11-0-0:save:v4')),'captain')),false);
   await page.getByRole('button',{name:'Enter the Olympiad'}).click();
   await page.getByRole('button',{name:'All-time field'}).click();
   assert.equal(await page.locator('[data-action="field-team"]').count(),31);
@@ -142,7 +144,7 @@ try {
   assert.equal(await page.locator('.field-roster .form-chip').count(),5);
   assert.equal(await page.locator('.field-roster .fatigue-status').count(),5);
   assert.ok((await page.locator('.field-roster').textContent()).includes('Resting next round'));
-  assert.equal(await page.locator('.field-roster .captain-marker').count(),1);
+  assert.equal(await page.locator('.field-roster .captain-marker').count(),0);
   await page.keyboard.press('Escape');
   const aiProfiles=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.teams.slice(1).map(t=>t.profiles));
   const aiTraits=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.teams.slice(1).map(t=>t.traits));
@@ -150,9 +152,13 @@ try {
   assert.equal(await page.locator('.match-forecast article').count(),4);
   assert.equal(await page.locator('.match-forecast .trait-badge').count(),8);
   assert.equal(await page.locator('.match-forecast .profile-levels').count(),8);
-  assert.ok((await page.locator('.preview-captains').textContent()).includes('Opponent captain:'));
-  await page.getByRole('button',{name:'Choose a captain'}).click();
-  await page.locator('.captain-options>button').first().click();
+  assert.equal(await page.locator('.preview-captains,[data-action="captain"]').count(),0);
+  assert.ok(!(await page.getByRole('dialog').textContent()).includes('CAPTAIN'));
+  await page.getByRole('button',{name:'Review team profiles'}).click();
+  assert.equal(await page.locator('.team-profiles>article').count(),5);
+  assert.equal(await page.locator('#dialog').evaluate(el=>el.scrollTop),0);
+  assert.equal(await page.locator('.dialog-close').evaluate(el=>el===document.activeElement),true);
+  await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Preview next match'}).click();
   await page.screenshot({path:`${artifacts}/desktop-match-preview.png`,fullPage:true});
   await page.keyboard.press('Escape');
@@ -223,11 +229,13 @@ try {
   await page.getByRole('button',{name:'Preview next match'}).click();
   assert.ok(await page.evaluate(()=>document.querySelector('#dialog').scrollWidth<=document.querySelector('#dialog').clientWidth));
   await page.screenshot({path:`${artifacts}/mobile-match-preview.png`,fullPage:true});
-  await page.getByRole('button',{name:'Choose a captain'}).click();
-  assert.equal(await page.locator('.captain-options>button').count(),5);
+  await page.getByRole('button',{name:'Review team profiles'}).click();
+  assert.equal(await page.locator('.team-profiles>article').count(),5);
+  assert.equal(await page.locator('#dialog').evaluate(el=>el.scrollTop),0);
+  assert.equal(await page.locator('.dialog-close').evaluate(el=>el===document.activeElement),true);
   assert.ok(await page.evaluate(()=>document.querySelector('#dialog').scrollWidth<=document.querySelector('#dialog').clientWidth));
-  await page.screenshot({path:`${artifacts}/mobile-captain.png`,fullPage:true});
-  await page.locator('.captain-options>button').last().click();
+  await page.screenshot({path:`${artifacts}/mobile-team-profiles.png`,fullPage:true});
+  await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Preview next match'}).click();
   await page.getByRole('button',{name:'Choose a reserve rotation'}).click();
   await page.locator('.rotation-option').first().click();
@@ -242,7 +250,7 @@ try {
   await page.setViewportSize({width:320,height:740});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
   const results=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
-  assert.ok(results.tournament.teams.every(team=>team.players.every(id=>team.loads[id]>=0&&team.loads[id]<=100)));
+  assert.ok(results.tournament.teams.every(team=>!Object.hasOwn(team,'captain')&&team.players.every(id=>team.loads[id]>=0&&team.loads[id]<=100&&!Object.hasOwn(team.profiles[id],'captaincy'))));
   assert.ok(results.tournament.teams.slice(1).some(team=>{const played=new Set(results.tournament.rounds.flatMap(round=>round.filter(m=>m.a===team.id||m.b===team.id).flatMap(m=>m.boards.map(b=>m.a===team.id?b.a.id:b.b.id))));return played.size===5;}));
   await page.reload();await page.getByRole('button',{name:'Copy result'}).waitFor();
   assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4'))),results);
@@ -254,7 +262,7 @@ try {
   assert.equal(await legacyPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).version),4);
   await legacyContext.close();
   const oldRulesContext=await browser.newContext();
-  const oldRulesSave=JSON.stringify({...results,rulesVersion:results.rulesVersion.replace('squad-profiles-2','squad-profiles-1')});
+  const oldRulesSave=JSON.stringify({...results,rulesVersion:results.rulesVersion.replace('squad-profiles-3','squad-profiles-2')});
   assert.notEqual(JSON.parse(oldRulesSave).rulesVersion,results.rulesVersion);
   await oldRulesContext.addInitScript(saved=>localStorage.setItem('11-0-0:save:v4',saved),oldRulesSave);
   const oldRulesPage=await oldRulesContext.newPage();await oldRulesPage.goto(url);await oldRulesPage.getByRole('button',{name:'Quick draft'}).waitFor();
@@ -263,6 +271,6 @@ try {
   assert.equal(await oldRulesPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).rulesVersion),results.rulesVersion);
   await oldRulesContext.close();
   assert.deepEqual(errors,[]);
-  console.log('Browser QA passed: stamina/captaincy/style/form/consistency, captain choice and opponent profiles, trait guide and career traits, saved offer/pick traits, seeded AI traits, match previews and effects, legacy save preservation, unchanged source ratings, inclusive 2600 country cutoff, all-time A/B roster and source dialogs, manual and quick drafts, expert mode, rerolls, team name, board targeting, persistence, reserve rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
+  console.log('Browser QA passed: stamina/style/form/consistency, team profile inspection without captain attributes or bonuses, trait guide and career traits, saved offer/pick traits, seeded AI traits, match previews and effects, legacy save preservation, unchanged source ratings, inclusive 2600 country cutoff, all-time A/B roster and source dialogs, manual and quick drafts, expert mode, rerolls, team name, board targeting, persistence, reserve rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
   console.log(`Screenshots: ${artifacts}`);
 } finally {await browser.close();}

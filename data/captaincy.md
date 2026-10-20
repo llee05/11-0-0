@@ -1,6 +1,6 @@
-# Olympiad captaincy: evidence and game proposal
+# Olympiad captaincy: evidence and accepted design
 
-Research checked on 20 October 2026. This document proposes a future captaincy change; the current game still uses its fictional playing-captain bonus.
+Research checked on 20 October 2026. The accepted game design is that the user acts as captain by managing the team. Captain attributes and bonuses have been removed.
 
 ## What real captains do
 
@@ -10,22 +10,14 @@ FIDE's general captain rules assign fixed board order, round selection, technica
 
 [Older Olympiad rules, article 6.3.9.4](https://www.fide.com/FIDE/handbook/chess_olympiad_regulations.pdf), allowed limited draw advice. Do not copy that permission into a modern captain mechanic without checking the applicable edition's rules. The game's abstract match conditions are not positions on which a captain can supply moves.
 
-## Recommended game design
+## Accepted game design
 
-Use a separate non-playing staff role alongside the five drafted players. It should consume neither a board nor the reserve slot. Its influence should remain available when any player rests; the current half-influence-from-reserve rule would no longer apply.
+The user acts as captain: draft five players, choose four starters, rotate the reserve and manage fatigue and form. Opponents use the same reserve planner offered to the user through lineup recommendations and Auto-rotate & finish.
 
-The user already performs a captain's central management work: picking the squad, choosing four starters and managing recovery. The new reserve planner provides the equivalent selection process for opponents. An additional staff choice could emphasize one of three approaches:
+There is no captaincy attribute, chosen playing captain, separate staff slot or leadership bonus on either side. Team profiles is a read-only view of style, stamina, consistency, form and current fatigue. Match probabilities depend on source rating, color, individual traits, styles, form, daily performance and fatigue.
 
-| Approach | Possible fictional game effect | Tradeoff |
-| --- | --- | --- |
-| Preparation | A small bonus in theory-focused rounds, representing preparation before play. | No general bonus in other conditions. |
-| Recovery | Improve recovery when a player sits out. | Does not remove fatigue merely by changing the lineup. |
-| Morale | Reduce the penalty from poor form. | Does not increase positive form or provide board advice. |
+This replaces both the former playing-captain bonus and the proposed separate staff model. The user explicitly chose to remove captaincy rather than add staff. Do not reintroduce either system without a new request.
 
-These are design suggestions, not implemented rules or measured abilities of real captains. Tune them against each other before assigning numerical effects. Apply the same choices and effects to all 32 teams, with opponent staff assignments fixed from the tournament seed.
+Profile rules advance to `squad-profiles-3`. Earlier saves contain captain attributes and historical captain bonuses; preserve them in the existing backup key before a fresh draft. Current save validation rejects obsolete captain assignments and bonus fields.
 
-Remove the playing player's numerical captaincy attribute if adopting this model, instead of stacking two captain bonuses. Keep any future real-person staff catalogue separate from player editions: playing strength and career fame are not evidence of coaching or captaincy effectiveness. A real captain's appointment would need its own source.
-
-Store staff assignments and any changes between rounds in game state. Update forecasts, history validation and the profile rules marker together, preserving incompatible saves before a fresh draft. Keep current form, fatigue and daily performance independent of opening the staff dialog or changing staff, so captain selection cannot reroll them.
-
-The simulation currently sorts active boards by source rating after substitutions. Real fixed board-order rules are a separate format decision and would need an explicit rule change if the game is to reproduce them strictly.
+The simulation sorts active boards by source rating after substitutions. Real fixed board-order rules remain a separate format decision.

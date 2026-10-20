@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {STYLES,SWINGS,fixedProfile,rollProfile,rollProfiles,validProfile,validProfiles,profileFatigue,nextFatigue,validFatigue,performanceSwing,styleEffect,captainBonus,bestCaptain,nextForm,restedForm,performanceSeed} from '../dist/player-profile.js';
+import {STYLES,SWINGS,fixedProfile,rollProfile,rollProfiles,validProfile,validProfiles,profileFatigue,nextFatigue,validFatigue,performanceSwing,styleEffect,nextForm,restedForm,performanceSeed} from '../dist/player-profile.js';
 import {random} from '../dist/engine.js';
 
 const unknown={id:'u',personId:'unprofiled',rating:2600};
@@ -34,15 +34,12 @@ test('fatigue accumulates by stamina, persists across rest and has bounded penal
   assert.equal(profileFatigue(null,100),76);
   for(const invalid of [-1,101,1.5,NaN,'20'])assert.equal(validFatigue(invalid),false);
 });
-test('only one captain supplies a bounded team bonus, with half influence from the reserve',()=>{
-  const lineup=['a','b','c','d','e'],profiles=Object.fromEntries(lineup.map(id=>[id,{captaincy:3}]));
-  profiles.e.captaincy=5;
-  assert.equal(bestCaptain(lineup,profiles,()=>unknown),'e');
-  assert.equal(captainBonus('e',lineup,profiles,'a'),6);
-  assert.equal(captainBonus('e',lineup,profiles,'e'),0);
-  const rotated=['e','b','c','d','a'];
-  assert.equal(captainBonus('e',rotated,profiles,'b'),12);
-  assert.equal(captainBonus('b',lineup,profiles,'a'),6);
+test('profiles contain gameplay attributes without captaincy',()=>{
+  for(const player of [unknown,{id:'magnus',personId:'fide:1503014'}]){
+    const profile=rollProfile(player,random(3));
+    assert.deepEqual(Object.keys(profile).sort(),['consistency','form','stamina','style']);
+    assert.equal(validProfile({...profile,captaincy:5},player),false);
+  }
 });
 test('styles have symmetric rules, consistency narrows daily swings and form evolves around expectations',()=>{
   for(const a of STYLES)for(const b of STYLES)for(const kind of ['sharp','quiet','technical','theory']){
