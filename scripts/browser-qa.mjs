@@ -175,6 +175,45 @@ try {
   assert.equal(await page.locator('[data-action="captain"],[data-action="captain-pick"],.captain-marker').count(),0);
   assert.equal(await page.evaluate(()=>Object.hasOwn(JSON.parse(localStorage.getItem('11-0-0:save:v4')),'captain')),false);
   await page.getByRole('button',{name:'Enter the Olympiad'}).click();
+  const beforeOrdering=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
+  const originalOrder=beforeOrdering.tournament.squad;
+  const initialFixtures=await page.evaluate(async()=>{const {roundFixtures}=await import('/engine.js');return roundFixtures(JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament);});
+  await page.locator('.round-actions [data-action="board-order"]').click();
+  assert.equal(await page.locator('.board-order-row').count(),4);
+  assert.equal(await page.locator('.board-order-row option').count(),16);
+  await page.getByLabel('Board 1',{exact:true}).selectOption(originalOrder[3]);
+  const customOrder=[originalOrder[3],originalOrder[1],originalOrder[2],originalOrder[0],originalOrder[4]];
+  assert.equal(await page.getByLabel('Board 1',{exact:true}).evaluate(el=>el===document.activeElement),true);
+  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.squad),customOrder);
+  await page.getByLabel('Board 1',{exact:true}).press('Home');
+  await page.getByLabel('Board 1',{exact:true}).press('ArrowDown');
+  await page.getByLabel('Board 1',{exact:true}).press('ArrowDown');
+  assert.equal(await page.getByLabel('Board 1',{exact:true}).inputValue(),originalOrder[2]);
+  await page.getByRole('button',{name:'Order by rating',exact:true}).click();
+  await page.getByLabel('Board 1',{exact:true}).selectOption(originalOrder[3]);
+  assert.deepEqual(await page.evaluate(async()=>{const {roundFixtures}=await import('/engine.js');return roundFixtures(JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament);}),initialFixtures);
+  await page.screenshot({path:`${artifacts}/desktop-board-order.png`,fullPage:true});
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(()=>document.activeElement.matches('.round-actions [data-action="board-order"]'));
+  assert.equal(await page.locator('.round-actions [data-action="board-order"]').evaluate(el=>el===document.activeElement),true);
+  await page.reload();await page.getByRole('button',{name:'Play round 1'}).waitFor();
+  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.squad),customOrder);
+  await page.locator('.round-actions [data-action="board-order"]').click();
+  for(const width of [320,390]){
+    await page.setViewportSize({width,height:844});
+    assert.ok(await page.locator('#dialog').evaluate(el=>el.scrollWidth<=el.clientWidth));
+    await page.getByLabel('Board 2',{exact:true}).selectOption(customOrder[2]);
+    await page.getByLabel('Board 2',{exact:true}).selectOption(customOrder[1]);
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  }
+  await page.screenshot({path:`${artifacts}/mobile-board-order.png`,fullPage:true});
+  await page.getByRole('button',{name:'Order by rating',exact:true}).click();
+  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.squad),originalOrder);
+  await page.getByLabel('Board 1',{exact:true}).selectOption(originalOrder[3]);
+  await page.getByRole('button',{name:'Preview this lineup'}).click();
+  assert.equal(await page.locator('.match-forecast article').count(),4);
+  assert.ok((await page.locator('.match-forecast article').first().textContent()).includes(beforeOrdering.tournament.teams[0].players.map(id=>({id,name:catalogue.players.find(p=>p.id===id).name})).find(p=>p.id===customOrder[0]).name));
+  await page.keyboard.press('Escape');await page.setViewportSize({width:1440,height:1100});
   await page.getByRole('button',{name:'All-time field'}).click();
   assert.equal(await page.locator('[data-action="field-team"]').count(),31);
   await page.locator('[data-action="field-team"][data-id="alltime:USA:A"]').click();
@@ -202,6 +241,8 @@ try {
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Play round 1'}).click();
   await page.locator('.match-score').waitFor();
+  const playedOrder=await page.evaluate(()=>{const t=JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament,m=t.rounds[0].find(m=>m.a==='YOU'||m.b==='YOU');return m.boards.map(b=>m.a==='YOU'?b.a.id:b.b.id);});
+  assert.deepEqual(playedOrder,customOrder.slice(0,4));
   assert.equal(await page.locator('.board-result').count(),4);
   assert.equal(await page.locator('.board-result .trait-badge').count(),8);
   assert.equal(await page.locator('.board-result .board-breakdown').count(),8);
@@ -221,7 +262,9 @@ try {
   await page.getByRole('button',{name:'Use recommended lineup'}).click();
   assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.loads),loadsBefore);
   await page.getByRole('button',{name:'Rotate reserve'}).click();
+  const lineupBeforeReserve=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.squad);
   await page.locator('.rotation-option').first().click();
+  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.squad),[lineupBeforeReserve[4],...lineupBeforeReserve.slice(1,4),lineupBeforeReserve[0]]);
   assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.loads),loadsBefore);
   await page.getByRole('button',{name:'Play round 2'}).click();
   await page.getByRole('button',{name:'Play round 3'}).waitFor();
@@ -358,6 +401,27 @@ try {
   assert.equal(await oldRulesPage.locator('.squad-slot.filled').count(),0);
   assert.equal(await oldRulesPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).rulesVersion),results.rulesVersion);
   await oldRulesContext.close();
+  const compatibleContext=await browser.newContext();
+  const compatibleSave={...beforeOrdering,rulesVersion:beforeOrdering.rulesVersion.replace(/olympiad-\d+/,'olympiad-5')};
+  await compatibleContext.addInitScript(saved=>localStorage.setItem('11-0-0:save:v4',JSON.stringify(saved)),compatibleSave);
+  const compatiblePage=await compatibleContext.newPage();await compatiblePage.goto(url);await compatiblePage.getByRole('button',{name:'Play round 1'}).waitFor();
+  const upgraded=await compatiblePage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
+  assert.equal(upgraded.rulesVersion,beforeOrdering.rulesVersion);assert.deepEqual(upgraded.tournament,beforeOrdering.tournament);
+  assert.equal(await compatiblePage.evaluate(()=>localStorage.getItem('11-0-0:save:v4:backup')),null);
+  await compatibleContext.close();
+  const completedLegacy=await page.evaluate(async saved=>{
+    const {simulateRound}=await import('/engine.js'),{snapshotRun}=await import('/run-history.js');
+    let tournament=saved.tournament;while(tournament.round<11)tournament=simulateRound(tournament);
+    const game={...saved,phase:'results',tournament,rulesVersion:saved.rulesVersion.replace(/olympiad-\d+/,'olympiad-5')};
+    return {game,record:snapshotRun(game,'2026-10-20T12:00:00.000Z')};
+  },beforeOrdering);
+  const completedContext=await browser.newContext();
+  await completedContext.addInitScript(({game,record})=>{localStorage.setItem('11-0-0:save:v4',JSON.stringify(game));localStorage.setItem('11-0-0:best-runs:v1',JSON.stringify({version:1,runs:[record]}));},completedLegacy);
+  const completedPage=await completedContext.newPage();await completedPage.goto(url);await completedPage.getByRole('button',{name:'Copy result'}).waitFor();
+  assert.equal(await completedPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).rulesVersion),completedLegacy.game.rulesVersion);
+  assert.deepEqual(await completedPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs),[completedLegacy.record]);
+  assert.equal(await completedPage.evaluate(()=>localStorage.getItem('11-0-0:save:v4:backup')),null);
+  await completedContext.close();
   // Quick Sim is available before drafting and preserves partial or full squads.
   const quickContext=await browser.newContext({viewport:{width:1440,height:1100}});
   const quickPage=await quickContext.newPage();quickPage.on('pageerror',error=>errors.push(error.message));
@@ -452,6 +516,6 @@ try {
   await quotaPage.getByRole('button',{name:'Best runs',exact:true}).click();assert.equal(await quotaPage.locator('.run-card').count(),1);
   await quotaContext.close();
   assert.deepEqual(errors,[]);
-  console.log('Browser QA passed: system theme, keyboard theme toggle, preference persistence, cross-tab updates and responsive theme controls; top-three personal records, complete archived reports/standings/squads, reset and reload persistence, deduplication, old-catalogue independence, corrupt-history backup and storage failure recovery; stamina/style/form/consistency, profiles, traits, saves, previews, source catalogue, manual and quick drafts/simulation, expert mode, rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
+  console.log('Browser QA passed: manual board order, native keyboard controls and focus return, stable fixtures, reloads, exact-slot substitutions and compatible old-save/report restoration; system theme, keyboard theme toggle, preference persistence, cross-tab updates and responsive theme controls; top-three personal records, complete archived reports/standings/squads, reset and reload persistence, deduplication, old-catalogue independence, corrupt-history backup and storage failure recovery; stamina/style/form/consistency, profiles, traits, saves, previews, source catalogue, manual and quick drafts/simulation, expert mode, rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
   console.log(`Screenshots: ${artifacts}`);
 } finally {await browser.close();}

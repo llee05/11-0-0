@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,RULES_VERSION,ELO_SCALE,planLineup,previewTeams,applyRecommendedLineup,completeDraft,quickSim,roundFixtures,sortBoards,lineupExpectation,expectedMatchPoints,recommendedLineup,offerWeight,rankedCandidates,draftValue} from '../dist/engine.js';
+import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,setBoardOrder,boardProbabilities,validSave,restoreSave,configureCatalogue,previewRound,playerById,RULES_VERSION,ELO_SCALE,planLineup,previewTeams,applyRecommendedLineup,completeDraft,quickSim,roundFixtures,sortBoards,lineupExpectation,expectedMatchPoints,recommendedLineup,offerWeight,rankedCandidates,draftValue} from '../dist/engine.js';
 
 import {rollTraits,careerProfile} from '../dist/traits.js';
 import {fixedProfile,rollProfiles,profileFatigue,nextFatigue,performanceSeed,performanceSwing,restedForm} from '../dist/player-profile.js';
@@ -285,6 +285,87 @@ test('reserve rotates into active boards and sitting out recovers fatigue only a
   assert.equal(t.streaks[reserve],1);
 });
 
+test('every manual board permutation preserves fixtures, readiness and unrelated matches',()=>{
+  const s=draft(94);let t=startTournament(s.squad,s.teamName,94,s.traits,s.profiles);
+  for(let round=0;round<3;round++)t=simulateRound(t);
+  const before=structuredClone(t),fixtures=roundFixtures(t),ranks=standings(t).map(team=>team.id),preview=previewRound(t);
+  const reference=simulateRound(t),unrelated=reference.rounds.at(-1).filter(m=>m.a!=='YOU'&&m.b!=='YOU');
+  const permutations=xs=>xs.length?xs.flatMap((x,i)=>permutations(xs.filter((_,j)=>i!==j)).map(rest=>[x,...rest])):[[]];
+  const originalPlayers=preview.boards.map(b=>preview.a==='YOU'?b.a:b.b);
+  for(const order of permutations(t.squad.slice(0,4))){
+    const changed=setBoardOrder(t,order),forecast=previewRound(changed),own=changed.teams.find(team=>team.id==='YOU');
+    assert.deepEqual(changed.squad,[...order,t.squad[4]]);
+    assert.deepEqual(own.lineup,changed.squad);assert.deepEqual(own.players,t.teams[0].players);
+    assert.deepEqual(changed.loads,t.loads);assert.deepEqual(changed.streaks,t.streaks);
+    assert.deepEqual(changed.teams.map(team=>team.forms),t.teams.map(team=>team.forms));
+    assert.deepEqual(roundFixtures(changed),fixtures);assert.deepEqual(standings(changed).map(team=>team.id),ranks);
+    assert.deepEqual(forecast.boards.map(b=>(forecast.a==='YOU'?b.a:b.b).id),order);
+    for(const board of forecast.boards){const p=forecast.a==='YOU'?board.a:board.b,original=originalPlayers.find(other=>other.id===p.id);assert.deepEqual([p.performance,p.form,p.fatigueLoad],[original.performance,original.form,original.fatigueLoad]);}
+    const played=simulateRound(changed),actual=played.rounds.at(-1).find(m=>m.a==='YOU'||m.b==='YOU');
+    assert.deepEqual(actual.boards.map(({score,...b})=>b).map(b=>[b.a.id,b.b.id,b.probabilities]),forecast.boards.map(b=>[b.a.id,b.b.id,b.probabilities]));
+    assert.deepEqual(played.rounds.at(-1).filter(m=>m.a!=='YOU'&&m.b!=='YOU'),unrelated);
+    assert.ok(validSave({...s,phase:'tournament',tournament:played}));
+  }
+  assert.deepEqual(t,before);
+  for(const order of [null,[],t.squad,[...t.squad.slice(0,3),t.squad[0]],[...t.squad.slice(0,3),t.squad[4]],[...t.squad.slice(0,3),'unknown']])assert.strictEqual(setBoardOrder(t,order),t);
+});
+
+test('manual orders persist through reserve changes, round play, saves and completion',()=>{
+  const s=draft(95);let t=startTournament(s.squad,s.teamName,95,s.traits,s.profiles);
+  for(let round=0;round<11;round++){
+    t=setBoardOrder(t,[t.squad[3],t.squad[0],t.squad[1],t.squad[2]]);
+    const order=[...t.squad],resting=round%4;
+    t=rotateReserve(t,resting);
+    assert.deepEqual(t.squad,order.map((id,i)=>i===resting?order[4]:i===4?order[resting]:id));
+    const ready=JSON.parse(JSON.stringify({...s,phase:'tournament',tournament:t}));assert.ok(validSave(ready));
+    const preview=previewRound(t);t=simulateRound(ready.tournament);
+    const match=t.rounds.at(-1).find(m=>m.a==='YOU'||m.b==='YOU');
+    assert.deepEqual(match.boards.map(b=>(match.a==='YOU'?b.a:b.b).id),t.squad.slice(0,4));
+    assert.deepEqual(match.boards.map(b=>b.probabilities),preview.boards.map(b=>b.probabilities));
+    assert.ok(validSave({...s,phase:round===10?'results':'tournament',tournament:t}));
+  }
+  assert.strictEqual(setBoardOrder(t,[...t.squad.slice(0,4)].reverse()),t);
+  assert.strictEqual(rotateReserve(t,0),t);
+});
+
+test('recommendations preserve chosen board slots and use the current order in their cache',()=>{
+  const s=draft(96),original=startTournament(s.squad,s.teamName,96,s.traits,s.profiles);
+  const t=setBoardOrder(original,[original.squad[3],original.squad[1],original.squad[0],original.squad[2]]);
+  const forecast=previewRound(t),side=forecast.a==='YOU'?'a':'b',opponent=previewTeams(t).find(team=>team.id===(side==='a'?forecast.b:forecast.a));
+  const own=t.teams[0],matchup={opponent,boards:forecast.boards,side};
+  const candidates=order=>order.map((_,i)=>{const lineup=[...order];[lineup[i],lineup[4]]=[lineup[4],lineup[i]];return lineup;});
+  for(const order of [original.squad,t.squad]){
+    const choice=planLineup(own,1,matchup,order),score=lineupExpectation(own,choice,matchup);
+    assert.ok(candidates(order).some(lineup=>JSON.stringify(lineup)===JSON.stringify(choice)));
+    for(const lineup of candidates(order))assert.ok(score>=lineupExpectation(own,lineup,matchup)-1e-12);
+    choice[0]='changed';assert.notEqual(planLineup(own,1,matchup,order)[0],'changed');
+  }
+  const before=structuredClone(t),recommended=recommendedLineup(t);
+  assert.ok(candidates(t.squad).some(lineup=>JSON.stringify(lineup)===JSON.stringify(recommended)));
+  assert.deepEqual(applyRecommendedLineup(t).squad,recommended);assert.deepEqual(t,before);
+});
+
+test('previous source-ordered saves resume without replacing progress or duplicating completed reports',()=>{
+  const previous='career-traits-3/squad-profiles-4/olympiad-5/competitive-draft-1';
+  const s=draft(97),legacyDraft={...s,rulesVersion:previous},draftBefore=structuredClone(legacyDraft);
+  assert.equal(restoreSave(legacyDraft).rulesVersion,RULES_VERSION);assert.deepEqual(legacyDraft,draftBefore);
+  let t=startTournament(s.squad,s.teamName,97,s.traits,s.profiles);
+  for(let round=0;round<3;round++)t=simulateRound(t);
+  const legacy={...s,rulesVersion:previous,phase:'tournament',tournament:t},before=structuredClone(legacy),restored=restoreSave(legacy);
+  assert.ok(validSave(restored));assert.deepEqual(restored,{...legacy,rulesVersion:RULES_VERSION});assert.deepEqual(legacy,before);
+  assert.deepEqual(simulateRound(restored.tournament),simulateRound(legacy.tournament));
+  const corrupt=structuredClone(legacy);corrupt.tournament.loads[corrupt.squad[0]]++;
+  assert.equal(restoreSave(corrupt),null);
+  const forgedOrder={...legacy,tournament:setBoardOrder(t,[...t.squad.slice(0,4)].reverse())};
+  assert.equal(restoreSave(forgedOrder),null);
+  assert.equal(restoreSave({...legacy,catalogueRelease:'old-catalogue'}),null);
+  assert.equal(restoreSave({...legacy,rulesVersion:previous.replace('olympiad-5','olympiad-4')}),null);
+  while(t.round<11)t=simulateRound(t);
+  const completed={...legacy,phase:'results',tournament:t};
+  assert.ok(validSave(completed));assert.strictEqual(restoreSave(completed),completed);
+  assert.equal(restoreSave(completed).rulesVersion,previous);
+});
+
 test('save validation rejects corrupt and incompatible browser data',()=>{
   assert.ok(validSave(initialState()));
   const previousRules={...initialState(),rulesVersion:RULES_VERSION.replace(/career-traits-\d+/,'career-traits-1')};
@@ -496,8 +577,6 @@ test('match-aware planning selects a lower-rated specialist and maximises final-
   for(const reserve of ids){const candidate=sortBoards([...ids.filter(id=>id!==reserve),reserve]);assert.ok(score>=lineupExpectation(team,candidate,matchup)-1e-12);}
   assert.deepEqual(team,before);
   lineup[0]='modified';assert.notEqual(planLineup(team,1,matchup)[0],'modified');
-  const recommended=recommendedLineup(t),rotated=rotateReserve(t,0);
-  assert.deepEqual(recommendedLineup(rotated),recommended);
 });
 
 

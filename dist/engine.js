@@ -22,10 +22,12 @@ export function configureCatalogue(catalogue){
 }
 export const ROUND_COUNT = 11;
 export const SAVE_VERSION = 4;
-export const SIMULATION_RULESET = 'olympiad-5';
+export const SIMULATION_RULESET = 'olympiad-6';
 export const ELO_SCALE = 320;
 export const DRAFT_RULESET = 'competitive-draft-1';
 export const RULES_VERSION = `${TRAIT_RULESET}/${PROFILE_RULESET}/${SIMULATION_RULESET}/${DRAFT_RULESET}`;
+// The previous rules share the same board arithmetic and neutral fixtures.
+const SOURCE_ORDER_RULES = 'career-traits-3/squad-profiles-4/olympiad-5/competitive-draft-1';
 export const nationById = id => nationIndex.get(id);
 export const playerById = id => playerIndex.get(id);
 export const average = squad => { const p=squad.filter(Boolean).map(playerById); return p.length ? Math.round(p.reduce((n,p)=>n+p.rating,0)/p.length) : 0; };
@@ -227,9 +229,10 @@ export function lineupExpectation(team,lineup,matchup){
 // Maximise expected match points over up to three rounds. The known fixture
 // uses exact trait/style matchups; later rounds use averaged reference effects.
 // Future outcomes, contexts, form changes and daily swings are never revealed.
-export function planLineup(team,roundsRemaining=3,matchup=null) {
+export function planLineup(team,roundsRemaining=3,matchup=null,preferredLineup=null) {
+  if(preferredLineup&&(!Array.isArray(preferredLineup)||preferredLineup.length!==5||new Set(preferredLineup).size!==5||preferredLineup.some(id=>!team.players.includes(id))))throw new Error('Invalid planned board order.');
   const signature=t=>t.players.map(id=>[id,t.traits[id],t.profiles[id],t.forms[id],t.loads[id]]);
-  const cacheKey=JSON.stringify([roundsRemaining,signature(team),matchup?[signature(matchup.opponent),matchup.opponent.lineup,matchup.boards,matchup.side]:null]);
+  const cacheKey=JSON.stringify([roundsRemaining,signature(team),preferredLineup,matchup?[signature(matchup.opponent),matchup.opponent.lineup,matchup.boards,matchup.side]:null]);
   if(planningCache.has(cacheKey))return [...planningCache.get(cacheKey)];
   const ids=team.players,profiles=ids.map(id=>team.profiles[id]),index=new Map(ids.map((id,i)=>[id,i]));
   const horizon=Math.max(1,Math.min(3,roundsRemaining));
@@ -238,7 +241,13 @@ export function planLineup(team,roundsRemaining=3,matchup=null) {
     if(!outlookCache.has(key))outlookCache.set(key,profileOutlook(team.traits[id],team.profiles[id].style,playerById(id).rating));
     return outlookCache.get(key);
   });
-  const choices=ids.map((reserve,i)=>({reserve,index:i,lineup:sortBoards([...ids.filter(id=>id!==reserve),reserve])}))
+  const choices=ids.map((reserve,i)=>{
+    // Manual orders survive recommendations. A substitute takes the exact
+    // board being rested; unknown future scores depend only on the active set.
+    const lineup=preferredLineup?[...preferredLineup]:sortBoards([...ids.filter(id=>id!==reserve),reserve]);
+    if(preferredLineup){const position=lineup.indexOf(reserve);[lineup[position],lineup[4]]=[lineup[4],lineup[position]];}
+    return {reserve,index:i,lineup};
+  })
     .sort((a,b)=>playerById(a.reserve).rating-playerById(b.reserve).rating||a.reserve.localeCompare(b.reserve));
   const memo=new Map(),boardCache=new Map();
   function neutralBoard(i,load,form){
@@ -291,12 +300,11 @@ export function recommendedLineup(tournament){
   if(tournament.round>=ROUND_COUNT)return [...tournament.squad];
   const prepared=prepareRound(tournament),fixture=roundFixtures(tournament).find(m=>m.a==='YOU'||m.b==='YOU'),side=fixture.a==='YOU'?'a':'b';
   const opponent=prepared.teams.find(team=>team.id===(side==='a'?fixture.b:fixture.a));
-  return planLineup(own,ROUND_COUNT-tournament.round,{opponent,boards:fixture.boards,side});
+  return planLineup(own,ROUND_COUNT-tournament.round,{opponent,boards:fixture.boards,side},tournament.squad);
 }
 export function applyRecommendedLineup(tournament) {
   if(tournament.round>=ROUND_COUNT)return tournament;
-  const lineup=recommendedLineup(tournament),t=structuredClone(tournament),own=t.teams.find(team=>team.id==='YOU');
-  t.squad=lineup;own.lineup=[...lineup];own.rating=average(lineup.slice(0,4));return t;
+  return withUserLineup(tournament,recommendedLineup(tournament));
 }
 function upcomingMatches(t) {
   return roundFixtures(t).map(({a:aid,b:bid,boards:setup})=>{
@@ -344,17 +352,31 @@ export function simulateRound(tournament) {
   t.loads={...t.teams.find(team=>team.id==='YOU').loads};
   t.round++; t.rounds.push(matches);return t;
 }
+function withUserLineup(tournament,lineup){
+  const t=structuredClone(tournament),own=t.teams.find(team=>team.id==='YOU');
+  t.squad=[...lineup];own.lineup=[...lineup];own.rating=average(lineup.slice(0,4));return t;
+}
+export function setBoardOrder(tournament,order){
+  if(tournament.round>=ROUND_COUNT||!Array.isArray(order)||order.length!==4||new Set(order).size!==4||order.some(id=>!tournament.squad.slice(0,4).includes(id))||order.every((id,i)=>id===tournament.squad[i]))return tournament;
+  return withUserLineup(tournament,[...order,tournament.squad[4]]);
+}
 export function rotateReserve(tournament,boardIndex) {
   if(!Number.isInteger(boardIndex)||boardIndex<0||boardIndex>3||tournament.round>=11) return tournament;
-  const t=structuredClone(tournament);
-  [t.squad[boardIndex],t.squad[4]]=[t.squad[4],t.squad[boardIndex]];
-  t.squad=sortBoards(t.squad);const own=t.teams.find(x=>x.id==='YOU');own.lineup=[...t.squad];own.rating=average(t.squad.slice(0,4));return t;
+  const lineup=[...tournament.squad];
+  [lineup[boardIndex],lineup[4]]=[lineup[4],lineup[boardIndex]];
+  return withUserLineup(tournament,lineup);
 }
 export function validSave(s) {
   try { return validateSave(s); } catch { return false; }
 }
-function validateSave(s) {
-  if(!s||Object.hasOwn(s,'captain')||s.version!==SAVE_VERSION||s.rulesVersion!==RULES_VERSION||s.catalogueRelease!==CATALOGUE.release||!['draft','tournament','results'].includes(s.phase)||!['classic','expert'].includes(s.mode)||!Array.isArray(s.squad)||s.squad.length!==5||s.squad.some(id=>id!==null&&!playerById(id))||new Set(s.squad.filter(Boolean).map(id=>playerById(id).personId)).size!==s.squad.filter(Boolean).length||!validTraits(s.squad.filter(Boolean),s.traits,playerById)||!validProfiles(s.squad.filter(Boolean),s.profiles,playerById)||!Number.isInteger(s.rerolls)||s.rerolls<0||s.rerolls>2||typeof s.teamName!=='string'||s.teamName.length>30)return false;
+export function restoreSave(saved){
+  if(validSave(saved))return saved;
+  if(saved?.rulesVersion!==SOURCE_ORDER_RULES)return null;
+  try{return validateSave(saved,true)?{...saved,rulesVersion:RULES_VERSION}:null;}catch{return null;}
+}
+function validateSave(s,allowSourceOrderUpgrade=false) {
+  if(!s||Object.hasOwn(s,'captain')||s.version!==SAVE_VERSION||(s.rulesVersion!==RULES_VERSION&&!(s.rulesVersion===SOURCE_ORDER_RULES&&(s.phase==='results'||allowSourceOrderUpgrade)))||s.catalogueRelease!==CATALOGUE.release||!['draft','tournament','results'].includes(s.phase)||!['classic','expert'].includes(s.mode)||!Array.isArray(s.squad)||s.squad.length!==5||s.squad.some(id=>id!==null&&!playerById(id))||new Set(s.squad.filter(Boolean).map(id=>playerById(id).personId)).size!==s.squad.filter(Boolean).length||!validTraits(s.squad.filter(Boolean),s.traits,playerById)||!validProfiles(s.squad.filter(Boolean),s.profiles,playerById)||!Number.isInteger(s.rerolls)||s.rerolls<0||s.rerolls>2||typeof s.teamName!=='string'||s.teamName.length>30)return false;
+  const sourceOrder=s.rulesVersion===SOURCE_ORDER_RULES;
   if(s.phase==='draft') {
     const nation=nationById(s.offer?.nation);
     return !s.tournament&&(!s.offer||!!nation&&Array.isArray(s.offer.players)&&s.offer.players.length===5&&s.offer.players.every((id,i)=>id===nation.players[i])&&validTraits(s.offer.players,s.offer.traits,playerById)&&validProfiles(s.offer.players,s.offer.profiles,playerById)&&s.offer.players.some(id=>canDraft(playerById(id),s.squad)));
@@ -364,11 +386,11 @@ function validateSave(s) {
   const same=(a,b)=>a.length===b.length&&a.every((id,i)=>id===b[i]);
   const streaks=(ids,values)=>values&&Object.keys(values).length===5&&ids.every(id=>Number.isInteger(values[id])&&values[id]>=0&&values[id]<=t.round);
   const loads=(ids,values)=>values&&Object.keys(values).length===5&&ids.every(id=>validFatigue(values[id]));
-  if(!Array.isArray(t.squad)||!same([...t.squad].sort(),[...s.squad].sort())||!same(t.squad,sortBoards(t.squad))||!streaks(t.squad,t.streaks)||!loads(t.squad,t.loads))return false;
+  if(!Array.isArray(t.squad)||!same([...t.squad].sort(),[...s.squad].sort())||(sourceOrder&&!same(t.squad,sortBoards(t.squad)))||!streaks(t.squad,t.streaks)||!loads(t.squad,t.loads))return false;
   for(const team of t.teams){
     const source=opponentIndex.get(team.id),own=team.id==='YOU';
     const canonical=own?sortBoards(s.squad):source?.players;
-    if(!canonical||typeof team.name!=='string'||typeof team.flag!=='string'||(own?team.name!==s.teamName||team.flag!=='✦':team.name!==source.name||team.flag!==source.flag)||!Array.isArray(team.players)||!same(team.players,canonical)||!Array.isArray(team.lineup)||!same([...team.lineup].sort(),[...canonical].sort())||!same(team.lineup,sortBoards(team.lineup))||team.rating!==average(team.lineup.slice(0,4))||team.seedingRating!==rosterRating(team.players)||!validTraits(team.players,team.traits,playerById)||!validProfiles(team.players,team.profiles,playerById)||Object.hasOwn(team,'captain')||!team.forms||Object.keys(team.forms).length!==5||team.players.some(id=>!validForm(team.forms[id]))||!streaks(team.players,team.streaks)||!loads(team.players,team.loads)||!Array.isArray(team.history)||team.history.length!==t.round)return false;
+    if(!canonical||typeof team.name!=='string'||typeof team.flag!=='string'||(own?team.name!==s.teamName||team.flag!=='✦':team.name!==source.name||team.flag!==source.flag)||!Array.isArray(team.players)||!same(team.players,canonical)||!Array.isArray(team.lineup)||!same([...team.lineup].sort(),[...canonical].sort())||((!own||sourceOrder)&&!same(team.lineup,sortBoards(team.lineup)))||team.rating!==average(team.lineup.slice(0,4))||team.seedingRating!==rosterRating(team.players)||!validTraits(team.players,team.traits,playerById)||!validProfiles(team.players,team.profiles,playerById)||Object.hasOwn(team,'captain')||!team.forms||Object.keys(team.forms).length!==5||team.players.some(id=>!validForm(team.forms[id]))||!streaks(team.players,team.streaks)||!loads(team.players,team.loads)||!Array.isArray(team.history)||team.history.length!==t.round)return false;
     if(own&&(!same(team.lineup,t.squad)||team.players.some(id=>team.traits[id]!==s.traits[id]||team.streaks[id]!==t.streaks[id]||team.loads[id]!==t.loads[id]||Object.keys(s.profiles[id]).some(k=>s.profiles[id][k]!==team.profiles[id][k]))))return false;
     const opponents=new Set();let mp=0,bp=0,w=0,d=0,l=0;
     for(const h of team.history){
@@ -386,7 +408,7 @@ function validateSave(s) {
     if(new Set(m.boards.map(board=>board.a?.id)).size!==4||new Set(m.boards.map(board=>board.b?.id)).size!==4)return false;
     const lineup=side=>{const ids=m.boards.map(board=>board[side].id),team=side==='a'?a:b;return [...ids,...team.players.filter(id=>!ids.includes(id))];};
     const lineups={a:lineup('a'),b:lineup('b')};
-    for(const side of ['a','b'])if(!same(lineups[side],sortBoards(lineups[side])))return false;
+    for(const [side,team] of [['a',a],['b',b]])if((team.id!=='YOU'||sourceOrder)&&!same(lineups[side],sortBoards(lineups[side])))return false;
     const setup=matchSetup({seed:t.seed,round,rounds:t.rounds.slice(0,round),teams:[{...a,...tracked.get(a.id)},{...b,...tracked.get(b.id)}]},a.id,b.id);
     const valid=m.boards.every((board,i)=>{
       if(!validContext(board.context)||Object.keys(setup[i].context).some(key=>board.context[key]!==setup[i].context[key])||board.white!==setup[i].white||![0,0.5,1].includes(board.score))return false;

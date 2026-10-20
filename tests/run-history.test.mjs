@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {openDatabase} from '../server/sqlite.mjs';
 import {readCatalogue} from '../server/catalog.mjs';
-import {configureCatalogue,initialState,quickSim,completeDraft,startTournament,simulateRound,rotateReserve,random,standings} from '../dist/engine.js';
+import {configureCatalogue,initialState,quickSim,completeDraft,startTournament,simulateRound,rotateReserve,restoreSave,random,standings} from '../dist/engine.js';
 import {snapshotRun,validRun,keepBestRuns,parseRunHistory,serializeRunHistory} from '../dist/run-history.js';
 
 const db=openDatabase(':memory:');
@@ -67,6 +67,16 @@ test('reloading a result never duplicates it or changes its recorded date',()=>{
   t=rotateReserve(t,0);
   while(t.round<11)t=simulateRound(t);
   assert.notEqual(snapshotRun({...game,tournament:t}).id,runs[0].id);
+});
+
+test('compatible completed saves retain their original report identity after board-order support',()=>{
+  const game=games[0];let tournament=startTournament(game.squad,game.teamName,92,game.traits,game.profiles);
+  while(tournament.round<11)tournament=simulateRound(tournament);
+  const legacy={...game,rulesVersion:'career-traits-3/squad-profiles-4/olympiad-5/competitive-draft-1',tournament};
+  const original=snapshotRun(legacy,'2026-10-20T12:00:00.000Z'),existing=[original];
+  const restored=restoreSave(legacy);assert.ok(restored);
+  const reloaded=snapshotRun(restored,'2026-10-21T12:00:00.000Z');
+  assert.equal(reloaded.id,original.id);assert.strictEqual(keepBestRuns(existing,reloaded),existing);
 });
 
 test('reports round-trip independently of the active catalogue and game rules',()=>{
