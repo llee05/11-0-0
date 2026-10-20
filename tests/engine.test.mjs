@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,RULES_VERSION,planLineup,previewTeams,applyRecommendedLineup,completeDraft,quickSim} from '../dist/engine.js';
+import {PLAYERS,NATIONS,OPPONENTS,initialState,createOffer,selectPlayer,random,canDraft,startTournament,simulateRound,standings,rotateReserve,boardProbabilities,validSave,configureCatalogue,previewRound,playerById,RULES_VERSION,planLineup,previewTeams,applyRecommendedLineup,completeDraft,quickSim,roundFixtures} from '../dist/engine.js';
 
 import {rollTraits,careerProfile} from '../dist/traits.js';
 import {fixedProfile,rollProfiles,profileFatigue,nextFatigue,performanceSeed,performanceSwing,restedForm} from '../dist/player-profile.js';
@@ -216,6 +216,45 @@ test('same draft and seed produce the same tournament',()=>{
   const s=draft(83);
   const play=()=>{let t=startTournament(s.squad,'Repeatable',54321,s.traits,s.profiles);for(let i=0;i<11;i++)t=simulateRound(t);return t;};
   assert.deepEqual(play(),play());
+});
+
+test('substitutions preserve pairings, standings order, colours and conditions throughout the event',()=>{
+  for(const seed of [5,12,36]){
+    const s=completeDraft(initialState(),random(seed));let t=startTournament(s.squad,s.teamName,seed,s.traits,s.profiles);
+    for(let round=0;round<11;round++){
+      const fixtures=roundFixtures(t),ranks=standings(t).map(team=>team.id),before=structuredClone(t);
+      const baseRound=simulateRound(t).rounds.at(-1);
+      for(let board=0;board<4;board++){
+        const rotated=rotateReserve(t,board);
+        assert.deepEqual(roundFixtures(rotated),fixtures);
+        assert.deepEqual(standings(rotated).map(team=>team.id),ranks);
+        const changed=simulateRound(rotated).rounds.at(-1);
+        assert.deepEqual(changed.filter(m=>m.a!=='YOU'&&m.b!=='YOU'),baseRound.filter(m=>m.a!=='YOU'&&m.b!=='YOU'));
+      }
+      assert.deepEqual(t,before);
+      t=simulateRound(applyRecommendedLineup(t));
+    }
+  }
+});
+
+test('colour allocation responds to individual history and keeps two whites per team',()=>{
+  const s=draft(17);let t=startTournament(s.squad,s.teamName,469720421,s.traits,s.profiles);
+  const records=new Map();
+  for(let round=0;round<11;round++){
+    t=simulateRound(applyRecommendedLineup(t));
+    for(const match of t.rounds.at(-1)){
+      assert.equal(match.boards.filter(board=>board.white).length,2);
+      for(const board of match.boards)for(const [id,white] of [[`${match.a}:${board.a.id}`,board.white],[`${match.b}:${board.b.id}`,!board.white]]){
+        const record=records.get(id)||{white:0,black:0};record[white?'white':'black']++;records.set(id,record);
+      }
+    }
+  }
+  const botvinnik=records.get('alltime:URS:A:URS-1946:chessmetrics:15154');
+  assert.ok(botvinnik.white>0&&botvinnik.black>0);
+  assert.ok(Math.abs(botvinnik.white-botvinnik.black)<=3);
+  const corrupt=structuredClone(t);corrupt.teams[0].seedingRating++;
+  assert.equal(validSave({...s,phase:'results',tournament:corrupt}),false);
+  assert.equal(validSave({...s,phase:'results',tournament:t,rulesVersion:RULES_VERSION.replace('/olympiad-2','')}),false);
 });
 
 test('reserve rotates into active boards and sitting out recovers fatigue only after the round',()=>{
