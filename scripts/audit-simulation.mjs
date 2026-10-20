@@ -8,10 +8,12 @@ import {openDatabase} from '../server/sqlite.mjs';
 import {readCatalogue} from '../server/catalog.mjs';
 import * as game from '../dist/engine.js';
 import {TRAITS,CAREER_PROFILES,careerProfile,matchupEffects,rollTraits} from '../dist/traits.js';
-import {styleEffect,rollProfiles,FORM_ELO} from '../dist/player-profile.js';
-const {values:args}=parseArgs({options:{runs:{type:'string',default:'200'},output:{type:'string'}}});
+import {styleEffect,rollProfiles,fixedProfile} from '../dist/player-profile.js';
+const {values:args}=parseArgs({options:{runs:{type:'string',default:'200'},output:{type:'string'},'skip-probes':{type:'boolean',default:false},'probe-seeds':{type:'string',default:'40'}}});
 const runs=Number(args.runs);
 if(!Number.isInteger(runs)||runs<10||runs>2000)throw new Error('--runs must be an integer from 10 to 2000.');
+const probeSeeds=Number(args['probe-seeds']);
+if(!Number.isInteger(probeSeeds)||probeSeeds<1||probeSeeds>100)throw new Error('--probe-seeds must be an integer from 1 to 100.');
 const output=args.output;
 const db=openDatabase(':memory:');game.configureCatalogue(await readCatalogue(db));db.close();
 const mean=values=>values.reduce((sum,value)=>sum+value,0)/values.length;
@@ -50,7 +52,7 @@ function draft(policy,seed,onPick=()=>{}){
     if(policy==='random')id=eligible[Math.floor(game.random(seed^Math.imul(pick+1,0x85EBCA6B))()*eligible.length)];
     if(policy==='profile')id=eligible.map(id=>{
       const p=game.playerById(id),profile=s.offer.profiles[id];
-      return {id,score:chances(p.rating+profile.form*FORM_ELO,s.offer.traits[id],profile.style).expected};
+      return {id,score:game.draftValue(p,s.offer.traits[id],profile)};
     }).sort((a,b)=>b.score-a.score||a.id.localeCompare(b.id))[0].id;
     onPick(id,eligible);
     s=game.selectPlayer(s,id,pick);
@@ -73,7 +75,7 @@ function matchOdds(match){
 }
 
 const grid={cases:0,maxProbabilitySumError:0,maxExpectedScoreError:0,invalid:0};
-for(let difference=-1200;difference<=1200;difference+=5)for(let shift=-0.16;shift<=0.16001;shift+=0.02)for(const white of [false,true]){
+for(let difference=-1200;difference<=1200;difference+=5)for(let shift=-0.24;shift<=0.24001;shift+=0.02)for(const white of [false,true]){
   const p=game.boardProbabilities(2650+difference,2650,white,shift),expected=1/(1+10**(-(difference+(white?28:-28))/400));
   grid.cases++;grid.maxProbabilitySumError=Math.max(grid.maxProbabilitySumError,Math.abs(p.win+p.draw+p.loss-1));grid.maxExpectedScoreError=Math.max(grid.maxExpectedScoreError,Math.abs(p.win+p.draw/2-expected));
   if(Object.values(p).some(value=>!Number.isFinite(value)||value<0||value>1))grid.invalid++;
@@ -85,12 +87,13 @@ const traitEffects=TRAITS.map(trait=>{
   return {trait:trait.id,expectedScore:rounded(expected),drawProbability:rounded(draw)};
 }).sort((a,b)=>b.expectedScore-a.expectedScore);
 
-const probes={comparisons:0,opponentChanges:0,opponentChangesAfterFirstRound:0,contextChanges:0,sameOpponentContextChanges:0,rankChanges:0,rankChangesAfterFirstRound:0,unrelatedGamesChanged:0,example:null,unrelatedExample:null,plannerComparisons:0,plannerInferior:0,plannerExample:null,finalRoundPlannerComparisons:0,finalRoundPlannerInferior:0,finalRoundPlannerExample:null};
+const probes={comparisons:0,opponentChanges:0,opponentChangesAfterFirstRound:0,contextChanges:0,sameOpponentContextChanges:0,rankChanges:0,rankChangesAfterFirstRound:0,unrelatedGamesChanged:0,example:null,unrelatedExample:null,plannerComparisons:0,plannerInferior:0,plannerExample:null,finalRoundPlannerComparisons:0,finalRoundPlannerInferior:0,finalRoundPlannerExample:null,finalRoundKnownComparisons:0,finalRoundKnownInferior:0};
 // Every alternative starts from the same state; previews never advance it.
-for(const draftPolicy of ['random','rating'])for(let seed=1;seed<=40;seed++){
-  const s=draftPolicy==='random'?game.completeDraft(game.initialState(),game.random(seed)):draft('rating',seed);
+for(const draftPolicy of (args['skip-probes']?[]:['random','rating']))for(let seed=1;seed<=probeSeeds;seed++){
+  const s=draft(draftPolicy,seed);
   let t=game.startTournament(s.squad,s.teamName,seed,s.traits,s.profiles);
   for(let round=0;round<11;round++){
+    const knownTeams=game.previewTeams(t),own=t.teams.find(team=>team.id==='YOU');
     const preview=game.previewRound(t),opponent=preview.a==='YOU'?preview.b:preview.a,played=game.simulateRound(t),ownRank=game.standings(t).findIndex(team=>team.id==='YOU');
     const recommended=game.applyRecommendedLineup(t),recommendedPreview=game.previewRound(recommended),recommendedOpponent=recommendedPreview.a==='YOU'?recommendedPreview.b:recommendedPreview.a,recommendedOdds=matchOdds(recommendedPreview);
     for(let board=0;board<4;board++){
@@ -107,6 +110,9 @@ for(const draftPolicy of ['random','rating'])for(let seed=1;seed<=40;seed++){
         if(gain>0.01&&(!probes.plannerExample||gain>probes.plannerExample.gain))probes.plannerExample=example;
         if(round===10){
           probes.finalRoundPlannerComparisons++;
+          const opponentTeam=knownTeams.find(team=>team.id===recommendedOpponent),matchup={opponent:opponentTeam,boards:recommendedPreview.boards,side:recommendedPreview.a==='YOU'?'a':'b'};
+          probes.finalRoundKnownComparisons++;
+          if(game.lineupExpectation(own,alternative.squad,matchup)>game.lineupExpectation(own,recommended.squad,matchup)+1e-10)probes.finalRoundKnownInferior++;
           if(gain>0.01)probes.finalRoundPlannerInferior++;
           if(gain>0.01&&(!probes.finalRoundPlannerExample||gain>probes.finalRoundPlannerExample.gain))probes.finalRoundPlannerExample=example;
         }
@@ -127,7 +133,7 @@ for(const draftPolicy of ['random','rating'])for(let seed=1;seed<=40;seed++){
     }
     t=played;
   }
-  if(seed%10===0)console.error(`Probed ${draftPolicy} draft seeds 1–${seed}/40 through all eleven rounds.`);
+  if(seed%10===0)console.error(`Probed ${draftPolicy} draft seeds 1–${seed}/${probeSeeds} through all eleven rounds.`);
 }
 
 const names=['random-auto','rating-auto','rating-manual','profile-auto','elite-auto'],samples=Object.fromEntries(names.map(name=>[name,[]]));
@@ -185,13 +191,14 @@ const result={
     elitePlayers:elite.map(p=>({name:p.name,rating:p.rating,year:p.year})),
   },
   method:{
-    counterfactuals:'40 seeds per random/rating draft policy, 11 rounds, four reserve substitutions; no user rotation on the baseline path.',
+    counterfactualsSkipped:args['skip-probes'],
+    counterfactuals:`${probeSeeds} seeds per random/rating draft policy, 11 rounds, four reserve substitutions; no user rotation on the baseline path.`,
     rerollsUsed:0,
     sourceRating:'Unrounded mean source rating of the four players actually fielded in round one.',
     runsPerPolicy:runs,totalTournaments:runs*names.length,
     pairedSeeds:'(0x1BFDA550 + (run + 1) * 997) >>> 0',
     profilePolicyReferenceRating:2720,
-    profilePolicy:'Maximize context-averaged expected fresh-board score, including starting form and style, against a neutral universal opponent; omit future fatigue and daily swings.',
+    profilePolicy:'Maximize the engine draftValue across eleven rounds, including reference trait/style matchups, scheduled fatigue/recovery, decaying starting form and integrated daily swings.',
   },
   probabilities:grid,policies,
   pairedComparisons:{
@@ -200,6 +207,10 @@ const result={
     profileLowerRatedChoices,profileChoices,
   },
   counterfactuals:probes,traitEffects,
+  bundleEffects:TRAITS.map(trait=>{
+    const career=CAREER_PROFILES.find(player=>player.trait===trait.id),preset=career?fixedProfile(career):{style:'universal',stamina:3,consistency:3};
+    return {trait:trait.id,preset,reference:career?'career archetype preset':'neutral numerical preset',valueAt2650:game.draftValue({rating:2650},trait.id,{...preset,form:0}),valueAt2750:game.draftValue({rating:2750},trait.id,{...preset,form:0})};
+  }),
   telemetry:{
     games:telemetry.games,
     observedRates:telemetry.observed.map(n=>n/telemetry.games),

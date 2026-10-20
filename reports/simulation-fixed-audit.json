@@ -1,0 +1,834 @@
+{
+  "source": {
+    "node": "v26.7.0",
+    "sourceRatings": "Unchanged published ratings and labelled historical estimates; sampled best observed editions.",
+    "catalogueRelease": "a0fdb700d517ce26894c43a6a85f6f8b4325621db06369b805f08387605b8db2",
+    "rules": "career-traits-3/squad-profiles-3/olympiad-4/competitive-draft-1",
+    "snapshots": 396,
+    "careerProfiles": 94,
+    "fixedOpponentPlayers": 76,
+    "opponentsAtLeast2700": 21,
+    "meanOfferLeader": 2677.290404040404,
+    "meanLeaderToSecondGap": 63.782828282828284,
+    "opponentMean": 2720.451612903226,
+    "opponentRange": [
+      2657,
+      2810
+    ],
+    "elitePlayers": [
+      {
+        "name": "Mikhail Botvinnik",
+        "rating": 2883,
+        "year": 1946
+      },
+      {
+        "name": "Magnus Carlsen",
+        "rating": 2872,
+        "year": 2014
+      },
+      {
+        "name": "Garry Kasparov",
+        "rating": 2838,
+        "year": 2002
+      },
+      {
+        "name": "Levon Aronian",
+        "rating": 2812,
+        "year": 2014
+      },
+      {
+        "name": "Fabiano Caruana",
+        "rating": 2811,
+        "year": 2018
+      }
+    ]
+  },
+  "method": {
+    "counterfactualsSkipped": false,
+    "counterfactuals": "10 seeds per random/rating draft policy, 11 rounds, four reserve substitutions; no user rotation on the baseline path.",
+    "rerollsUsed": 0,
+    "sourceRating": "Unrounded mean source rating of the four players actually fielded in round one.",
+    "runsPerPolicy": 100,
+    "totalTournaments": 500,
+    "pairedSeeds": "(0x1BFDA550 + (run + 1) * 997) >>> 0",
+    "profilePolicyReferenceRating": 2720,
+    "profilePolicy": "Maximize the engine draftValue across eleven rounds, including reference trait/style matchups, scheduled fatigue/recovery, decaying starting form and integrated daily swings."
+  },
+  "probabilities": {
+    "cases": 24050,
+    "maxProbabilitySumError": 1.1102230246251565e-16,
+    "maxExpectedScoreError": 1.1102230246251565e-16,
+    "invalid": 0
+  },
+  "policies": {
+    "random-auto": {
+      "runs": 100,
+      "titles": 0,
+      "titleRate": 0,
+      "titleRate95": [
+        0,
+        0.037
+      ],
+      "podiumRate": 0.04,
+      "perfect": 0,
+      "meanWins": 3.27,
+      "rank": {
+        "mean": 22.41,
+        "median": 24,
+        "p05": 4,
+        "p95": 32
+      },
+      "matchPoints": {
+        "mean": 9.15,
+        "median": 9,
+        "p05": 4,
+        "p95": 13
+      },
+      "matchPoints95": [
+        8.6074,
+        9.6926
+      ],
+      "sourceRating": {
+        "mean": 2681.0125,
+        "median": 2678,
+        "p05": 2611,
+        "p95": 2743.5
+      },
+      "meanMirrorPlayers": 3.02,
+      "runtimeMs": {
+        "mean": 703.0906,
+        "median": 691.1831,
+        "p05": 646.4039,
+        "p95": 797.0277
+      }
+    },
+    "rating-auto": {
+      "runs": 100,
+      "titles": 2,
+      "titleRate": 0.02,
+      "titleRate95": [
+        0.0055,
+        0.07
+      ],
+      "podiumRate": 0.1,
+      "perfect": 0,
+      "meanWins": 4.54,
+      "rank": {
+        "mean": 12.64,
+        "median": 11,
+        "p05": 2,
+        "p95": 27
+      },
+      "matchPoints": {
+        "mean": 12.01,
+        "median": 12,
+        "p05": 8,
+        "p95": 16
+      },
+      "matchPoints95": [
+        11.5762,
+        12.4438
+      ],
+      "sourceRating": {
+        "mean": 2749.075,
+        "median": 2749.75,
+        "p05": 2693.5,
+        "p95": 2791.25
+      },
+      "meanMirrorPlayers": 4.02,
+      "runtimeMs": {
+        "mean": 690.1276,
+        "median": 683.249,
+        "p05": 620.1954,
+        "p95": 753.2485
+      }
+    },
+    "rating-manual": {
+      "runs": 100,
+      "titles": 1,
+      "titleRate": 0.01,
+      "titleRate95": [
+        0.0018,
+        0.0545
+      ],
+      "podiumRate": 0.05,
+      "perfect": 0,
+      "meanWins": 3.56,
+      "rank": {
+        "mean": 18.5,
+        "median": 19,
+        "p05": 2,
+        "p95": 32
+      },
+      "matchPoints": {
+        "mean": 10.26,
+        "median": 10,
+        "p05": 5,
+        "p95": 15
+      },
+      "matchPoints95": [
+        9.723,
+        10.797
+      ],
+      "sourceRating": {
+        "mean": 2734.2875,
+        "median": 2736.25,
+        "p05": 2678.75,
+        "p95": 2781.25
+      },
+      "meanMirrorPlayers": 4.02,
+      "runtimeMs": {
+        "mean": 445.3479,
+        "median": 488.2849,
+        "p05": 136.46,
+        "p95": 599.2514
+      }
+    },
+    "profile-auto": {
+      "runs": 100,
+      "titles": 3,
+      "titleRate": 0.03,
+      "titleRate95": [
+        0.0103,
+        0.0845
+      ],
+      "podiumRate": 0.12,
+      "perfect": 0,
+      "meanWins": 4.54,
+      "rank": {
+        "mean": 13.19,
+        "median": 13,
+        "p05": 2,
+        "p95": 28
+      },
+      "matchPoints": {
+        "mean": 11.89,
+        "median": 12,
+        "p05": 8,
+        "p95": 16
+      },
+      "matchPoints95": [
+        11.4173,
+        12.3627
+      ],
+      "sourceRating": {
+        "mean": 2749.215,
+        "median": 2749.75,
+        "p05": 2695.25,
+        "p95": 2794.75
+      },
+      "meanMirrorPlayers": 4.08,
+      "runtimeMs": {
+        "mean": 568.4338,
+        "median": 640.4237,
+        "p05": 182.7109,
+        "p95": 754.8498
+      }
+    },
+    "elite-auto": {
+      "runs": 100,
+      "titles": 47,
+      "titleRate": 0.47,
+      "titleRate95": [
+        0.3751,
+        0.5671
+      ],
+      "podiumRate": 0.77,
+      "perfect": 0,
+      "meanWins": 7.28,
+      "rank": {
+        "mean": 2.93,
+        "median": 2,
+        "p05": 1,
+        "p95": 9
+      },
+      "matchPoints": {
+        "mean": 16.45,
+        "median": 17,
+        "p05": 12,
+        "p95": 20
+      },
+      "matchPoints95": [
+        15.9712,
+        16.9288
+      ],
+      "sourceRating": {
+        "mean": 2847.725,
+        "median": 2851,
+        "p05": 2836,
+        "p95": 2851.25
+      },
+      "meanMirrorPlayers": 5,
+      "runtimeMs": {
+        "mean": 680.6563,
+        "median": 676.1536,
+        "p05": 607.104,
+        "p95": 764.9413
+      }
+    }
+  },
+  "pairedComparisons": {
+    "rotationMatchPointGain": {
+      "mean": 1.75,
+      "ci95": [
+        1.2271,
+        2.2729
+      ]
+    },
+    "profileMatchPointGain": {
+      "mean": -0.12,
+      "ci95": [
+        -0.4404,
+        0.2004
+      ]
+    },
+    "profileLowerRatedChoices": 34,
+    "profileChoices": 500
+  },
+  "counterfactuals": {
+    "comparisons": 880,
+    "opponentChanges": 0,
+    "opponentChangesAfterFirstRound": 0,
+    "contextChanges": 0,
+    "sameOpponentContextChanges": 0,
+    "rankChanges": 0,
+    "rankChangesAfterFirstRound": 0,
+    "unrelatedGamesChanged": 0,
+    "example": null,
+    "unrelatedExample": null,
+    "plannerComparisons": 880,
+    "plannerInferior": 52,
+    "plannerExample": {
+      "draftPolicy": "random",
+      "seed": 5,
+      "round": 6,
+      "gain": 0.1698,
+      "recommendedRest": "Arkadij Naiditsch",
+      "alternativeRest": "John Paul Gomez",
+      "recommended": {
+        "win": 0.34053911692022715,
+        "draw": 0.2885920239361368,
+        "expectedMatchPoints": 0.9696702577765911
+      },
+      "alternative": {
+        "win": 0.43488933705760374,
+        "draw": 0.2697238943648982,
+        "expectedMatchPoints": 1.1395025684801057
+      }
+    },
+    "finalRoundPlannerComparisons": 80,
+    "finalRoundPlannerInferior": 0,
+    "finalRoundPlannerExample": null,
+    "finalRoundKnownComparisons": 80,
+    "finalRoundKnownInferior": 0
+  },
+  "traitEffects": [
+    {
+      "trait": "time-trouble",
+      "expectedScore": 0.5096,
+      "drawProbability": 0.4686
+    },
+    {
+      "trait": "intuitive",
+      "expectedScore": 0.5087,
+      "drawProbability": 0.4708
+    },
+    {
+      "trait": "endgame",
+      "expectedScore": 0.5086,
+      "drawProbability": 0.4645
+    },
+    {
+      "trait": "calculator",
+      "expectedScore": 0.5084,
+      "drawProbability": 0.4671
+    },
+    {
+      "trait": "specialist",
+      "expectedScore": 0.5073,
+      "drawProbability": 0.4626
+    },
+    {
+      "trait": "coordinator",
+      "expectedScore": 0.5071,
+      "drawProbability": 0.4666
+    },
+    {
+      "trait": "exchange",
+      "expectedScore": 0.5064,
+      "drawProbability": 0.4662
+    },
+    {
+      "trait": "positional",
+      "expectedScore": 0.5057,
+      "drawProbability": 0.4662
+    },
+    {
+      "trait": "simplifier",
+      "expectedScore": 0.5046,
+      "drawProbability": 0.499
+    },
+    {
+      "trait": "prophylaxis",
+      "expectedScore": 0.5045,
+      "drawProbability": 0.5132
+    },
+    {
+      "trait": "rook",
+      "expectedScore": 0.5044,
+      "drawProbability": 0.4667
+    },
+    {
+      "trait": "unorthodox",
+      "expectedScore": 0.5039,
+      "drawProbability": 0.4294
+    },
+    {
+      "trait": "dynamic",
+      "expectedScore": 0.5032,
+      "drawProbability": 0.4657
+    },
+    {
+      "trait": "tactician",
+      "expectedScore": 0.5032,
+      "drawProbability": 0.4057
+    },
+    {
+      "trait": "practical",
+      "expectedScore": 0.5029,
+      "drawProbability": 0.471
+    },
+    {
+      "trait": "preparation",
+      "expectedScore": 0.5025,
+      "drawProbability": 0.4653
+    },
+    {
+      "trait": "attacker",
+      "expectedScore": 0.5018,
+      "drawProbability": 0.4055
+    },
+    {
+      "trait": "sacrificer",
+      "expectedScore": 0.5018,
+      "drawProbability": 0.3856
+    },
+    {
+      "trait": "universal",
+      "expectedScore": 0.5018,
+      "drawProbability": 0.4716
+    },
+    {
+      "trait": "counterattacker",
+      "expectedScore": 0.5014,
+      "drawProbability": 0.4689
+    },
+    {
+      "trait": "flexible",
+      "expectedScore": 0.4988,
+      "drawProbability": 0.4693
+    },
+    {
+      "trait": "materialist",
+      "expectedScore": 0.4986,
+      "drawProbability": 0.4689
+    },
+    {
+      "trait": "grinder",
+      "expectedScore": 0.4962,
+      "drawProbability": 0.471
+    },
+    {
+      "trait": "innovator",
+      "expectedScore": 0.4962,
+      "drawProbability": 0.4692
+    },
+    {
+      "trait": "defender",
+      "expectedScore": 0.4906,
+      "drawProbability": 0.5108
+    }
+  ],
+  "bundleEffects": [
+    {
+      "trait": "attacker",
+      "preset": {
+        "style": "attacking",
+        "stamina": 3,
+        "consistency": 2
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.39632365510315437,
+      "valueAt2750": 0.5363709746006443
+    },
+    {
+      "trait": "sacrificer",
+      "preset": {
+        "style": "attacking",
+        "stamina": 3,
+        "consistency": 1
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.4019147127548284,
+      "valueAt2750": 0.5363272887398367
+    },
+    {
+      "trait": "dynamic",
+      "preset": {
+        "style": "attacking",
+        "stamina": 3,
+        "consistency": 2
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.3976905442584206,
+      "valueAt2750": 0.5377901247209984
+    },
+    {
+      "trait": "tactician",
+      "preset": {
+        "style": "attacking",
+        "stamina": 3,
+        "consistency": 2
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.3976905442584206,
+      "valueAt2750": 0.5377901247209984
+    },
+    {
+      "trait": "positional",
+      "preset": {
+        "style": "positional",
+        "stamina": 3,
+        "consistency": 5
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.40099217517893426,
+      "valueAt2750": 0.5400221397510703
+    },
+    {
+      "trait": "prophylaxis",
+      "preset": {
+        "style": "defensive",
+        "stamina": 4,
+        "consistency": 5
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.4002353284294077,
+      "valueAt2750": 0.5406701524504789
+    },
+    {
+      "trait": "counterattacker",
+      "preset": {
+        "style": "defensive",
+        "stamina": 4,
+        "consistency": 4
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.4025664851800833,
+      "valueAt2750": 0.5422618264062875
+    },
+    {
+      "trait": "defender",
+      "preset": {
+        "style": "defensive",
+        "stamina": 4,
+        "consistency": 4
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.4282604054018182,
+      "valueAt2750": 0.5251900260700678
+    },
+    {
+      "trait": "endgame",
+      "preset": {
+        "style": "positional",
+        "stamina": 4,
+        "consistency": 4
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.40694723254479825,
+      "valueAt2750": 0.5461727903015701
+    },
+    {
+      "trait": "simplifier",
+      "preset": {
+        "style": "positional",
+        "stamina": 4,
+        "consistency": 5
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.40280148658587955,
+      "valueAt2750": 0.5419235235667864
+    },
+    {
+      "trait": "grinder",
+      "preset": {
+        "style": "positional",
+        "stamina": 5,
+        "consistency": 5
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.39789924952277406,
+      "valueAt2750": 0.5368790139137836
+    },
+    {
+      "trait": "rook",
+      "preset": {
+        "style": "universal",
+        "stamina": 3,
+        "consistency": 3
+      },
+      "reference": "neutral numerical preset",
+      "valueAt2650": 0.39896455130667735,
+      "valueAt2750": 0.5379002704446909
+    },
+    {
+      "trait": "exchange",
+      "preset": {
+        "style": "universal",
+        "stamina": 3,
+        "consistency": 3
+      },
+      "reference": "neutral numerical preset",
+      "valueAt2650": 0.4003356226168038,
+      "valueAt2750": 0.5394613668648665
+    },
+    {
+      "trait": "universal",
+      "preset": {
+        "style": "universal",
+        "stamina": 4,
+        "consistency": 4
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.399347250528229,
+      "valueAt2750": 0.5384011862211169
+    },
+    {
+      "trait": "coordinator",
+      "preset": {
+        "style": "positional",
+        "stamina": 4,
+        "consistency": 4
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.4055678833397411,
+      "valueAt2750": 0.5447552787960519
+    },
+    {
+      "trait": "practical",
+      "preset": {
+        "style": "defensive",
+        "stamina": 3,
+        "consistency": 4
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.3950050302105127,
+      "valueAt2750": 0.5343927798441446
+    },
+    {
+      "trait": "innovator",
+      "preset": {
+        "style": "attacking",
+        "stamina": 3,
+        "consistency": 3
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.400689354204213,
+      "valueAt2750": 0.5410161537736832
+    },
+    {
+      "trait": "preparation",
+      "preset": {
+        "style": "positional",
+        "stamina": 3,
+        "consistency": 4
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.4051312563962831,
+      "valueAt2750": 0.5442734329378713
+    },
+    {
+      "trait": "specialist",
+      "preset": {
+        "style": "attacking",
+        "stamina": 3,
+        "consistency": 3
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.40446881701663734,
+      "valueAt2750": 0.5449148092639251
+    },
+    {
+      "trait": "flexible",
+      "preset": {
+        "style": "universal",
+        "stamina": 3,
+        "consistency": 3
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.40170824492016277,
+      "valueAt2750": 0.5407390653254681
+    },
+    {
+      "trait": "unorthodox",
+      "preset": {
+        "style": "attacking",
+        "stamina": 3,
+        "consistency": 1
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.3998601096757606,
+      "valueAt2750": 0.5398698104696815
+    },
+    {
+      "trait": "calculator",
+      "preset": {
+        "style": "universal",
+        "stamina": 3,
+        "consistency": 4
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.4027588708311508,
+      "valueAt2750": 0.541895446825118
+    },
+    {
+      "trait": "intuitive",
+      "preset": {
+        "style": "universal",
+        "stamina": 4,
+        "consistency": 4
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.4062250462220916,
+      "valueAt2750": 0.5454973487787131
+    },
+    {
+      "trait": "time-trouble",
+      "preset": {
+        "style": "attacking",
+        "stamina": 3,
+        "consistency": 2
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.3985114396964654,
+      "valueAt2750": 0.5386413248610071
+    },
+    {
+      "trait": "materialist",
+      "preset": {
+        "style": "defensive",
+        "stamina": 5,
+        "consistency": 4
+      },
+      "reference": "career archetype preset",
+      "valueAt2650": 0.4022461588892508,
+      "valueAt2750": 0.5419520645710496
+    }
+  ],
+  "telemetry": {
+    "games": 70400,
+    "observedRates": [
+      0.29982954545454543,
+      0.4314204545454545,
+      0.26875
+    ],
+    "predictedRates": [
+      0.30258004665397187,
+      0.43009793999781404,
+      0.26732201334821115
+    ],
+    "calibrationZ": [
+      -1.6415155770809922,
+      0.717216726790783,
+      0.8834583779747892
+    ],
+    "contextRates": {
+      "theory": 0.2525710227272727,
+      "quiet": 0.25035511363636365,
+      "technical": 0.2475994318181818,
+      "sharp": 0.24947443181818182
+    },
+    "timePressureRate": 0.1979403409090909,
+    "playersAtLeast8Games": 13919,
+    "playersColorImbalanceAtLeast6": 0,
+    "maxColorImbalance": 5,
+    "maxConsecutiveSameColor": 5,
+    "maxColorExample": {
+      "seed": 469614739,
+      "team": "alltime:POL:A",
+      "player": "Bartosz Socko",
+      "playerId": "POL-2014:fide:1107038",
+      "white": 2,
+      "black": 7,
+      "last": false,
+      "streak": 3,
+      "games": 9,
+      "appearances": [
+        {
+          "round": 1,
+          "color": "black"
+        },
+        {
+          "round": 2,
+          "color": "black"
+        },
+        {
+          "round": 4,
+          "color": "black"
+        },
+        {
+          "round": 5,
+          "color": "white"
+        },
+        {
+          "round": 6,
+          "color": "black"
+        },
+        {
+          "round": 7,
+          "color": "white"
+        },
+        {
+          "round": 9,
+          "color": "black"
+        },
+        {
+          "round": 10,
+          "color": "black"
+        },
+        {
+          "round": 11,
+          "color": "black"
+        }
+      ],
+      "imbalance": 5
+    },
+    "meanOwnFatigueByRound": [
+      0,
+      0,
+      0.05999999999999999,
+      4.984999999999993,
+      9.704999999999998,
+      12.542500000000002,
+      14.192500000000006,
+      18.19125000000002,
+      21.53375,
+      26.551250000000042,
+      30.882500000000103
+    ],
+    "meanOpponentFatigueByRound": [
+      0,
+      0,
+      0.10935483870967881,
+      4.4095564516124535,
+      7.819919354838727,
+      9.224032258064401,
+      10.523225806450874,
+      13.762379032256693,
+      16.62624999999969,
+      18.77189516128964,
+      21.635564516127957
+    ]
+  }
+}

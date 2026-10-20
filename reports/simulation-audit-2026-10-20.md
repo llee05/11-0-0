@@ -1,5 +1,7 @@
 # Simulation investigation · 20 October 2026
 
+The [follow-up fixes and measurements](simulation-fixes-2026-10-20.md) address these findings. This document and its original measurements describe the pre-fix game. Use commit `53a13b9` to reproduce that baseline; the current audit script targets the updated rules.
+
 The simulation is internally consistent in the checks run, but normal drafts are substantially weaker than the all-time field. Two confirmed problems deserve attention: substitutions can change pairings and standings without a game being played, and individual players can receive the same colour for all eleven rounds. Reserve management helps; the current trait system and automated planner offer less tactical depth than their presentation suggests.
 
 This investigation changes no gameplay, ratings, catalogue data, saves or deployment. The [audit script](../scripts/audit-simulation.mjs) and [measurements](simulation-audit.json) make the findings reproducible.

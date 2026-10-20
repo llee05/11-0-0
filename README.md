@@ -128,7 +128,7 @@ For a reproducible simulation investigation, run the read-only audit against an 
 node scripts/audit-simulation.mjs --runs 200 --output /tmp/11-0-0-simulation-audit.json
 ```
 
-This compares five drafting/rotation policies across 1,000 complete tournaments, probes substitution effects and checks probability arithmetic, colour allocation and fatigue. It changes no game rules, persistent database or browser saves. See the [20 October 2026 investigation](reports/simulation-audit-2026-10-20.md) for findings, methods and limitations; regenerate measurements after changing the engine or catalogue.
+This compares five drafting/rotation policies across 1,000 complete tournaments, probes substitution effects and checks probability arithmetic, colour allocation and fatigue. It changes no game rules, persistent database or browser saves. See the [original investigation](reports/simulation-audit-2026-10-20.md) and [follow-up fixes and measurements](reports/simulation-fixes-2026-10-20.md). The follow-up uses `--runs 100 --probe-seeds 10` (500 tournaments, 880 substitutions); `--skip-probes` is available for isolated balance experiments. Regenerate measurements after changing the engine or catalogue.
 
 Optional browser QA, with the local app running:
 
