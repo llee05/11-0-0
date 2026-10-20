@@ -152,6 +152,12 @@ This runs 6,000 complete tournaments: four fixed squads near 2700/2750/2800/2850
 
 Use `--cohorts 2800`, `--variants baseline,profiles`, `--offset 1000` or `--include-samples` for focused comparisons, fresh evaluation seeds or individual records. The four squads are explicit benchmarks, not representative samples of every squad with those ratings. Runtime depends on the machine and worker count; the default performs thousands of tournaments. The [21 October balance evaluation](reports/simulation-balance-2026-10-21.md) records the selected settings and 5,250 tournaments on fresh evaluation seeds under `olympiad-5`, before manual board-order support. Reproduce those measurements at its recorded commit.
 
+Historical rating modes are investigated in the [era-rating study](reports/era-ratings-2026-10-21.md). It compares a fictional rank-based balance candidate with the evidence needed for move-based strength estimates. These modes are proposals; current gameplay still uses unadjusted source ratings. Reproduce the descriptive study without changing the app or persistent database:
+
+```bash
+node scripts/audit-era-ratings.mjs --output /tmp/era-ratings.json
+```
+
 Optional browser QA, with the local app running:
 
 ```bash
