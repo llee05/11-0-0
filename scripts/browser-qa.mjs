@@ -29,7 +29,13 @@ try {
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'COUNTRIES & YEARS'}).click();
   assert.equal(await page.locator('#archive-year option').count(),26);
-  assert.equal(await page.locator('[data-id="MGL-2026"][data-action="archive-country"]').count(),1);
+  assert.ok((await page.getByRole('dialog').textContent()).includes('rated at least 2600'));
+  const catalogue=await page.evaluate(async()=>await (await fetch('/api/catalog')).json());
+  assert.equal(catalogue.metadata.snapshotCount,396);
+  assert.equal(catalogue.metadata.countryCount,69);
+  assert.ok(catalogue.nations.every(n=>n.players.some(id=>catalogue.players.find(p=>p.id===id).rating>=2600)));
+  assert.equal(await page.locator('[data-id="AUS-2026"][data-action="archive-country"]').count(),0);
+  assert.equal(await page.locator('[data-id="MGL-2026"][data-action="archive-country"]').count(),0);
   await page.locator('[data-id="USA-2026"][data-action="archive-country"]').click();
   assert.equal(await page.locator('.source-roster>div').count(),5);
   assert.ok((await page.locator('.source-roster').textContent()).includes('Hikaru Nakamura'));
@@ -227,6 +233,6 @@ try {
   assert.equal(await legacyPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).version),4);
   await legacyContext.close();
   assert.deepEqual(errors,[]);
-  console.log('Browser QA passed: stamina/captaincy/style/form/consistency, captain choice and opponent profiles, trait guide and signatures, saved offer/pick traits, seeded AI traits, match previews and effects, legacy save preservation, unchanged source ratings, strict country cutoff, all-time A/B roster and source dialogs, manual and quick drafts, expert mode, rerolls, team name, board targeting, persistence, reserve rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
+  console.log('Browser QA passed: stamina/captaincy/style/form/consistency, captain choice and opponent profiles, trait guide and signatures, saved offer/pick traits, seeded AI traits, match previews and effects, legacy save preservation, unchanged source ratings, inclusive 2600 country cutoff, all-time A/B roster and source dialogs, manual and quick drafts, expert mode, rerolls, team name, board targeting, persistence, reserve rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
   console.log(`Screenshots: ${artifacts}`);
 } finally {await browser.close();}

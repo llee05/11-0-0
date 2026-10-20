@@ -41,7 +41,7 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 - Country snapshots use period federation and the top five published standard ratings, independent of Olympiad participation. Show all five; disable ineligible picks. Prevent drafting the same person from multiple years.
 - Tournament opponents are the strongest 31 all-time A/B lineups by unrounded four-board total, plus the user's team for 32 total. For each person keep their best observed source edition (ties: latest year, federation, edition ID), using its federation. Each federation's first five form A and the next five B. Never repeat a person across opposing teams or combine Russia and the Soviet Union. Source coverage is selective; do not describe sampled ratings as exhaustive career peaks.
 - Official-list coverage is 1974–2026 at four-year intervals. Twelve labelled Chessmetrics country snapshots cover every scheduled early year from 1927–1970. Their country coverage is selective and each has a complete higher-rank affiliation audit. Additional early countries remain unavailable pending evidence; never publish speculative top fives. Preserve temporal inference qualifications and sourced person-identity crosswalks.
-- Preserve source date, URL, SHA256 and raw ratings. Gameplay uses source ratings unchanged, with no era adjustment. Country-year rolls must contain at least one player rated strictly above 2500; preserve the complete top five of each qualifying snapshot.
+- Preserve source date, URL, SHA256 and raw ratings. Gameplay uses source ratings unchanged, with no era adjustment. Country-year rolls must contain at least one player rated at least 2600; preserve the complete top five of each qualifying snapshot.
 
 ## Implementation guidance
 
@@ -67,7 +67,7 @@ npm test       # SQL catalogue, rules and simulation tests
 npm run build  # Hosted Worker/assets; requires npm --prefix backend ci
 ```
 
-For catalogue changes, test SQLite persistence, foreign keys, complete source-ranked top fives, known modern rosters, unchanged ratings, the strict 2500 cutoff, all-time A/B selection, cross-era identity links and atomic release replacement. For engine changes, run the syntax checks and engine suite; add or adjust tests for changed behavior. The suite covers 1,000 drafts, 100 complete tournaments, deterministic results, scoring, pairings, fatigue, invalid actions and saved-game validation.
+For catalogue changes, test SQLite persistence, foreign keys, complete source-ranked top fives, known modern rosters, unchanged ratings, the inclusive 2600 cutoff, all-time A/B selection, cross-era identity links and atomic release replacement. For engine changes, run the syntax checks and engine suite; add or adjust tests for changed behavior. The suite covers 1,000 drafts, 100 complete tournaments, deterministic results, scoring, pairings, fatigue, invalid actions and saved-game validation.
 
 For UI changes, run syntax checks and verify the affected browser flows at desktop and mobile widths. The optional full browser QA setup and environment overrides are documented in `README.md`. For documentation-only changes, verify commands, file paths and statements against the source, and check the diff for whitespace errors with `git diff --check`.
 

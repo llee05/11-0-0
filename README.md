@@ -16,7 +16,7 @@ Edit the maintained HTML, CSS and ES modules in `dist/` directly. The app now ne
 
 ## Play
 
-- **Country-year rolls:** USA 2026 and USA 2022 are separate rollable options. Every offer shows its source list's five highest standard-rated players, ordered by the original rating. A snapshot is playable only if at least one of those players is rated strictly above 2500. Olympiad participation is never a selection filter.
+- **Country-year rolls:** USA 2026 and USA 2022 are separate rollable options. Every offer shows its source list's five highest standard-rated players, ordered by the original rating. A snapshot is playable only if at least one of those players is rated at least 2600. Olympiad participation is never a selection filter.
 - **Draft:** Pick five distinct people within 100 credits. Two nation rerolls are available. Unaffordable or already-drafted players remain visible and disabled; lower-ranked players never replace them. Only snapshots with an eligible pick can be rolled. Quick Draft can complete an affordable squad.
 - **Player traits:** 28 famous players have fixed, sourced career-inspired signatures across their year editions. Everyone else rolls one of 25 abilities or no trait (25% chance) with each new draft offer. A picked trait stays for the game and survives reloads. The **Player traits** guide explains every effect and links the signature sources. Trait rolls are visible in both modes.
 - **Player profiles:** Each player has a playing style plus stamina, captaincy and consistency rated 1–5. Famous players use fixed game presets derived from their signature archetype; other players roll profiles with each offer. Everyone rolls starting form. These numerical values are fictional balance choices. Both your squad and all 31 opponents use the complete system.
@@ -32,7 +32,7 @@ Edit the maintained HTML, CSS and ES modules in `dist/` directly. The app now ne
 
 ## Rating data and historical coverage
 
-The playable catalogue contains **722 country-year snapshots**, **3,610 player editions** and **93 federation codes**, covering **1974–2026 every four years**, plus **12 audited historical estimates from 1927–1970**. All 26 scheduled years now have at least one country. Four neutral `FID` entries are excluded from country rolls. The intended schedule is 2026, 2022, …, 1930, plus 1927, the year of the first Chess Olympiad.
+The playable catalogue contains **396 country-year snapshots**, **1,980 player editions** and **69 federation codes**, covering **1974–2026 every four years**, plus **12 audited historical estimates from 1927–1970**. All 26 scheduled years now have at least one country. Four neutral `FID` entries are excluded from country rolls. The intended schedule is 2026, 2022, …, 1930, plus 1927, the year of the first Chess Olympiad.
 
 Sources:
 
@@ -51,7 +51,7 @@ Each snapshot records its source date, URL, archive SHA256 and published player 
 
 Top-five selection and gameplay both use the **published source rating unchanged**. There is no era adjustment. Pre-FIDE Chessmetrics estimates remain labelled as estimates; comparing these ratings across eras does not establish absolute playing strength. Source top-100 statistics remain recorded for provenance but do not affect gameplay.
 
-Only country-year snapshots containing a player rated **strictly above 2500** are playable. A top rating of exactly 2500 does not qualify. Qualifying snapshots retain their complete top five, including players below the cutoff. The checked-in source observations retain excluded snapshots for reproducibility.
+Only country-year snapshots containing a player rated **at least 2600** are playable. A top rating of exactly 2600 qualifies; 2599 does not. Qualifying snapshots retain their complete top five, including players below the cutoff. The checked-in source observations retain excluded snapshots for reproducibility.
 
 Prices use `max(8, round((source Elo − 2320) / 20))`. No actual chess moves are played: each board samples an outcome from Elo expected score, a draw probability, color advantage, fatigue, traits, styles, captain influence, form and daily performance. Tournament randomness is seeded; the same squad, traits, profiles, seed, captain and reserve decisions produce repeatable results.
 
@@ -115,7 +115,7 @@ npm run check
 npm test
 ```
 
-Tests cover persistent SQL data, source ordering, known USA rosters, unchanged ratings, the strict 2500 cutoff, source identity links, all-time A/B field selection, cross-year player uniqueness, complete five-player offers, 1,000 drafts, 100 tournaments, scoring, pairings, reproducibility, symmetric stamina/fatigue, trait/style effects, captain selection, bounded form and consistency, forecast consistency and invalid saves. Browser QA also checks saved profiles, guide/source dialogs, forecasts, seeded opponent traits/profiles and preservation of legacy or malformed saves.
+Tests cover persistent SQL data, source ordering, known USA rosters, unchanged ratings, the inclusive 2600 cutoff, source identity links, all-time A/B field selection, cross-year player uniqueness, complete five-player offers, 1,000 drafts, 100 tournaments, scoring, pairings, reproducibility, symmetric stamina/fatigue, trait/style effects, captain selection, bounded form and consistency, forecast consistency and invalid saves. Browser QA also checks saved profiles, guide/source dialogs, forecasts, seeded opponent traits/profiles and preservation of legacy or malformed saves.
 
 Optional browser QA, with the local app running:
 
