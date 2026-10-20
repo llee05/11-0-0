@@ -1,0 +1,631 @@
+{
+  "source": {
+    "node": "v26.7.0",
+    "sourceRatings": "Unchanged published ratings and labelled historical estimates; sampled best observed editions.",
+    "catalogueRelease": "a0fdb700d517ce26894c43a6a85f6f8b4325621db06369b805f08387605b8db2",
+    "rules": "career-traits-2/squad-profiles-3",
+    "snapshots": 396,
+    "careerProfiles": 94,
+    "fixedOpponentPlayers": 76,
+    "opponentsAtLeast2700": 21,
+    "meanOfferLeader": 2677.290404040404,
+    "meanLeaderToSecondGap": 63.782828282828284,
+    "opponentMean": 2720.451612903226,
+    "opponentRange": [
+      2657,
+      2810
+    ],
+    "elitePlayers": [
+      {
+        "name": "Mikhail Botvinnik",
+        "rating": 2883,
+        "year": 1946
+      },
+      {
+        "name": "Magnus Carlsen",
+        "rating": 2872,
+        "year": 2014
+      },
+      {
+        "name": "Garry Kasparov",
+        "rating": 2838,
+        "year": 2002
+      },
+      {
+        "name": "Levon Aronian",
+        "rating": 2812,
+        "year": 2014
+      },
+      {
+        "name": "Fabiano Caruana",
+        "rating": 2811,
+        "year": 2018
+      }
+    ]
+  },
+  "method": {
+    "counterfactuals": "40 seeds per random/rating draft policy, 11 rounds, four reserve substitutions; no user rotation on the baseline path.",
+    "rerollsUsed": 0,
+    "sourceRating": "Unrounded mean source rating of the four players actually fielded in round one.",
+    "runsPerPolicy": 200,
+    "totalTournaments": 1000,
+    "pairedSeeds": "(0x1BFDA550 + (run + 1) * 997) >>> 0",
+    "profilePolicyReferenceRating": 2720,
+    "profilePolicy": "Maximize context-averaged expected fresh-board score, including starting form and style, against a neutral universal opponent; omit future fatigue and daily swings."
+  },
+  "probabilities": {
+    "cases": 16354,
+    "maxProbabilitySumError": 1.1102230246251565e-16,
+    "maxExpectedScoreError": 1.1102230246251565e-16,
+    "invalid": 0
+  },
+  "policies": {
+    "random-auto": {
+      "runs": 200,
+      "titles": 0,
+      "titleRate": 0,
+      "titleRate95": [
+        0,
+        0.0188
+      ],
+      "podiumRate": 0,
+      "perfect": 0,
+      "meanWins": 1.83,
+      "rank": {
+        "mean": 28.685,
+        "median": 31,
+        "p05": 16,
+        "p95": 32
+      },
+      "matchPoints": {
+        "mean": 5.94,
+        "median": 6,
+        "p05": 1,
+        "p95": 11
+      },
+      "matchPoints95": [
+        5.5291,
+        6.3509
+      ],
+      "sourceRating": {
+        "mean": 2622.6575,
+        "median": 2626.25,
+        "p05": 2546.5,
+        "p95": 2687.75
+      },
+      "meanMirrorPlayers": 1.63,
+      "runtimeMs": {
+        "mean": 105.8707,
+        "median": 102.6128,
+        "p05": 100.4329,
+        "p95": 120.9805
+      }
+    },
+    "rating-auto": {
+      "runs": 200,
+      "titles": 2,
+      "titleRate": 0.01,
+      "titleRate95": [
+        0.0027,
+        0.0357
+      ],
+      "podiumRate": 0.035,
+      "perfect": 0,
+      "meanWins": 3.395,
+      "rank": {
+        "mean": 21.345,
+        "median": 22,
+        "p05": 6,
+        "p95": 32
+      },
+      "matchPoints": {
+        "mean": 9.48,
+        "median": 10,
+        "p05": 4,
+        "p95": 14
+      },
+      "matchPoints95": [
+        9.0792,
+        9.8808
+      ],
+      "sourceRating": {
+        "mean": 2687.2238,
+        "median": 2686.25,
+        "p05": 2637.75,
+        "p95": 2748.25
+      },
+      "meanMirrorPlayers": 2.67,
+      "runtimeMs": {
+        "mean": 104.7231,
+        "median": 101.8514,
+        "p05": 99.9093,
+        "p95": 117.915
+      }
+    },
+    "rating-manual": {
+      "runs": 200,
+      "titles": 1,
+      "titleRate": 0.005,
+      "titleRate95": [
+        0.0009,
+        0.0278
+      ],
+      "podiumRate": 0.01,
+      "perfect": 0,
+      "meanWins": 2.66,
+      "rank": {
+        "mean": 25.28,
+        "median": 28,
+        "p05": 9,
+        "p95": 32
+      },
+      "matchPoints": {
+        "mean": 7.99,
+        "median": 8,
+        "p05": 3,
+        "p95": 12
+      },
+      "matchPoints95": [
+        7.5936,
+        8.3864
+      ],
+      "sourceRating": {
+        "mean": 2674.6075,
+        "median": 2672.25,
+        "p05": 2627.25,
+        "p95": 2726
+      },
+      "meanMirrorPlayers": 2.67,
+      "runtimeMs": {
+        "mean": 64.1012,
+        "median": 61.598,
+        "p05": 60.5924,
+        "p95": 75.4113
+      }
+    },
+    "profile-auto": {
+      "runs": 200,
+      "titles": 1,
+      "titleRate": 0.005,
+      "titleRate95": [
+        0.0009,
+        0.0278
+      ],
+      "podiumRate": 0.025,
+      "perfect": 0,
+      "meanWins": 3.285,
+      "rank": {
+        "mean": 21.83,
+        "median": 23,
+        "p05": 6,
+        "p95": 32
+      },
+      "matchPoints": {
+        "mean": 9.305,
+        "median": 9,
+        "p05": 5,
+        "p95": 13
+      },
+      "matchPoints95": [
+        8.9244,
+        9.6856
+      ],
+      "sourceRating": {
+        "mean": 2684.83,
+        "median": 2681.75,
+        "p05": 2633.75,
+        "p95": 2748.25
+      },
+      "meanMirrorPlayers": 2.585,
+      "runtimeMs": {
+        "mean": 106.2305,
+        "median": 102.7841,
+        "p05": 100.7822,
+        "p95": 123.3153
+      }
+    },
+    "elite-auto": {
+      "runs": 200,
+      "titles": 100,
+      "titleRate": 0.5,
+      "titleRate95": [
+        0.4314,
+        0.5686
+      ],
+      "podiumRate": 0.845,
+      "perfect": 2,
+      "meanWins": 7.48,
+      "rank": {
+        "mean": 2.24,
+        "median": 1,
+        "p05": 1,
+        "p95": 6
+      },
+      "matchPoints": {
+        "mean": 17,
+        "median": 17,
+        "p05": 14,
+        "p95": 20
+      },
+      "matchPoints95": [
+        16.7112,
+        17.2888
+      ],
+      "sourceRating": {
+        "mean": 2850.3688,
+        "median": 2851,
+        "p05": 2844.5,
+        "p95": 2851.25
+      },
+      "meanMirrorPlayers": 5,
+      "runtimeMs": {
+        "mean": 104.9856,
+        "median": 102.024,
+        "p05": 99.9765,
+        "p95": 120.9103
+      }
+    }
+  },
+  "pairedComparisons": {
+    "rotationMatchPointGain": {
+      "mean": 1.49,
+      "ci95": [
+        1.0148,
+        1.9652
+      ]
+    },
+    "profileMatchPointGain": {
+      "mean": -0.175,
+      "ci95": [
+        -0.4656,
+        0.1156
+      ]
+    },
+    "profileLowerRatedChoices": 151,
+    "profileChoices": 1000
+  },
+  "counterfactuals": {
+    "comparisons": 3520,
+    "opponentChanges": 205,
+    "opponentChangesAfterFirstRound": 63,
+    "contextChanges": 205,
+    "sameOpponentContextChanges": 0,
+    "rankChanges": 215,
+    "rankChangesAfterFirstRound": 77,
+    "unrelatedGamesChanged": 0,
+    "example": {
+      "draftPolicy": "random",
+      "seed": 5,
+      "round": 1,
+      "reserveIn": "Peter Svidler",
+      "resting": "Helgi Ass Gretarsson",
+      "opponent": "alltime:ARM:A",
+      "alternativeOpponent": "alltime:HUN:A",
+      "baseContexts": [
+        {
+          "kind": "quiet",
+          "ending": null,
+          "timePressure": false
+        },
+        {
+          "kind": "quiet",
+          "ending": null,
+          "timePressure": false
+        },
+        {
+          "kind": "sharp",
+          "ending": null,
+          "timePressure": false
+        },
+        {
+          "kind": "technical",
+          "ending": "minor",
+          "timePressure": true
+        }
+      ],
+      "alternativeContexts": [
+        {
+          "kind": "quiet",
+          "ending": null,
+          "timePressure": false
+        },
+        {
+          "kind": "theory",
+          "ending": null,
+          "timePressure": false
+        },
+        {
+          "kind": "theory",
+          "ending": null,
+          "timePressure": true
+        },
+        {
+          "kind": "quiet",
+          "ending": null,
+          "timePressure": false
+        }
+      ]
+    },
+    "unrelatedExample": null,
+    "plannerComparisons": 3333,
+    "plannerInferior": 210,
+    "plannerExample": {
+      "draftPolicy": "random",
+      "seed": 12,
+      "round": 6,
+      "gain": 0.1856,
+      "recommendedRest": "Boris Gelfand",
+      "alternativeRest": "Yannick Pelletier",
+      "recommended": {
+        "win": 0.17687742340132676,
+        "draw": 0.22065313413793625,
+        "expectedMatchPoints": 0.5744079809405898
+      },
+      "alternative": {
+        "win": 0.2555988403353909,
+        "draw": 0.24878444642702038,
+        "expectedMatchPoints": 0.7599821270978021
+      }
+    },
+    "finalRoundPlannerComparisons": 320,
+    "finalRoundPlannerInferior": 6,
+    "finalRoundPlannerExample": {
+      "draftPolicy": "rating",
+      "seed": 4,
+      "round": 11,
+      "gain": 0.0476,
+      "recommendedRest": "Jan H Timman",
+      "alternativeRest": "Viswanathan Anand",
+      "recommended": {
+        "win": 0.2191640952523392,
+        "draw": 0.23178386746982488,
+        "expectedMatchPoints": 0.6701120579745032
+      },
+      "alternative": {
+        "win": 0.23975224911522164,
+        "draw": 0.23821833278217128,
+        "expectedMatchPoints": 0.7177228310126146
+      }
+    }
+  },
+  "traitEffects": [
+    {
+      "trait": "universal",
+      "expectedScore": 0.5105,
+      "drawProbability": 0.4734
+    },
+    {
+      "trait": "intuitive",
+      "expectedScore": 0.5063,
+      "drawProbability": 0.4733
+    },
+    {
+      "trait": "exchange",
+      "expectedScore": 0.5044,
+      "drawProbability": 0.4732
+    },
+    {
+      "trait": "specialist",
+      "expectedScore": 0.5044,
+      "drawProbability": 0.4727
+    },
+    {
+      "trait": "simplifier",
+      "expectedScore": 0.5042,
+      "drawProbability": 0.5033
+    },
+    {
+      "trait": "time-trouble",
+      "expectedScore": 0.5038,
+      "drawProbability": 0.4732
+    },
+    {
+      "trait": "coordinator",
+      "expectedScore": 0.5034,
+      "drawProbability": 0.4732
+    },
+    {
+      "trait": "calculator",
+      "expectedScore": 0.5029,
+      "drawProbability": 0.4732
+    },
+    {
+      "trait": "endgame",
+      "expectedScore": 0.5028,
+      "drawProbability": 0.4731
+    },
+    {
+      "trait": "rook",
+      "expectedScore": 0.5028,
+      "drawProbability": 0.4726
+    },
+    {
+      "trait": "preparation",
+      "expectedScore": 0.5027,
+      "drawProbability": 0.4734
+    },
+    {
+      "trait": "positional",
+      "expectedScore": 0.502,
+      "drawProbability": 0.4732
+    },
+    {
+      "trait": "counterattacker",
+      "expectedScore": 0.5013,
+      "drawProbability": 0.4731
+    },
+    {
+      "trait": "grinder",
+      "expectedScore": 0.5007,
+      "drawProbability": 0.4733
+    },
+    {
+      "trait": "attacker",
+      "expectedScore": 0.4999,
+      "drawProbability": 0.4132
+    },
+    {
+      "trait": "dynamic",
+      "expectedScore": 0.4999,
+      "drawProbability": 0.4732
+    },
+    {
+      "trait": "tactician",
+      "expectedScore": 0.4999,
+      "drawProbability": 0.4132
+    },
+    {
+      "trait": "innovator",
+      "expectedScore": 0.4997,
+      "drawProbability": 0.4734
+    },
+    {
+      "trait": "flexible",
+      "expectedScore": 0.4993,
+      "drawProbability": 0.4733
+    },
+    {
+      "trait": "prophylaxis",
+      "expectedScore": 0.4988,
+      "drawProbability": 0.5133
+    },
+    {
+      "trait": "unorthodox",
+      "expectedScore": 0.4988,
+      "drawProbability": 0.4332
+    },
+    {
+      "trait": "materialist",
+      "expectedScore": 0.4974,
+      "drawProbability": 0.4732
+    },
+    {
+      "trait": "defender",
+      "expectedScore": 0.4965,
+      "drawProbability": 0.5133
+    },
+    {
+      "trait": "practical",
+      "expectedScore": 0.4965,
+      "drawProbability": 0.4733
+    },
+    {
+      "trait": "sacrificer",
+      "expectedScore": 0.4901,
+      "drawProbability": 0.3931
+    }
+  ],
+  "telemetry": {
+    "games": 140800,
+    "observedRates": [
+      0.30378551136363635,
+      0.43097301136363636,
+      0.2652414772727273
+    ],
+    "predictedRates": [
+      0.30250679027190264,
+      0.4327681394598615,
+      0.2647250702682451
+    ],
+    "calibrationZ": [
+      1.0738342572842663,
+      -1.3743359032908606,
+      0.45097456681329445
+    ],
+    "contextRates": {
+      "sharp": 0.25004261363636365,
+      "theory": 0.2501988636363636,
+      "technical": 0.2502911931818182,
+      "quiet": 0.24946732954545456
+    },
+    "timePressureRate": 0.20049005681818183,
+    "playersAtLeast8Games": 27268,
+    "playersColorImbalanceAtLeast6": 1586,
+    "maxColorImbalance": 11,
+    "maxConsecutiveSameColor": 11,
+    "maxColorExample": {
+      "seed": 469720421,
+      "team": "alltime:URS:A",
+      "player": "Mikhail Botvinnik",
+      "playerId": "URS-1946:chessmetrics:15154",
+      "white": 11,
+      "black": 0,
+      "last": true,
+      "streak": 11,
+      "games": 11,
+      "appearances": [
+        {
+          "round": 1,
+          "color": "white"
+        },
+        {
+          "round": 2,
+          "color": "white"
+        },
+        {
+          "round": 3,
+          "color": "white"
+        },
+        {
+          "round": 4,
+          "color": "white"
+        },
+        {
+          "round": 5,
+          "color": "white"
+        },
+        {
+          "round": 6,
+          "color": "white"
+        },
+        {
+          "round": 7,
+          "color": "white"
+        },
+        {
+          "round": 8,
+          "color": "white"
+        },
+        {
+          "round": 9,
+          "color": "white"
+        },
+        {
+          "round": 10,
+          "color": "white"
+        },
+        {
+          "round": 11,
+          "color": "white"
+        }
+      ],
+      "imbalance": 11
+    },
+    "meanOwnFatigueByRound": [
+      0,
+      0,
+      0.10250000000000005,
+      5.195000000000029,
+      9.222500000000013,
+      11.060000000000034,
+      13.061250000000063,
+      16.678750000000065,
+      20.10749999999997,
+      23.91625000000002,
+      29.25062499999999
+    ],
+    "meanOpponentFatigueByRound": [
+      0,
+      0,
+      0.11153225806451482,
+      4.737641129031359,
+      7.734032258064943,
+      7.988749999999387,
+      8.930141129031233,
+      12.723608870964352,
+      15.684274193545079,
+      17.93002016128996,
+      21.86302419354498
+    ]
+  }
+}

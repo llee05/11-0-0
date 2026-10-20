@@ -121,6 +121,14 @@ npm test
 
 Tests cover persistent SQL data, source ordering, known USA rosters, unchanged ratings, the inclusive 2600 cutoff, source identity links, all-time A/B field selection, cross-year player uniqueness, complete five-player offers, 1,000 drafts, 100 tournaments, scoring, pairings, reproducibility, symmetric stamina/fatigue, trait/style effects, captain-free profiles and match modifiers, bounded form and consistency, forecast consistency and invalid saves. Browser QA also checks saved profiles, guide/source dialogs, forecasts, seeded opponent traits/profiles and preservation of legacy or malformed saves.
 
+For a reproducible simulation investigation, run the read-only audit against an in-memory catalogue:
+
+```bash
+node scripts/audit-simulation.mjs --runs 200 --output /tmp/11-0-0-simulation-audit.json
+```
+
+This compares five drafting/rotation policies across 1,000 complete tournaments, probes substitution effects and checks probability arithmetic, colour allocation and fatigue. It changes no game rules, persistent database or browser saves. See the [20 October 2026 investigation](reports/simulation-audit-2026-10-20.md) for findings, methods and limitations; regenerate measurements after changing the engine or catalogue.
+
 Optional browser QA, with the local app running:
 
 ```bash

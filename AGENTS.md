@@ -25,6 +25,7 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 | `scripts/ratings/`, `scripts/import-ratings.mjs` | Reproducible, checksum-verified source extraction. |
 | `tests/engine.test.mjs` | Node's built-in test suite for game rules, simulations and save validation. |
 | `scripts/browser-qa.mjs` | Optional Playwright Core flow using an existing Chromium installation. |
+| `scripts/audit-simulation.mjs`, `reports/` | Read-only seeded simulation experiments, counterfactual substitution probes and dated findings; use an in-memory catalogue and keep measured results tied to their audited rules and release. |
 | `.openai/hosting.json`, `scripts/build-hosted.mjs` | Existing Site identity, D1 binding `DB`, and non-destructive hosted build. |
 
 ### State and data flow
