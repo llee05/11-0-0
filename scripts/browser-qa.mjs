@@ -181,6 +181,14 @@ try {
   await page.locator('.round-actions [data-action="board-order"]').click();
   assert.equal(await page.locator('.board-order-row').count(),4);
   assert.equal(await page.locator('.board-order-row option').count(),16);
+  const firstPlayer=catalogue.players.find(p=>p.id===originalOrder[0]).name;
+  assert.ok(await page.getByRole('button',{name:`Move ${firstPlayer} up one board`,exact:true}).isDisabled());
+  await page.getByRole('button',{name:`Move ${firstPlayer} down one board`,exact:true}).click();
+  assert.equal(await page.getByLabel('Board 2',{exact:true}).inputValue(),originalOrder[0]);
+  assert.equal(await page.getByLabel('Board 2',{exact:true}).evaluate(el=>el===document.activeElement),true);
+  await page.getByRole('button',{name:`Move ${firstPlayer} up one board`,exact:true}).click();
+  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.squad),originalOrder);
+  assert.equal(await page.locator('.board-order-opponent').count(),4);
   await page.getByLabel('Board 1',{exact:true}).selectOption(originalOrder[3]);
   const customOrder=[originalOrder[3],originalOrder[1],originalOrder[2],originalOrder[0],originalOrder[4]];
   assert.equal(await page.getByLabel('Board 1',{exact:true}).evaluate(el=>el===document.activeElement),true);
@@ -229,6 +237,10 @@ try {
   assert.equal(await page.locator('.match-forecast article').count(),4);
   assert.equal(await page.locator('.match-forecast .trait-badge').count(),8);
   assert.equal(await page.locator('.match-forecast .profile-levels').count(),8);
+  assert.equal(await page.locator('.match-forecast .rating-calculation').count(),8);
+  assert.equal(await page.locator('.match-forecast .piece-colour').count(),8);
+  assert.equal(await page.locator('.match-forecast .odds-bar').count(),4);
+  for(const width of [320,390,1440]){await page.setViewportSize({width,height:1000});assert.ok(await page.locator('#dialog').evaluate(el=>el.scrollWidth<=el.clientWidth));}
   assert.equal(await page.locator('.preview-captains,[data-action="captain"]').count(),0);
   assert.ok(!(await page.getByRole('dialog').textContent()).includes('CAPTAIN'));
   await page.getByRole('button',{name:'Review team profiles'}).click();
