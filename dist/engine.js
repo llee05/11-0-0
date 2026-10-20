@@ -1,5 +1,5 @@
 import {TRAIT_RULESET, rollTraits, validTraits, matchContext, validContext, matchupEffects} from './traits.js';
-import {PROFILE_RULESET,rollProfiles,validProfiles,validForm,profileFatigue,nextFatigue,validFatigue,styleEffect,performanceSwing,performanceSeed,nextForm,restedForm,FORM_ELO,profileOutlook} from './player-profile.js';
+import {PROFILE_RULESET,rollProfiles,validProfiles,validForm,profileFatigue,nextFatigue,validFatigue,styleEffect,performanceSwing,performanceSeed,nextForm,restedForm,FORM_ELO,SWINGS,profileOutlook} from './player-profile.js';
 // SQL supplies the versioned catalogue through an API or a static build export.
 export let NATIONS=[],PLAYERS=[],OPPONENTS=[],CATALOGUE={release:null};
 const planningCache=new Map(),outlookCache=new Map();
@@ -56,7 +56,7 @@ export function offerWeight(nation,squad){
 }
 export function draftValue(player,trait,profile){
   const outlook=profileOutlook(trait,profile.style,player.rating);
-  const swing=[0,32,24,16,8,4][profile.consistency];
+  const swing=SWINGS[profile.consistency];
   let load=0,score=0,games=0;
   for(let round=0;round<ROUND_COUNT;round++){
     const playing=round%5!==4;

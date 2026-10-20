@@ -60,6 +60,10 @@ try {
   assert.equal(await page.locator('.style-guide article').count(),4);
   assert.equal(await page.locator('.trait-guide article').count(),25);
   assert.equal(await page.locator('.career-list article').count(),94);
+  const profileGuide=await page.locator('.profile-guide').textContent();
+  assert.ok(profileGuide.includes('0.5 effective Elo per point'));
+  assert.ok(profileGuide.includes('6 Elo per level'));
+  assert.ok(profileGuide.includes('±16, ±12, ±8, ±4, ±2 Elo'));
   assert.ok((await page.locator('.career-list').textContent()).includes('Bobby Fischer'));
   for(const name of ['Ian Nepomniachtchi','Alireza Firouzja','Paul Keres','Yasser Seirawan'])assert.ok((await page.locator('.career-list').textContent()).includes(name));
   await page.keyboard.press('Escape');
@@ -346,7 +350,7 @@ try {
   assert.equal(await legacyPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).version),4);
   await legacyContext.close();
   const oldRulesContext=await browser.newContext();
-  const oldRulesSave=JSON.stringify({...results,rulesVersion:results.rulesVersion.replace('squad-profiles-3','squad-profiles-2')});
+  const oldRulesSave=JSON.stringify({...results,rulesVersion:results.rulesVersion.replace(/squad-profiles-\d+/,'squad-profiles-3')});
   assert.notEqual(JSON.parse(oldRulesSave).rulesVersion,results.rulesVersion);
   await oldRulesContext.addInitScript(saved=>localStorage.setItem('11-0-0:save:v4',saved),oldRulesSave);
   const oldRulesPage=await oldRulesContext.newPage();await oldRulesPage.goto(url);await oldRulesPage.getByRole('button',{name:'Quick draft'}).waitFor();

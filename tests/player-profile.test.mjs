@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {STYLES,SWINGS,fixedProfile,rollProfile,rollProfiles,validProfile,validProfiles,profileFatigue,nextFatigue,validFatigue,performanceSwing,styleEffect,nextForm,restedForm,performanceSeed} from '../dist/player-profile.js';
+import {STYLES,SWINGS,FORM_ELO,fixedProfile,rollProfile,rollProfiles,validProfile,validProfiles,profileFatigue,nextFatigue,validFatigue,performanceSwing,styleEffect,nextForm,restedForm,performanceSeed} from '../dist/player-profile.js';
 import {random} from '../dist/engine.js';
 
 const unknown={id:'u',personId:'unprofiled',rating:2600};
@@ -29,9 +29,12 @@ test('fatigue accumulates by stamina, persists across rest and has bounded penal
   assert.equal(nextFatigue(70,false,{stamina:1}),40);
   assert.equal(nextFatigue(20,false,{stamina:5}),0);
   assert.equal(profileFatigue(null,24),0);
-  assert.equal(profileFatigue(null,70),46);
-  assert.equal(profileFatigue('grinder',70),23);
-  assert.equal(profileFatigue(null,100),76);
+  assert.equal(profileFatigue(null,70),23);
+  assert.equal(profileFatigue('grinder',70),11.5);
+  assert.equal(profileFatigue(null,100),38);
+  assert.equal(profileFatigue('grinder',100),19);
+  assert.equal(profileFatigue(null,25),0.5);
+  assert.equal(profileFatigue('grinder',25),0.25);
   for(const invalid of [-1,101,1.5,NaN,'20'])assert.equal(validFatigue(invalid),false);
 });
 test('profiles contain gameplay attributes without captaincy',()=>{
@@ -42,6 +45,8 @@ test('profiles contain gameplay attributes without captaincy',()=>{
   }
 });
 test('styles have symmetric rules, consistency narrows daily swings and form evolves around expectations',()=>{
+  assert.equal(FORM_ELO*2,12);
+  assert.deepEqual(SWINGS.slice(1),[16,12,8,4,2]);
   for(const a of STYLES)for(const b of STYLES)for(const kind of ['sharp','quiet','technical','theory']){
     const effect=styleEffect(a.id,b.id,{kind});
     assert.ok(Math.abs(effect.bonus)<=16&&Math.abs(effect.draw)<=0.04);

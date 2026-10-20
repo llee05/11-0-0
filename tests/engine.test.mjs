@@ -284,7 +284,7 @@ test('save validation rejects corrupt and incompatible browser data',()=>{
   const previousRules={...initialState(),rulesVersion:RULES_VERSION.replace(/career-traits-\d+/,'career-traits-1')};
   assert.notEqual(previousRules.rulesVersion,RULES_VERSION);
   assert.equal(validSave(previousRules),false);
-  assert.equal(validSave({...initialState(),rulesVersion:RULES_VERSION.replace('squad-profiles-3','squad-profiles-2')}),false);
+  assert.equal(validSave({...initialState(),rulesVersion:RULES_VERSION.replace(/squad-profiles-\d+/,'squad-profiles-3')}),false);
   for(const broken of [null,{},[],{...initialState(),version:9},{...initialState(),squad:['invalid',null,null,null,null]},{...initialState(),rerolls:-1},{...initialState(),phase:'results'},{...initialState(),offer:{nation:'IND',players:['fake']}}]) assert.equal(validSave(broken),false);
 });
 

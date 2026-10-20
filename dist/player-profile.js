@@ -1,6 +1,6 @@
 import {careerProfile,matchupEffects} from './traits.js';
 
-export const PROFILE_RULESET = 'squad-profiles-3';
+export const PROFILE_RULESET = 'squad-profiles-4';
 export const STYLES = [
   {id:'attacking',name:'Attacking',description:'Sharp play: +16 Elo. Quiet play: −8. Draw chance −4 points.'},
   {id:'positional',name:'Positional',description:'Quiet or technical play: +12 Elo. Sharp play: −6.'},
@@ -8,8 +8,8 @@ export const STYLES = [
   {id:'universal',name:'Universal',description:'Every match condition: +4 Elo.'},
 ];
 export const styleById = id => STYLES.find(s=>s.id===id);
-export const FORM_ELO = 12;
-export const SWINGS = [0,32,24,16,8,4];
+export const FORM_ELO = 6;
+export const SWINGS = [0,16,12,8,4,2];
 export const formLabel = form => ['Cold','Below par','Neutral','In form','Hot'][form+2];
 // These are balance presets derived from the career trait’s game archetype, not
 // sourced measurements of a real person's stamina or consistency.
@@ -49,9 +49,10 @@ export const validForm = form=>Number.isInteger(form)&&form>=-2&&form<=2;
 export const MAX_FATIGUE = 100;
 export const FATIGUE_BUFFER = 24;
 export const REST_RECOVERY = 30;
+export const FATIGUE_ELO = 0.5;
 // Load changes only after a round is played. A substitution alone grants no rest.
 export const nextFatigue = (load,playing,profile)=>Math.max(0,Math.min(MAX_FATIGUE,load+(playing?14-profile.stamina:-REST_RECOVERY)));
-export const profileFatigue = (trait,load)=>Math.max(0,load-FATIGUE_BUFFER)*(trait==='grinder'?0.5:1);
+export const profileFatigue = (trait,load)=>Math.max(0,load-FATIGUE_BUFFER)*FATIGUE_ELO*(trait==='grinder'?0.5:1);
 export const validFatigue = load=>Number.isInteger(load)&&load>=0&&load<=MAX_FATIGUE;
 export const performanceSwing = (consistency,rng)=>Math.round((rng()*2-1)*SWINGS[consistency])||0;
 export function styleEffect(style,other,context) {
