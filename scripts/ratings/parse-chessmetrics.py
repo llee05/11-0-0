@@ -17,7 +17,8 @@ def source_url(month):
     return 'http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000' + month.replace('-', '') + '111000000000000010100'
 
 
-def parse(data, month):
+def parse(data, month, *, expected_count=100):
+    """Keep imports strict; expected_count=None permits sparse research tables only."""
     markup = data.decode('cp1252')
     def plain(value):
         return re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]*>', ' ', value))).strip()
@@ -31,10 +32,16 @@ def parse(data, month):
             continue
         rank = int(plain(cells[0])[1:])
         records.append({'sourcePlayerId': 'chessmetrics:' + player[1], 'name': plain(player[2]), 'sourceRating': int(plain(cells[2])), 'worldRank': rank, 'sourceMonth': month, 'ratingSystem': 'chessmetrics-2005', 'federation': None})
-    assert len(records) == 100, f'Expected source top 100, got {len(records)}'
-    assert [row['worldRank'] for row in records] == list(range(1, 101))
+    if expected_count is not None:
+        assert len(records) == expected_count, f'Expected source top {expected_count}, got {len(records)}'
+    assert len(records) <= 100
+    assert [row['worldRank'] for row in records] == list(range(1, len(records) + 1))
+    assert len({row['sourcePlayerId'] for row in records}) == len(records)
     assert all(a['sourceRating'] >= b['sourceRating'] for a, b in zip(records, records[1:]))
-    return {'sourceUrl': source_url(month), 'sourceSha256': hashlib.sha256(data).hexdigest(), 'coverage': 'world-top-100-only', 'affiliationCoverage': 'none; time-specific federation must be independently verified before creating any roll', 'players': records}
+    result = {'sourceUrl': source_url(month), 'sourceSha256': hashlib.sha256(data).hexdigest(), 'coverage': 'world-top-100-only', 'affiliationCoverage': 'none; time-specific federation must be independently verified before creating any roll', 'players': records}
+    if expected_count is None:
+        result.update(researchOnly=True, coverage=f'published-world-list-{len(records)}-rows')
+    return result
 
 
 if __name__ == '__main__':

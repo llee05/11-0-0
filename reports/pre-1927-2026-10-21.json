@@ -1,0 +1,986 @@
+{
+  "researchOnly": true,
+  "gameRulesApplied": false,
+  "catalogueImported": false,
+  "manifestSha256": "98926567376e719de2389ad92bb7b0eb92fc3791b19a0ad980f5d619b44abf90",
+  "scriptSha256": "d743fce3cd52abc9a4ab6465fd614bcc025ba70e0043df3b60ac664d0fdb7bad",
+  "chessmetricsParserSha256": "df6181b80caf1e5b0423e207f9099a916e6921cee5b5512eb7067009c5a0465b",
+  "samples": [
+    {
+      "kind": "chessmetrics",
+      "period": "1926-01",
+      "sourceUrl": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000192601111000000000000010100",
+      "sourceSha256": "22e36fe66207324ffd1d1c87e919e35716b3c6ba9a1ec65261bb5bd75efa52a4",
+      "observedSourceRecords": 100,
+      "recordsAtLeast2600": 19,
+      "zeroGameRecords": null,
+      "offhandEntries": [],
+      "leader": {
+        "sourcePlayerId": "chessmetrics:73076",
+        "name": "Emanuel Lasker",
+        "sourceRating": 2787,
+        "worldRank": 1,
+        "sourceMonth": "1926-01",
+        "ratingSystem": "chessmetrics-2005",
+        "federation": null
+      },
+      "topFive": [
+        {
+          "sourcePlayerId": "chessmetrics:73076",
+          "name": "Emanuel Lasker",
+          "sourceRating": 2787,
+          "worldRank": 1,
+          "sourceMonth": "1926-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:2138",
+          "name": "Alexander Alekhine",
+          "sourceRating": 2761,
+          "worldRank": 2,
+          "sourceMonth": "1926-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:13879",
+          "name": "Efim Bogoljubow",
+          "sourceRating": 2757,
+          "worldRank": 3,
+          "sourceMonth": "1926-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:19593",
+          "name": "José Capablanca",
+          "sourceRating": 2754,
+          "worldRank": 4,
+          "sourceMonth": "1926-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:93234",
+          "name": "Aron Nimzowitsch",
+          "sourceRating": 2697,
+          "worldRank": 5,
+          "sourceMonth": "1926-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        }
+      ],
+      "examples": [],
+      "affiliationAuditComplete": false,
+      "verifiedCountryOfferCount": null
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1924-01",
+      "sourceUrl": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000192401111000000000000010100",
+      "sourceSha256": "2a9bed3faaf088210f051210e5c7c7766070f95ca283d8459d53dac7f1d49ab0",
+      "observedSourceRecords": 100,
+      "recordsAtLeast2600": 18,
+      "zeroGameRecords": null,
+      "offhandEntries": [],
+      "leader": {
+        "sourcePlayerId": "chessmetrics:2138",
+        "name": "Alexander Alekhine",
+        "sourceRating": 2775,
+        "worldRank": 1,
+        "sourceMonth": "1924-01",
+        "ratingSystem": "chessmetrics-2005",
+        "federation": null
+      },
+      "topFive": [
+        {
+          "sourcePlayerId": "chessmetrics:2138",
+          "name": "Alexander Alekhine",
+          "sourceRating": 2775,
+          "worldRank": 1,
+          "sourceMonth": "1924-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:19593",
+          "name": "José Capablanca",
+          "sourceRating": 2774,
+          "worldRank": 2,
+          "sourceMonth": "1924-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:73076",
+          "name": "Emanuel Lasker",
+          "sourceRating": 2741,
+          "worldRank": 3,
+          "sourceMonth": "1924-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:112008",
+          "name": "Akiba Rubinstein",
+          "sourceRating": 2703,
+          "worldRank": 4,
+          "sourceMonth": "1924-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:13879",
+          "name": "Efim Bogoljubow",
+          "sourceRating": 2688,
+          "worldRank": 5,
+          "sourceMonth": "1924-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        }
+      ],
+      "examples": [],
+      "affiliationAuditComplete": false,
+      "verifiedCountryOfferCount": null
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1920-01",
+      "sourceUrl": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000192001111000000000000010100",
+      "sourceSha256": "01c3035f1f56f29ea53e0a4720c1f08a89cf2b6fe2f15e89794c608969e15432",
+      "observedSourceRecords": 22,
+      "recordsAtLeast2600": 15,
+      "zeroGameRecords": null,
+      "offhandEntries": [],
+      "leader": {
+        "sourcePlayerId": "chessmetrics:19593",
+        "name": "José Capablanca",
+        "sourceRating": 2873,
+        "worldRank": 1,
+        "sourceMonth": "1920-01",
+        "ratingSystem": "chessmetrics-2005",
+        "federation": null
+      },
+      "topFive": [
+        {
+          "sourcePlayerId": "chessmetrics:19593",
+          "name": "José Capablanca",
+          "sourceRating": 2873,
+          "worldRank": 1,
+          "sourceMonth": "1920-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:73076",
+          "name": "Emanuel Lasker",
+          "sourceRating": 2825,
+          "worldRank": 2,
+          "sourceMonth": "1920-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:2138",
+          "name": "Alexander Alekhine",
+          "sourceRating": 2756,
+          "worldRank": 3,
+          "sourceMonth": "1920-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:81701",
+          "name": "Frank Marshall",
+          "sourceRating": 2727,
+          "worldRank": 4,
+          "sourceMonth": "1920-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:138141",
+          "name": "Milan Vidmar Sr",
+          "sourceRating": 2716,
+          "worldRank": 5,
+          "sourceMonth": "1920-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        }
+      ],
+      "examples": [],
+      "affiliationAuditComplete": false,
+      "verifiedCountryOfferCount": null
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1912-01",
+      "sourceUrl": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000191201111000000000000010100",
+      "sourceSha256": "ea5db7aaef0be628a7200c1f468eec23b1316d23bda4e921d6b9208740064141",
+      "observedSourceRecords": 42,
+      "recordsAtLeast2600": 20,
+      "zeroGameRecords": null,
+      "offhandEntries": [],
+      "leader": {
+        "sourcePlayerId": "chessmetrics:73076",
+        "name": "Emanuel Lasker",
+        "sourceRating": 2822,
+        "worldRank": 1,
+        "sourceMonth": "1912-01",
+        "ratingSystem": "chessmetrics-2005",
+        "federation": null
+      },
+      "topFive": [
+        {
+          "sourcePlayerId": "chessmetrics:73076",
+          "name": "Emanuel Lasker",
+          "sourceRating": 2822,
+          "worldRank": 1,
+          "sourceMonth": "1912-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:112008",
+          "name": "Akiba Rubinstein",
+          "sourceRating": 2772,
+          "worldRank": 2,
+          "sourceMonth": "1912-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:116667",
+          "name": "Carl Schlechter",
+          "sourceRating": 2755,
+          "worldRank": 3,
+          "sourceMonth": "1912-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:19593",
+          "name": "José Capablanca",
+          "sourceRating": 2753,
+          "worldRank": 4,
+          "sourceMonth": "1912-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:130134",
+          "name": "Richard Teichmann",
+          "sourceRating": 2744,
+          "worldRank": 5,
+          "sourceMonth": "1912-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        }
+      ],
+      "examples": [],
+      "affiliationAuditComplete": false,
+      "verifiedCountryOfferCount": null
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1900-01",
+      "sourceUrl": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000190001111000000000000010100",
+      "sourceSha256": "058630cbb2f0f3a2173016cbdf7503f1fdb586f102068af7e3ff6ced90708bd1",
+      "observedSourceRecords": 79,
+      "recordsAtLeast2600": 20,
+      "zeroGameRecords": null,
+      "offhandEntries": [],
+      "leader": {
+        "sourcePlayerId": "chessmetrics:73076",
+        "name": "Emanuel Lasker",
+        "sourceRating": 2858,
+        "worldRank": 1,
+        "sourceMonth": "1900-01",
+        "ratingSystem": "chessmetrics-2005",
+        "federation": null
+      },
+      "topFive": [
+        {
+          "sourcePlayerId": "chessmetrics:73076",
+          "name": "Emanuel Lasker",
+          "sourceRating": 2858,
+          "worldRank": 1,
+          "sourceMonth": "1900-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:129791",
+          "name": "Siegbert Tarrasch",
+          "sourceRating": 2805,
+          "worldRank": 2,
+          "sourceMonth": "1900-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:101422",
+          "name": "Harry Pillsbury",
+          "sourceRating": 2798,
+          "worldRank": 3,
+          "sourceMonth": "1900-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:58966",
+          "name": "Dawid Janowsky",
+          "sourceRating": 2743,
+          "worldRank": 4,
+          "sourceMonth": "1900-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:81520",
+          "name": "Géza Maróczy",
+          "sourceRating": 2743,
+          "worldRank": 5,
+          "sourceMonth": "1900-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        }
+      ],
+      "examples": [],
+      "affiliationAuditComplete": false,
+      "verifiedCountryOfferCount": null
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1886-01",
+      "sourceUrl": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000188601111000000000000010100",
+      "sourceSha256": "67e39f2a9c3a6aa5685eeb01f77c596b99092a5ea4436c4cc916f8307a5b93b3",
+      "observedSourceRecords": 68,
+      "recordsAtLeast2600": 15,
+      "zeroGameRecords": null,
+      "offhandEntries": [],
+      "leader": {
+        "sourcePlayerId": "chessmetrics:126127",
+        "name": "Wilhelm Steinitz",
+        "sourceRating": 2777,
+        "worldRank": 1,
+        "sourceMonth": "1886-01",
+        "ratingSystem": "chessmetrics-2005",
+        "federation": null
+      },
+      "topFive": [
+        {
+          "sourcePlayerId": "chessmetrics:126127",
+          "name": "Wilhelm Steinitz",
+          "sourceRating": 2777,
+          "worldRank": 1,
+          "sourceMonth": "1886-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:147051",
+          "name": "Johannes Zukertort",
+          "sourceRating": 2757,
+          "worldRank": 2,
+          "sourceMonth": "1886-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:12785",
+          "name": "Joseph Blackburne",
+          "sourceRating": 2717,
+          "worldRank": 3,
+          "sourceMonth": "1886-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:34631",
+          "name": "Berthold Englisch",
+          "sourceRating": 2679,
+          "worldRank": 4,
+          "sourceMonth": "1886-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:143058",
+          "name": "Szymon Winawer",
+          "sourceRating": 2673,
+          "worldRank": 5,
+          "sourceMonth": "1886-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        }
+      ],
+      "examples": [],
+      "affiliationAuditComplete": false,
+      "verifiedCountryOfferCount": null
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1858-01",
+      "sourceUrl": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000185801111000000000000010100",
+      "sourceSha256": "109724dc6420c8294bceaca53eef2c23f8d6d52da14b06fcb1a735cb3a051402",
+      "observedSourceRecords": 8,
+      "recordsAtLeast2600": 1,
+      "zeroGameRecords": null,
+      "offhandEntries": [],
+      "leader": {
+        "sourcePlayerId": "chessmetrics:32288",
+        "name": "Serafino Dubois",
+        "sourceRating": 2629,
+        "worldRank": 1,
+        "sourceMonth": "1858-01",
+        "ratingSystem": "chessmetrics-2005",
+        "federation": null
+      },
+      "topFive": [
+        {
+          "sourcePlayerId": "chessmetrics:32288",
+          "name": "Serafino Dubois",
+          "sourceRating": 2629,
+          "worldRank": 1,
+          "sourceMonth": "1858-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:28085",
+          "name": "Jules de Rivière",
+          "sourceRating": 2546,
+          "worldRank": 2,
+          "sourceMonth": "1858-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:17462",
+          "name": "J Budzinsky",
+          "sourceRating": 2530,
+          "worldRank": 3,
+          "sourceMonth": "1858-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:16396",
+          "name": "Robert Brien",
+          "sourceRating": 2463,
+          "worldRank": 4,
+          "sourceMonth": "1858-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "chessmetrics:12446",
+          "name": "Henry Bird",
+          "sourceRating": 2462,
+          "worldRank": 5,
+          "sourceMonth": "1858-01",
+          "ratingSystem": "chessmetrics-2005",
+          "federation": null
+        }
+      ],
+      "examples": [],
+      "affiliationAuditComplete": false,
+      "verifiedCountryOfferCount": null
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1840-01",
+      "sourceUrl": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000184001111000000000000010100",
+      "sourceSha256": "3e6a5c67cc72895698b1c6a222286e848dc799e068f7770818c18c9913b75445",
+      "observedSourceRecords": 0,
+      "recordsAtLeast2600": 0,
+      "zeroGameRecords": null,
+      "offhandEntries": [],
+      "leader": null,
+      "topFive": [],
+      "examples": [],
+      "affiliationAuditComplete": false,
+      "verifiedCountryOfferCount": null
+    },
+    {
+      "kind": "edo",
+      "period": "1857",
+      "sourceUrl": "http://www.edochess.ca/years/y1857.html",
+      "sourceSha256": "52b311fb5cf5d44599675c78e449722e1e9bf628d388e68277b37088abe718f7",
+      "observedSourceRecords": 241,
+      "recordsAtLeast2600": 7,
+      "zeroGameRecords": 126,
+      "offhandEntries": [
+        {
+          "sourcePlayerId": "edo:p478",
+          "name": "Anderssen, Adolf (offhand)",
+          "worldRank": 22,
+          "sourceRating": 2466,
+          "sourceDeviation": 43,
+          "sourceGames": 39,
+          "federation": null
+        }
+      ],
+      "leader": {
+        "sourcePlayerId": "edo:p23",
+        "name": "Morphy, Paul",
+        "worldRank": 1,
+        "sourceRating": 2805,
+        "sourceDeviation": 34,
+        "sourceGames": 267,
+        "federation": null
+      },
+      "topFive": [
+        {
+          "sourcePlayerId": "edo:p23",
+          "name": "Morphy, Paul",
+          "worldRank": 1,
+          "sourceRating": 2805,
+          "sourceDeviation": 34,
+          "sourceGames": 267,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p104",
+          "name": "Petrov, Alexander",
+          "worldRank": 2,
+          "sourceRating": 2641,
+          "sourceDeviation": 80,
+          "sourceGames": 0,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p28",
+          "name": "Paulsen, Louis",
+          "worldRank": 3,
+          "sourceRating": 2627,
+          "sourceDeviation": 58,
+          "sourceGames": 26,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p13",
+          "name": "Anderssen, Adolf",
+          "worldRank": 4,
+          "sourceRating": 2614,
+          "sourceDeviation": 52,
+          "sourceGames": 2,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p11",
+          "name": "Löwenthal, Johann",
+          "worldRank": 5,
+          "sourceRating": 2609,
+          "sourceDeviation": 44,
+          "sourceGames": 16,
+          "federation": null
+        }
+      ],
+      "examples": [
+        {
+          "sourcePlayerId": "edo:p23",
+          "name": "Morphy, Paul",
+          "worldRank": 1,
+          "sourceRating": 2805,
+          "sourceDeviation": 34,
+          "sourceGames": 267,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p28",
+          "name": "Paulsen, Louis",
+          "worldRank": 3,
+          "sourceRating": 2627,
+          "sourceDeviation": 58,
+          "sourceGames": 26,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p30",
+          "name": "Lichtenhein, Theodor",
+          "worldRank": 16,
+          "sourceRating": 2499,
+          "sourceDeviation": 56,
+          "sourceGames": 38,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p24",
+          "name": "Stanley, Charles",
+          "worldRank": 49,
+          "sourceRating": 2376,
+          "sourceDeviation": 53,
+          "sourceGames": 23,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p115",
+          "name": "Perrin, Frederic",
+          "worldRank": 76,
+          "sourceRating": 2304,
+          "sourceDeviation": 38,
+          "sourceGames": 81,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p145",
+          "name": "Thompson, James (1)",
+          "worldRank": 79,
+          "sourceRating": 2298,
+          "sourceDeviation": 52,
+          "sourceGames": 12,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p33",
+          "name": "Fiske, Daniel",
+          "worldRank": 90,
+          "sourceRating": 2280,
+          "sourceDeviation": 83,
+          "sourceGames": 11,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p31",
+          "name": "Marache, Napoleon",
+          "worldRank": 98,
+          "sourceRating": 2261,
+          "sourceDeviation": 50,
+          "sourceGames": 21,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p29",
+          "name": "Raphael, Benjamin",
+          "worldRank": 132,
+          "sourceRating": 2173,
+          "sourceDeviation": 58,
+          "sourceGames": 22,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p110",
+          "name": "Meek, Alexander",
+          "worldRank": 193,
+          "sourceRating": 1934,
+          "sourceDeviation": 94,
+          "sourceGames": 15,
+          "federation": null
+        }
+      ],
+      "affiliationAuditComplete": false,
+      "verifiedCountryOfferCount": null
+    },
+    {
+      "kind": "edo",
+      "period": "1858",
+      "sourceUrl": "http://www.edochess.ca/years/y1858.html",
+      "sourceSha256": "d9354b52063fef16362ad2a6148f455089a2122faa6d6fc05a8f043f31d31739",
+      "observedSourceRecords": 264,
+      "recordsAtLeast2600": 7,
+      "zeroGameRecords": 143,
+      "offhandEntries": [
+        {
+          "sourcePlayerId": "edo:p478",
+          "name": "Anderssen, Adolf (offhand)",
+          "worldRank": 11,
+          "sourceRating": 2540,
+          "sourceDeviation": 46,
+          "sourceGames": 6,
+          "federation": null
+        }
+      ],
+      "leader": {
+        "sourcePlayerId": "edo:p23",
+        "name": "Morphy, Paul",
+        "worldRank": 1,
+        "sourceRating": 2798,
+        "sourceDeviation": 29,
+        "sourceGames": 228,
+        "federation": null
+      },
+      "topFive": [
+        {
+          "sourcePlayerId": "edo:p23",
+          "name": "Morphy, Paul",
+          "worldRank": 1,
+          "sourceRating": 2798,
+          "sourceDeviation": 29,
+          "sourceGames": 228,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p104",
+          "name": "Petrov, Alexander",
+          "worldRank": 2,
+          "sourceRating": 2638,
+          "sourceDeviation": 76,
+          "sourceGames": 0,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p13",
+          "name": "Anderssen, Adolf",
+          "worldRank": 3,
+          "sourceRating": 2630,
+          "sourceDeviation": 44,
+          "sourceGames": 19,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p11",
+          "name": "Löwenthal, Johann",
+          "worldRank": 4,
+          "sourceRating": 2630,
+          "sourceDeviation": 41,
+          "sourceGames": 29,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p28",
+          "name": "Paulsen, Louis",
+          "worldRank": 5,
+          "sourceRating": 2624,
+          "sourceDeviation": 60,
+          "sourceGames": 0,
+          "federation": null
+        }
+      ],
+      "examples": [
+        {
+          "sourcePlayerId": "edo:p23",
+          "name": "Morphy, Paul",
+          "worldRank": 1,
+          "sourceRating": 2798,
+          "sourceDeviation": 29,
+          "sourceGames": 228,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p28",
+          "name": "Paulsen, Louis",
+          "worldRank": 5,
+          "sourceRating": 2624,
+          "sourceDeviation": 60,
+          "sourceGames": 0,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p30",
+          "name": "Lichtenhein, Theodor",
+          "worldRank": 20,
+          "sourceRating": 2482,
+          "sourceDeviation": 57,
+          "sourceGames": 0,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p24",
+          "name": "Stanley, Charles",
+          "worldRank": 60,
+          "sourceRating": 2359,
+          "sourceDeviation": 56,
+          "sourceGames": 0,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p115",
+          "name": "Perrin, Frederic",
+          "worldRank": 79,
+          "sourceRating": 2314,
+          "sourceDeviation": 43,
+          "sourceGames": 13,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p145",
+          "name": "Thompson, James (1)",
+          "worldRank": 92,
+          "sourceRating": 2285,
+          "sourceDeviation": 51,
+          "sourceGames": 2,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p33",
+          "name": "Fiske, Daniel",
+          "worldRank": 102,
+          "sourceRating": 2269,
+          "sourceDeviation": 90,
+          "sourceGames": 0,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p31",
+          "name": "Marache, Napoleon",
+          "worldRank": 115,
+          "sourceRating": 2245,
+          "sourceDeviation": 53,
+          "sourceGames": 3,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p29",
+          "name": "Raphael, Benjamin",
+          "worldRank": 146,
+          "sourceRating": 2153,
+          "sourceDeviation": 64,
+          "sourceGames": 9,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p110",
+          "name": "Meek, Alexander",
+          "worldRank": 210,
+          "sourceRating": 1946,
+          "sourceDeviation": 92,
+          "sourceGames": 7,
+          "federation": null
+        }
+      ],
+      "affiliationAuditComplete": false,
+      "verifiedCountryOfferCount": null
+    },
+    {
+      "kind": "edo",
+      "period": "1900",
+      "sourceUrl": "http://www.edochess.ca/years/y1900.html",
+      "sourceSha256": "e05e51acd7b3701e6bac19bfece32c1cf2395ddd8a2fc3fda3cf51d3f021a89b",
+      "observedSourceRecords": 1177,
+      "recordsAtLeast2600": 6,
+      "zeroGameRecords": 575,
+      "offhandEntries": [],
+      "leader": {
+        "sourcePlayerId": "edo:p485",
+        "name": "Lasker, Emanuel",
+        "worldRank": 1,
+        "sourceRating": 2726,
+        "sourceDeviation": 42,
+        "sourceGames": 19,
+        "federation": null
+      },
+      "topFive": [
+        {
+          "sourcePlayerId": "edo:p485",
+          "name": "Lasker, Emanuel",
+          "worldRank": 1,
+          "sourceRating": 2726,
+          "sourceDeviation": 42,
+          "sourceGames": 19,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p455",
+          "name": "Tarrasch, Siegbert",
+          "worldRank": 2,
+          "sourceRating": 2655,
+          "sourceDeviation": 53,
+          "sourceGames": 0,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p533",
+          "name": "Pillsbury, Harry",
+          "worldRank": 3,
+          "sourceRating": 2655,
+          "sourceDeviation": 31,
+          "sourceGames": 51,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p543",
+          "name": "Maróczy, Géza",
+          "worldRank": 4,
+          "sourceRating": 2648,
+          "sourceDeviation": 32,
+          "sourceGames": 49,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p388",
+          "name": "Chigorin, Mikhail",
+          "worldRank": 5,
+          "sourceRating": 2608,
+          "sourceDeviation": 32,
+          "sourceGames": 40,
+          "federation": null
+        }
+      ],
+      "examples": [],
+      "affiliationAuditComplete": false,
+      "verifiedCountryOfferCount": null
+    },
+    {
+      "kind": "edo",
+      "period": "1920",
+      "sourceUrl": "http://www.edochess.ca/years/y1920.html",
+      "sourceSha256": "288d6cafcf48f9126ea7373fe22c4c982a41ecb0e150c94e21eb06e31cd80b72",
+      "observedSourceRecords": 1280,
+      "recordsAtLeast2600": 4,
+      "zeroGameRecords": 692,
+      "offhandEntries": [],
+      "leader": {
+        "sourcePlayerId": "edo:p864",
+        "name": "Capablanca, José",
+        "worldRank": 1,
+        "sourceRating": 2809,
+        "sourceDeviation": 53,
+        "sourceGames": 0,
+        "federation": null
+      },
+      "topFive": [
+        {
+          "sourcePlayerId": "edo:p864",
+          "name": "Capablanca, José",
+          "worldRank": 1,
+          "sourceRating": 2809,
+          "sourceDeviation": 53,
+          "sourceGames": 0,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p485",
+          "name": "Lasker, Emanuel",
+          "worldRank": 2,
+          "sourceRating": 2698,
+          "sourceDeviation": 58,
+          "sourceGames": 1,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p4444",
+          "name": "Alekhine, Alexander",
+          "worldRank": 3,
+          "sourceRating": 2688,
+          "sourceDeviation": 38,
+          "sourceGames": 37,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p4243",
+          "name": "Vidmar, Milan",
+          "worldRank": 4,
+          "sourceRating": 2614,
+          "sourceDeviation": 53,
+          "sourceGames": 0,
+          "federation": null
+        },
+        {
+          "sourcePlayerId": "edo:p2174",
+          "name": "Rubinstein, Akiba",
+          "worldRank": 5,
+          "sourceRating": 2598,
+          "sourceDeviation": 33,
+          "sourceGames": 32,
+          "federation": null
+        }
+      ],
+      "examples": [],
+      "affiliationAuditComplete": false,
+      "verifiedCountryOfferCount": null
+    }
+  ]
+}

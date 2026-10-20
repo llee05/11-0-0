@@ -158,6 +158,12 @@ Historical rating modes are investigated in the [era-rating study](reports/era-r
 node scripts/audit-era-ratings.mjs --output /tmp/era-ratings.json
 ```
 
+The [pre-1927 investigation](reports/pre-1927-2026-10-21.md) compares twelve original Chessmetrics/Edo tables, identifies rated candidate pools and explains affiliation, annual-period and duplicate-person requirements. Its pinned research data does not add playable rosters. Download the exact source files listed in its manifest, then reproduce the coverage study:
+
+```bash
+python -B scripts/research-early-history.py --source-dir .data/early-history-research --output /tmp/pre-1927.json
+```
+
 Optional browser QA, with the local app running:
 
 ```bash

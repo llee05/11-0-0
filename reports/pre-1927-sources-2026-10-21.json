@@ -1,0 +1,184 @@
+{
+  "researchOnly": true,
+  "retrievedDate": "2026-10-21",
+  "sources": [
+    {
+      "kind": "chessmetrics",
+      "period": "1926-01",
+      "file": "chessmetrics-1926-01.html",
+      "url": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000192601111000000000000010100",
+      "sha256": "22e36fe66207324ffd1d1c87e919e35716b3c6ba9a1ec65261bb5bd75efa52a4",
+      "encoding": "cp1252",
+      "title": "Monthly List: January 1926 rating list",
+      "expectedRows": 100
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1924-01",
+      "file": "chessmetrics-1924-01.html",
+      "url": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000192401111000000000000010100",
+      "sha256": "2a9bed3faaf088210f051210e5c7c7766070f95ca283d8459d53dac7f1d49ab0",
+      "encoding": "cp1252",
+      "title": "Monthly List: January 1924 rating list",
+      "expectedRows": 100
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1920-01",
+      "file": "chessmetrics-1920-01.html",
+      "url": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000192001111000000000000010100",
+      "sha256": "01c3035f1f56f29ea53e0a4720c1f08a89cf2b6fe2f15e89794c608969e15432",
+      "encoding": "cp1252",
+      "title": "Monthly List: January 1920 rating list",
+      "expectedRows": 22
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1912-01",
+      "file": "chessmetrics-1912-01.html",
+      "url": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000191201111000000000000010100",
+      "sha256": "ea5db7aaef0be628a7200c1f468eec23b1316d23bda4e921d6b9208740064141",
+      "encoding": "cp1252",
+      "title": "Monthly List: January 1912 rating list",
+      "expectedRows": 42
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1900-01",
+      "file": "chessmetrics-1900-01.html",
+      "url": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000190001111000000000000010100",
+      "sha256": "058630cbb2f0f3a2173016cbdf7503f1fdb586f102068af7e3ff6ced90708bd1",
+      "encoding": "cp1252",
+      "title": "Monthly List: January 1900 rating list",
+      "expectedRows": 79
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1886-01",
+      "file": "chessmetrics-1886-01.html",
+      "url": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000188601111000000000000010100",
+      "sha256": "67e39f2a9c3a6aa5685eeb01f77c596b99092a5ea4436c4cc916f8307a5b93b3",
+      "encoding": "cp1252",
+      "title": "Monthly List: January 1886 rating list",
+      "expectedRows": 68
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1858-01",
+      "file": "chessmetrics-1858-01.html",
+      "url": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000185801111000000000000010100",
+      "sha256": "109724dc6420c8294bceaca53eef2c23f8d6d52da14b06fcb1a735cb3a051402",
+      "encoding": "cp1252",
+      "title": "Monthly List: January 1858 rating list",
+      "expectedRows": 8
+    },
+    {
+      "kind": "chessmetrics",
+      "period": "1840-01",
+      "file": "chessmetrics-1840-01.html",
+      "url": "http://www.chessmetrics.com/cm/CM2/SingleMonth.asp?Params=199510SSSSS3S000000184001111000000000000010100",
+      "sha256": "3e6a5c67cc72895698b1c6a222286e848dc799e068f7770818c18c9913b75445",
+      "encoding": "cp1252",
+      "title": "Monthly List: January 1840 rating list",
+      "expectedRows": 0
+    },
+    {
+      "kind": "edo",
+      "period": "1857",
+      "file": "edo-1857.html",
+      "url": "http://www.edochess.ca/years/y1857.html",
+      "sha256": "52b311fb5cf5d44599675c78e449722e1e9bf628d388e68277b37088abe718f7",
+      "encoding": "utf-8",
+      "title": "Edo Ratings, 1857",
+      "expectedRows": 241,
+      "exampleIds": [
+        "edo:p23",
+        "edo:p28",
+        "edo:p30",
+        "edo:p24",
+        "edo:p115",
+        "edo:p145",
+        "edo:p33",
+        "edo:p31",
+        "edo:p29",
+        "edo:p110"
+      ]
+    },
+    {
+      "kind": "edo",
+      "period": "1858",
+      "file": "edo-1858.html",
+      "url": "http://www.edochess.ca/years/y1858.html",
+      "sha256": "d9354b52063fef16362ad2a6148f455089a2122faa6d6fc05a8f043f31d31739",
+      "encoding": "utf-8",
+      "title": "Edo Ratings, 1858",
+      "expectedRows": 264,
+      "exampleIds": [
+        "edo:p23",
+        "edo:p28",
+        "edo:p30",
+        "edo:p24",
+        "edo:p115",
+        "edo:p145",
+        "edo:p33",
+        "edo:p31",
+        "edo:p29",
+        "edo:p110"
+      ]
+    },
+    {
+      "kind": "edo",
+      "period": "1900",
+      "file": "edo-1900.html",
+      "url": "http://www.edochess.ca/years/y1900.html",
+      "sha256": "e05e51acd7b3701e6bac19bfece32c1cf2395ddd8a2fc3fda3cf51d3f021a89b",
+      "encoding": "utf-8",
+      "title": "Edo Ratings, 1900",
+      "expectedRows": 1177,
+      "exampleIds": []
+    },
+    {
+      "kind": "edo",
+      "period": "1920",
+      "file": "edo-1920.html",
+      "url": "http://www.edochess.ca/years/y1920.html",
+      "sha256": "288d6cafcf48f9126ea7373fe22c4c982a41ecb0e150c94e21eb06e31cd80b72",
+      "encoding": "utf-8",
+      "title": "Edo Ratings, 1920",
+      "expectedRows": 1280,
+      "exampleIds": []
+    },
+    {
+      "kind": "reference",
+      "file": "edo-index.html",
+      "url": "http://www.edochess.ca/index.html",
+      "sha256": "fb3cbe0e05151f3ef58f961140590c82a917fa5456ea82593038077f993557f8",
+      "encoding": "utf-8",
+      "title": "Edo Historical Chess Ratings"
+    },
+    {
+      "kind": "reference",
+      "file": "edo-Edo.explanation.html",
+      "url": "http://www.edochess.ca/Edo.explanation.html",
+      "sha256": "36de26faa716b90ceec80254289501ef8ae2d1b598f372ca1a100f43cf148173",
+      "encoding": "utf-8",
+      "title": "Edo Ratings - Explanation"
+    },
+    {
+      "kind": "reference",
+      "file": "edo-Edo.years.html",
+      "url": "http://www.edochess.ca/Edo.years.html",
+      "sha256": "c9f99919b9f337140b51e0a824416df78371e274e0d5c77fa07f561f265225e5",
+      "encoding": "utf-8",
+      "title": "Edo ratings by year"
+    },
+    {
+      "kind": "reference",
+      "file": "chessmetrics-SourceData.html",
+      "url": "http://www.chessmetrics.com/cm/CM2/SourceData.asp",
+      "sha256": "4f18c391523c9c940023ee4d1a70113719c445d82f457e1bfcaed16d88681a2d",
+      "encoding": "cp1252",
+      "title": "Source Data"
+    }
+  ]
+}
