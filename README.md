@@ -97,7 +97,7 @@ These are **best observed editions**, not complete career peaks: four-year sampl
 
 ## Architecture
 
-The interface combines a chess almanac with tournament broadcast graphics: warm paper, forest green, serif headings, country/year stamps and tabular scoreboards. Trait symbols supplement their written labels; form and fatigue retain text readouts alongside colour. Mobile lineups use two columns so all five players and their profiles remain readable. The serif stack uses system fonts; the existing local sans fonts and licenses remain bundled.
+The interface combines a chess almanac with tournament broadcast graphics: warm paper, forest green, serif headings, country/year stamps and tabular scoreboards. A compact cover and wider desktop canvas bring the game controls forward. The draft comes before the lineup, with two offer columns on larger screens and one on phones; every offer retains all five players and their details. Tournament actions sit above the match report, and compact standings follow it directly rather than waiting for the squad column. Trait symbols supplement their written labels; form and fatigue retain text readouts alongside colour. Mobile lineups use two columns so all five players and their profiles remain readable. The serif stack uses system fonts; the existing local sans fonts and licenses remain bundled.
 
 | Path | Responsibility |
 | --- | --- |
