@@ -4,6 +4,29 @@ import {STYLES,SWINGS,styleById,fixedProfile,profileFatigue,formLabel,FORM_ELO} 
 import {HISTORY_KEY,parseRunHistory,serializeRunHistory,snapshotRun,keepBestRuns} from './run-history.js';
 
 const $=s=>document.querySelector(s);
+// Theme preferences stay independent of game saves and catalogue availability.
+const THEME_KEY='11-0-0:theme',systemTheme=matchMedia('(prefers-color-scheme: dark)');
+let preferredTheme=null;
+try{const saved=localStorage.getItem(THEME_KEY);if(saved==='light'||saved==='dark')preferredTheme=saved;}catch{}
+function applyTheme(){
+  const theme=preferredTheme||(systemTheme.matches?'dark':'light');
+  document.documentElement.dataset.theme=theme;
+  $('#theme-toggle').setAttribute('aria-pressed',String(theme==='dark'));
+  $('#theme-toggle').title=`Switch to ${theme==='dark'?'light':'dark'} mode`;
+  $('meta[name="theme-color"]').content=theme==='dark'?'#121a16':'#163c32';
+}
+applyTheme();
+systemTheme.addEventListener('change',()=>{if(!preferredTheme)applyTheme();});
+$('#theme-toggle').addEventListener('click',()=>{
+  preferredTheme=document.documentElement.dataset.theme==='dark'?'light':'dark';
+  applyTheme();
+  try{localStorage.setItem(THEME_KEY,preferredTheme);}catch{ /* The choice still applies to this tab. */ }
+});
+window.addEventListener('storage',event=>{
+  if(event.key!==THEME_KEY&&event.key!==null)return;
+  preferredTheme=event.newValue==='light'||event.newValue==='dark'?event.newValue:null;
+  applyTheme();
+});
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const icons={arrow:'↗',spin:'⟳',chevron:'→',check:'✓',close:'×',king:'♔',queen:'♕',rook:'♖',knight:'♘',bishop:'♗',pawn:'♙'};
 const pieces=['king','queen','rook','knight','pawn'];

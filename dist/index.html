@@ -7,6 +7,13 @@
   <meta name="catalogue-url" content="/api/catalog">
   <meta name="description" content="Spin a nation. Draft your dream chess team. Chase a perfect 11–0–0 at the Fantasy Olympiad.">
   <title>11–0–0 · The Fantasy Chess Olympiad</title>
+  <script>
+    (() => {
+      let theme;
+      try { theme = localStorage.getItem('11-0-0:theme'); } catch {}
+      document.documentElement.dataset.theme = theme === 'light' || theme === 'dark' ? theme : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    })();
+  </script>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="stylesheet" href="./styles.css">
 </head>
@@ -15,7 +22,7 @@
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="./" aria-label="11–0–0 home"><img class="brand-mark" src="./knight.svg" alt="" width="32" height="39"><span>11<span class="brand-dash">–</span>0<span class="brand-dash">–</span>0<span class="brand-dot">.</span></span><span class="brand-description">THE FANTASY<br>CHESS OLYMPIAD</span></a>
-      <nav aria-label="Main navigation"><button class="nav-item active" data-action="game">The game <span class="nav-dot"></span></button><button class="nav-item" data-action="history">Best runs</button><button class="nav-item" data-action="rules">How to play <span class="small-arrow">↗</span></button></nav>
+      <nav aria-label="Main navigation"><button class="nav-item active" data-action="game">The game <span class="nav-dot"></span></button><button class="nav-item" data-action="history">Best runs</button><button class="nav-item" data-action="rules">How to play <span class="small-arrow">↗</span></button><button id="theme-toggle" class="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false" title="Switch to dark mode"><svg class="theme-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.3A8.5 8.5 0 0 1 9.7 3.5a8.5 8.5 0 1 0 10.8 10.8Z"/></svg><svg class="theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button></nav>
       <span class="edition-mark">THE CHESS ALMANAC<small>A PLAYABLE COLLECTION</small></span>
     </div>
   </header>

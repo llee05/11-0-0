@@ -16,6 +16,7 @@ Edit the maintained HTML, CSS and ES modules in `dist/` directly. Local developm
 
 ## Play
 
+- **Appearance:** Use the moon/sun button in the header to toggle dark mode. The almanac follows your system theme until you choose one; your choice is saved separately under `11-0-0:theme` and shared across tabs. Theme controls also work while the catalogue loads or is unavailable.
 - **Country-year rolls:** USA 2026 and USA 2022 are separate rollable options. Every offer shows its source list's five highest standard-rated players, ordered by the original rating. A snapshot is playable only if at least one of those players is rated at least 2600. Rolls favour strong, deep rosters: weight doubles per 50 Elo of the mean of the available leader and the available top-three average. Every qualifying snapshot with an eligible player remains possible. Olympiad participation is never a selection filter.
 - **Draft:** Pick five distinct people. Two nation rerolls are available. Already-drafted players remain visible and disabled; lower-ranked players never replace them. Only snapshots with an eligible pick can be rolled. Quick Draft can complete a squad using projected eleven-round strength from ratings, traits, styles, stamina, starting form and consistency.
 - **Quick Sim:** From the draft, choose **Quick sim** to keep your existing picks, fill empty slots and simulate all eleven rounds with automatic reserve rotation. It uses the same full tournament rules, traits, fatigue and form as manual play. Results include every round, all boards and full standings, and save normally. It uses the same profile-aware picks as Quick Draft, retaining existing picks and offers. With a complete squad, it immediately simulates that team.
@@ -127,7 +128,7 @@ npm run check
 npm test
 ```
 
-Tests cover persistent SQL data, source ordering, known USA rosters, unchanged ratings, the inclusive 2600 cutoff, source identity links, all-time A/B field selection, cross-year player uniqueness, complete five-player offers, 1,000 drafts, 100 tournaments, scoring, pairings, reproducibility, symmetric stamina/fatigue, trait/style effects, captain-free profiles and match modifiers, bounded form and consistency, forecast consistency and invalid saves. Browser QA also checks saved profiles, guide/source dialogs, forecasts, seeded opponent traits/profiles and preservation of legacy or malformed saves.
+Tests cover persistent SQL data, source ordering, known USA rosters, unchanged ratings, the inclusive 2600 cutoff, source identity links, all-time A/B field selection, cross-year player uniqueness, complete five-player offers, 1,000 drafts, 100 tournaments, scoring, pairings, reproducibility, symmetric stamina/fatigue, trait/style effects, captain-free profiles and match modifiers, bounded form and consistency, forecast consistency and invalid saves. Browser QA also checks system-theme following, keyboard toggling, saved appearance preferences, cross-tab updates, mobile theme controls, saved profiles, guide/source dialogs, forecasts, seeded opponent traits/profiles and preservation of legacy or malformed saves.
 
 Static release tests compare exported JSON with the SQL API catalogue, verify complete browser assets and font licenses, preserve maintained source and persistent database bytes, and check reproducible rebuilds without stale files.
 

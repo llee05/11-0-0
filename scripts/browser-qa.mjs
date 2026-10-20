@@ -9,11 +9,41 @@ await mkdir(artifacts,{recursive:true});
 const url=process.env.QA_URL||'http://localhost:4173';
 const errors=[];
 try {
-  const context=await browser.newContext({viewport:{width:1440,height:1100},permissions:['clipboard-read','clipboard-write']});
+  const context=await browser.newContext({viewport:{width:1440,height:1100},colorScheme:'light',permissions:['clipboard-read','clipboard-write']});
   const page=await context.newPage();
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto(url);await page.evaluate(()=>document.fonts.ready);
   await page.getByRole('button',{name:'Quick draft'}).waitFor();
+  const themeToggle=page.getByRole('button',{name:'Dark mode',exact:true});
+  const savedBeforeTheme=await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
+  assert.equal(await themeToggle.getAttribute('aria-pressed'),'false');
+  await page.emulateMedia({colorScheme:'dark'});
+  await page.waitForFunction(()=>document.documentElement.dataset.theme==='dark');
+  assert.equal(await themeToggle.getAttribute('aria-pressed'),'true');
+  await themeToggle.focus();await page.keyboard.press('Enter');
+  assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:theme')),'light');
+  await page.emulateMedia({colorScheme:'light'});await page.emulateMedia({colorScheme:'dark'});
+  assert.equal(await themeToggle.getAttribute('aria-pressed'),'false');
+  await page.reload();await page.getByRole('button',{name:'Quick draft'}).waitFor();
+  assert.equal(await themeToggle.getAttribute('aria-pressed'),'false');
+  assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),savedBeforeTheme);
+  await themeToggle.click();
+  assert.equal(await page.evaluate(()=>getComputedStyle(document.body).backgroundColor),'rgb(18, 26, 22)');
+  await page.screenshot({path:`${artifacts}/desktop-dark-draft.png`,fullPage:true});
+  for(const width of [320,375,600,768,1050]){
+    await page.setViewportSize({width,height:900});
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`Theme toggle fits at ${width}px`);
+    const bounds=await themeToggle.boundingBox();assert.ok(bounds.x>=0&&bounds.x+bounds.width<=width);
+  }
+  await page.setViewportSize({width:375,height:900});
+  await page.screenshot({path:`${artifacts}/mobile-dark-draft.png`,fullPage:true});
+  await page.setViewportSize({width:1440,height:1100});
+  const otherTab=await context.newPage();await otherTab.goto(url);
+  await otherTab.getByRole('button',{name:'Quick draft'}).waitFor();
+  assert.equal(await otherTab.getByRole('button',{name:'Dark mode',exact:true}).getAttribute('aria-pressed'),'true');
+  await otherTab.getByRole('button',{name:'Dark mode',exact:true}).click();
+  await page.waitForFunction(()=>document.documentElement.dataset.theme==='light');
+  await otherTab.close();
   await page.getByRole('button',{name:'Best runs',exact:true}).click();
   assert.equal(await page.locator('.run-card').count(),0);
   assert.ok((await page.getByRole('dialog').textContent()).includes('Your first record is waiting'));
@@ -418,6 +448,6 @@ try {
   await quotaPage.getByRole('button',{name:'Best runs',exact:true}).click();assert.equal(await quotaPage.locator('.run-card').count(),1);
   await quotaContext.close();
   assert.deepEqual(errors,[]);
-  console.log('Browser QA passed: top-three personal records, complete archived reports/standings/squads, reset and reload persistence, deduplication, old-catalogue independence, corrupt-history backup and storage failure recovery; stamina/style/form/consistency, profiles, traits, saves, previews, source catalogue, manual and quick drafts/simulation, expert mode, rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
+  console.log('Browser QA passed: system theme, keyboard theme toggle, preference persistence, cross-tab updates and responsive theme controls; top-three personal records, complete archived reports/standings/squads, reset and reload persistence, deduplication, old-catalogue independence, corrupt-history backup and storage failure recovery; stamina/style/form/consistency, profiles, traits, saves, previews, source catalogue, manual and quick drafts/simulation, expert mode, rotation, rounds, standings, sharing, reset, and 320/390/1440px layouts.');
   console.log(`Screenshots: ${artifacts}`);
 } finally {await browser.close();}
