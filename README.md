@@ -123,6 +123,8 @@ npm test
 
 Tests cover persistent SQL data, source ordering, known USA rosters, unchanged ratings, the inclusive 2600 cutoff, source identity links, all-time A/B field selection, cross-year player uniqueness, complete five-player offers, 1,000 drafts, 100 tournaments, scoring, pairings, reproducibility, symmetric stamina/fatigue, trait/style effects, captain-free profiles and match modifiers, bounded form and consistency, forecast consistency and invalid saves. Browser QA also checks saved profiles, guide/source dialogs, forecasts, seeded opponent traits/profiles and preservation of legacy or malformed saves.
 
+Static release tests compare exported JSON with the SQL API catalogue, verify complete browser assets and font licenses, preserve maintained source and persistent database bytes, and check reproducible rebuilds without stale files.
+
 For a reproducible simulation investigation, run the read-only audit against an in-memory catalogue:
 
 ```bash
@@ -139,6 +141,12 @@ PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium node scripts/browser-qa.mjs
 ```
 
 Override `QA_URL`, `QA_ARTIFACTS` or `PLAYWRIGHT_MODULE` if needed. Screenshots default to `/tmp/eleven-zero-zero-qa/screenshots`.
+
+## GitHub Pages release
+
+Run `npm run build:pages` to generate the static site in `release/pages/`, then `npm run preview:pages` to test it at http://localhost:4174/11-0-0/. The build exports the canonical catalogue through an in-memory SQLite database; the published game loads local JSON and needs no backend. Relative URLs support a repository subpath or a root domain with the same artifact.
+
+[The release guide](docs/github-pages.md) covers local checks, GitHub setup, save migration boundaries and catalogue updates. The included GitHub Actions workflow validates pull requests and deploys successful pushes to `main` once Pages is enabled. This preparation does not publish anything by itself.
 
 ## Hosted database and build
 

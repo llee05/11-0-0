@@ -32,7 +32,7 @@ try {
   await page.getByRole('button',{name:'COUNTRIES & YEARS'}).click();
   assert.equal(await page.locator('#archive-year option').count(),26);
   assert.ok((await page.getByRole('dialog').textContent()).includes('rated at least 2600'));
-  const catalogue=await page.evaluate(async()=>await (await fetch('/api/catalog')).json());
+  const catalogue=await page.evaluate(async()=>await (await fetch(document.querySelector('meta[name="catalogue-url"]')?.content||'/api/catalog')).json());
   assert.ok(catalogue.players.every(p=>!Object.hasOwn(p,'cost')));
   assert.equal(catalogue.metadata.snapshotCount,396);
   assert.equal(catalogue.metadata.countryCount,69);

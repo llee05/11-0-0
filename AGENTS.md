@@ -28,6 +28,8 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 | `scripts/audit-simulation.mjs`, `reports/` | Read-only seeded simulation experiments, counterfactual substitution probes and dated findings; use an in-memory catalogue and keep measured results tied to their audited rules and release. |
 | `.openai/hosting.json`, `scripts/build-hosted.mjs` | Existing Site identity, D1 binding `DB`, and non-destructive hosted build. |
 | `scripts/build-pages.mjs`, `release/pages/` | Dependency-free static release with canonical SQL catalogue JSON; allowlisted browser assets and font licenses, no Worker or hosting metadata. Generated output is ignored by Git. |
+| `scripts/preview-pages.mjs`, `scripts/browser-pages-qa.mjs` | Static-only preview under a configurable repository path and focused release checks; no API fallback. |
+| `.github/workflows/pages.yml`, `docs/github-pages.md` | Pages build/test/deploy workflow and release guide; pull requests validate, successful pushes to `main` deploy when Pages is enabled. |
 
 ### State and data flow
 
@@ -75,11 +77,14 @@ npm run check  # Syntax checks for app.js and engine.js
 npm test       # SQL catalogue, rules and simulation tests
 npm run build  # Hosted Worker/assets; requires npm --prefix backend ci
 npm run build:pages # Static release/pages/; no backend dependencies or remote database
+npm run preview:pages # Static-only http://localhost:4174/11-0-0/; PAGES_BASE_PATH and PORT configurable
 ```
 
 For catalogue changes, test SQLite persistence, foreign keys, complete source-ranked top fives, known modern rosters, unchanged ratings, the inclusive 2600 cutoff, all-time A/B selection, cross-era identity links and atomic release replacement. For engine changes, run the syntax checks and engine suite; add or adjust tests for changed behavior. The suite covers 1,000 drafts, 100 complete tournaments, deterministic results, scoring, pairings, fatigue, invalid actions and saved-game validation.
 
 For UI changes, run syntax checks and verify the affected browser flows at desktop and mobile widths. The optional full browser QA setup and environment overrides are documented in `README.md`. For documentation-only changes, verify commands, file paths and statements against the source, and check the diff for whitespace errors with `git diff --check`.
+
+For Pages changes, run the static export integration test and build. Verify both root and repository-subpath previews, relative catalogue/assets, no backend requests, save persistence and catalogue-failure recovery; see `docs/github-pages.md`. Keep the static catalogue identical to the SQL API and preserve source/font licenses. Do not change the existing Sites identity or D1 configuration for a Pages release.
 
 ## Task and commit workflow
 
