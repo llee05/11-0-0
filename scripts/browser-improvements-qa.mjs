@@ -1,0 +1,38 @@
+// Focused checks for comparison, discovery, reports and portable browser saves.
+import assert from 'node:assert/strict';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright-core');
+const browser=await chromium.launch({executablePath:process.env.PLAYWRIGHT_CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+try{
+  const context=await browser.newContext({viewport:{width:1440,height:1000}}),page=await context.newPage(),errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  const url=process.env.QA_URL||'http://localhost:4173/';
+  await page.goto(url);await page.getByRole('button',{name:'Spin a nation'}).click();
+  await page.locator('.candidate').first().waitFor();
+  const before=await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
+  await page.getByRole('button',{name:'Compare candidates'}).click();
+  assert.equal(await page.locator('.comparison-card').count(),5);
+  assert.match(await page.locator('.comparison-grid').textContent(),/reference board score/);
+  assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),before);
+  for(const width of [320,390,1440]){await page.setViewportSize({width,height:900});assert.ok(await page.locator('#dialog').evaluate(el=>el.scrollWidth<=el.clientWidth));}
+  const id=await page.locator('.comparison-card [data-action="pick"]').first().getAttribute('data-id');
+  await page.locator('.comparison-card [data-action="pick"]').first().click();
+  assert.equal(await page.getByRole('dialog').isVisible(),false);
+  const picked=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
+  assert.ok(picked.squad.includes(id));assert.deepEqual(picked.profiles[id],JSON.parse(before).offer.profiles[id]);
+  const expertPage=await (await browser.newContext({viewport:{width:390,height:844}})).newPage();
+  await expertPage.goto(url);await expertPage.getByRole('button',{name:'Expert Trust your instincts'}).click();
+  await expertPage.getByRole('button',{name:'Spin a nation'}).click();await expertPage.getByRole('button',{name:'Compare candidates'}).click();
+  const expertText=await expertPage.locator('.comparison-grid').textContent();
+  assert.ok(!/reference board score|game Elo|source|Highest available outlook/.test(expertText));
+  assert.equal(await expertPage.locator('.comparison-card').count(),5);
+  await expertPage.keyboard.press('Escape');await expertPage.getByRole('button',{name:'Quick sim',exact:true}).click();await expertPage.getByRole('button',{name:'Copy result'}).waitFor();
+  assert.equal(await expertPage.locator('.player-scoreboard tbody tr').count(),5);assert.equal(await expertPage.locator('.rank-trail button').count(),11);
+  const completed=await expertPage.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
+  await expertPage.locator('.rank-trail button').first().click();assert.match(await expertPage.locator('.match-heading').textContent(),/ROUND 01/);
+  assert.equal(await expertPage.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),completed);
+  await expertPage.getByRole('button',{name:'Best runs',exact:true}).click();await expertPage.getByRole('button',{name:/View tournament/}).first().click();
+  await expertPage.getByRole('button',{name:'Tournament story',exact:true}).click();assert.equal(await expertPage.locator('#dialog .rank-trail button').count(),11);
+  await expertPage.locator('#dialog .rank-trail button').first().click();assert.match(await expertPage.locator('#dialog .match-heading').textContent(),/ROUND 01/);
+  await expertPage.keyboard.press('Escape');assert.deepEqual(errors,[]);
+  console.log('Improvement QA passed: full offer comparisons, retained assignments, Expert privacy, player scoreboard, ranks, archived stories and responsive layouts.');
+}finally{await browser.close();}
