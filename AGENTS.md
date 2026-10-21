@@ -6,7 +6,7 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 
 11–0–0 is a fantasy Chess Olympiad game with a browser ES-module UI and a shared historical rating catalogue. Local development uses Node.js 22.13 or newer and built-in SQLite without runtime packages. Hosted Sites uses an isolated Vinext adapter and Cloudflare D1.
 
-`dist/` contains the maintained browser source. Edit its top-level files directly. Sites builds generate only `dist/server/`, `dist/client/` and `dist/.openai/`; never replace or clean the entire directory. Local development and Sites use `/api/catalog`. The separate GitHub Pages build exports the same SQL catalogue to `release/pages/catalog.json` and uses an explicit relative catalogue URL; static hosting must serve `release/pages/`, not the maintained `dist/` source.
+`dist/` contains the maintained browser source. Edit its top-level files directly. Sites builds generate only `dist/server/`, `dist/client/` and `dist/.openai/`; never replace or clean the entire directory. Local development and Sites use `/api/catalog`. The separate static builds export the same SQL catalogue to `release/pages/catalog.json` or `release/cloudflare/catalog.json` and use an explicit relative catalogue URL; static hosting must serve the corresponding generated release, not the maintained `dist/` source.
 
 | File | Responsibility |
 | --- | --- |
@@ -32,7 +32,9 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 | `scripts/research-early-history.py`, `reports/pre-1927-*` | Checksum-pinned Chessmetrics/Edo coverage research. Sparse-list parsing is explicitly research-only; national offers still require the strict publication builder and sourced affiliation/identity audits. |
 | `.openai/hosting.json`, `scripts/build-hosted.mjs` | Existing Site identity, D1 binding `DB`, and non-destructive hosted build. |
 | `scripts/build-pages.mjs`, `release/pages/` | Dependency-free static release with canonical SQL catalogue JSON; allowlisted browser assets and font licenses, no Worker or hosting metadata. Generated output is ignored by Git. |
-| `scripts/preview-pages.mjs`, `scripts/browser-pages-qa.mjs` | Static-only preview under a configurable repository path and focused release checks; no API fallback. |
+| `scripts/build-static.mjs`, `scripts/build-cloudflare.mjs`, `release/cloudflare/` | Shared static exporter and independent Cloudflare Pages release; preserves Sites and GitHub Pages output. |
+| `cloudflare/`, `scripts/package-cloudflare.py`, `docs/cloudflare-pages.md` | Response headers, root 404, isolated Wrangler config and reproducible Direct Upload ZIP; Python is needed only for ZIP packaging. |
+| `scripts/preview-pages.mjs`, `scripts/browser-pages-qa.mjs` | Static-only previews at the root or a configurable repository path and focused release checks; no API fallback. Cloudflare rule checks run against Wrangler. |
 | `.github/workflows/pages.yml`, `docs/github-pages.md` | Pages build/test/deploy workflow and release guide; pull requests validate, successful pushes to `main` deploy when Pages is enabled. |
 
 ### State and data flow
@@ -87,13 +89,16 @@ npm test       # SQL catalogue, rules and simulation tests
 npm run build  # Hosted Worker/assets; requires npm --prefix backend ci
 npm run build:pages # Static release/pages/; no backend dependencies or remote database
 npm run preview:pages # Static-only http://localhost:4174/11-0-0/; PAGES_BASE_PATH and PORT configurable
+npm run build:cloudflare # Static release/cloudflare/; no backend dependencies or remote database
+npm run preview:cloudflare # Static-only http://localhost:4175/; PAGES_BASE_PATH and PORT configurable
+npm run package:cloudflare # Rebuild and ZIP for dashboard upload; Python 3 standard library
 ```
 
 For catalogue changes, test SQLite persistence, foreign keys, complete source-ranked top fives, known modern rosters, unchanged ratings, the strict source-rating cutoff above 2650, all-time A/B selection, cross-era identity links and atomic release replacement. For engine changes, run the syntax checks and engine suite; add or adjust tests for changed behavior. The suite covers 1,000 drafts, 100 complete tournaments, deterministic results, scoring, pairings, fatigue, invalid actions and saved-game validation.
 
 For UI changes, run syntax checks and verify the affected browser flows at desktop and mobile widths. The optional full browser QA setup and environment overrides are documented in `README.md`. For documentation-only changes, verify commands, file paths and statements against the source, and check the diff for whitespace errors with `git diff --check`.
 
-For Pages changes, run the static export integration test and build. Verify both root and repository-subpath previews, relative catalogue/assets, no backend requests, save persistence and catalogue-failure recovery; see `docs/github-pages.md`. Keep the static catalogue identical to the SQL API and preserve source/font licenses. Do not change the existing Sites identity or D1 configuration for a Pages release.
+For Pages changes, run the static export integration tests and affected builds. Verify both root and repository-subpath previews, relative catalogue/assets, no backend requests, save persistence and catalogue-failure recovery; see `docs/github-pages.md` and `docs/cloudflare-pages.md`. For Cloudflare, also check `_headers` and nested 404 recovery with Wrangler. Keep its Wrangler config isolated under `cloudflare/` and use `--cwd cloudflare` so Sites cannot discover it. Keep the static catalogue identical to the SQL API and preserve source/font licenses. Do not change the existing Sites identity or D1 configuration for a Pages release.
 
 ## Task and commit workflow
 

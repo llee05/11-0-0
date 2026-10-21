@@ -12,7 +12,7 @@ npm start
 
 Open http://localhost:4173. `npm run dev` starts the same server; set `PORT` for another port. The server creates `.data/catalogue.sqlite`, applies pending schema migrations and imports the checked-in rating catalogue. Override `DATABASE_PATH` to choose another database file. Game progress still saves in the browser; SQLite stores the shared historical player catalogue.
 
-Edit the maintained HTML, CSS and ES modules in `dist/` directly. Local development and Sites load `/api/catalog`. For static hosting, `npm run build:pages` exports the same SQL catalogue to `release/pages/catalog.json` and builds a separate browser release in `release/pages/`. Serve that output over HTTP; serving `dist/` alone still requires the API. Sites builds add generated `dist/server/`, `dist/client/` and `dist/.openai/` directories without replacing the maintained source files.
+Edit the maintained HTML, CSS and ES modules in `dist/` directly. Local development and Sites load `/api/catalog`. For static hosting, `npm run build:cloudflare` exports the same SQL catalogue to `release/cloudflare/catalog.json` and builds a separate browser release in `release/cloudflare/`; `npm run build:pages` produces `release/pages/` for GitHub Pages. Serve the generated output over HTTP; serving `dist/` alone still requires the API. Sites builds add generated `dist/server/`, `dist/client/` and `dist/.openai/` directories without replacing the maintained source files.
 
 ## Play
 
@@ -124,6 +124,9 @@ The interface combines a chess almanac with tournament broadcast graphics: warm 
 | `backend/db/schema.ts`, `drizzle/` | Drizzle schema and generated schema-only SQL migrations, snapshots and journal. |
 | `scripts/build-hosted.mjs`, `.openai/hosting.json` | Hosted build and D1 binding; preserves the existing Site identity and browser source. |
 | `scripts/build-pages.mjs`, `release/pages/` | Separate static build, exporting the canonical SQL catalogue as JSON with relative browser asset URLs; generated output is ignored by Git. |
+| `scripts/build-static.mjs`, `scripts/build-cloudflare.mjs`, `release/cloudflare/` | Shared canonical export and independent Cloudflare Pages build; no runtime backend or npm dependencies. |
+| `cloudflare/`, `scripts/package-cloudflare.py`, `docs/cloudflare-pages.md` | Cloudflare headers, root 404 page, isolated Wrangler configuration, reproducible Direct Upload ZIP and deployment guide. |
+| `scripts/preview-pages.mjs`, `scripts/browser-pages-qa.mjs` | Static previews for both providers and focused browser release checks. |
 
 The game moves through `draft` → `tournament` → `results`. UI actions update state through the engine and re-render. Quick Sim automates that same sequence through pure `completeDraft` and `quickSim` engine functions, committing the completed result to browser state only after success. Existing offer assignments and picked traits/profiles are retained. Saves use `11-0-0:save:v4` and carry catalogue, trait and profile rules versions; selected dialogs and views are transient. Teams retain their starting profiles, current form, consecutive-game streaks and persistent fatigue loads. Validation reconstructs form, load and rest history from recorded boards. There are no application accounts or remote game saves.
 
@@ -178,6 +181,12 @@ PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium node scripts/browser-qa.mjs
 ```
 
 Override `QA_URL`, `QA_ARTIFACTS` or `PLAYWRIGHT_MODULE` if needed. Screenshots default to `/tmp/eleven-zero-zero-qa/screenshots`.
+
+## Cloudflare Pages release
+
+Run `npm run build:cloudflare`, then `npm run preview:cloudflare` to test the standalone site at http://localhost:4175/. The generated `release/cloudflare/` includes the canonical catalogue, browser assets, font licenses, Cloudflare headers and a custom 404 page. No runtime database is required.
+
+Run `npm run package:cloudflare` to create `release/11-0-0-cloudflare.zip` for dashboard upload; packaging uses Python 3's standard library. [The Cloudflare guide](docs/cloudflare-pages.md) covers Git integration, manual upload, Wrangler, custom domains and browser checks. Preparation and local previews do not publish the site.
 
 ## GitHub Pages release
 

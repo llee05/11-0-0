@@ -58,5 +58,21 @@ try{
     assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:best-runs:v1')),records);
   }
   assert.deepEqual(errors,['Catalogue unavailable','Invalid rating catalogue.']);
-  console.log(`Pages QA passed: ${home.href} · relative assets, JSON catalogue, no API/backend, mobile layout, best-run reports, game/record preservation and catalogue retry.`);
+  if(process.env.QA_CLOUDFLARE==='1'){
+    // Run against Wrangler Pages to exercise _headers and platform 404 behavior.
+    assert.equal(home.pathname,'/','Cloudflare release uses a root domain');
+    const response=await context.request.get(home.href),headers=response.headers();
+    assert.equal(headers['x-content-type-options'],'nosniff');
+    assert.equal(headers['referrer-policy'],'strict-origin-when-cross-origin');
+    assert.equal(headers['x-frame-options'],'DENY');
+    const missing=await page.goto(new URL('missing/nested/page',home).href);
+    assert.equal(missing.status(),404);
+    await page.getByRole('heading',{name:'That page is off the board.'}).waitFor();
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    await page.getByRole('link',{name:'Play 11–0–0 →'}).click();
+    await page.getByRole('button',{name:'Copy result'}).waitFor();
+    assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),saved);
+    assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:best-runs:v1')),records);
+  }
+  console.log(`Static hosting QA passed: ${home.href} · relative assets, JSON catalogue, no API/backend, mobile layout, best-run reports, game/record preservation and catalogue retry${process.env.QA_CLOUDFLARE==='1'?', Cloudflare headers and nested 404 recovery':''}.`);
 }finally{await browser.close();}
