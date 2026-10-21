@@ -104,6 +104,7 @@ async function buildVariants(temp,ref,names){
   const files=['engine.js','player-profile.js','traits.js'];
   const originals=Object.fromEntries(await Promise.all(files.map(async file=>[file,(await git('git',['show',`${baseline}:dist/${file}`],{cwd:root})).stdout])));
   const baselineRatings=originals['engine.js'].includes('./rating-rules.js')?(await git('git',['show',`${baseline}:dist/rating-rules.js`],{cwd:root})).stdout:null;
+  const baselineTournamentRules=originals['engine.js'].includes('./tournament-rules.js')?(await git('git',['show',`${baseline}:dist/tournament-rules.js`],{cwd:root})).stdout:null;
   return names.map(name=>{
     const directory=join(temp,name);mkdirSync(directory);writeFileSync(join(directory,'package.json'),' {"type":"module"}\n');
     const hashes={};
@@ -119,7 +120,7 @@ async function buildVariants(temp,ref,names){
     }
     const engineSource=readFileSync(join(directory,'engine.js'),'utf8');
     if(engineSource.includes('./tournament-rules.js')){
-      const source=readFileSync(join(root,'dist','tournament-rules.js'),'utf8');
+      const source=name==='baseline'?baselineTournamentRules:readFileSync(join(root,'dist','tournament-rules.js'),'utf8');
       hashes['tournament-rules.js']=hash(source);writeFileSync(join(directory,'tournament-rules.js'),source);
     }
     const scale=engineSource.match(/export const ELO_SCALE = (\d+);/)||engineSource.match(/10\*\*\(-difference\/(\d+)\)/);
