@@ -8,6 +8,7 @@ try{
   const url=process.env.QA_URL||'http://localhost:4173/';
   await page.goto(url);await page.getByRole('button',{name:'Spin a nation'}).click();
   await page.locator('.candidate').first().waitFor();
+  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4'))?.offer);
   const before=await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
   await page.getByRole('button',{name:'Compare candidates'}).click();
   assert.equal(await page.locator('.comparison-card').count(),5);
@@ -17,6 +18,7 @@ try{
   const id=await page.locator('.comparison-card [data-action="pick"]').first().getAttribute('data-id');
   await page.locator('.comparison-card [data-action="pick"]').first().click();
   assert.equal(await page.getByRole('dialog').isVisible(),false);
+  await page.waitForFunction(id=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).squad.includes(id),id);
   const picked=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
   assert.ok(picked.squad.includes(id));assert.deepEqual(picked.profiles[id],JSON.parse(before).offer.profiles[id]);
   await page.getByRole('button',{name:'PLAYERS & EDITIONS'}).click();
@@ -36,6 +38,7 @@ try{
   // Two tabs share one active game. A stale tab must pause before it writes.
   const otherTab=await context.newPage();await otherTab.goto(url);await otherTab.getByRole('button',{name:'Quick draft'}).waitFor();
   await page.getByRole('button',{name:'Spin a nation'}).click();await page.locator('.candidate').first().waitFor();
+  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4'))?.offer);
   await otherTab.locator('#save-status').waitFor({state:'visible'});
   const fresh=await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
   await otherTab.getByRole('button',{name:'Quick draft'}).click();assert.equal(await otherTab.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),fresh);
@@ -59,10 +62,13 @@ try{
   await expertPage.goto(url);await expertPage.getByRole('button',{name:'Expert Trust your instincts'}).click();
   await expertPage.getByRole('button',{name:'Spin a nation'}).click();await expertPage.getByRole('button',{name:'Compare candidates'}).click();
   const expertText=await expertPage.locator('.comparison-grid').textContent();
-  assert.ok(!/reference board score|game Elo|source|Highest available outlook/.test(expertText));
+  assert.ok(!/reference board score|game Elo|Highest available outlook/.test(expertText));
   assert.equal(await expertPage.locator('.comparison-card').count(),5);
+  assert.equal(await expertPage.locator('.comparison-card>p>strong').count(),0);
+  assert.ok((await expertPage.locator('.comparison-outlook').allTextContents()).every(text=>text.includes('rating-derived estimates hidden')));
   await expertPage.keyboard.press('Escape');await expertPage.getByRole('button',{name:'Quick sim',exact:true}).click();await expertPage.getByRole('button',{name:'Copy result'}).waitFor();
   assert.equal(await expertPage.locator('.player-scoreboard tbody tr').count(),5);assert.equal(await expertPage.locator('.rank-trail button').count(),11);
+  await expertPage.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4'))?.phase==='results'&&JSON.parse(localStorage.getItem('11-0-0:best-runs:v1'))?.runs.length===1);
   const completed=await expertPage.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
   await expertPage.locator('.rank-trail button').first().click();assert.match(await expertPage.locator('.match-heading').textContent(),/ROUND 01/);
   assert.equal(await expertPage.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),completed);
@@ -70,5 +76,25 @@ try{
   await expertPage.getByRole('button',{name:'Tournament story',exact:true}).click();assert.equal(await expertPage.locator('#dialog .rank-trail button').count(),11);
   await expertPage.locator('#dialog .rank-trail button').first().click();assert.match(await expertPage.locator('#dialog .match-heading').textContent(),/ROUND 01/);
   await expertPage.keyboard.press('Escape');assert.deepEqual(errors,[]);
+  // Independent reports survive incompatible active rules and merge without duplicates.
+  const file=await expertPage.evaluate(()=>({app:'11-0-0',version:1,exportedAt:new Date().toISOString(),game:{...JSON.parse(localStorage.getItem('11-0-0:save:v4')),catalogueRelease:'retired'},runs:JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs}));
+  const activeBeforeReports=await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
+  for(let i=0;i<2;i++){
+    await page.getByRole('button',{name:'Saves & offline'}).click();
+    await page.locator('#backup-file').setInputFiles({name:'old-backup.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(file))});
+    await page.getByRole('button',{name:'Merge reports only'}).waitFor();assert.equal(await page.locator('[data-action="import-game"]').count(),0);
+    await page.getByRole('button',{name:'Merge reports only'}).click();await page.getByRole('dialog').waitFor({state:'hidden'});
+  }
+  assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),activeBeforeReports);
+  assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs.length),1);
+  const blockedContext=await browser.newContext();
+  await blockedContext.addInitScript(()=>{
+    localStorage.setItem('11-0-0:save:v4','{preserve-this-broken-save');
+    const set=Storage.prototype.setItem;
+    Storage.prototype.setItem=function(key,value){if(key==='11-0-0:save:v4:backup')throw new Error('Backup quota');return set.call(this,key,value);};
+  });
+  const blocked=await blockedContext.newPage();await blocked.goto(url);await blocked.getByRole('button',{name:'Quick draft'}).click();
+  assert.equal(await blocked.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),'{preserve-this-broken-save');
+  assert.match(await blocked.locator('#save-status').textContent(),/original browser copy is preserved/);
   console.log('Improvement QA passed: full offer comparisons, retained assignments, Expert privacy, canonical player search, source editions, backup previews and imports, stale-tab protection, player scoreboard, ranks, archived stories and responsive layouts.');
 }finally{await browser.close();}
