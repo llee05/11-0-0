@@ -24,7 +24,7 @@ test('Cloudflare release and upload archive preserve the SQL catalogue, source a
   assert.equal(resolve(fileURLToPath(new URL('cloudflare/',root)),config.pages_build_output_dir),fileURLToPath(output).replace(/\/$/,''));
   assert.deepEqual(Object.keys(config).sort(),['compatibility_date','name','pages_build_output_dir']);
   build();
-  assert.deepEqual(files(),['_headers','404.html','catalog.json','index.html',...assets].sort());
+  assert.deepEqual(files(),['_headers','404.html','catalog.json','index.html','sw.js',...assets].sort());
   for(const name of assets)assert.deepEqual(readFileSync(new URL(name,output)),before.get(`dist/${name}`),name);
   const html=readFileSync(new URL('index.html',output),'utf8');
   assert.equal(html.replace('./catalog.json','/api/catalog'),before.get('dist/index.html').toString());

@@ -120,8 +120,44 @@ function downloadBackup(game=state,runs=bestRuns){
     link.href=url;link.download=`11-0-0-${game?'backup':'reports'}-${new Date().toISOString().slice(0,10)}.json`;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   }catch(error){toast(error.message||'The backup could not be created.');}
 }
+let offlineRegistration=null,offlineMessage='Enable offline play to keep this release and its catalogue on this device.',offlineBusy=false;
+function offlineControls(){
+  return `<section class="offline-controls"><h3>Play without a connection</h3><p id="offline-status" role="status">${esc(offlineMessage)}</p><div class="data-actions"><button class="secondary-button" data-action="enable-offline" ${offlineBusy||!('serviceWorker' in navigator)?'disabled':''}>${offlineBusy?'Preparing offline play…':offlineRegistration?.active?'Check for offline updates':'Make available offline'}</button>${offlineRegistration?.waiting?'<button class="primary-button" data-action="offline-update">Reload with the update</button>':''}</div><p class="planning-note">Offline play starts after preparation succeeds. Updates wait until you choose to reload or close the old tabs. Download a backup to keep a separate copy of your progress.</p></section>`;
+}
+function refreshOfflineControls(){const box=$('#offline-controls');if(box)box.innerHTML=offlineControls();}
+function watchOfflineRegistration(registration){
+  offlineRegistration=registration;
+  const refresh=()=>{offlineMessage=registration.waiting?'An offline update is ready. Your current game is saved before reloading.':registration.active?'This release is available offline on this device.':'Preparing offline play…';refreshOfflineControls();};
+  const watch=()=>{registration.installing?.addEventListener('statechange',()=>{const worker=registration.installing;refresh();if(worker?.state==='redundant'){offlineMessage='Offline preparation did not finish. Check your connection and try again.';refreshOfflineControls();}});};
+  registration.addEventListener('updatefound',watch);watch();refresh();
+}
+async function enableOffline(){
+  if(offlineBusy||!('serviceWorker' in navigator))return;
+  offlineBusy=true;offlineMessage='Preparing this release and its catalogue…';refreshOfflineControls();
+  try{
+    const registration=await navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'});watchOfflineRegistration(registration);
+    await registration.update();
+    const worker=registration.installing;
+    if(worker)await new Promise((resolve,reject)=>{
+      const timer=setTimeout(()=>reject(new Error('Preparation is taking too long. Try again when connected.')),30000);
+      const finish=()=>{if(['installed','activated'].includes(worker.state)){clearTimeout(timer);resolve();}else if(worker.state==='redundant'){clearTimeout(timer);reject(new Error('The release changed or a download failed. Try preparing offline play again.'));}};
+      worker.addEventListener('statechange',finish);finish();
+    });
+    offlineMessage=registration.waiting?'An offline update is ready. Reload when you are ready.':registration.active?'This release is available offline on this device.':'Finishing offline preparation…';
+  }catch(error){offlineMessage=error.message||'Offline preparation could not finish. Try again when connected.';}
+  finally{offlineBusy=false;refreshOfflineControls();}
+}
+async function useOfflineUpdate(){
+  if(!offlineRegistration?.waiting)return;
+  await saveStore?.flush();if(!canMutate()||storageFailed||backupBlocked){toast('Download your current game or load the latest save before updating.');return;}
+  navigator.serviceWorker.addEventListener('controllerchange',()=>location.reload(),{once:true});
+  offlineRegistration.waiting.postMessage({type:'ACTIVATE_UPDATE'});
+}
+if('serviceWorker' in navigator)navigator.serviceWorker.getRegistration(new URL('./',location.href)).then(registration=>{
+  if(registration){watchOfflineRegistration(registration);registration.update().catch(()=>{});}
+}).catch(()=>{});
 function dataDialog(){
-  modal(`<span class="section-number">YOUR GAME. YOUR DEVICE.</span><h2 id="dialog-title">Saves &amp; offline.</h2><p class="dialog-lead">Download your game and Best runs to keep a copy or move between browsers. Import previews the contents before replacing progress. Reports from older rules can be imported independently.</p><div class="data-actions"><button class="primary-button" data-action="export-backup">Download game &amp; reports</button><button class="secondary-button" data-action="export-reports">Download Best runs only</button></div><label class="input-label" for="backup-file">IMPORT A BACKUP OR REPORT FILE</label><input id="backup-file" type="file" accept="application/json,.json"><p class="planning-note">JSON backups up to 10 MB. Incompatible active games stay unplayable; valid completed reports remain readable. Importing reports merges the best three without duplicate entries.</p><div id="backup-preview" role="status"></div><button class="primary-button" data-action="close">Back to the game →</button>`);
+  modal(`<span class="section-number">YOUR GAME. YOUR DEVICE.</span><h2 id="dialog-title">Saves &amp; offline.</h2><p class="dialog-lead">Download your game and Best runs to keep a copy or move between browsers. Import previews the contents before replacing progress. Reports from older rules can be imported independently.</p><div class="data-actions"><button class="primary-button" data-action="export-backup">Download game &amp; reports</button><button class="secondary-button" data-action="export-reports">Download Best runs only</button></div><label class="input-label" for="backup-file">IMPORT A BACKUP OR REPORT FILE</label><input id="backup-file" type="file" accept="application/json,.json"><p class="planning-note">JSON backups up to 10 MB. Incompatible active games stay unplayable; valid completed reports remain readable. Importing reports merges the best three without duplicate entries.</p><div id="backup-preview" role="status"></div><div id="offline-controls">${offlineControls()}</div><button class="primary-button" data-action="close">Back to the game →</button>`);
 }
 async function previewBackup(file){
   pendingBackup=null;if(!file)return;
@@ -376,6 +412,8 @@ document.addEventListener('click',async event=>{
   const changesGame=['spin','reroll','mode','pick','slot','sort','team-name','quick','confirm-quick','quick-sim','start','next','finish','board-move','board-sort','recommend-lineup','rotate-pick','reset','confirm-reset','plan-play','import-game'];
   if(changesGame.includes(action)&&!canMutate())return;
   if(action==='data')dataDialog();
+  if(action==='enable-offline')await enableOffline();
+  if(action==='offline-update')await useOfflineUpdate();
   if(action==='load-latest')await loadLatest();
   if(action==='export-backup')downloadBackup();
   if(action==='export-original'&&initialSaveRaw){const url=URL.createObjectURL(new Blob([initialSaveRaw],{type:'application/json'})),link=document.createElement('a');link.href=url;link.download='11-0-0-previous-save.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}

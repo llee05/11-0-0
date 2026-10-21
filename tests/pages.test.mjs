@@ -19,7 +19,7 @@ test('Pages release exports the canonical SQL catalogue, preserves browser sourc
   const before=new Map(sourceFiles.map(name=>[name,readFileSync(new URL(`dist/${name}`,root))]));
   const databaseFiles=existsSync(new URL('.data/',root))?readdirSync(new URL('.data/',root)).filter(name=>name.startsWith('catalogue.sqlite')).map(name=>[name,readFileSync(new URL(`.data/${name}`,root))]):[];
   build();
-  assert.deepEqual(files(output),['.nojekyll','catalog.json','index.html',...assets].sort());
+  assert.deepEqual(files(output),['.nojekyll','catalog.json','index.html','sw.js',...assets].sort());
   for(const name of assets)assert.deepEqual(readFileSync(new URL(name,output)),before.get(name),name);
   const html=readFileSync(new URL('index.html',output),'utf8');
   assert.ok(html.includes('<meta name="catalogue-url" content="./catalog.json">'));

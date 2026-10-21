@@ -101,3 +101,5 @@ QA_CLOUDFLARE=1 QA_URL=http://localhost:4176/ node scripts/browser-pages-qa.mjs
 ```
 
 The focused flow checks local assets, correct JSON/JS MIME types, missing backend routes, mobile layout, best-run reports, catalogue failure recovery and preserved saves. Cloudflare mode also checks response headers and returning from a nested 404 page to the saved game. Full browser QA covers desktop and mobile gameplay. The Node suite checks the canonical export, isolated build configuration, license files and reproducible upload ZIP contents.
+
+Offline play is opt-in from **Saves & offline**. Each build emits `sw.js` with an integrity manifest for the complete browser release and exported catalogue. Cache names include the hosting path and release fingerprint; partial or changed downloads never become the active offline copy. Run `QA_URL=<preview URL ending in /> node scripts/browser-offline-qa.mjs` with the same Playwright environment as the hosting checks to verify disconnected reloads and a complete 50-team tournament. Backups can move games between origins when their rules and catalogue still match; independent valid reports remain importable after those change.

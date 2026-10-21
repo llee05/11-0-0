@@ -5,15 +5,18 @@ import {resolve,extname,sep} from 'node:path';
 import {gzipSync} from 'node:zlib';
 import {openDatabase} from '../server/sqlite.mjs';
 import {readCatalogue} from '../server/catalog.mjs';
+import {createOfflineWorker} from './offline-worker.mjs';
 const root=fileURLToPath(new URL('../dist/',import.meta.url));
 const port=Number(process.env.PORT||4173);
 const db=openDatabase();
 const catalogue=await readCatalogue(db);
 const catalogueJson=JSON.stringify(catalogue),catalogueGzip=gzipSync(catalogueJson);
+const offlineWorker=createOfflineWorker({directory:new URL('../dist/',import.meta.url),html:await readFile(resolve(root,'index.html'),'utf8'),catalogueURL:'/api/catalog',catalogueText:catalogueJson});
 const server=createServer(async(req,res)=>{
   try {
     const url=new URL(req.url,'http://localhost');
     if(!['GET','HEAD'].includes(req.method)){res.writeHead(405,{Allow:'GET, HEAD'}).end();return;}
+    if(url.pathname==='/sw.js'){res.writeHead(200,{'Content-Type':'text/javascript; charset=utf-8','Cache-Control':'no-cache'});res.end(req.method==='HEAD'?undefined:offlineWorker);return;}
     if(url.pathname==='/api/catalog'){
       const compressed=String(req.headers['accept-encoding']).includes('gzip');
       res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-cache',Vary:'Accept-Encoding',...(compressed?{'Content-Encoding':'gzip'}:{})});

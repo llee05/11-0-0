@@ -17,6 +17,7 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 | `dist/tournament-rules.js` | Shared 50-team field size used by catalogue selection and simulation. |
 | `dist/rating-rules.js` | Shared era-balanced rank mapping, ±150 cap, rules identity and disclaimer. Source observations stay immutable. |
 | `dist/player-profile.js` | Pure style, stamina, form and consistency rules and game presets shared by all teams. |
+| `dist/sw.js`, `scripts/browser-assets.mjs`, `scripts/offline-worker.mjs` | Opt-in, hash-verified offline release cohorts shared by local, static and Sites builds. |
 | `dist/browser-saves.js`, `dist/portable-save.js` | Serialized browser-save coordination and validated portable game/report backups; storage access and download UI stay in `app.js`. |
 | `dist/player-explorer.js` | Pure canonical-person indexing and accent-insensitive search over sampled editions. |
 | `dist/tournament-story.js` | Pure player totals, round ranks and highlights derived from independent completed reports. |
@@ -68,6 +69,11 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 - Tournament opponents are the strongest 49 all-time A/B lineups by unrounded era-balanced four-board total, plus the user's team for 50 total. For each person keep their best observed era-balanced country edition (ties: latest year, federation, edition ID), using its federation. Each federation's first five form A and the next five B. Never repeat a person across opposing teams or combine Russia and the Soviet Union. Source coverage is selective; do not describe sampled ratings as exhaustive career peaks.
 - Official-list coverage is 1972–2026 at two-year intervals (July 1972, May 1974, otherwise January). Twenty-two audited source Chessmetrics country snapshots cover 1927, 1928 and every even year through 1970 except 1944; its original estimate table is retained but remains an explicit affiliation-audit gap. Their country coverage is selective and each has a complete higher-rank affiliation audit. Additional early countries remain unavailable pending evidence; never publish speculative top fives. Preserve temporal inference qualifications and sourced person-identity crosswalks.
 - Preserve source date, URL, SHA256 and raw ratings. The main game uses `era-balanced-1` in both Classic and Expert; no extra rating mode exists. `rawRating` preserves the source, `eraAdjustment` records the capped ±150 rank mapping to January 2026, and `rating` is the game base. Match `baseRating` is that game base; effective `rating` adds traits/style/form/daily swing and subtracts fatigue. Keep a visible fictional-balance disclaimer and source/game/effective breakdowns. Use game ratings consistently for drafting, lineup order, seeding, national field selection, forecasts, planners and simulation; keep country top-five membership and eligibility source-based. Country-year rolls must contain at least one player with a source rating strictly above 2650 (2650 is excluded, 2651 qualifies); preserve the complete top five of each qualifying snapshot.
+
+- Match preparation combines board order, reserve selection, shared planner advice and full forecasts in one responsive dialog. The projected board-point change compares the current lineup with the lineup when the dialog opened; it never rerolls the fixture or mutates fatigue. Recommendations show neutral-performance current-round match expectations alongside their recovery horizon.
+- Draft comparisons reuse `draftValue` only in Classic and retain the original offer assignments; Expert must never expose a rating-derived rank or estimate in this view.
+- Portable imports preview before replacing active progress, back up existing browser data and merge reports through `keepBestRuns`. Incompatible games are never restored; independent valid reports remain importable. Serialize active-save writes with a shared Web Lock where supported, compare the stored base before writing, pause stale tabs and allow export/reload. Unchanged renders must not write storage. Never replace an incompatible/malformed save if preserving its backup failed.
+- Offline preparation must cache a complete hash-verified app/catalogue cohort, isolated by origin path. Generate the worker from maintained `dist/sw.js` without modifying that template; preserve API/static catalogue parity and relative subpath URLs. Do not activate waiting workers during play without the user choosing the update. New browser assets belong in the shared allowlist and static-release assertions.
 
 ## Implementation guidance
 
@@ -121,9 +127,3 @@ refactor: isolate tournament pairing rules
 docs: describe app architecture and contribution workflow
 test: cover invalid saved tournament data
 ```
-
-Match preparation combines board order, reserve selection, shared planner advice and full forecasts in one responsive dialog. The projected board-point change compares the current lineup with the lineup when the dialog opened; it never rerolls the fixture or mutates fatigue. Recommendations show neutral-performance current-round match expectations alongside their recovery horizon.
-
-Draft comparisons reuse `draftValue` only in Classic and retain the original offer assignments; Expert must never expose a rating-derived rank or estimate in this view.
-
-Portable imports preview before replacing active progress, back up existing browser data and merge reports through `keepBestRuns`. Incompatible games are never restored; independent valid reports remain importable. Serialize active-save writes with a shared Web Lock where supported, compare the stored base before writing, pause stale tabs and allow export/reload. Unchanged renders must not write storage. Never replace an incompatible/malformed save if preserving its backup failed.

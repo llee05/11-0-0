@@ -1,7 +1,9 @@
 import { readFileSync, writeFileSync, cpSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { buildSeed, CATALOGUE_FORMAT, LEGENDS_DATA } from '../server/catalog.mjs';
+import {openDatabase} from '../server/sqlite.mjs';
+import {createOfflineWorker} from './offline-worker.mjs';
+import { buildSeed, CATALOGUE_FORMAT, LEGENDS_DATA,readCatalogue } from '../server/catalog.mjs';
 
 // Keep maintained dist/*.js and artwork intact. Framework output is built in
 // backend/dist and copied only into the generated dist/server and dist/client.
@@ -20,6 +22,8 @@ for(const entry of readdirSync(new URL('dist/',root),{withFileTypes:true})){
   if(['server','client','.openai','index.html'].includes(entry.name))continue;
   cpSync(new URL(`dist/${entry.name}`,root),new URL(`public/${entry.name}`,backend),{recursive:true});
 }
+const offlineDB=openDatabase(':memory:');
+try{writeFileSync(new URL('public/sw.js',backend),createOfflineWorker({directory:new URL('dist/',root),html:readFileSync(new URL('dist/index.html',root),'utf8'),catalogueURL:'/api/catalog',catalogueText:JSON.stringify(await readCatalogue(offlineDB))}));}finally{offlineDB.close();}
 const result=spawnSync(process.execPath,['scripts/run-framework.mjs','build'],{cwd:backend,stdio:'inherit'});
 if(result.status!==0)process.exit(result.status??1);
 for(const name of ['server','client','.openai']){

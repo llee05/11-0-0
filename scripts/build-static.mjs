@@ -1,7 +1,9 @@
 // Separate static releases; dist/ remains the maintained browser source.
 import {cpSync,mkdirSync,mkdtempSync,readFileSync,renameSync,rmSync,writeFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
-import {join} from 'node:path';
+import {join,dirname} from 'node:path';
+import {BROWSER_ASSETS} from './browser-assets.mjs';
+import {createOfflineWorker} from './offline-worker.mjs';
 import {openDatabase} from '../server/sqlite.mjs';
 import {readCatalogue} from '../server/catalog.mjs';
 import {configureCatalogue} from '../dist/engine.js';
@@ -24,11 +26,15 @@ export async function buildStaticRelease(target){
   const staging=mkdtempSync(join(release,`.${target}-`));
   try{
     // Explicit assets exclude generated Workers, databases and hosting metadata.
-    for(const name of ['app.js','engine.js','tournament-rules.js','rating-rules.js','traits.js','player-profile.js','run-history.js','tournament-story.js','player-explorer.js','browser-saves.js','portable-save.js','styles.css','favicon.svg','king.svg','knight.svg','fonts']){
-      cpSync(new URL(name,source),join(staging,name),{recursive:true});
+    for(const name of BROWSER_ASSETS){
+      mkdirSync(dirname(join(staging,name)),{recursive:true});
+      cpSync(new URL(name,source),join(staging,name));
     }
-    writeFileSync(join(staging,'index.html'),html.replace(marker,'<meta name="catalogue-url" content="./catalog.json">'));
-    writeFileSync(join(staging,'catalog.json'),JSON.stringify(catalogue)+'\n');
+    const staticHTML=html.replace(marker,'<meta name="catalogue-url" content="./catalog.json">');
+    const catalogueText=JSON.stringify(catalogue)+'\n';
+    writeFileSync(join(staging,'index.html'),staticHTML);
+    writeFileSync(join(staging,'catalog.json'),catalogueText);
+    writeFileSync(join(staging,'sw.js'),createOfflineWorker({directory:source,html:staticHTML,catalogueURL:'./catalog.json',catalogueText}));
     if(target==='pages')writeFileSync(join(staging,'.nojekyll'),'');
     else for(const name of ['_headers','404.html'])cpSync(new URL(`../cloudflare/${name}`,import.meta.url),join(staging,name));
     // Replace only this generated release after the export and copies succeed.
