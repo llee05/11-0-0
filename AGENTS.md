@@ -17,6 +17,7 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 | `dist/tournament-rules.js` | Shared 50-team field size used by catalogue selection and simulation. |
 | `dist/rating-rules.js` | Shared era-balanced rank mapping, ±150 cap, rules identity and disclaimer. Source observations stay immutable. |
 | `dist/player-profile.js` | Pure style, stamina, form and consistency rules and game presets shared by all teams. |
+| `dist/browser-saves.js`, `dist/portable-save.js` | Serialized browser-save coordination and validated portable game/report backups; storage access and download UI stay in `app.js`. |
 | `dist/player-explorer.js` | Pure canonical-person indexing and accent-insensitive search over sampled editions. |
 | `dist/tournament-story.js` | Pure player totals, round ranks and highlights derived from independent completed reports. |
 | `dist/run-history.js` | Independent completed-run reports, top-three ranking, content deduplication and validation; browser storage stays in `app.js`. |
@@ -124,3 +125,5 @@ test: cover invalid saved tournament data
 Match preparation combines board order, reserve selection, shared planner advice and full forecasts in one responsive dialog. The projected board-point change compares the current lineup with the lineup when the dialog opened; it never rerolls the fixture or mutates fatigue. Recommendations show neutral-performance current-round match expectations alongside their recovery horizon.
 
 Draft comparisons reuse `draftValue` only in Classic and retain the original offer assignments; Expert must never expose a rating-derived rank or estimate in this view.
+
+Portable imports preview before replacing active progress, back up existing browser data and merge reports through `keepBestRuns`. Incompatible games are never restored; independent valid reports remain importable. Serialize active-save writes with a shared Web Lock where supported, compare the stored base before writing, pause stale tabs and allow export/reload. Unchanged renders must not write storage. Never replace an incompatible/malformed save if preserving its backup failed.

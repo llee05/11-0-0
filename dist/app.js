@@ -1,3 +1,5 @@
+import {createSaveStore} from './browser-saves.js';
+import {serializeBackup,parseBackup,MAX_BACKUP_SIZE} from './portable-save.js';
 import {indexPeople,searchPeople} from './player-explorer.js';
 import {tournamentStory} from './tournament-story.js';
 import {NATIONS,PLAYERS,OPPONENTS,CATALOGUE,configureCatalogue,canDraft,ROUND_COUNT,roundFixtures,lineupExpectation,initialState,playerById,nationById,average,createOffer,selectPlayer,sortBoards,startTournament,simulateRound,standings,rotateReserve,setBoardOrder,restoreSave,draftValue,completeDraft,quickSim,previewRound,recommendedLineup,previewTeams,applyRecommendedLineup} from './engine.js';
@@ -43,7 +45,7 @@ try{
   throw error;
 }
 const SAVE_KEY='11-0-0:save:v4';
-let saveNotice='';
+let saveNotice='',initialSaveRaw=null,backupBlocked=false;
 let bestRuns=[],historyNotice='',historyWritable=true,recordedTournament=null,runRound=11,runView='matches';
 try{
   const previous=localStorage.getItem(HISTORY_KEY);
@@ -55,24 +57,95 @@ try{
 let boardOrderDialogActive=false,planningBaseline=0,planningTrigger="preview";
 let state=initialState(),selectedSlot=0,swapSlot=null,busy=false,quickSimRunning=false,selectedRound=null,view='matches',toastTimer,storageFailed=false;
 try {
-  const previous=localStorage.getItem(SAVE_KEY);
+  const previous=localStorage.getItem(SAVE_KEY);initialSaveRaw=previous;
   if(previous){
     let saved;try{saved=JSON.parse(previous);}catch{ /* Preserve malformed saves too. */ }
     const restored=restoreSave(saved);
     if(restored)state=restored;
     else{localStorage.setItem(`${SAVE_KEY}:backup`,previous);saveNotice='The game rules or archive have changed. Your previous save is preserved in a backup; a fresh draft is ready.';}
   }else if(localStorage.getItem('11-0-0:save:v3')||localStorage.getItem('11-0-0:save:v2')||localStorage.getItem('11-0-0:save:v1'))saveNotice='Player profiles are here. Your older game remains stored separately; a fresh draft uses stamina, styles and form.';
-}catch { /* Browser storage may be unavailable. */ }
+}catch {backupBlocked=initialSaveRaw!==null; /* Never replace a save whose backup failed. */ }
 selectedSlot=Math.max(0,state.squad.indexOf(null));
-function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch{if(!storageFailed){storageFailed=true;toast('Browser storage is unavailable. Keep this tab open to preserve your game.');}}}
+const withBrowserLock=(name,fn)=>navigator.locks?navigator.locks.request(`11-0-0:${name}`,fn):Promise.resolve().then(fn);
+let saveStore=null,storageConflict=false,pendingBackup=null;
+try{saveStore=createSaveStore(localStorage,SAVE_KEY,initialSaveRaw,fn=>withBrowserLock('active-save',fn));}catch{}
+function saveStatus(){
+  const el=$('#save-status');el.hidden=!storageConflict&&!storageFailed&&!backupBlocked;
+  el.innerHTML=backupBlocked?'<p>Your previous save could not be backed up. Its original browser copy is preserved; this new game lasts in this tab until you download it.</p><button class="text-button" data-action="export-original">Download previous save</button><button class="secondary-button" data-action="export-backup">Download this game</button>':storageConflict?'<p>Another tab updated this game. This tab is paused so it cannot overwrite newer progress.</p><button class="secondary-button" data-action="load-latest">Load latest game</button><button class="text-button" data-action="export-backup">Export this tab’s game</button>':storageFailed?'<p>Browser storage could not save your game. Keep this tab open or download a backup.</p><button class="secondary-button" data-action="export-backup">Download backup</button>':'';
+}
+function conflict(){storageConflict=true;saveStatus();}
+function canMutate(){
+  if(storageConflict){toast('Load the latest game or export this tab’s game before continuing.');return false;}
+  try{if(saveStore?.changed()){conflict();return false;}}catch{storageFailed=true;saveStatus();}
+  return true;
+}
+function save(){
+  if(backupBlocked){saveStatus();return;}
+  if(storageConflict)return;
+  if(!saveStore){storageFailed=true;saveStatus();return;}
+  saveStore.write(JSON.stringify(state)).then(result=>{if(result.conflict)conflict();else if(storageFailed){storageFailed=false;saveStatus();}}).catch(()=>{
+    if(!storageFailed)toast('Browser storage is unavailable. Keep this tab open or download a backup.');
+    storageFailed=true;saveStatus();
+  });
+}
+async function persistRuns(runs){
+  return withBrowserLock('best-runs',()=>{
+    if(!historyWritable)throw new Error('History storage unavailable');
+    const raw=localStorage.getItem(HISTORY_KEY);let stored=[];
+    if(raw){try{stored=parseRunHistory(raw);}catch{localStorage.setItem(`${HISTORY_KEY}:backup`,raw);}}
+    bestRuns=runs.reduce(keepBestRuns,stored);
+    localStorage.setItem(HISTORY_KEY,serializeRunHistory(bestRuns));
+  });
+}
 function rememberCompletedRun(){
   if(state.phase!=='results'||recordedTournament===state.tournament)return;
   recordedTournament=state.tournament;
-  const next=keepBestRuns(bestRuns,snapshotRun(state));
+  const run=snapshotRun(state),next=keepBestRuns(bestRuns,run);
   if(next===bestRuns)return;
   bestRuns=next;
-  try{if(!historyWritable)throw new Error('History storage unavailable');localStorage.setItem(HISTORY_KEY,serializeRunHistory(bestRuns));}
-  catch{toast('Your best-run record is available in this tab, but browser storage could not save it.');}
+  persistRuns(bestRuns).catch(()=>toast('Your best-run record is available in this tab, but browser storage could not save it.'));
+}
+window.addEventListener('storage',event=>{if(event.key===SAVE_KEY||event.key===null){try{if(saveStore?.changed())conflict();}catch{storageFailed=true;saveStatus();}}});
+async function loadLatest(){
+  try{
+    await saveStore?.flush();const raw=localStorage.getItem(SAVE_KEY),latest=raw?restoreSave(JSON.parse(raw)):initialState();
+    if(!latest)throw new Error('The latest game uses incompatible rules. Export this tab’s game before reloading the app.');
+    state=latest;saveStore?.adopt(raw);storageConflict=false;selectedSlot=Math.max(0,state.squad.indexOf(null));selectedRound=null;view='matches';swapSlot=null;
+    $('#dialog').close();saveStatus();render();toast('Latest game loaded. You can continue in this tab.');
+  }catch(error){toast(error.message||'The latest game could not be loaded. Your current tab is unchanged.');}
+}
+function downloadBackup(game=state,runs=bestRuns){
+  try{
+    const blob=new Blob([serializeBackup(game,runs)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+    link.href=url;link.download=`11-0-0-${game?'backup':'reports'}-${new Date().toISOString().slice(0,10)}.json`;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }catch(error){toast(error.message||'The backup could not be created.');}
+}
+function dataDialog(){
+  modal(`<span class="section-number">YOUR GAME. YOUR DEVICE.</span><h2 id="dialog-title">Saves &amp; offline.</h2><p class="dialog-lead">Download your game and Best runs to keep a copy or move between browsers. Import previews the contents before replacing progress. Reports from older rules can be imported independently.</p><div class="data-actions"><button class="primary-button" data-action="export-backup">Download game &amp; reports</button><button class="secondary-button" data-action="export-reports">Download Best runs only</button></div><label class="input-label" for="backup-file">IMPORT A BACKUP OR REPORT FILE</label><input id="backup-file" type="file" accept="application/json,.json"><p class="planning-note">JSON backups up to 10 MB. Incompatible active games stay unplayable; valid completed reports remain readable. Importing reports merges the best three without duplicate entries.</p><div id="backup-preview" role="status"></div><button class="primary-button" data-action="close">Back to the game →</button>`);
+}
+async function previewBackup(file){
+  pendingBackup=null;if(!file)return;
+  try{
+    if(file.size>MAX_BACKUP_SIZE)throw new Error('Choose a backup smaller than 10 MB.');
+    pendingBackup=parseBackup(await file.text());const p=pendingBackup;
+    $('#backup-preview').innerHTML=`<h3>Ready to review</h3><p>${p.game?`${esc(p.game.teamName)} · ${esc(p.game.phase)}${p.game.tournament?` · round ${p.game.tournament.round} of 11`:''}`:p.hasGame?'The active game uses another catalogue or rules version. Your current game will stay in place.':'Completed reports only.'}</p><p>${p.runs.length} completed ${p.runs.length===1?'report':'reports'} · exported ${esc(new Date(p.exportedAt).toLocaleDateString())}</p>${p.game?'<button class="primary-button" data-action="import-game">Replace current game &amp; merge reports</button>':''}${p.runs.length?'<button class="secondary-button" data-action="import-reports">Merge reports only</button>':''}<p class="planning-note">The current browser save and reports are backed up before replacement.</p>`;
+  }catch(error){$('#backup-preview').textContent=error.message||'This file could not be read.';}
+}
+async function importBackup(includeGame){
+  const p=pendingBackup;if(!p||includeGame&&!p.game)return;
+  try{
+    await saveStore?.flush();
+    if(includeGame&&!canMutate())return;
+    const oldGame=localStorage.getItem(SAVE_KEY),oldHistory=localStorage.getItem(HISTORY_KEY);
+    if(oldGame)localStorage.setItem(`${SAVE_KEY}:backup`,oldGame);
+    if(oldHistory)localStorage.setItem(`${HISTORY_KEY}:backup`,oldHistory);
+    if(includeGame){
+      if(!saveStore)throw new Error('Browser storage is unavailable. Import left your game unchanged.');
+      const result=await saveStore.write(JSON.stringify(p.game));if(!result.ok){conflict();return;}
+      state=p.game;recordedTournament=null;selectedSlot=Math.max(0,state.squad.indexOf(null));selectedRound=null;view='matches';swapSlot=null;
+    }
+    await persistRuns([...bestRuns,...p.runs]);pendingBackup=null;$('#dialog').close();render();toast(includeGame?'Game imported and Best runs merged.':'Best runs merged. Your active game is unchanged.');
+  }catch(error){if(includeGame&&state===p.game){$('#dialog').close();render();toast('The game was imported, but browser storage could not merge its reports. Keep the backup file.');}else toast(error.message||'Import could not be saved. Your game is unchanged.');}
 }
 function toast(message){$('#toast').textContent=message;$('#toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('visible'),4000);}
 const label=(n)=>n===0.5?'½':String(n).replace('.5','½');
@@ -175,7 +248,7 @@ function runDetails(id){
   const run=bestRuns.find(run=>run.id===id);if(!run)return;
   const game={teamName:run.teamName,formElo:run.formElo,tournament:{teams:run.standings,rounds:run.rounds.map(round=>[round.match])}};
   const round=run.rounds[runRound-1],team=id=>run.standings.find(team=>team.id===id);
-  modal(`<div class="run-detail"><button class="text-button" data-action="history">← Best runs</button><span class="section-number">COMPLETED OLYMPIAD / ${run.mode==='expert'?'EXPERT':'CLASSIC'}</span><h2 id="dialog-title">${esc(run.teamName)}</h2><p class="dialog-lead">${run.ratingRules?'Era-balanced ratings':'Original source ratings'} · Recorded ${esc(runDate(run))} · ${ordinal(run.rank)} of ${run.standings.length} · ${run.summary.w}–${run.summary.d}–${run.summary.l}</p><div class="run-metrics"><div><span>MATCH POINTS</span><strong>${run.summary.mp} / 22</strong></div><div><span>BOARD POINTS</span><strong>${label(run.summary.bp)} / 44</strong></div><div><span>SONNEBORN–BERGER</span><strong>${label(run.summary.sb)}</strong></div></div><div class="view-tabs run-view-tabs" role="group" aria-label="Saved tournament view">${[['matches','Your matches'],['story','Tournament story'],['standings','Final standings'],['squad','Your squad']].map(([view,label])=>`<button data-action="run-view" data-id="${esc(run.id)}" data-view="${view}" class="${runView===view?'active':''}" aria-pressed="${runView===view}">${label}</button>`).join('')}</div>${runView==='story'?storyPanel(run,true):runView==='standings'?table(true,run.standings):runView==='squad'?runSquad(run):`<div class="round-tabs" role="group" aria-label="Select saved round">${run.rounds.map((r,i)=>{const points=r.match.a==='YOU'?r.match.points:4-r.match.points;return `<button data-action="run-round" data-id="${esc(run.id)}" data-round="${i+1}" class="${runRound===i+1?'active':''} ${points>2?'won':points===2?'drawn':'lost'}" aria-pressed="${runRound===i+1}" aria-label="Saved round ${i+1}, ${points>2?'won':points===2?'drawn':'lost'}">${String(i+1).padStart(2,'0')}<span aria-hidden="true">${points>2?'W':points===2?'D':'L'}</span></button>`;}).join('')}</div>${matchDetails(runRound,game)}<details class="run-fixtures"><summary>All ${round.matches.length} matches in round ${runRound}</summary>${round.matches.map(m=>`<div><span>${esc(team(m.a).flag)} ${esc(team(m.a).name)}</span><strong>${scoreLabel(m.points,4-m.points)}</strong><span>${esc(team(m.b).flag)} ${esc(team(m.b).name)}</span></div>`).join('')}</details>`}<button class="primary-button" data-action="close">Back to the game →</button></div>`,true);
+  modal(`<div class="run-detail"><button class="text-button" data-action="export-run" data-id="${esc(run.id)}">Download this report ↓</button><button class="text-button" data-action="history">← Best runs</button><span class="section-number">COMPLETED OLYMPIAD / ${run.mode==='expert'?'EXPERT':'CLASSIC'}</span><h2 id="dialog-title">${esc(run.teamName)}</h2><p class="dialog-lead">${run.ratingRules?'Era-balanced ratings':'Original source ratings'} · Recorded ${esc(runDate(run))} · ${ordinal(run.rank)} of ${run.standings.length} · ${run.summary.w}–${run.summary.d}–${run.summary.l}</p><div class="run-metrics"><div><span>MATCH POINTS</span><strong>${run.summary.mp} / 22</strong></div><div><span>BOARD POINTS</span><strong>${label(run.summary.bp)} / 44</strong></div><div><span>SONNEBORN–BERGER</span><strong>${label(run.summary.sb)}</strong></div></div><div class="view-tabs run-view-tabs" role="group" aria-label="Saved tournament view">${[['matches','Your matches'],['story','Tournament story'],['standings','Final standings'],['squad','Your squad']].map(([view,label])=>`<button data-action="run-view" data-id="${esc(run.id)}" data-view="${view}" class="${runView===view?'active':''}" aria-pressed="${runView===view}">${label}</button>`).join('')}</div>${runView==='story'?storyPanel(run,true):runView==='standings'?table(true,run.standings):runView==='squad'?runSquad(run):`<div class="round-tabs" role="group" aria-label="Select saved round">${run.rounds.map((r,i)=>{const points=r.match.a==='YOU'?r.match.points:4-r.match.points;return `<button data-action="run-round" data-id="${esc(run.id)}" data-round="${i+1}" class="${runRound===i+1?'active':''} ${points>2?'won':points===2?'drawn':'lost'}" aria-pressed="${runRound===i+1}" aria-label="Saved round ${i+1}, ${points>2?'won':points===2?'drawn':'lost'}">${String(i+1).padStart(2,'0')}<span aria-hidden="true">${points>2?'W':points===2?'D':'L'}</span></button>`;}).join('')}</div>${matchDetails(runRound,game)}<details class="run-fixtures"><summary>All ${round.matches.length} matches in round ${runRound}</summary>${round.matches.map(m=>`<div><span>${esc(team(m.a).flag)} ${esc(team(m.a).name)}</span><strong>${scoreLabel(m.points,4-m.points)}</strong><span>${esc(team(m.b).flag)} ${esc(team(m.b).name)}</span></div>`).join('')}</details>`}<button class="primary-button" data-action="close">Back to the game →</button></div>`,true);
 }
 function render(){rememberCompletedRun();const focus=document.activeElement;const focusData={...focus?.dataset},focusAction=focusData.action;$('#main').innerHTML=state.phase==='draft'?renderDraft():renderTournament();save();if(focusAction){const candidates=[...document.querySelectorAll(`[data-action="${focusAction}"]`)];(candidates.find(el=>!el.disabled&&Object.entries(focusData).every(([key,value])=>el.dataset[key]===value)))?.focus({preventScroll:true});}}
 function modal(html,wide=false){$('#dialog').classList.toggle('history-dialog',wide===true);$('#dialog').classList.toggle('planning-dialog',wide==='planning');$('#dialog-content').innerHTML=`<button class="dialog-close" data-action="close" aria-label="Close dialog">×</button>${html}`;if(!$('#dialog').open)$('#dialog').showModal();$('#dialog').scrollTop=0;$('#dialog .dialog-close').focus({preventScroll:true});}
@@ -275,7 +348,7 @@ function matchPreparation(focusBoard=null,message=''){
 function rules(){modal(`<span class="section-number">THE PLAYBOOK</span><h2 id="dialog-title">Five minds.<br>One perfect run.</h2><p class="dialog-lead">A fantasy team builder inspired by <a href="https://38-0-0.com/" target="_blank" rel="noopener">38–0–0</a>. Your challenge: win all eleven rounds. Choose Quick sim to keep your picks, auto-draft empty slots and play the full Olympiad with automatic reserve rotation.</p><ol class="rules-list"><li><span>01</span><div><strong>Spin. Choose. Repeat.</strong><p>Draw a country-year top five or a pre-1927 Legends collection and choose a player. People already drafted stay visible but cannot be picked again, even from a different year. Pick four active players and one reserve. Rolls favour stronger available leaders, with every qualifying country-year still possible. Two nation rerolls give you a second chance. Picks cannot be undone.</p></div></li><li><span>02</span><div><strong>Find your best four.</strong><p>Select an empty board before drafting. Click two filled slots to swap players. Active boards start in game-rating order. During the tournament, use Arrange boards to swap starters into any board. A substitute takes the exact board being rested.</p></div></li><li><span>03</span><div><strong>Take on the world.</strong><p>Play eleven rounds against the ${OPPONENTS.length} strongest all-time national A/B lineups in the catalogue. Your team completes the ${OPPONENTS.length+1}-team field. A board win is 1 point, a draw ½. Win the four-board match for 2 match points, or draw it for 1. Similar scores are paired with no rematches.</p></div></li><li><span>04</span><div><strong>Keep something in reserve.</strong><p>Each game adds 9–13 fatigue load according to stamina. Load is capped at 100; every point above 24 costs ${FATIGUE_ELO} effective Elo. Grinders lose half as much. Sitting out removes 30 load and moves form toward neutral. Opponents plan rotations up to three rounds ahead using traits, styles, match chances and recovery. Rotate manually, use the recommended lineup, or choose Auto-rotate &amp; finish to manage your reserve through the remaining rounds. You act as captain: choose the lineup, manage recovery and compare styles, form and consistency in the next-match preview. Higher Elo improves your chances, but guarantees nothing.</p></div></li></ol><div class="rules-note"><strong>Play to their strengths.</strong><p>Famous players have sourced career-inspired traits. Other players roll an ability or no trait each time they appear in an offer; picks keep that roll for the game. Preview the next match to see abstract conditions and both sides’ effects before choosing your reserve. Trait numbers and tradeoffs are fictional balance rules.</p><button class="text-button" data-action="traits">Explore all player traits ↗</button></div><div class="rules-note"><strong>A fantasy, grounded in chess.</strong><p>${esc(ERA_DISCLAIMER)} Country-year rolls require at least one player with a source rating above 2650. Top-five selection uses source ratings and federation, independent of Olympiad participation. A ${OPPONENTS.length+1}-team field, simplified Swiss pairings and simplified Sonneborn–Berger tiebreaks keep this prototype quick. No actual chess moves are played. Expert mode hides Elo during the draft; choose using playing styles, traits and your chess knowledge.</p><a href="https://handbook.fide.com/files/handbook/Olympiad2024.pdf" target="_blank" rel="noopener">The real Olympiad format ↗</a></div><button class="primary-button" data-action="close">Let's play <span>→</span></button>`);}
 function newDraft(){state=initialState();selectedSlot=0;swapSlot=null;selectedRound=null;view='matches';busy=false;$('#dialog').close();render();window.scrollTo({top:0,behavior:'smooth'});toast('A fresh board. A new possibility.');}
 function reset(){if(!count()&&!state.offer){newDraft();return;}modal(`<span class="section-number">A CLEAN SLATE</span><h2 id="dialog-title">One more run?</h2><p class="dialog-lead">This replaces your current team and tournament with a fresh draft. Your three best completed runs stay in Best runs.</p><button class="primary-button" data-action="confirm-reset">Start a new draft <span>→</span></button><button class="secondary-button" data-action="close">Keep my team</button>`);}
-async function spin(reroll=false){if(busy||count()>=5||(!reroll&&state.offer)||(reroll&&(!state.offer||!state.rerolls)))return;busy=true;render();await new Promise(r=>setTimeout(r,550));state.offer=createOffer(state.squad);if(reroll)state.rerolls--;busy=false;render();document.querySelector('.candidate')?.focus({preventScroll:true});}
+async function spin(reroll=false){if(busy||count()>=5||(!reroll&&state.offer)||(reroll&&(!state.offer||!state.rerolls)))return;busy=true;render();await new Promise(r=>setTimeout(r,550));if(!canMutate()){busy=false;render();return;}state.offer=createOffer(state.squad);if(reroll)state.rerolls--;busy=false;render();document.querySelector('.candidate')?.focus({preventScroll:true});}
 function quick(){if(count())modal(`<span class="section-number">BUILD A COMPETITIVE FIVE</span><h2 id="dialog-title">Finish the draft?</h2><p class="dialog-lead">Keep your existing picks. The assistant weighs ratings, traits, playing styles and stamina for the remaining boards.</p><button class="primary-button" data-action="confirm-quick">Complete my team <span>→</span></button><button class="secondary-button" data-action="close">Back to the draft</button>`);else quickDraft();}
 function quickDraft(){state=completeDraft(state);$('#dialog').close();render();toast('Your five are ready. Review your lineup and enter the Olympiad.');}
 async function runQuickSim(){
@@ -284,7 +357,7 @@ async function runQuickSim(){
   try{
     // Let the browser show the busy state before the synchronous simulation.
     await new Promise(resolve=>setTimeout(resolve,30));
-    state=quickSim(state);selectedRound=ROUND_COUNT;view='matches';swapSlot=null;
+    if(!canMutate())return;state=quickSim(state);selectedRound=ROUND_COUNT;view='matches';swapSlot=null;
     $('#dialog').close();
   }catch{toast('Quick sim could not finish. Your draft is saved.');}
   finally{busy=false;quickSimRunning=false;render();}
@@ -293,13 +366,23 @@ async function runQuickSim(){
     const heading=$('h1');heading?.setAttribute('tabindex','-1');heading?.focus({preventScroll:true});
   }
 }
-async function advance(all=false){if(busy||state.phase!=='tournament')return;busy=true;render();await new Promise(r=>setTimeout(r,all?650:400));try {do{if(all)state.tournament=applyRecommendedLineup(state.tournament);state.tournament=simulateRound(state.tournament);}while(all&&state.tournament.round<11);selectedRound=state.tournament.round;view='matches';if(state.tournament.round===11)state.phase='results';}catch{toast('The round could not be completed. Your progress is saved.');}finally{busy=false;render();}}
+async function advance(all=false){if(busy||state.phase!=='tournament')return;busy=true;render();await new Promise(r=>setTimeout(r,all?650:400));try {if(!canMutate())return;do{if(all)state.tournament=applyRecommendedLineup(state.tournament);state.tournament=simulateRound(state.tournament);}while(all&&state.tournament.round<11);selectedRound=state.tournament.round;view='matches';if(state.tournament.round===11)state.phase='results';}catch{toast('The round could not be completed. Your progress is saved.');}finally{busy=false;render();}}
 function rotate(){matchPreparation();$('#rest-player')?.focus({preventScroll:true});}
 function arrangeBoards(focusBoard=null,message=''){matchPreparation(focusBoard,message);}
 async function share(){const t=state.tournament,me=t.teams.find(x=>x.id==='YOU'),rank=standings(t).findIndex(x=>x.id==='YOU')+1;const result=`11–0–0 · Fantasy Chess Olympiad\n${state.teamName}: ${me.w}–${me.d}–${me.l} | ${ordinal(rank)} / ${t.teams.length} | ${me.mp} match points\n${t.squad.slice(0,4).map(id=>playerById(id).name).join(' · ')}\nBuild your dream team: ${location.origin}${location.pathname}`;try{await navigator.clipboard.writeText(result);toast('Result copied. Your dream team deserves an audience.');}catch{modal(`<span class="section-number">YOUR OLYMPIAD RESULT</span><h2 id="dialog-title">A run worth sharing.</h2><p class="dialog-lead">Copy your result below.</p><textarea class="share-text" readonly aria-label="Result to copy">${esc(result)}</textarea><button class="primary-button" data-action="close">Done <span>✓</span></button>`);$('.share-text').select();}}
 document.addEventListener('click',async event=>{
   const target=event.target.closest('[data-action]');if(!target||target.disabled)return;const action=target.dataset.action;
-  if(busy&&!['rules','about','close','game'].includes(action))return;
+  if(busy&&!['rules','about','close','game','data','export-backup'].includes(action))return;
+  const changesGame=['spin','reroll','mode','pick','slot','sort','team-name','quick','confirm-quick','quick-sim','start','next','finish','board-move','board-sort','recommend-lineup','rotate-pick','reset','confirm-reset','plan-play','import-game'];
+  if(changesGame.includes(action)&&!canMutate())return;
+  if(action==='data')dataDialog();
+  if(action==='load-latest')await loadLatest();
+  if(action==='export-backup')downloadBackup();
+  if(action==='export-original'&&initialSaveRaw){const url=URL.createObjectURL(new Blob([initialSaveRaw],{type:'application/json'})),link=document.createElement('a');link.href=url;link.download='11-0-0-previous-save.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  if(action==='export-reports')downloadBackup(null,bestRuns);
+  if(action==='export-run'){const run=bestRuns.find(r=>r.id===target.dataset.id);if(run)downloadBackup(null,[run]);}
+  if(action==='import-game')await importBackup(true);
+  if(action==='import-reports')await importBackup(false);
   if(action==='history')runHistory();
   if(action==='run-details'){runRound=11;runView='matches';runDetails(target.dataset.id);}
   if(action==='run-round'){runView='matches';runRound=Number(target.dataset.round);runDetails(target.dataset.id);document.querySelector(`[data-action="run-round"][data-round="${runRound}"]`)?.focus({preventScroll:true});}
@@ -344,8 +427,10 @@ document.addEventListener('click',async event=>{
   if(action==='rotate-pick'){state.tournament=rotateReserve(state.tournament,Number(target.dataset.slot));$('#dialog').close();render();toast('Reserve rotated in. Your other boards keep their positions.');}
   if(action==='reset')reset();if(action==='confirm-reset')newDraft();if(action==='share')await share();
 });
-document.addEventListener('submit',event=>{if(event.target.id!=='team-form')return;event.preventDefault();const name=$('#team-name').value.trim();if(!name){$('#team-name').setCustomValidity('Give your team a name.');$('#team-name').reportValidity();return;}state.teamName=name;$('#dialog').close();render();});
-document.addEventListener('change',event=>{
+document.addEventListener('submit',event=>{if(event.target.id!=='team-form')return;event.preventDefault();if(!canMutate())return;const name=$('#team-name').value.trim();if(!name){$('#team-name').setCustomValidity('Give your team a name.');$('#team-name').reportValidity();return;}state.teamName=name;$('#dialog').close();render();});
+document.addEventListener('change',async event=>{
+  if(event.target.id==='backup-file')await previewBackup(event.target.files[0]);
+  if((event.target.id==='rest-player'||event.target.matches('[data-board-order]'))&&!canMutate())return;
   if(event.target.id==='rest-player'&&state.phase==='tournament'&&!busy){const slot=state.tournament.squad.indexOf(event.target.value);if(slot>=0&&slot<4){state.tournament=rotateReserve(state.tournament,slot);render();matchPreparation(null,'Reserve changed. Your other boards keep their positions.');$('#rest-player').focus({preventScroll:true});}}
   if(event.target.id==='player-country'||event.target.id==='player-era'){explorerFilters[event.target.id==='player-country'?'country':'era']=event.target.value;explorerLimit=60;renderPeople();}
   if(event.target.id==='archive-year')renderArchiveYear(event.target.value);

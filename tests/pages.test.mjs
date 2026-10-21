@@ -9,7 +9,7 @@ import {readCatalogue} from '../server/catalog.mjs';
 
 const root=new URL('../',import.meta.url);
 const output=new URL('release/pages/',root);
-const assets=['app.js','engine.js','tournament-rules.js','rating-rules.js','traits.js','player-profile.js','run-history.js','tournament-story.js','player-explorer.js','styles.css','favicon.svg','king.svg','knight.svg',
+const assets=['app.js','engine.js','tournament-rules.js','rating-rules.js','traits.js','player-profile.js','run-history.js','tournament-story.js','player-explorer.js','browser-saves.js','portable-save.js','styles.css','favicon.svg','king.svg','knight.svg',
   'fonts/manrope.ttf','fonts/manrope-LICENSE.txt','fonts/dm-sans.ttf','fonts/dm-sans-LICENSE.txt'];
 const build=()=>execFileSync(process.execPath,[fileURLToPath(new URL('scripts/build-pages.mjs',root))],{cwd:fileURLToPath(root),stdio:'pipe'});
 const files=directory=>readdirSync(directory,{recursive:true,withFileTypes:true}).filter(entry=>entry.isFile()).map(entry=>relative(fileURLToPath(directory),join(entry.parentPath,entry.name)).split('\\').join('/')).sort();

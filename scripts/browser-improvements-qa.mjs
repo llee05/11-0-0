@@ -33,6 +33,28 @@ try{
   await page.getByLabel('PLAYER, COUNTRY OR YEAR').fill('Morphy');
   await page.locator('#explorer-results [data-action="player-history"]').first().click();assert.match(await page.locator('.edition-table').textContent(),/no affiliation inferred/);
   await page.keyboard.press('Escape');assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),discoverySave);
+  // Two tabs share one active game. A stale tab must pause before it writes.
+  const otherTab=await context.newPage();await otherTab.goto(url);await otherTab.getByRole('button',{name:'Quick draft'}).waitFor();
+  await page.getByRole('button',{name:'Spin a nation'}).click();await page.locator('.candidate').first().waitFor();
+  await otherTab.locator('#save-status').waitFor({state:'visible'});
+  const fresh=await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
+  await otherTab.getByRole('button',{name:'Quick draft'}).click();assert.equal(await otherTab.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),fresh);
+  await otherTab.getByRole('button',{name:'Load latest game'}).click();assert.equal(await otherTab.locator('#save-status').isVisible(),false);
+  await otherTab.close();
+  await page.getByRole('button',{name:'Saves & offline'}).click();
+  const downloadEvent=page.waitForEvent('download');await page.getByRole('button',{name:'Download game & reports'}).click();
+  const download=await downloadEvent,backupPath=await download.path();
+  const exported=await (await import('node:fs/promises')).readFile(backupPath,'utf8');
+  assert.equal(JSON.parse(exported).game.phase,'draft');
+  const beforeImport=await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
+  await page.locator('#backup-file').setInputFiles({name:'broken.json',mimeType:'application/json',buffer:Buffer.from('{')});
+  await page.waitForFunction(()=>document.querySelector('#backup-preview').textContent.includes('not valid JSON'));
+  assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),beforeImport);
+  await page.locator('#backup-file').setInputFiles({name:'backup.json',mimeType:'application/json',buffer:Buffer.from(exported)});
+  await page.getByRole('button',{name:'Replace current game & merge reports'}).waitFor();
+  assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),beforeImport);
+  await page.getByRole('button',{name:'Replace current game & merge reports'}).click();await page.getByRole('dialog').waitFor({state:'hidden'});
+  assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4:backup')),beforeImport);
   const expertPage=await (await browser.newContext({viewport:{width:390,height:844}})).newPage();
   await expertPage.goto(url);await expertPage.getByRole('button',{name:'Expert Trust your instincts'}).click();
   await expertPage.getByRole('button',{name:'Spin a nation'}).click();await expertPage.getByRole('button',{name:'Compare candidates'}).click();
@@ -48,5 +70,5 @@ try{
   await expertPage.getByRole('button',{name:'Tournament story',exact:true}).click();assert.equal(await expertPage.locator('#dialog .rank-trail button').count(),11);
   await expertPage.locator('#dialog .rank-trail button').first().click();assert.match(await expertPage.locator('#dialog .match-heading').textContent(),/ROUND 01/);
   await expertPage.keyboard.press('Escape');assert.deepEqual(errors,[]);
-  console.log('Improvement QA passed: full offer comparisons, retained assignments, Expert privacy, canonical player search, source editions, player scoreboard, ranks, archived stories and responsive layouts.');
+  console.log('Improvement QA passed: full offer comparisons, retained assignments, Expert privacy, canonical player search, source editions, backup previews and imports, stale-tab protection, player scoreboard, ranks, archived stories and responsive layouts.');
 }finally{await browser.close();}
