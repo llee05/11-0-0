@@ -206,3 +206,5 @@ After changing `backend/db/schema.ts`, run `npm run db:generate`, review the gen
 Read [AGENTS.md](AGENTS.md). Split each task into focused, reviewable commits; keep implementation, relevant tests and accompanying docs together. Write messages as `action: message`, for example `add: import historical country-year rating snapshots`.
 
 The [2024 Olympiad format](https://handbook.fide.com/files/handbook/Olympiad2024.pdf) inspires the eleven-round, four-board, one-reserve and 2/1/0 structure. This smaller 50-team simulation uses simplified Swiss matching and full Sonneborn–Berger, then board points, fixed roster seeding rating and ID as tiebreaks. The draft loop is inspired by [38–0–0](https://38-0-0.com/). This is an independent game, unaffiliated with FIDE or 38–0–0.
+
+Match preparation combines board order, reserve selection, shared planner advice and full forecasts in one responsive dialog. The projected board-point change compares the current lineup with the lineup when the dialog opened; it never rerolls the fixture or mutates fatigue. Recommendations show neutral-performance current-round match expectations alongside their recovery horizon.

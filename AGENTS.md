@@ -118,3 +118,5 @@ refactor: isolate tournament pairing rules
 docs: describe app architecture and contribution workflow
 test: cover invalid saved tournament data
 ```
+
+Match preparation combines board order, reserve selection, shared planner advice and full forecasts in one responsive dialog. The projected board-point change compares the current lineup with the lineup when the dialog opened; it never rerolls the fixture or mutates fatigue. Recommendations show neutral-performance current-round match expectations alongside their recovery horizon.
