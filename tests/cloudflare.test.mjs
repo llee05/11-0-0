@@ -9,7 +9,7 @@ import {openDatabase} from '../server/sqlite.mjs';
 import {readCatalogue} from '../server/catalog.mjs';
 
 const root=new URL('../',import.meta.url),output=new URL('release/cloudflare/',root);
-const assets=['app.js','engine.js','tournament-rules.js','rating-rules.js','traits.js','player-profile.js','run-history.js','styles.css','favicon.svg','king.svg','knight.svg',
+const assets=['app.js','engine.js','tournament-rules.js','rating-rules.js','traits.js','player-profile.js','run-history.js','tournament-story.js','styles.css','favicon.svg','king.svg','knight.svg',
   'fonts/manrope.ttf','fonts/manrope-LICENSE.txt','fonts/dm-sans.ttf','fonts/dm-sans-LICENSE.txt'];
 const files=()=>readdirSync(output,{recursive:true,withFileTypes:true}).filter(entry=>entry.isFile()).map(entry=>relative(fileURLToPath(output),join(entry.parentPath,entry.name)).split('\\').join('/')).sort();
 const run=(command,args)=>execFileSync(command,args,{cwd:fileURLToPath(root),stdio:'pipe'});

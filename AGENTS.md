@@ -17,6 +17,7 @@ These instructions apply throughout this repository. Read `README.md` for setup,
 | `dist/tournament-rules.js` | Shared 50-team field size used by catalogue selection and simulation. |
 | `dist/rating-rules.js` | Shared era-balanced rank mapping, ±150 cap, rules identity and disclaimer. Source observations stay immutable. |
 | `dist/player-profile.js` | Pure style, stamina, form and consistency rules and game presets shared by all teams. |
+| `dist/tournament-story.js` | Pure player totals, round ranks and highlights derived from independent completed reports. |
 | `dist/run-history.js` | Independent completed-run reports, top-three ranking, content deduplication and validation; browser storage stays in `app.js`. |
 | `data/captaincy.md` | Sourced captain research and the accepted decision that the user manages the team; no captain attribute or staff system. |
 | `dist/styles.css` | Almanac paper/serif identity, broadcast scoreboards, responsive presentation, interaction states and reduced-motion behavior. |
