@@ -51,7 +51,7 @@ Sources:
 
 All titles and sexes are eligible. An explicit inactive flag excludes a player; inactivity is not inferred when historical lists lack reliable flags. Countries need at least five listed eligible players. Ties use source name, then source ID. Birth country, current citizenship and Olympiad team rosters are not substituted for the period federation. Historical name spellings and IDs may vary; unique matching source names and sourced identity crosswalks link older records to later FIDE identities where possible. Namesakes remain separate.
 
-Each snapshot records its source date, URL, archive SHA256 and published player ratings. The in-game **Countries & years** archive exposes available years, top fives, source notes and coverage gaps.
+**Players & editions** searches canonical people by name, federation or year, including accent-insensitive aliases. Filter by period federation and source era, then open a player to compare every sampled source/game edition and its citations. Namesakes remain separate; these observations do not claim exhaustive career peaks. Each snapshot records its source date, URL, archive SHA256 and published player ratings. The in-game **Countries & years** archive exposes available years, top fives, source notes and coverage gaps.
 
 ### Comparing eras
 

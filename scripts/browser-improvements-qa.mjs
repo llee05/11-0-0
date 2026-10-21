@@ -19,6 +19,20 @@ try{
   assert.equal(await page.getByRole('dialog').isVisible(),false);
   const picked=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
   assert.ok(picked.squad.includes(id));assert.deepEqual(picked.profiles[id],JSON.parse(before).offer.profiles[id]);
+  await page.getByRole('button',{name:'PLAYERS & EDITIONS'}).click();
+  await page.getByLabel('PLAYER, COUNTRY OR YEAR').fill('Fischer');
+  const discoverySave=await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
+  assert.ok(await page.locator('#explorer-results [data-action="player-history"]').count()>0);
+  await page.locator('#explorer-results [data-action="player-history"]').first().click();
+  assert.ok(await page.locator('.edition-table tbody tr').count()>1);
+  assert.ok(await page.locator('.edition-table a[href^="http"]').count()>0);
+  await page.setViewportSize({width:320,height:800});assert.ok(await page.locator('#dialog').evaluate(el=>el.scrollWidth<=el.clientWidth));
+  await page.getByRole('button',{name:'Explore more players'}).click();
+  assert.equal(await page.getByLabel('PLAYER, COUNTRY OR YEAR').inputValue(),'Fischer');
+  await page.getByLabel('SOURCE ERA').selectOption('legends');assert.match(await page.locator('#explorer-results').textContent(),/No sampled editions/);
+  await page.getByLabel('PLAYER, COUNTRY OR YEAR').fill('Morphy');
+  await page.locator('#explorer-results [data-action="player-history"]').first().click();assert.match(await page.locator('.edition-table').textContent(),/no affiliation inferred/);
+  await page.keyboard.press('Escape');assert.equal(await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4')),discoverySave);
   const expertPage=await (await browser.newContext({viewport:{width:390,height:844}})).newPage();
   await expertPage.goto(url);await expertPage.getByRole('button',{name:'Expert Trust your instincts'}).click();
   await expertPage.getByRole('button',{name:'Spin a nation'}).click();await expertPage.getByRole('button',{name:'Compare candidates'}).click();
@@ -34,5 +48,5 @@ try{
   await expertPage.getByRole('button',{name:'Tournament story',exact:true}).click();assert.equal(await expertPage.locator('#dialog .rank-trail button').count(),11);
   await expertPage.locator('#dialog .rank-trail button').first().click();assert.match(await expertPage.locator('#dialog .match-heading').textContent(),/ROUND 01/);
   await expertPage.keyboard.press('Escape');assert.deepEqual(errors,[]);
-  console.log('Improvement QA passed: full offer comparisons, retained assignments, Expert privacy, player scoreboard, ranks, archived stories and responsive layouts.');
+  console.log('Improvement QA passed: full offer comparisons, retained assignments, Expert privacy, canonical player search, source editions, player scoreboard, ranks, archived stories and responsive layouts.');
 }finally{await browser.close();}
