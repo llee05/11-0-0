@@ -1,3 +1,4 @@
+import {OPPONENT_COUNT} from '../dist/tournament-rules.js';
 // Shared SQLite/D1 catalogue logic. No Node or browser APIs in this module.
 import {buildAllTimeTeams} from './all-time.mjs';
 import identities from '../data/identity-links.json' with {type:'json'};
@@ -7,7 +8,7 @@ import {rankEquivalent,RATING_RULESET,ERA_ADJUSTMENT_CAP,ERA_DISCLAIMER} from '.
 export const LEGENDS_DATA=legendObservations;
 export const NORMALIZATION = RATING_RULESET;
 export const MINIMUM_TOP_RATING = 2650;
-export const CATALOGUE_FORMAT = `country-year-v9-source-above${MINIMUM_TOP_RATING}-${LEGENDS_POLICY}-${RATING_RULESET}-balanced-alltime-2-identities-${JSON.stringify(identities)}-legends-${JSON.stringify(legendObservations)}`;
+export const CATALOGUE_FORMAT = `country-year-v9-source-above${MINIMUM_TOP_RATING}-${LEGENDS_POLICY}-${RATING_RULESET}-balanced-alltime-3-field50-identities-${JSON.stringify(identities)}-legends-${JSON.stringify(legendObservations)}`;
 export const EXCLUDED_FEDERATIONS = new Set(['FID']);
 const historicNames = {CSR:['Czechoslovakia',null],GDR:['East Germany',null],SCG:['Serbia and Montenegro',null],URS:['Soviet Union',null],YUG:['Yugoslavia',null]};
 const aliases = {LIB:'LBN',ROM:'ROU',SIN:'SGP',TRI:'TTO'};
@@ -120,6 +121,6 @@ export async function readCatalogue(db){
     return {id:e.id,personId:e.person_id,fideId:e.fide_id,name:e.name,nation:nation.id,offerKind:nation.kind,federation:nation.kind==='legends'?null:nation.code,flag:nation.flag,year:e.edition_year??nation.year,source,rank:e.rank,rawRating:e.raw_rating,eraAdjustment:e.rating-e.raw_rating,rating:e.rating,estimated:source.kind==='historical-estimate',title:e.title};
   });
   if(nations.some(n=>n.players.length!==5))throw new Error('The database contains an incomplete country snapshot.');
-  const opponents=buildAllTimeTeams(nations,players).slice(0,31);
-  return {metadata:{...metadata,snapshotCount:nations.length,playerCount:players.length,countryCount:new Set(nations.filter(n=>n.kind==='country').map(n=>n.code)).size,countrySnapshotCount:nations.filter(n=>n.kind==='country').length,legendCount:nations.filter(n=>n.kind==='legends').length,legendPolicy:LEGENDS_POLICY,earliestEditionYear:Math.min(...players.map(p=>p.year)),opponentPolicy:'Best observed era-balanced country edition per person; federation at that edition; latest year breaks ties. A team = first five, B = next five. Strongest 31 teams by four-board mean; Russia and Soviet Union separate.'},nations,players,opponents};
+  const opponents=buildAllTimeTeams(nations,players).slice(0,OPPONENT_COUNT);
+  return {metadata:{...metadata,snapshotCount:nations.length,playerCount:players.length,countryCount:new Set(nations.filter(n=>n.kind==='country').map(n=>n.code)).size,countrySnapshotCount:nations.filter(n=>n.kind==='country').length,legendCount:nations.filter(n=>n.kind==='legends').length,legendPolicy:LEGENDS_POLICY,earliestEditionYear:Math.min(...players.map(p=>p.year)),opponentPolicy:'Best observed era-balanced country edition per person; federation at that edition; latest year breaks ties. A team = first five, B = next five. Strongest 49 teams by four-board mean; Russia and Soviet Union separate.'},nations,players,opponents};
 }

@@ -19,7 +19,7 @@ test('only complete tournaments become independent reports with every user board
   assert.deepEqual(game,before);
   assert.equal(run.rounds.length,11);
   assert.equal(run.rounds.reduce((n,r)=>n+r.match.boards.length,0),44);
-  assert.equal(run.rounds.reduce((n,r)=>n+r.matches.length,0),176);
+  assert.equal(run.rounds.reduce((n,r)=>n+r.matches.length,0),275);
   for(const [i,round] of run.rounds.entries()){
     const report=structuredClone(round.match);
     for(const board of report.boards)for(const side of ['a','b'])delete board[side].traitInfo;
@@ -28,7 +28,7 @@ test('only complete tournaments become independent reports with every user board
   }
   const rows=standings(game.tournament),own=rows.find(t=>t.id==='YOU');
   assert.equal(run.rank,rows.indexOf(own)+1);
-  assert.equal(run.standings.length,32);
+  assert.equal(run.standings.length,50);
   assert.deepEqual(run.standings.map(t=>t.id),rows.map(t=>t.id));
   assert.deepEqual(run.squad.map(p=>p.id),game.tournament.squad);
   assert.deepEqual(run.squad.map(p=>p.profile),game.tournament.squad.map(id=>game.profiles[id]));
@@ -70,7 +70,7 @@ test('reloading a result never duplicates it or changes its recorded date',()=>{
 });
 
 test('reports from earlier rating rules stay independently readable after active saves become incompatible',()=>{
-  const legacy={...games[0],rulesVersion:games[0].rulesVersion.replace('olympiad-7','olympiad-6')};
+  const legacy={...games[0],rulesVersion:games[0].rulesVersion.replace('olympiad-8','olympiad-7')};
   assert.equal(restoreSave(legacy),null);
   const original=structuredClone(runs[0]);original.rulesVersion=legacy.rulesVersion;delete original.ratingRules;
   assert.ok(validRun(original));const existing=[original];
@@ -101,4 +101,25 @@ test('unreadable or inconsistent record data is rejected before rendering',()=>{
   ];
   for(const corrupt of corruptions){const run=structuredClone(runs[0]);corrupt(run);assert.equal(validRun(run),false);assert.throws(()=>parseRunHistory(serializeRunHistory([run])));}
   assert.deepEqual(parseRunHistory(serializeRunHistory([])),[]);
+});
+
+test('32-team reports remain readable alongside the new 50-team field',()=>{
+  const run=structuredClone(runs[0]);
+  run.rulesVersion=run.rulesVersion.replace('olympiad-8','olympiad-7');
+  run.rank=1;run.id="legacy-32";
+  const record={w:0,d:11,l:0,mp:11,bp:22,sb:242};
+  run.summary={...record};
+  run.standings=Array.from({length:32},(_,i)=>({id:i?`legacy:${i}`:'YOU',name:`Legacy ${i}`,flag:'⚑',seedingRating:2700,...record}));
+  let order=run.standings.map(t=>t.id);
+  const boards=run.rounds[0].match.boards.map(b=>({...b,score:0.5}));
+  run.rounds=Array.from({length:11},()=>{
+    const matches=Array.from({length:16},(_,i)=>({a:order[i],b:order[31-i],points:2}));
+    const fixture=matches.find(m=>m.a==='YOU'||m.b==='YOU');
+    const match={...fixture,boards:structuredClone(boards).map(b=>fixture.a==='YOU'?{...b,a:run.rounds[0].match.a==='YOU'?b.a:b.b,b:run.rounds[0].match.a==='YOU'?b.b:b.a}:{...b,a:run.rounds[0].match.a==='YOU'?b.b:b.a,b:run.rounds[0].match.a==='YOU'?b.a:b.b})};
+    order=[order[0],order.at(-1),...order.slice(1,-1)];
+    return {matches,match};
+  });
+  assert.ok(validRun(run));
+  assert.deepEqual(parseRunHistory(serializeRunHistory([run,runs[0]])),[run,runs[0]].sort((a,b)=>b.summary.mp-a.summary.mp||b.summary.w-a.summary.w||a.rank-b.rank||b.summary.sb-a.summary.sb||b.summary.bp-a.summary.bp));
+  const corrupt=structuredClone(run);corrupt.rounds[0].matches.pop();assert.equal(validRun(corrupt),false);
 });

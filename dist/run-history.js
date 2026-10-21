@@ -9,7 +9,7 @@ export const HISTORY_LIMIT=3;
 const traitInfo=(player,trait)=>({career:!!careerProfile(player),name:traitLabel(trait),description:traitById(trait)?.description||'No match modifier.'});
 
 // Store an independent report, not a resumable game. Keep the user's complete
-// boards and every team score without duplicating the other 660 board reports.
+// boards and every team score without duplicating the other teams’ board reports.
 export function snapshotRun(game,completedAt=new Date().toISOString()){
   const t=game.tournament;
   if(game.phase!=='results'||t?.round!==ROUND_COUNT||t.rounds.length!==ROUND_COUNT)throw new Error('Only completed tournaments enter the records.');
@@ -57,14 +57,16 @@ function boardPlayer(p){
 }
 export function validRun(run){
   try{
+    const teamCount=run?.standings?.length;
+    if(![32,50].includes(teamCount))return false;
     if(!run||run.version!==HISTORY_VERSION||!text(run.id)||!text(run.teamName)||!['classic','expert'].includes(run.mode)||
       !text(run.completedAt)||!Number.isFinite(Date.parse(run.completedAt))||!integer(run.seed,0,4294967295)||
-      !text(run.catalogueRelease)||!text(run.rulesVersion)||(run.ratingRules!==undefined&&!text(run.ratingRules))||!number(run.formElo,0,1000)||!integer(run.rank,1,32)||!record(run.summary))return false;
+      !text(run.catalogueRelease)||!text(run.rulesVersion)||(run.ratingRules!==undefined&&!text(run.ratingRules))||!number(run.formElo,0,1000)||!integer(run.rank,1,teamCount)||!record(run.summary))return false;
     if(!Array.isArray(run.squad)||run.squad.length!==5||new Set(run.squad.map(p=>p.id)).size!==5||run.squad.some(p=>
       !text(p.id)||!text(p.personId)||!text(p.name)||!text(p.flag)||!(text(p.federation)||p.offerKind==='legends'&&p.federation===null)||!integer(p.year,1800,3000)||
       !integer(p.rating,100,4000)||(run.ratingRules===RATING_RULESET&&!balancedBase(p))||!profile(p.profile)||(p.trait!==null&&!text(p.trait))||!validTraitInfo(p.traitInfo)||!integer(p.form,-2,2)||!integer(p.load,0,100)||
       !text(p.source?.url)||!/^https?:\/\//.test(p.source.url)||!text(p.source.date)))return false;
-    if(!Array.isArray(run.standings)||run.standings.length!==32||new Set(run.standings.map(t=>t.id)).size!==32||
+    if(!Array.isArray(run.standings)||run.standings.length!==teamCount||new Set(run.standings.map(t=>t.id)).size!==teamCount||
       run.standings.some(t=>!text(t.id)||!text(t.name)||!text(t.flag)||!record(t)||!number(t.seedingRating,100,4000)))return false;
     const own=run.standings[run.rank-1],teamIds=new Set(run.standings.map(t=>t.id));
     if(own.id!=='YOU'||Object.keys(run.summary).some(key=>run.summary[key]!==own[key]))return false;
@@ -72,7 +74,7 @@ export function validRun(run){
     const squadIds=new Set(run.squad.map(p=>p.id));
     if(!Array.isArray(run.rounds)||run.rounds.length!==11)return false;
     for(const round of run.rounds){
-      if(!Array.isArray(round.matches)||round.matches.length!==16||new Set(round.matches.flatMap(m=>[m.a,m.b])).size!==32)return false;
+      if(!Array.isArray(round.matches)||round.matches.length!==teamCount/2||new Set(round.matches.flatMap(m=>[m.a,m.b])).size!==teamCount)return false;
       for(const m of round.matches){
         if(!teamIds.has(m.a)||!teamIds.has(m.b)||!half(m.points,0,4))return false;
         for(const [id,opponent,points] of [[m.a,m.b,m.points],[m.b,m.a,4-m.points]]){

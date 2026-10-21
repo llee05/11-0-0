@@ -1,3 +1,5 @@
+import {TEAM_COUNT,OPPONENT_COUNT} from './tournament-rules.js';
+export {TEAM_COUNT} from './tournament-rules.js';
 import {TRAIT_RULESET, rollTraits, validTraits, matchContext, validContext, matchupEffects} from './traits.js';
 import {PROFILE_RULESET,rollProfiles,validProfiles,validForm,profileFatigue,nextFatigue,validFatigue,styleEffect,performanceSwing,performanceSeed,nextForm,restedForm,FORM_ELO,SWINGS,profileOutlook} from './player-profile.js';
 import {RATING_RULESET,ERA_ADJUSTMENT_CAP} from './rating-rules.js';
@@ -12,7 +14,7 @@ export function configureCatalogue(catalogue){
   if(players.size!==catalogue.players.length||catalogue.nations.some(n=>n.players.length!==5||new Set(n.players).size!==5||n.players.some(id=>players.get(id)?.nation!==n.id)))throw new Error('Incomplete country-year roster.');
   const opponents=catalogue.opponents;
   const usedPeople=new Set();
-  if(!Array.isArray(opponents)||opponents.length!==31||new Set(opponents.map(o=>o.id)).size!==31||opponents.some(o=>!o.id.startsWith('alltime:')||o.players.length!==5||o.players.some(id=>{
+  if(!Array.isArray(opponents)||opponents.length!==OPPONENT_COUNT||new Set(opponents.map(o=>o.id)).size!==OPPONENT_COUNT||opponents.some(o=>!o.id.startsWith('alltime:')||o.players.length!==5||o.players.some(id=>{
     const p=players.get(id);
     if(!p||p.federation!==o.code||usedPeople.has(p.personId))return true;
     usedPeople.add(p.personId);return false;
@@ -24,7 +26,7 @@ export function configureCatalogue(catalogue){
 }
 export const ROUND_COUNT = 11;
 export const SAVE_VERSION = 4;
-export const SIMULATION_RULESET = 'olympiad-7';
+export const SIMULATION_RULESET = 'olympiad-8';
 export const ELO_SCALE = 320;
 export const DRAFT_RULESET = 'competitive-draft-1';
 export const RULES_VERSION = `${TRAIT_RULESET}/${PROFILE_RULESET}/${SIMULATION_RULESET}/${DRAFT_RULESET}/${RATING_RULESET}`;
@@ -135,7 +137,7 @@ export function standings(t) {
 // A small score-group Swiss matcher. Backtracking guarantees no repeated opponents.
 export function pairTeams(t) {
   const ordered=standings(t);
-  if(!t.round) { const ranked=[...ordered].sort((a,b)=>b.seedingRating-a.seedingRating); return ranked.slice(0,16).map((team,i)=>[team.id,ranked[i+16].id]); }
+  if(!t.round) { const ranked=[...ordered].sort((a,b)=>b.seedingRating-a.seedingRating); return ranked.slice(0,TEAM_COUNT/2).map((team,i)=>[team.id,ranked[i+TEAM_COUNT/2].id]); }
   function match(remaining) {
     if(!remaining.length) return [];
     const [a,...rest]=remaining;
@@ -379,7 +381,7 @@ function validateSave(s) {
     return !s.tournament&&(!s.offer||!!nation&&Array.isArray(s.offer.players)&&s.offer.players.length===5&&s.offer.players.every((id,i)=>id===nation.players[i])&&validTraits(s.offer.players,s.offer.traits,playerById)&&validProfiles(s.offer.players,s.offer.profiles,playerById)&&s.offer.players.some(id=>canDraft(playerById(id),s.squad)));
   }
   const t=s.tournament;
-  if(s.offer||s.squad.some(id=>!id)||!t||!Number.isInteger(t.seed)||!Number.isInteger(t.round)||t.round<0||t.round>ROUND_COUNT||(s.phase==='results'?t.round!==ROUND_COUNT:t.round>=ROUND_COUNT)||!Array.isArray(t.teams)||t.teams.length!==32||new Set(t.teams.map(x=>x?.id)).size!==32||!t.teams.some(x=>x.id==='YOU')||OPPONENTS.some(o=>!t.teams.some(x=>x.id===o.id)))return false;
+  if(s.offer||s.squad.some(id=>!id)||!t||!Number.isInteger(t.seed)||!Number.isInteger(t.round)||t.round<0||t.round>ROUND_COUNT||(s.phase==='results'?t.round!==ROUND_COUNT:t.round>=ROUND_COUNT)||!Array.isArray(t.teams)||t.teams.length!==TEAM_COUNT||new Set(t.teams.map(x=>x?.id)).size!==TEAM_COUNT||!t.teams.some(x=>x.id==='YOU')||OPPONENTS.some(o=>!t.teams.some(x=>x.id===o.id)))return false;
   const same=(a,b)=>a.length===b.length&&a.every((id,i)=>id===b[i]);
   const streaks=(ids,values)=>values&&Object.keys(values).length===5&&ids.every(id=>Number.isInteger(values[id])&&values[id]>=0&&values[id]<=t.round);
   const loads=(ids,values)=>values&&Object.keys(values).length===5&&ids.every(id=>validFatigue(values[id]));
@@ -399,7 +401,7 @@ function validateSave(s) {
   }
   if(!Array.isArray(t.rounds)||t.rounds.length!==t.round)return false;
   const tracked=new Map(t.teams.map(team=>[team.id,{forms:Object.fromEntries(team.players.map(id=>[id,team.profiles[id].form])),streaks:Object.fromEntries(team.players.map(id=>[id,0])),loads:Object.fromEntries(team.players.map(id=>[id,0]))}]));
-  const roundsValid=t.rounds.every((matches,round)=>Array.isArray(matches)&&matches.length===16&&new Set(matches.flatMap(m=>[m?.a,m?.b])).size===32&&matches.every(m=>{
+  const roundsValid=t.rounds.every((matches,round)=>Array.isArray(matches)&&matches.length===TEAM_COUNT/2&&new Set(matches.flatMap(m=>[m?.a,m?.b])).size===TEAM_COUNT&&matches.every(m=>{
     const a=t.teams.find(x=>x.id===m?.a),b=t.teams.find(x=>x.id===m?.b);
     if(!a||!b||a===b||!Array.isArray(m.boards)||m.boards.length!==4||m.points!==m.boards.reduce((sum,board)=>sum+board.score,0)||a.history[round].opponent!==b.id||b.history[round].opponent!==a.id||a.history[round].points!==m.points||b.history[round].points!==4-m.points)return false;
     if(new Set(m.boards.map(board=>board.a?.id)).size!==4||new Set(m.boards.map(board=>board.b?.id)).size!==4)return false;

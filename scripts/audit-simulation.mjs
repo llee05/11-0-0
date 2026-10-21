@@ -163,7 +163,7 @@ for(let run=0;run<runs;run++){
           const key=`${teamId}:${player.id}`,record=colors.get(key)||{team:teamId,player:player.name,playerId:player.id,white:0,black:0,last:null,streak:0,games:0,appearances:[]};
           record.appearances.push({round:round+1,color:white?'white':'black'});
           record[white?'white':'black']++;record.streak=record.last===white?record.streak+1:1;record.last=white;record.games++;colors.set(key,record);telemetry.maxColorStreak=Math.max(telemetry.maxColorStreak,record.streak);
-          if(teamId==='YOU')telemetry.ownAverageFatigueByRound[round]+=player.fatigue/(runs*4);else telemetry.opponentAverageFatigueByRound[round]+=player.fatigue/(runs*31*4);
+          if(teamId==='YOU')telemetry.ownAverageFatigueByRound[round]+=player.fatigue/(runs*4);else telemetry.opponentAverageFatigueByRound[round]+=player.fatigue/(runs*game.OPPONENTS.length*4);
         }
       })));
       telemetry.colors.push(...[...colors.values()].filter(record=>record.games>=8).map(({white,black,games})=>({white,black,games})));

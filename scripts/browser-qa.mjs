@@ -139,7 +139,7 @@ try {
   assert.ok(!(await page.locator('.source-roster').textContent()).includes('→'));
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'ALL-TIME FIELD'}).click();
-  assert.equal(await page.locator('[data-action="field-team"]').count(),31);
+  assert.equal(await page.locator('[data-action="field-team"]').count(),49);
   for(const id of ['alltime:RUS:A','alltime:URS:A','alltime:RUS:B','alltime:URS:B']){
     assert.equal(await page.locator(`[data-action="field-team"][data-id="${id}"]`).count(),1);
   }
@@ -248,7 +248,7 @@ try {
   assert.ok((await page.locator('.match-forecast article').first().textContent()).includes(beforeOrdering.tournament.teams[0].players.map(id=>({id,name:catalogue.players.find(p=>p.id===id).name})).find(p=>p.id===customOrder[0]).name));
   await page.keyboard.press('Escape');await page.setViewportSize({width:1440,height:1100});
   await page.getByRole('button',{name:'All-time field'}).click();
-  assert.equal(await page.locator('[data-action="field-team"]').count(),31);
+  assert.equal(await page.locator('[data-action="field-team"]').count(),49);
   await page.locator('[data-action="field-team"][data-id="alltime:USA:A"]').click();
   assert.equal(await page.locator('.field-roster .profile-levels').count(),5);
   assert.equal(await page.locator('.field-roster .form-chip').count(),5);
@@ -308,7 +308,7 @@ try {
   await page.getByRole('button',{name:/Round 1, /}).click();
   assert.ok((await page.locator('.match-heading').textContent()).includes('ROUND 01'));
   await page.getByRole('button',{name:'Full standings',exact:true}).click();
-  assert.equal(await page.locator('.standings-row.full').count(),32);
+  assert.equal(await page.locator('.standings-row.full').count(),50);
   await page.getByRole('button',{name:'Your matches',exact:true}).click();
   await page.screenshot({path:`${artifacts}/desktop-tournament.png`,fullPage:true});
   await page.reload();
@@ -335,9 +335,9 @@ try {
   assert.equal(await archivedBreakdown.evaluate(el=>el.open),true);
   assert.ok((await archivedBreakdown.textContent()).includes('FORM AFTER GAME'));
   await page.locator('.run-fixtures summary').click();
-  assert.equal(await page.locator('.run-fixtures>div').count(),16);
+  assert.equal(await page.locator('.run-fixtures>div').count(),25);
   await page.locator('[data-action="run-view"][data-view="standings"]').click();
-  assert.equal(await page.locator('.run-detail .standings-row.full').count(),32);
+  assert.equal(await page.locator('.run-detail .standings-row.full').count(),50);
   await page.locator('[data-action="run-view"][data-view="squad"]').click();
   assert.equal(await page.locator('.run-detail .team-profiles>article').count(),5);
   assert.equal(await page.locator('.run-detail .team-profiles a').count(),5);
@@ -411,7 +411,7 @@ try {
   await page.getByRole('button',{name:'Copy result'}).waitFor();
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
   await page.getByRole('button',{name:'Full standings',exact:true}).click();
-  assert.equal(await page.locator('.standings-row.full').count(),32);
+  assert.equal(await page.locator('.standings-row.full').count(),50);
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
   await page.getByRole('button',{name:'Your matches',exact:true}).click();
   await page.screenshot({path:`${artifacts}/mobile-results.png`,fullPage:true});
@@ -468,10 +468,10 @@ try {
   let quickSave=await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
   assert.equal(await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs.length),1);
   assert.equal(quickSave.phase,'results');assert.equal(quickSave.tournament.round,11);
-  assert.equal(quickSave.tournament.teams.length,32);
+  assert.equal(quickSave.tournament.teams.length,50);
   assert.equal(await quickPage.locator('.round-tabs button:not([disabled])').count(),11);
   await quickPage.getByRole('button',{name:'Full standings',exact:true}).click();
-  assert.equal(await quickPage.locator('.standings-row.full').count(),32);
+  assert.equal(await quickPage.locator('.standings-row.full').count(),50);
   await quickPage.screenshot({path:`${artifacts}/desktop-quick-sim-results.png`,fullPage:true});
   await quickPage.reload();await quickPage.getByRole('button',{name:'Copy result'}).waitFor();
   assert.deepEqual(await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4'))),quickSave);

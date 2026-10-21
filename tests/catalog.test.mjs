@@ -48,7 +48,7 @@ test('SQLite persists sourced top-five country snapshots and reopens without dup
     const early=catalogue.players.filter(p=>p.nation==='USA-1932');
     assert.equal(early.length,5);
     assert.ok(early.every(p=>p.estimated&&p.rating===p.rawRating+p.eraAdjustment));
-    assert.deepEqual(catalogue.opponents,buildAllTimeTeams(catalogue.nations,catalogue.players).slice(0,31));
+    assert.deepEqual(catalogue.opponents,buildAllTimeTeams(catalogue.nations,catalogue.players).slice(0,49));
     db.close();db=openDatabase(filename);
     assert.deepEqual(await readCatalogue(db),catalogue);
     assert.throws(()=>db.sqlite.prepare('DELETE FROM rating_sources').run());
@@ -69,7 +69,7 @@ test('sourced identity links handle transfers while preserving namesakes and reu
     assert.ok(sokolovs.some(p=>p.personId==='fide:627089'));
     assert.ok(sokolovs.some(p=>p.personId==='fide:11600306')); // The surviving 1994 source names him Andrei (2) Sokolov.
     const fieldPeople=opponents.flatMap(t=>t.players.map(id=>players.find(p=>p.id===id).personId));
-    assert.equal(new Set(fieldPeople).size,155);
+    assert.equal(new Set(fieldPeople).size,245);
   }finally{db.close();}
 });
 

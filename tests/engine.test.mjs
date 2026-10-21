@@ -62,9 +62,9 @@ test('Quick Sim completes a reproducible full Olympiad from an empty or complete
     assert.deepEqual(quickSim(state,831),result);
     assert.equal(result.phase,'results');
     assert.equal(result.tournament.round,11);
-    assert.equal(result.tournament.teams.length,32);
-    assert.equal(result.tournament.teams.reduce((sum,team)=>sum+team.mp,0),352);
-    assert.equal(result.tournament.teams.reduce((sum,team)=>sum+team.bp,0),704);
+    assert.equal(result.tournament.teams.length,50);
+    assert.equal(result.tournament.teams.reduce((sum,team)=>sum+team.mp,0),550);
+    assert.equal(result.tournament.teams.reduce((sum,team)=>sum+team.bp,0),1100);
     assert.ok(validSave(JSON.parse(JSON.stringify(result))));
     for(const id of state.squad.filter(Boolean)){
       assert.ok(result.squad.includes(id));
@@ -157,12 +157,12 @@ test('a tournament requires five unique players and accepts an elite squad witho
     assert.equal(state.squad[slot],id);
   }
   assert.ok(validSave(state));
-  assert.equal(startTournament(elite,'Elite').teams.length,32);
+  assert.equal(startTournament(elite,'Elite').teams.length,50);
 });
 
-test('the field contains 31 all-time opponents, separate Russia and USSR, mixed eras and qualifying B teams',()=>{
+test('the field contains 49 all-time opponents, separate Russia and USSR, mixed eras and qualifying B teams',()=>{
   const s=draft(12),t=startTournament(s.squad,'All-time',12,s.traits,s.profiles);
-  assert.equal(t.teams.length,32);
+  assert.equal(t.teams.length,50);
   assert.deepEqual(t.teams.slice(1).map(team=>team.id),OPPONENTS.map(team=>team.id));
   assert.ok(OPPONENTS.some(team=>team.code==='RUS'));
   assert.ok(OPPONENTS.some(team=>team.code==='URS'));
@@ -207,15 +207,15 @@ test('100 full Olympiads preserve scoring and pair every team once per round wit
     for(let round=1;round<=11;round++){
       t=simulateRound(t);
       assert.equal(t.round,round);
-      assert.equal(t.teams.reduce((sum,x)=>sum+x.mp,0),32*round);
-      assert.equal(t.teams.reduce((sum,x)=>sum+x.bp,0),64*round);
+      assert.equal(t.teams.reduce((sum,x)=>sum+x.mp,0),50*round);
+      assert.equal(t.teams.reduce((sum,x)=>sum+x.bp,0),100*round);
       assert.ok(t.teams.every(team=>team.history.length===round&&new Set(team.history.map(h=>h.opponent)).size===round&&team.w+team.d+team.l===round));
-      assert.equal(new Set(t.rounds.at(-1).flatMap(m=>[m.a,m.b])).size,32);
+      assert.equal(new Set(t.rounds.at(-1).flatMap(m=>[m.a,m.b])).size,50);
       assert.ok(validSave({...s,teamName:t.teams[0].name,phase:round===11?'results':'tournament',tournament:t}));
     }
     assert.strictEqual(simulateRound(t),t);
     const rankings=standings(t);
-    assert.equal(rankings.length,32);
+    assert.equal(rankings.length,50);
     assert.ok(rankings.every((x,i)=>i===0||rankings[i-1].mp>=x.mp));
   }
 });
@@ -349,7 +349,7 @@ test('recommendations preserve chosen board slots and use the current order in t
 
 test('era-balanced rules resume current saves and reject earlier rules without mutating them',()=>{
   const s=draft(97),before=structuredClone(s);assert.strictEqual(restoreSave(s),s);
-  for(const rulesVersion of [RULES_VERSION.replace('olympiad-7','olympiad-6'),RULES_VERSION.replace('era-balanced-1','source-ratings-v1')]){
+  for(const rulesVersion of [RULES_VERSION.replace('olympiad-8','olympiad-7'),RULES_VERSION.replace('era-balanced-1','source-ratings-v1')]){
     const legacy={...s,rulesVersion};assert.equal(restoreSave(legacy),null);assert.equal(validSave(legacy),false);
   }
   assert.deepEqual(s,before);
@@ -360,7 +360,7 @@ test('era-balanced rules resume current saves and reject earlier rules without m
   assert.equal(restoreSave({...current,catalogueRelease:'old-catalogue'}),null);
   while(t.round<11)t=simulateRound(t);
   const completed={...current,phase:'results',tournament:t};assert.strictEqual(restoreSave(completed),completed);
-  assert.equal(restoreSave({...completed,rulesVersion:completed.rulesVersion.replace('olympiad-7','olympiad-6')}),null);
+  assert.equal(restoreSave({...completed,rulesVersion:completed.rulesVersion.replace('olympiad-8','olympiad-7')}),null);
 });
 
 test('save validation rejects corrupt and incompatible browser data',()=>{

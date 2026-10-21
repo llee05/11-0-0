@@ -1,4 +1,4 @@
-// Read-only, paired experiments against complete 32-team tournaments.
+// Read-only, paired experiments against complete tournaments.
 import {execFile} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {mkdirSync,mkdtempSync,readFileSync,rmSync,writeFileSync} from 'node:fs';
@@ -118,6 +118,10 @@ async function buildVariants(temp,ref,names){
       hashes['rating-rules.js']=hash(source);writeFileSync(join(directory,'rating-rules.js'),source);
     }
     const engineSource=readFileSync(join(directory,'engine.js'),'utf8');
+    if(engineSource.includes('./tournament-rules.js')){
+      const source=readFileSync(join(root,'dist','tournament-rules.js'),'utf8');
+      hashes['tournament-rules.js']=hash(source);writeFileSync(join(directory,'tournament-rules.js'),source);
+    }
     const scale=engineSource.match(/export const ELO_SCALE = (\d+);/)||engineSource.match(/10\*\*\(-difference\/(\d+)\)/);
     if(!scale)throw new Error('Cannot identify the audited Elo scale.');
     return {name,url:pathToFileURL(join(directory,'engine.js')).href,sourceRef:name==='baseline'?baseline:'working tree',hashes,eloScale:Number(scale[1])};
@@ -131,7 +135,7 @@ function fixedCohorts(players,targets){
   });
 }
 async function runWorker(){
-  const variants=await Promise.all(workerData.variants.map(async variant=>{const game=await import(variant.url);game.configureCatalogue(workerData.catalogue);return {...variant,game};}));
+  const variants=await Promise.all(workerData.variants.map(async variant=>{const game=await import(variant.url);game.configureCatalogue({...workerData.catalogue,opponents:workerData.catalogue.opponents.slice(0,(game.TEAM_COUNT||32)-1)});return {...variant,game};}));
   parentPort.on('message',task=>{
     try{
       const seed=(0x2B00_A550+Math.imul(task.run+1,997))>>>0,ids=task.cohort.roster.map(p=>p.id),results=[];
@@ -185,7 +189,7 @@ async function main(){
     }
     const examples=samples.filter(r=>r.rounds).sort((a,b)=>(a.mp-a.expectedMP)-(b.mp-b.expectedMP)).filter((r,i,all)=>all.slice(0,i).filter(a=>a.variant===r.variant&&a.cohort===r.cohort).length<3);
     const result={metadata:{baselineRef:variants.find(v=>v.name==='baseline')?.sourceRef??args['baseline-ref'],catalogueRelease:catalogue.metadata.release,runsPerCohort:runs,seedOffset:offset,totalTournaments:total*names.length,workers,seconds:rounded((Date.now()-started)/1000),cohorts,
-      variants:await Promise.all(variants.map(async v=>{const game=await import(v.url),profile=await import(new URL('./player-profile.js',v.url));return {name:v.name,sourceRef:v.sourceRef,hashes:v.hashes,rules:game.RULES_VERSION,eloScale:v.eloScale,formElo:profile.FORM_ELO,dailySwings:profile.SWINGS.slice(1),maxFatiguePenalty:profile.profileFatigue(null,100)};})),
+      variants:await Promise.all(variants.map(async v=>{const game=await import(v.url),profile=await import(new URL('./player-profile.js',v.url));return {name:v.name,sourceRef:v.sourceRef,hashes:v.hashes,rules:game.RULES_VERSION,teamCount:game.TEAM_COUNT||32,eloScale:v.eloScale,formElo:profile.FORM_ELO,dailySwings:profile.SWINGS.slice(1),maxFatiguePenalty:profile.profileFatigue(null,100)};})),
       method:'Fixed best-observed rosters near target ratings, identical seeds across variants, automatic rotation for every team. Forecast sums describe each encountered adaptive Swiss path; they are not unconditional tournament expectations. Poor means at most 10 match points (2-6-3 scores 10). Numeric profiles and alternative Elo scales are fictional game balance, not empirical chess calibration.'},summaries,paired,
       calibration:Object.fromEntries(names.map(n=>[n,{boards:calibrationReport(boards[n]),userMatches:calibrationReport(matches[n]),userMatchesByCohort:Object.fromEntries(cohorts.map(c=>[c.name,calibrationReport(cohortMatches[c.name][n])]))}])),poorRunExamples:examples,
       ...(args['include-samples']?{samples:samples.map(({rounds,...row})=>row)}:{})};
