@@ -157,12 +157,12 @@ try {
   await page.locator('.field-roster [data-action="archive-country"]').first().click();
   assert.ok((await page.locator('.source-roster').textContent()).includes(usaLeader.name));
   await page.keyboard.press('Escape');
-  await page.getByRole('button',{name:'Rename team'}).click();
+  await page.getByRole('button',{name:/ — rename team$/}).click();
   await page.getByLabel('TEAM NAME',{exact:true}).fill('Queensland Knights');
   await page.getByRole('button',{name:'Save team name'}).click();
   await page.getByRole('button',{name:'Expert Trust your instincts'}).click();
   await page.getByRole('button',{name:'Classic Ratings visible'}).click();
-  await page.getByRole('button',{name:'Select reserve for your next pick'}).click();
+  await page.getByRole('button',{name:'THE RESERVE Your secret weapon',exact:true}).click();
   await page.getByRole('button',{name:'Spin a nation'}).click();
   await page.locator('.candidate').first().waitFor();
   await page.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.offer?.profiles);
@@ -182,7 +182,7 @@ try {
   await page.waitForFunction(()=>document.querySelector('.reroll-button')?.textContent.includes('1 left'));
   assert.ok((await page.getByRole('button',{name:'Reroll nation'}).textContent()).includes('1 left'));
   await page.screenshot({path:`${artifacts}/desktop-offer.png`,fullPage:true});
-  await page.getByRole('button',{name:'Select reserve for your next pick'}).click();
+  await page.getByRole('button',{name:'THE RESERVE Your secret weapon',exact:true}).click();
   const selectedId=await page.locator('.candidate:not([disabled])').first().getAttribute('data-id');
   const selectedProfile=await page.evaluate(id=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).offer.profiles[id],selectedId);
   const selectedTrait=await page.evaluate(id=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).offer.traits[id],selectedId);
@@ -194,7 +194,7 @@ try {
   assert.equal(await page.locator('.squad-slot.filled').count(),1);
   assert.equal(await page.evaluate(id=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).traits[id],selectedId),selectedTrait);
   assert.deepEqual(await page.evaluate(id=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).profiles[id],selectedId),selectedProfile);
-  assert.ok((await page.getByRole('button',{name:'Rename team'}).textContent()).includes('Queensland Knights'));
+  assert.ok((await page.getByRole('button',{name:/ — rename team$/}).textContent()).includes('Queensland Knights'));
   for(let i=1;i<5;i++){
     await page.getByRole('button',{name:'Spin a nation'}).click();
     await page.locator('.candidate:not([disabled])').first().click();
@@ -326,7 +326,7 @@ try {
   assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.loads),loadsBefore);
   await page.getByRole('button',{name:'Play round 2'}).click();
   await page.getByRole('button',{name:'Play round 3'}).waitFor();
-  await page.getByRole('button',{name:/Round 1, /}).click();
+  await page.getByRole('group',{name:'Select round',exact:true}).getByRole('button',{name:/^01/}).click();
   assert.ok((await page.locator('.match-heading').textContent()).includes('ROUND 01'));
   await page.getByRole('button',{name:'Full standings',exact:true}).click();
   assert.equal(await page.locator('.standings-row.full').count(),50);
