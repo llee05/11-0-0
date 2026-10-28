@@ -188,7 +188,7 @@ npm install --no-save --package-lock=false playwright-core
 PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium node scripts/browser-qa.mjs
 ```
 
-For focused comparisons, discovery, report and portable-save checks, run `node scripts/browser-improvements-qa.mjs`; for a full offline tournament and reloads, run `node scripts/browser-offline-qa.mjs`. Both accept `QA_URL`, `PLAYWRIGHT_MODULE` and `PLAYWRIGHT_CHROMIUM_PATH`. Override `QA_URL`, `QA_ARTIFACTS` or `PLAYWRIGHT_MODULE` if needed. Screenshots default to `/tmp/eleven-zero-zero-qa/screenshots`.
+For focused comparisons, discovery, report and portable-save checks, run `node scripts/browser-improvements-qa.mjs`; for a full offline tournament and reloads, run `node scripts/browser-offline-qa.mjs`. Both accept `QA_URL`, `PLAYWRIGHT_MODULE` and `PLAYWRIGHT_CHROMIUM_PATH`. Override `QA_URL`, `QA_ARTIFACTS` or `PLAYWRIGHT_MODULE` if needed. When pointing `PLAYWRIGHT_MODULE` to a file path rather than an installed package name, point to `.../playwright-core/index.mjs`. Screenshots default to `/tmp/eleven-zero-zero-qa/screenshots`.
 
 ## Cloudflare Pages release
 

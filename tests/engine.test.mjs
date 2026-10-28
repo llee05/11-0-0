@@ -201,8 +201,9 @@ test('board probabilities are normalized, unbiased in expectation and reward str
   assert.ok(advantage.every(p=>p.win>p.loss&&p.loss>0));
 });
 
-test('100 full Olympiads preserve scoring and pair every team once per round without rematches',()=>{
-  for(let seed=0;seed<100;seed++){
+const tournamentCount=Number(process.env.TOURNAMENT_COUNT||(process.env.FULL_TEST||process.env.CI?100:5));
+test(`${tournamentCount} full Olympiads preserve scoring and pair every team once per round without rematches`,()=>{
+  for(let seed=0;seed<tournamentCount;seed++){
     const s=draft(seed);let t=startTournament(s.squad,'Test Team',seed,s.traits,s.profiles);
     for(let round=1;round<=11;round++){
       t=simulateRound(t);

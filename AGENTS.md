@@ -94,8 +94,9 @@ Run commands from the repository root:
 
 ```bash
 npm start       # Same server as npm run dev; http://localhost:4173
-npm run check  # Syntax checks for app.js and engine.js
-npm test       # SQL catalogue, rules and simulation tests
+npm run check  # Syntax checks for application, server, script, test and backend modules
+npm test       # SQL catalogue, rules and fast simulation tests
+npm run test:full # Complete 100-tournament simulation and full test suite
 npm run build  # Hosted Worker/assets; requires npm --prefix backend ci
 npm run build:pages # Static release/pages/; no backend dependencies or remote database
 npm run preview:pages # Static-only http://localhost:4174/11-0-0/; PAGES_BASE_PATH and PORT configurable
