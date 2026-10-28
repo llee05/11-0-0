@@ -44,7 +44,7 @@ The workflow in [`.github/workflows/pages.yml`](../.github/workflows/pages.yml) 
 
 ## Data updates and existing games
 
-Pages serves a catalogue snapshot. Import and review source changes locally, commit the checked-in data, and push to `main` to rebuild. Visitors never run SQL or download source archives. Catalogue release IDs, source ratings, historical qualifications, trait rules and the 31 all-time opponents match the API version.
+Pages serves a catalogue snapshot. Import and review source changes locally, commit the checked-in data, and push to `main` to rebuild. Visitors never run SQL or download source archives. Catalogue release IDs, source ratings, historical qualifications, trait rules and the all-time opponent field match the API version.
 
 Game saves and the three best completed-run reports remain in each browser's local storage. Saves and records on the previous Sites domain do not automatically transfer to the GitHub Pages domain. Hosting alone does not change the save format or rules; existing catalogue/rules incompatibilities still use the normal backup flow. Best-run reports remain readable across catalogue/rules updates. Projects on the same Pages origin share browser storage, including this game's save and record keys.
 

@@ -85,7 +85,7 @@ Saves, appearance preferences and best-run records remain in browser local stora
 
 The catalogue and game modules use Cloudflare's default caching; avoid adding long browser cache lifetimes to these unversioned filenames. The supplied `_headers` sets MIME sniffing protection, a referrer policy and frame protection. The root `404.html` keeps unknown paths, including `/api/catalog`, as actual 404 responses instead of serving the game shell. See Cloudflare's [serving behavior](https://developers.cloudflare.com/pages/configuration/serving-pages/) and [header rules](https://developers.cloudflare.com/pages/configuration/headers/).
 
-Source/catalogue changes require rebuilding and deploying. The static export preserves catalogue release IDs, source citations, raw ratings, trait rules and all 31 opponents. The original API/Sites build remains available through `npm run build`.
+Source/catalogue changes require rebuilding and deploying. The static export preserves catalogue release IDs, source citations, raw ratings, trait rules and the all-time opponent field. The original API/Sites build remains available through `npm run build`.
 
 With the optional Playwright setup from [README.md](../README.md#checks), run the focused and full browser flows against the simple preview:
 
