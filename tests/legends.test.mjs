@@ -24,7 +24,7 @@ test('Legends are eight source-ranked fives with actual dates, no inferred feder
   assert.ok(players.some(p=>p.name==='Paul Morphy'&&p.source.date==='1859-06-01'&&p.rawRating===2743));
   assert.ok(players.some(p=>p.name==='Adolf Anderssen'));
   assert.ok(catalogue.opponents.every(o=>!o.code.startsWith('LEG')&&o.players.every(id=>!ids.includes(id))));
-  assert.equal(catalogue.metadata.countryCount,49);
+  assert.equal(catalogue.metadata.countryCount,52);
   assert.deepEqual(catalogue.metadata.missingYears,[1944,1930,1928,1927]);
   assert.deepEqual(selectLegends([...LEGENDS_DATA].reverse()),groups);
   const corrupt=structuredClone(LEGENDS_DATA);corrupt[0].players[0].worldRank=2;

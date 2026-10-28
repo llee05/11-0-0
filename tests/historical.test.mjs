@@ -44,3 +44,20 @@ test('historical imports reject incomplete or contradictory country evidence and
   const duplicate=structuredClone(audit);duplicate.targets.push(duplicate.targets[0]);
   assert.throws(()=>buildHistoricalSnapshots(observations,duplicate),/Duplicate historical country/);
 });
+
+test('1952–1970 national fives follow complete higher-rank audits and keep emigration cases unresolved',()=>{
+  const result=buildHistoricalSnapshots(observations,audit);
+  const five=(year,code)=>result.snapshots.find(s=>s.year===year).countries.find(c=>c.federation===code)?.players.map(p=>p.name);
+  assert.equal(audit.targets.length,54);
+  assert.deepEqual(five(1960,'YUG'),['Svetozar Gligoric','Borislav Ivkov','Aleksandar Matanovic','Andrija Fuderer','Petar Trifunovic']);
+  assert.deepEqual(five(1954,'ARG'),['Miguel Najdorf','Julio Bolbochán','Erich Eliskases','Herman Pilnik','Oscar Panno']);
+  assert.deepEqual(five(1960,'USA'),['Bobby Fischer','Samuel Reshevsky','William Lombardy','Pal Benko','Larry Evans']);
+  assert.equal(result.snapshots.find(s=>s.year===1968).countries.find(c=>c.federation==='CSR').players.find(p=>p.name==='Lubomir Kavalek').personId,'historical:kavalek lubomir');
+  const row=(year,id)=>audit.affiliations.find(r=>r.year===year&&r.sourcePlayerId===id);
+  // Defection years record exclusions only, not a guessed national affiliation.
+  for(const [year,id,excluded] of [[1958,'chessmetrics:10653','HUN'],[1970,'chessmetrics:63226','USA']]){
+    assert.equal(row(year,id).countryCode,null);assert.ok(row(year,id).excludedCountryCodes.includes(excluded));
+  }
+  const missing=structuredClone(audit);missing.affiliations=missing.affiliations.filter(r=>!(r.year===1960&&r.sourcePlayerId==='chessmetrics:10653'));
+  assert.throws(()=>buildHistoricalSnapshots(observations,missing),/Unaudited higher-ranked player: Pal Benko \(1960\)/);
+});

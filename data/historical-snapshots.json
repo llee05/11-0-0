@@ -2252,7 +2252,7 @@
           "federation": "URS",
           "year": 1952,
           "listDate": "1952-01-01",
-          "listedPlayerCount": 5,
+          "listedPlayerCount": 20,
           "players": [
             {
               "name": "Vassily Smyslov",
@@ -2296,6 +2296,112 @@
               "sourcePlayerId": "chessmetrics:14127",
               "personId": "chessmetrics:14127",
               "rawRating": 2719,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "ARG",
+          "year": 1952,
+          "listDate": "1952-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "Miguel Najdorf",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:91045",
+              "personId": "chessmetrics:91045",
+              "rawRating": 2750,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Julio Bolbochán",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:14095",
+              "personId": "chessmetrics:14095",
+              "rawRating": 2701,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Erich Eliskases",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:34162",
+              "personId": "chessmetrics:34162",
+              "rawRating": 2688,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Herman Pilnik",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:101425",
+              "personId": "chessmetrics:101425",
+              "rawRating": 2644,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Carlos Guimard",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:48667",
+              "personId": "chessmetrics:48667",
+              "rawRating": 2607,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "YUG",
+          "year": 1952,
+          "listDate": "1952-01-01",
+          "listedPlayerCount": 6,
+          "players": [
+            {
+              "name": "Svetozar Gligoric",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:44611",
+              "personId": "chessmetrics:44611",
+              "rawRating": 2704,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Vasja Pirc",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:101745",
+              "personId": "chessmetrics:101745",
+              "rawRating": 2663,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Petar Trifunovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:133070",
+              "personId": "chessmetrics:133070",
+              "rawRating": 2650,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Braslav Rabar",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:105423",
+              "personId": "chessmetrics:105423",
+              "rawRating": 2635,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Aleksandar Matanovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:82815",
+              "personId": "chessmetrics:82815",
+              "rawRating": 2625,
               "title": null,
               "rank": 5
             }
@@ -2429,7 +2535,7 @@
           "federation": "URS",
           "year": 1954,
           "listDate": "1954-01-01",
-          "listedPlayerCount": 5,
+          "listedPlayerCount": 18,
           "players": [
             {
               "name": "Vassily Smyslov",
@@ -2473,6 +2579,112 @@
               "sourcePlayerId": "chessmetrics:43054",
               "personId": "chessmetrics:43054",
               "rawRating": 2740,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "ARG",
+          "year": 1954,
+          "listDate": "1954-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "Miguel Najdorf",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:91045",
+              "personId": "chessmetrics:91045",
+              "rawRating": 2752,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Julio Bolbochán",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:14095",
+              "personId": "chessmetrics:14095",
+              "rawRating": 2674,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Erich Eliskases",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:34162",
+              "personId": "chessmetrics:34162",
+              "rawRating": 2649,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Herman Pilnik",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:101425",
+              "personId": "chessmetrics:101425",
+              "rawRating": 2634,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Oscar Panno",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:97461",
+              "personId": "chessmetrics:97461",
+              "rawRating": 2624,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "YUG",
+          "year": 1954,
+          "listDate": "1954-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "Svetozar Gligoric",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:44611",
+              "personId": "chessmetrics:44611",
+              "rawRating": 2706,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Andrija Fuderer",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:40459",
+              "personId": "chessmetrics:40459",
+              "rawRating": 2662,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Petar Trifunovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:133070",
+              "personId": "chessmetrics:133070",
+              "rawRating": 2647,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Braslav Rabar",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:105423",
+              "personId": "chessmetrics:105423",
+              "rawRating": 2632,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Vasja Pirc",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:101745",
+              "personId": "chessmetrics:101745",
+              "rawRating": 2625,
               "title": null,
               "rank": 5
             }
@@ -2606,7 +2818,7 @@
           "federation": "URS",
           "year": 1956,
           "listDate": "1956-01-01",
-          "listedPlayerCount": 5,
+          "listedPlayerCount": 30,
           "players": [
             {
               "name": "Vassily Smyslov",
@@ -2650,6 +2862,218 @@
               "sourcePlayerId": "chessmetrics:100509",
               "personId": "historical:petrosian tigran",
               "rawRating": 2755,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "ARG",
+          "year": 1956,
+          "listDate": "1956-01-01",
+          "listedPlayerCount": 7,
+          "players": [
+            {
+              "name": "Miguel Najdorf",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:91045",
+              "personId": "chessmetrics:91045",
+              "rawRating": 2709,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Julio Bolbochán",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:14095",
+              "personId": "chessmetrics:14095",
+              "rawRating": 2681,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Oscar Panno",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:97461",
+              "personId": "chessmetrics:97461",
+              "rawRating": 2673,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Herman Pilnik",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:101425",
+              "personId": "chessmetrics:101425",
+              "rawRating": 2639,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Erich Eliskases",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:34162",
+              "personId": "chessmetrics:34162",
+              "rawRating": 2625,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "HUN",
+          "year": 1956,
+          "listDate": "1956-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "László Szabó",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:128739",
+              "personId": "historical:szabo laszlo",
+              "rawRating": 2695,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Pal Benko",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:10653",
+              "personId": "chessmetrics:10653",
+              "rawRating": 2648,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Gedeon Barcza",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:7942",
+              "personId": "chessmetrics:7942",
+              "rawRating": 2645,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Miklos Bely",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:10323",
+              "personId": "chessmetrics:10323",
+              "rawRating": 2610,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "István Bilek",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:12258",
+              "personId": "chessmetrics:12258",
+              "rawRating": 2592,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "YUG",
+          "year": 1956,
+          "listDate": "1956-01-01",
+          "listedPlayerCount": 9,
+          "players": [
+            {
+              "name": "Borislav Ivkov",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:58111",
+              "personId": "chessmetrics:58111",
+              "rawRating": 2708,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Svetozar Gligoric",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:44611",
+              "personId": "chessmetrics:44611",
+              "rawRating": 2696,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Aleksandar Matanovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:82815",
+              "personId": "chessmetrics:82815",
+              "rawRating": 2694,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Andrija Fuderer",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:40459",
+              "personId": "chessmetrics:40459",
+              "rawRating": 2637,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Petar Trifunovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:133070",
+              "personId": "chessmetrics:133070",
+              "rawRating": 2622,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "USA",
+          "year": 1956,
+          "listDate": "1956-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "Samuel Reshevsky",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:108065",
+              "personId": "historical:reshevsky samuel h",
+              "rawRating": 2752,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Larry Evans",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:35554",
+              "personId": "historical:evans larry m",
+              "rawRating": 2640,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Arthur Bisguier",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:12583",
+              "personId": "chessmetrics:12583",
+              "rawRating": 2612,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Donald Byrne",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:18578",
+              "personId": "chessmetrics:18578",
+              "rawRating": 2589,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Nicolas Rossolimo",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:111509",
+              "personId": "chessmetrics:111509",
+              "rawRating": 2584,
               "title": null,
               "rank": 5
             }
@@ -2783,7 +3207,7 @@
           "federation": "URS",
           "year": 1958,
           "listDate": "1958-01-01",
-          "listedPlayerCount": 5,
+          "listedPlayerCount": 41,
           "players": [
             {
               "name": "Vassily Smyslov",
@@ -2827,6 +3251,165 @@
               "sourcePlayerId": "chessmetrics:100509",
               "personId": "historical:petrosian tigran",
               "rawRating": 2734,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "ARG",
+          "year": 1958,
+          "listDate": "1958-01-01",
+          "listedPlayerCount": 6,
+          "players": [
+            {
+              "name": "Miguel Najdorf",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:91045",
+              "personId": "chessmetrics:91045",
+              "rawRating": 2694,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Oscar Panno",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:97461",
+              "personId": "chessmetrics:97461",
+              "rawRating": 2677,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Julio Bolbochán",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:14095",
+              "personId": "chessmetrics:14095",
+              "rawRating": 2633,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Raúl Sanguinetti",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:114671",
+              "personId": "chessmetrics:114671",
+              "rawRating": 2633,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Erich Eliskases",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:34162",
+              "personId": "chessmetrics:34162",
+              "rawRating": 2599,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "HUN",
+          "year": 1958,
+          "listDate": "1958-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "László Szabó",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:128739",
+              "personId": "historical:szabo laszlo",
+              "rawRating": 2689,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Gedeon Barcza",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:7942",
+              "personId": "chessmetrics:7942",
+              "rawRating": 2652,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "István Bilek",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:12258",
+              "personId": "chessmetrics:12258",
+              "rawRating": 2595,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Lajos Portisch",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:103368",
+              "personId": "fide:700037",
+              "rawRating": 2570,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "György Szilágyi",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:128942",
+              "personId": "chessmetrics:128942",
+              "rawRating": 2563,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "YUG",
+          "year": 1958,
+          "listDate": "1958-01-01",
+          "listedPlayerCount": 10,
+          "players": [
+            {
+              "name": "Svetozar Gligoric",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:44611",
+              "personId": "chessmetrics:44611",
+              "rawRating": 2729,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Aleksandar Matanovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:82815",
+              "personId": "chessmetrics:82815",
+              "rawRating": 2695,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Borislav Ivkov",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:58111",
+              "personId": "chessmetrics:58111",
+              "rawRating": 2669,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Petar Trifunovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:133070",
+              "personId": "chessmetrics:133070",
+              "rawRating": 2614,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Nikola Karaklajic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:62441",
+              "personId": "chessmetrics:62441",
+              "rawRating": 2606,
               "title": null,
               "rank": 5
             }
@@ -2960,7 +3543,7 @@
           "federation": "URS",
           "year": 1960,
           "listDate": "1960-01-01",
-          "listedPlayerCount": 5,
+          "listedPlayerCount": 40,
           "players": [
             {
               "name": "Mikhail Tal",
@@ -3004,6 +3587,218 @@
               "sourcePlayerId": "chessmetrics:123392",
               "personId": "chessmetrics:123392",
               "rawRating": 2757,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "ARG",
+          "year": 1960,
+          "listDate": "1960-01-01",
+          "listedPlayerCount": 6,
+          "players": [
+            {
+              "name": "Miguel Najdorf",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:91045",
+              "personId": "chessmetrics:91045",
+              "rawRating": 2679,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Oscar Panno",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:97461",
+              "personId": "chessmetrics:97461",
+              "rawRating": 2664,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Raúl Sanguinetti",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:114671",
+              "personId": "chessmetrics:114671",
+              "rawRating": 2605,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Erich Eliskases",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:34162",
+              "personId": "chessmetrics:34162",
+              "rawRating": 2587,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Herman Pilnik",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:101425",
+              "personId": "chessmetrics:101425",
+              "rawRating": 2577,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "USA",
+          "year": 1960,
+          "listDate": "1960-01-01",
+          "listedPlayerCount": 10,
+          "players": [
+            {
+              "name": "Bobby Fischer",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:38178",
+              "personId": "historical:fischer robert james",
+              "rawRating": 2701,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Samuel Reshevsky",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:108065",
+              "personId": "historical:reshevsky samuel h",
+              "rawRating": 2677,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "William Lombardy",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:77019",
+              "personId": "chessmetrics:77019",
+              "rawRating": 2627,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Pal Benko",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:10653",
+              "personId": "chessmetrics:10653",
+              "rawRating": 2625,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Larry Evans",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:35554",
+              "personId": "historical:evans larry m",
+              "rawRating": 2615,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "YUG",
+          "year": 1960,
+          "listDate": "1960-01-01",
+          "listedPlayerCount": 11,
+          "players": [
+            {
+              "name": "Svetozar Gligoric",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:44611",
+              "personId": "chessmetrics:44611",
+              "rawRating": 2732,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Borislav Ivkov",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:58111",
+              "personId": "chessmetrics:58111",
+              "rawRating": 2665,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Aleksandar Matanovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:82815",
+              "personId": "chessmetrics:82815",
+              "rawRating": 2661,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Andrija Fuderer",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:40459",
+              "personId": "chessmetrics:40459",
+              "rawRating": 2654,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Petar Trifunovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:133070",
+              "personId": "chessmetrics:133070",
+              "rawRating": 2606,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "HUN",
+          "year": 1960,
+          "listDate": "1960-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "László Szabó",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:128739",
+              "personId": "historical:szabo laszlo",
+              "rawRating": 2685,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Lajos Portisch",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:103368",
+              "personId": "fide:700037",
+              "rawRating": 2670,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Gedeon Barcza",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:7942",
+              "personId": "chessmetrics:7942",
+              "rawRating": 2649,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "István Bilek",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:12258",
+              "personId": "chessmetrics:12258",
+              "rawRating": 2599,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Tibor Flórián",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:38628",
+              "personId": "chessmetrics:38628",
+              "rawRating": 2546,
               "title": null,
               "rank": 5
             }
@@ -3137,7 +3932,7 @@
           "federation": "URS",
           "year": 1962,
           "listDate": "1962-01-01",
-          "listedPlayerCount": 5,
+          "listedPlayerCount": 20,
           "players": [
             {
               "name": "Tigran Petrosian",
@@ -3181,6 +3976,112 @@
               "sourcePlayerId": "chessmetrics:124734",
               "personId": "fide:600024",
               "rawRating": 2759,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "USA",
+          "year": 1962,
+          "listDate": "1962-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "Bobby Fischer",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:38178",
+              "personId": "historical:fischer robert james",
+              "rawRating": 2738,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Samuel Reshevsky",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:108065",
+              "personId": "historical:reshevsky samuel h",
+              "rawRating": 2684,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "William Lombardy",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:77019",
+              "personId": "chessmetrics:77019",
+              "rawRating": 2661,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Robert Byrne",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:18581",
+              "personId": "historical:byrne robert e",
+              "rawRating": 2653,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Larry Evans",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:35554",
+              "personId": "historical:evans larry m",
+              "rawRating": 2633,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "YUG",
+          "year": 1962,
+          "listDate": "1962-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "Svetozar Gligoric",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:44611",
+              "personId": "chessmetrics:44611",
+              "rawRating": 2715,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Aleksandar Matanovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:82815",
+              "personId": "chessmetrics:82815",
+              "rawRating": 2661,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Borislav Ivkov",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:58111",
+              "personId": "chessmetrics:58111",
+              "rawRating": 2644,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Bruno Parma",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:97934",
+              "personId": "chessmetrics:97934",
+              "rawRating": 2624,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Petar Trifunovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:133070",
+              "personId": "chessmetrics:133070",
+              "rawRating": 2617,
               "title": null,
               "rank": 5
             }
@@ -3314,7 +4215,7 @@
           "federation": "URS",
           "year": 1964,
           "listDate": "1964-01-01",
-          "listedPlayerCount": 5,
+          "listedPlayerCount": 35,
           "players": [
             {
               "name": "Tigran Petrosian",
@@ -3358,6 +4259,218 @@
               "sourcePlayerId": "chessmetrics:124734",
               "personId": "fide:600024",
               "rawRating": 2749,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "ARG",
+          "year": 1964,
+          "listDate": "1964-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "Miguel Najdorf",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:91045",
+              "personId": "chessmetrics:91045",
+              "rawRating": 2696,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Raúl Sanguinetti",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:114671",
+              "personId": "chessmetrics:114671",
+              "rawRating": 2665,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Herman Pilnik",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:101425",
+              "personId": "chessmetrics:101425",
+              "rawRating": 2619,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Oscar Panno",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:97461",
+              "personId": "chessmetrics:97461",
+              "rawRating": 2613,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Julio Bolbochán",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:14095",
+              "personId": "chessmetrics:14095",
+              "rawRating": 2590,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "HUN",
+          "year": 1964,
+          "listDate": "1964-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "Lajos Portisch",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:103368",
+              "personId": "fide:700037",
+              "rawRating": 2662,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "László Szabó",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:128739",
+              "personId": "historical:szabo laszlo",
+              "rawRating": 2621,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "István Bilek",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:12258",
+              "personId": "chessmetrics:12258",
+              "rawRating": 2609,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Gedeon Barcza",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:7942",
+              "personId": "chessmetrics:7942",
+              "rawRating": 2601,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Levente Lengyel",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:74660",
+              "personId": "chessmetrics:74660",
+              "rawRating": 2594,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "USA",
+          "year": 1964,
+          "listDate": "1964-01-01",
+          "listedPlayerCount": 7,
+          "players": [
+            {
+              "name": "Bobby Fischer",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:38178",
+              "personId": "historical:fischer robert james",
+              "rawRating": 2788,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Samuel Reshevsky",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:108065",
+              "personId": "historical:reshevsky samuel h",
+              "rawRating": 2674,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Pal Benko",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:10653",
+              "personId": "chessmetrics:10653",
+              "rawRating": 2651,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Larry Evans",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:35554",
+              "personId": "historical:evans larry m",
+              "rawRating": 2632,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Robert Byrne",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:18581",
+              "personId": "historical:byrne robert e",
+              "rawRating": 2608,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "YUG",
+          "year": 1964,
+          "listDate": "1964-01-01",
+          "listedPlayerCount": 6,
+          "players": [
+            {
+              "name": "Svetozar Gligoric",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:44611",
+              "personId": "chessmetrics:44611",
+              "rawRating": 2707,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Borislav Ivkov",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:58111",
+              "personId": "chessmetrics:58111",
+              "rawRating": 2672,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Aleksandar Matanovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:82815",
+              "personId": "chessmetrics:82815",
+              "rawRating": 2625,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Milan Matulovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:83180",
+              "personId": "chessmetrics:83180",
+              "rawRating": 2617,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Bruno Parma",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:97934",
+              "personId": "chessmetrics:97934",
+              "rawRating": 2616,
               "title": null,
               "rank": 5
             }
@@ -3491,7 +4604,7 @@
           "federation": "URS",
           "year": 1966,
           "listDate": "1966-01-01",
-          "listedPlayerCount": 5,
+          "listedPlayerCount": 44,
           "players": [
             {
               "name": "Boris Spassky",
@@ -3535,6 +4648,218 @@
               "sourcePlayerId": "chessmetrics:102867",
               "personId": "historical:polugaevsky lev",
               "rawRating": 2743,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "ARG",
+          "year": 1966,
+          "listDate": "1966-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "Miguel Najdorf",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:91045",
+              "personId": "chessmetrics:91045",
+              "rawRating": 2719,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Raúl Sanguinetti",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:114671",
+              "personId": "chessmetrics:114671",
+              "rawRating": 2642,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Oscar Panno",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:97461",
+              "personId": "chessmetrics:97461",
+              "rawRating": 2619,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Julio Bolbochán",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:14095",
+              "personId": "chessmetrics:14095",
+              "rawRating": 2618,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Erich Eliskases",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:34162",
+              "personId": "chessmetrics:34162",
+              "rawRating": 2571,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "HUN",
+          "year": 1966,
+          "listDate": "1966-01-01",
+          "listedPlayerCount": 6,
+          "players": [
+            {
+              "name": "Lajos Portisch",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:103368",
+              "personId": "fide:700037",
+              "rawRating": 2703,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "László Szabó",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:128739",
+              "personId": "historical:szabo laszlo",
+              "rawRating": 2629,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Levente Lengyel",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:74660",
+              "personId": "chessmetrics:74660",
+              "rawRating": 2605,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "István Bilek",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:12258",
+              "personId": "chessmetrics:12258",
+              "rawRating": 2592,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Gedeon Barcza",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:7942",
+              "personId": "chessmetrics:7942",
+              "rawRating": 2583,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "USA",
+          "year": 1966,
+          "listDate": "1966-01-01",
+          "listedPlayerCount": 6,
+          "players": [
+            {
+              "name": "Bobby Fischer",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:38178",
+              "personId": "historical:fischer robert james",
+              "rawRating": 2744,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Samuel Reshevsky",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:108065",
+              "personId": "historical:reshevsky samuel h",
+              "rawRating": 2665,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Pal Benko",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:10653",
+              "personId": "chessmetrics:10653",
+              "rawRating": 2630,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Robert Byrne",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:18581",
+              "personId": "historical:byrne robert e",
+              "rawRating": 2627,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Larry Evans",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:35554",
+              "personId": "historical:evans larry m",
+              "rawRating": 2594,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "YUG",
+          "year": 1966,
+          "listDate": "1966-01-01",
+          "listedPlayerCount": 8,
+          "players": [
+            {
+              "name": "Borislav Ivkov",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:58111",
+              "personId": "chessmetrics:58111",
+              "rawRating": 2698,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Svetozar Gligoric",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:44611",
+              "personId": "chessmetrics:44611",
+              "rawRating": 2668,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Bruno Parma",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:97934",
+              "personId": "chessmetrics:97934",
+              "rawRating": 2631,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Milan Matulovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:83180",
+              "personId": "chessmetrics:83180",
+              "rawRating": 2624,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Aleksandar Matanovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:82815",
+              "personId": "chessmetrics:82815",
+              "rawRating": 2598,
               "title": null,
               "rank": 5
             }
@@ -3668,7 +4993,7 @@
           "federation": "URS",
           "year": 1968,
           "listDate": "1968-01-01",
-          "listedPlayerCount": 5,
+          "listedPlayerCount": 50,
           "players": [
             {
               "name": "Viktor Korchnoi",
@@ -3712,6 +5037,218 @@
               "sourcePlayerId": "chessmetrics:123392",
               "personId": "chessmetrics:123392",
               "rawRating": 2743,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "CSR",
+          "year": 1968,
+          "listDate": "1968-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "Vlastimil Hort",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:55671",
+              "personId": "chessmetrics:55671",
+              "rawRating": 2692,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Ludek Pachmann",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:96685",
+              "personId": "chessmetrics:96685",
+              "rawRating": 2604,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Miroslav Filip",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:37858",
+              "personId": "chessmetrics:37858",
+              "rawRating": 2592,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Lubomir Kavalek",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:63226",
+              "personId": "historical:kavalek lubomir",
+              "rawRating": 2578,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Ladislav Mišta",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:87075",
+              "personId": "chessmetrics:87075",
+              "rawRating": 2574,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "HUN",
+          "year": 1968,
+          "listDate": "1968-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "Lajos Portisch",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:103368",
+              "personId": "fide:700037",
+              "rawRating": 2723,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "István Bilek",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:12258",
+              "personId": "chessmetrics:12258",
+              "rawRating": 2618,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "László Szabó",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:128739",
+              "personId": "historical:szabo laszlo",
+              "rawRating": 2615,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Gedeon Barcza",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:7942",
+              "personId": "chessmetrics:7942",
+              "rawRating": 2598,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Laszlo Barczay",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:7944",
+              "personId": "chessmetrics:7944",
+              "rawRating": 2565,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "USA",
+          "year": 1968,
+          "listDate": "1968-01-01",
+          "listedPlayerCount": 7,
+          "players": [
+            {
+              "name": "Bobby Fischer",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:38178",
+              "personId": "historical:fischer robert james",
+              "rawRating": 2801,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Samuel Reshevsky",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:108065",
+              "personId": "historical:reshevsky samuel h",
+              "rawRating": 2663,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Larry Evans",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:35554",
+              "personId": "historical:evans larry m",
+              "rawRating": 2654,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Pal Benko",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:10653",
+              "personId": "chessmetrics:10653",
+              "rawRating": 2653,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Robert Byrne",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:18581",
+              "personId": "historical:byrne robert e",
+              "rawRating": 2578,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "YUG",
+          "year": 1968,
+          "listDate": "1968-01-01",
+          "listedPlayerCount": 8,
+          "players": [
+            {
+              "name": "Milan Matulovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:83180",
+              "personId": "chessmetrics:83180",
+              "rawRating": 2675,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Svetozar Gligoric",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:44611",
+              "personId": "chessmetrics:44611",
+              "rawRating": 2674,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Borislav Ivkov",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:58111",
+              "personId": "chessmetrics:58111",
+              "rawRating": 2661,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Bruno Parma",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:97934",
+              "personId": "chessmetrics:97934",
+              "rawRating": 2633,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Aleksandar Matanovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:82815",
+              "personId": "chessmetrics:82815",
+              "rawRating": 2633,
               "title": null,
               "rank": 5
             }
@@ -3845,7 +5382,7 @@
           "federation": "URS",
           "year": 1970,
           "listDate": "1970-01-01",
-          "listedPlayerCount": 5,
+          "listedPlayerCount": 48,
           "players": [
             {
               "name": "Viktor Korchnoi",
@@ -3889,6 +5426,165 @@
               "sourcePlayerId": "chessmetrics:123392",
               "personId": "chessmetrics:123392",
               "rawRating": 2745,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "HUN",
+          "year": 1970,
+          "listDate": "1970-01-01",
+          "listedPlayerCount": 5,
+          "players": [
+            {
+              "name": "Lajos Portisch",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:103368",
+              "personId": "fide:700037",
+              "rawRating": 2732,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Levente Lengyel",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:74660",
+              "personId": "chessmetrics:74660",
+              "rawRating": 2591,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Gedeon Barcza",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:7942",
+              "personId": "chessmetrics:7942",
+              "rawRating": 2591,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Gyözö Forintos",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:39024",
+              "personId": "chessmetrics:39024",
+              "rawRating": 2581,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Laszlo Barczay",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:7944",
+              "personId": "chessmetrics:7944",
+              "rawRating": 2573,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "USA",
+          "year": 1970,
+          "listDate": "1970-01-01",
+          "listedPlayerCount": 6,
+          "players": [
+            {
+              "name": "Bobby Fischer",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:38178",
+              "personId": "historical:fischer robert james",
+              "rawRating": 2788,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Samuel Reshevsky",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:108065",
+              "personId": "historical:reshevsky samuel h",
+              "rawRating": 2683,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Pal Benko",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:10653",
+              "personId": "chessmetrics:10653",
+              "rawRating": 2642,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Larry Evans",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:35554",
+              "personId": "historical:evans larry m",
+              "rawRating": 2612,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Robert Byrne",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:18581",
+              "personId": "historical:byrne robert e",
+              "rawRating": 2602,
+              "title": null,
+              "rank": 5
+            }
+          ]
+        },
+        {
+          "federation": "YUG",
+          "year": 1970,
+          "listDate": "1970-01-01",
+          "listedPlayerCount": 8,
+          "players": [
+            {
+              "name": "Svetozar Gligoric",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:44611",
+              "personId": "chessmetrics:44611",
+              "rawRating": 2690,
+              "title": null,
+              "rank": 1
+            },
+            {
+              "name": "Milan Matulovic",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:83180",
+              "personId": "chessmetrics:83180",
+              "rawRating": 2674,
+              "title": null,
+              "rank": 2
+            },
+            {
+              "name": "Borislav Ivkov",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:58111",
+              "personId": "chessmetrics:58111",
+              "rawRating": 2640,
+              "title": null,
+              "rank": 3
+            },
+            {
+              "name": "Bruno Parma",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:97934",
+              "personId": "chessmetrics:97934",
+              "rawRating": 2627,
+              "title": null,
+              "rank": 4
+            },
+            {
+              "name": "Bojan Kurajica",
+              "fideId": null,
+              "sourcePlayerId": "chessmetrics:71071",
+              "personId": "fide:14400057",
+              "rawRating": 2616,
               "title": null,
               "rank": 5
             }

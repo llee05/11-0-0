@@ -11,7 +11,7 @@ const {players} = await readCatalogue(db);
 db.close();
 
 test('curated profiles identify sourced people, across editions and without namesake leakage', () => {
-  assert.equal(CAREER_PROFILES.length, 115);
+  assert.equal(CAREER_PROFILES.length, 116);
   assert.equal(new Set(CAREER_PROFILES.map(p => p.personId)).size, CAREER_PROFILES.length);
   for (const profile of CAREER_PROFILES) {
     const editions = players.filter(p => p.personId === profile.personId);
