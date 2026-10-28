@@ -29,7 +29,8 @@
   --meter-track:#3c493c;--meter-good:#a1ba82;--meter-warm:#d2b476;--meter-danger:#e29b7d;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:var(--paper);color:var(--ink);font:14px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+#main{flex:1 0 auto}
 body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.2;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23686147' opacity='.18' filter='url(%23n)' d='M0 0h160v160H0z'/%3E%3C/svg%3E")}
 button,input,textarea,select{font:inherit;color:inherit}
 button,a,input,textarea,select,summary{-webkit-tap-highlight-color:transparent}
@@ -202,7 +203,7 @@ h1 em{font-weight:400;color:var(--gold)}
 .insight{display:flex;align-items:center;gap:16px;padding:0 22px;border-left:1px solid var(--line)}.insight:first-child{border:0}
 .insight-icon{font:30px var(--serif);color:var(--gold);width:30px;flex-shrink:0}.insight strong{display:block;font:18px/1.3 var(--serif);margin-bottom:5px}.insight p{font-size:10px;color:var(--muted)}
 .reset-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:19px 0 30px;font-size:10px;color:var(--muted)}.reset-row .text-button{font-size:10px;white-space:nowrap}
-footer{display:flex;align-items:center;gap:22px;padding:20px max(var(--page-gutter),calc((100% - var(--page-width))/2));border-top:3px double var(--ink);font-size:10px;color:var(--muted)}
+footer{margin-top:auto;display:flex;align-items:center;gap:22px;padding:20px max(var(--page-gutter),calc((100% - var(--page-width))/2));border-top:3px double var(--ink);font-size:10px;color:var(--muted)}
 .footer-brand{font:700 26px var(--serif);text-decoration:none;letter-spacing:-1px;color:var(--emphasis)}footer>span{margin-right:auto}footer>button{font-size:10px}
 #toast{position:fixed;z-index:100;left:50%;bottom:24px;transform:translate(-50%,15px);opacity:0;pointer-events:none;background:var(--forest);color:var(--on-forest);border:1px solid #c3bd9d;padding:14px 20px;font-size:12px;box-shadow:4px 5px 0 #142c2026;max-width:calc(100vw - 30px);width:max-content;transition:opacity .2s,transform .2s}
 #toast.visible{opacity:1;transform:translate(-50%,0)}
