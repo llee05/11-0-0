@@ -70,7 +70,7 @@ try {
   assert.equal(await page.locator('.profile-guide').count(),1);
   assert.equal(await page.locator('.style-guide article').count(),4);
   assert.equal(await page.locator('.trait-guide article').count(),25);
-  assert.equal(await page.locator('.career-list article').count(),115);
+  assert.equal(await page.locator('.career-list article').count(),116);
   const profileGuide=await page.locator('.profile-guide').textContent();
   assert.ok(profileGuide.includes('0.5 effective Elo per point'));
   assert.ok(profileGuide.includes('6 Elo per level'));
