@@ -1,0 +1,603 @@
+{
+  "metadata": {
+    "baselineRef": "68a4ff6",
+    "catalogueRelease": "d82510d802418964de094fd5db145e8a1afe4777000c887abb6718515c286f6a",
+    "runsPerCohort": 250,
+    "seedOffset": 2000,
+    "totalTournaments": 750,
+    "workers": 10,
+    "seconds": 112.842,
+    "cohorts": [
+      {
+        "name": "2700",
+        "target": 2700,
+        "sourceRating": 2700,
+        "roster": [
+          {
+            "id": "GEO-2010:fide:13601520",
+            "personId": "fide:13601520",
+            "name": "Baadur Jobava",
+            "year": 2010,
+            "rating": 2700
+          },
+          {
+            "id": "IRI-2026:fide:12521213",
+            "personId": "fide:12521213",
+            "name": "M. Amin Tabatabaei",
+            "year": 2026,
+            "rating": 2700
+          },
+          {
+            "id": "NED-2006:fide:1008013",
+            "personId": "fide:1008013",
+            "name": "Sergei Tiviakov",
+            "year": 2006,
+            "rating": 2700
+          },
+          {
+            "id": "USA-2020:fide:2047640",
+            "personId": "fide:2047640",
+            "name": "Jeffery Xiong",
+            "year": 2020,
+            "rating": 2700
+          },
+          {
+            "id": "RUS-2026:fide:24175439",
+            "personId": "fide:24175439",
+            "name": "Andrey Esipenko",
+            "year": 2026,
+            "rating": 2698
+          }
+        ]
+      },
+      {
+        "name": "2750",
+        "target": 2750,
+        "sourceRating": 2751.75,
+        "roster": [
+          {
+            "id": "HUN-2022:fide:738590",
+            "personId": "fide:738590",
+            "name": "Richard Rapport",
+            "year": 2022,
+            "rating": 2753
+          },
+          {
+            "id": "RUS-1996:fide:4100107",
+            "personId": "fide:4100107",
+            "name": "Alexey Dreev",
+            "year": 1996,
+            "rating": 2752
+          },
+          {
+            "id": "HUN-1938:chessmetrics:126062",
+            "personId": "chessmetrics:126062",
+            "name": "Lajos Steiner",
+            "year": 1938,
+            "rating": 2751
+          },
+          {
+            "id": "UZB-2026:fide:14204118",
+            "personId": "fide:14204118",
+            "name": "Nodirbek Abdusattorov",
+            "year": 2026,
+            "rating": 2751
+          },
+          {
+            "id": "FRA-2006:fide:605506",
+            "personId": "fide:605506",
+            "name": "Etienne Bacrot",
+            "year": 2006,
+            "rating": 2747
+          }
+        ]
+      },
+      {
+        "name": "2850",
+        "target": 2850,
+        "sourceRating": 2840,
+        "roster": [
+          {
+            "id": "LEGENDS-1:chessmetrics:19593",
+            "personId": "chessmetrics:19593",
+            "name": "José Capablanca",
+            "year": 1920,
+            "rating": 2840
+          },
+          {
+            "id": "LEGENDS-1:chessmetrics:73076",
+            "personId": "chessmetrics:73076",
+            "name": "Emanuel Lasker",
+            "year": 1900,
+            "rating": 2840
+          },
+          {
+            "id": "LEGENDS-1:chessmetrics:81520",
+            "personId": "chessmetrics:81520",
+            "name": "Géza Maróczy",
+            "year": 1906,
+            "rating": 2840
+          },
+          {
+            "id": "LEGENDS-2:chessmetrics:112008",
+            "personId": "chessmetrics:112008",
+            "name": "Akiba Rubinstein",
+            "year": 1914,
+            "rating": 2840
+          },
+          {
+            "id": "LEGENDS-2:chessmetrics:126127",
+            "personId": "chessmetrics:126127",
+            "name": "Wilhelm Steinitz",
+            "year": 1874,
+            "rating": 2840
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "name": "steeper",
+        "sourceRef": "working tree",
+        "hashes": {
+          "engine.js": "d864c3d67e817b1ca4a26e3c10dcf32ad9d82c2c748f530fd2a2fef2bccdf7e0",
+          "player-profile.js": "ac8a36d1b439b9c5e5ce6c84d33e17ae6b9bab210f10d4e71929d6b292bf6a86",
+          "traits.js": "d538529ff14dce3660eb231c58ffb1fa934361039a165b91dd81c043bcbc1c68",
+          "rating-rules.js": "844efbf2f2475a45bb9505a6ca014078797f13d9581999ec2abe103407c3a65f",
+          "tournament-rules.js": "8b323da1b1b384626171f7f30ef30fcce484b7c0420da71d1d6275465c3d3510"
+        },
+        "rules": "career-traits-5/squad-profiles-4/olympiad-8/competitive-draft-1/era-balanced-1",
+        "teamCount": 50,
+        "eloScale": 320,
+        "formElo": 6,
+        "dailySwings": [
+          16,
+          12,
+          8,
+          4,
+          2
+        ],
+        "maxFatiguePenalty": 38
+      }
+    ],
+    "method": "Fixed best-observed rosters near target ratings, identical seeds across variants, automatic rotation for every team. Forecast sums describe each encountered adaptive Swiss path; they are not unconditional tournament expectations. Poor means at most 10 match points (2-6-3 scores 10). Numeric profiles and alternative Elo scales are fictional game balance, not empirical chess calibration."
+  },
+  "summaries": {
+    "2700": {
+      "steeper": {
+        "runs": 250,
+        "meanWins": 4.52,
+        "meanDraws": 2.328,
+        "meanLosses": 4.152,
+        "matchPoints": {
+          "mean": 11.368,
+          "interval95": [
+            11.17332,
+            11.56268
+          ],
+          "p05": 9,
+          "median": 11,
+          "p95": 14
+        },
+        "meanRank": 22.904,
+        "titles": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "perfect": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 6,
+          "rate": 0.024,
+          "interval95": [
+            0.011045,
+            0.051363
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 75,
+          "rate": 0.3,
+          "interval95": [
+            0.246571,
+            0.359483
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 2,
+          "rate": 0.008,
+          "interval95": [
+            0.002197,
+            0.028695
+          ]
+        },
+        "meanForecastMatchPoints": 11.323516,
+        "meanOutcomeMinusForecast": 0.044484,
+        "poorRunForecast": {
+          "runs": 75,
+          "meanActualMP": 9.52,
+          "meanForecastMP": 12.000656,
+          "meanOutcomeMinusForecast": -2.480656
+        },
+        "meanSourceGap": 13.124909,
+        "meanGameBaseGap": -4.616545,
+        "meanEffectiveGap": 3.079182,
+        "meanModifierGaps": {
+          "era": -17.741455,
+          "fatigue": 1.980159,
+          "form": 0.163091,
+          "performance": 0.064273,
+          "trait": 4.190205,
+          "style": 1.298
+        },
+        "sourceFavouriteOverturnRate": 0.261898,
+        "records": {
+          "1-3-7": 1,
+          "2-5-4": 2,
+          "2-6-3": 2,
+          "2-7-2": 1,
+          "3-1-7": 1,
+          "3-2-6": 3,
+          "3-3-5": 6,
+          "3-4-4": 16,
+          "3-5-3": 5,
+          "4-1-6": 14,
+          "4-2-5": 27,
+          "4-3-4": 30,
+          "4-4-3": 18,
+          "4-5-2": 3,
+          "4-6-1": 1,
+          "5-0-6": 3,
+          "5-1-5": 20,
+          "5-2-4": 30,
+          "5-3-3": 15,
+          "5-4-2": 4,
+          "6-0-5": 12,
+          "6-1-4": 21,
+          "6-2-3": 8,
+          "6-3-2": 1,
+          "7-0-4": 3,
+          "7-1-3": 2,
+          "7-2-2": 1
+        }
+      }
+    },
+    "2750": {
+      "steeper": {
+        "runs": 250,
+        "meanWins": 5.22,
+        "meanDraws": 2.512,
+        "meanLosses": 3.268,
+        "matchPoints": {
+          "mean": 12.952,
+          "interval95": [
+            12.746933,
+            13.157067
+          ],
+          "p05": 10,
+          "median": 13,
+          "p95": 15
+        },
+        "meanRank": 13.608,
+        "titles": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "perfect": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 3,
+          "rate": 0.012,
+          "interval95": [
+            0.004089,
+            0.034681
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 21,
+          "rate": 0.084,
+          "interval95": [
+            0.055596,
+            0.124996
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "meanForecastMatchPoints": 13.18763,
+        "meanOutcomeMinusForecast": -0.23563,
+        "poorRunForecast": {
+          "runs": 21,
+          "meanActualMP": 9.52381,
+          "meanForecastMP": 14.03593,
+          "meanOutcomeMinusForecast": -4.512121
+        },
+        "meanSourceGap": 12.961182,
+        "meanGameBaseGap": 27.424364,
+        "meanEffectiveGap": 30.700193,
+        "meanModifierGaps": {
+          "era": 14.463182,
+          "fatigue": 1.821818,
+          "form": -0.591273,
+          "performance": -0.040818,
+          "trait": 1.712102,
+          "style": 0.374
+        },
+        "sourceFavouriteOverturnRate": 0.188842,
+        "records": {
+          "2-4-5": 1,
+          "2-5-4": 2,
+          "3-3-5": 3,
+          "3-4-4": 5,
+          "3-5-3": 3,
+          "3-6-2": 3,
+          "4-1-6": 3,
+          "4-2-5": 5,
+          "4-3-4": 12,
+          "4-4-3": 9,
+          "4-5-2": 6,
+          "4-6-1": 2,
+          "5-0-6": 2,
+          "5-1-5": 10,
+          "5-2-4": 16,
+          "5-3-3": 46,
+          "5-4-2": 22,
+          "5-5-1": 1,
+          "6-0-5": 7,
+          "6-1-4": 23,
+          "6-2-3": 23,
+          "6-3-2": 15,
+          "6-4-1": 3,
+          "7-0-4": 10,
+          "7-1-3": 9,
+          "7-2-2": 6,
+          "7-3-1": 1,
+          "8-1-2": 2
+        }
+      }
+    },
+    "2850": {
+      "steeper": {
+        "runs": 250,
+        "meanWins": 7.28,
+        "meanDraws": 2.132,
+        "meanLosses": 1.588,
+        "matchPoints": {
+          "mean": 16.692,
+          "interval95": [
+            16.454335,
+            16.929665
+          ],
+          "p05": 14,
+          "median": 17,
+          "p95": 20
+        },
+        "meanRank": 2.996,
+        "titles": {
+          "count": 80,
+          "rate": 0.32,
+          "interval95": [
+            0.265274,
+            0.380174
+          ]
+        },
+        "perfect": {
+          "count": 1,
+          "rate": 0.004,
+          "interval95": [
+            0.000706,
+            0.022306
+          ]
+        },
+        "atMostTwoWins": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "atMostTenMatchPoints": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "exactTwoSixThree": {
+          "count": 0,
+          "rate": 0,
+          "interval95": [
+            0,
+            0.015134
+          ]
+        },
+        "meanForecastMatchPoints": 16.697563,
+        "meanOutcomeMinusForecast": -0.005563,
+        "poorRunForecast": null,
+        "meanSourceGap": 102.210818,
+        "meanGameBaseGap": 83.554455,
+        "meanEffectiveGap": 84.21525,
+        "meanModifierGaps": {
+          "era": -18.656364,
+          "fatigue": 1.908205,
+          "form": -1.288364,
+          "performance": 0.006091,
+          "trait": -1.317682,
+          "style": 1.352545
+        },
+        "sourceFavouriteOverturnRate": 0.142596,
+        "records": {
+          "10-0-1": 6,
+          "10-1-0": 5,
+          "11-0-0": 1,
+          "4-4-3": 3,
+          "4-6-1": 1,
+          "5-3-3": 5,
+          "5-4-2": 5,
+          "5-5-1": 3,
+          "6-1-4": 4,
+          "6-2-3": 11,
+          "6-3-2": 23,
+          "6-4-1": 11,
+          "6-5-0": 3,
+          "7-0-4": 3,
+          "7-1-3": 10,
+          "7-2-2": 22,
+          "7-3-1": 28,
+          "7-4-0": 10,
+          "8-0-3": 10,
+          "8-1-2": 26,
+          "8-2-1": 26,
+          "8-3-0": 7,
+          "9-0-2": 6,
+          "9-1-1": 13,
+          "9-2-0": 8
+        }
+      }
+    }
+  },
+  "paired": {},
+  "calibration": {
+    "steeper": {
+      "boards": {
+        "count": 825000,
+        "meanBrier": 0.603983,
+        "maxSumError": 1.1102230246251565e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.319117,
+            "observed": 0.319297,
+            "residualStandardErrors": 0.369629
+          },
+          "draw": {
+            "predicted": 0.430996,
+            "observed": 0.430977,
+            "residualStandardErrors": -0.03554
+          },
+          "loss": {
+            "predicted": 0.249887,
+            "observed": 0.249726,
+            "residualStandardErrors": -0.355529
+          }
+        }
+      },
+      "userMatches": {
+        "count": 8250,
+        "meanBrier": 0.520837,
+        "maxSumError": 4.440892098500626e-16,
+        "outcomes": {
+          "win": {
+            "predicted": 0.517676,
+            "observed": 0.515758,
+            "residualStandardErrors": -0.390211
+          },
+          "draw": {
+            "predicted": 0.213396,
+            "observed": 0.211273,
+            "residualStandardErrors": -0.475254
+          },
+          "loss": {
+            "predicted": 0.268928,
+            "observed": 0.27297,
+            "residualStandardErrors": 0.923503
+          }
+        }
+      },
+      "userMatchesByCohort": {
+        "2700": {
+          "count": 2750,
+          "meanBrier": 0.548741,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.400489,
+              "observed": 0.410909,
+              "residualStandardErrors": 1.223379
+            },
+            "draw": {
+              "predicted": 0.228433,
+              "observed": 0.211636,
+              "residualStandardErrors": -2.108205
+            },
+            "loss": {
+              "predicted": 0.371078,
+              "observed": 0.377455,
+              "residualStandardErrors": 0.769076
+            }
+          }
+        },
+        "2750": {
+          "count": 2750,
+          "meanBrier": 0.559033,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.4878,
+              "observed": 0.474545,
+              "residualStandardErrors": -1.52161
+            },
+            "draw": {
+              "predicted": 0.223276,
+              "observed": 0.228364,
+              "residualStandardErrors": 0.644079
+            },
+            "loss": {
+              "predicted": 0.288924,
+              "observed": 0.297091,
+              "residualStandardErrors": 1.02879
+            }
+          }
+        },
+        "2850": {
+          "count": 2750,
+          "meanBrier": 0.454737,
+          "maxSumError": 4.440892098500626e-16,
+          "outcomes": {
+            "win": {
+              "predicted": 0.66474,
+              "observed": 0.661818,
+              "residualStandardErrors": -0.351359
+            },
+            "draw": {
+              "predicted": 0.188479,
+              "observed": 0.193818,
+              "residualStandardErrors": 0.727818
+            },
+            "loss": {
+              "predicted": 0.14678,
+              "observed": 0.144364,
+              "residualStandardErrors": -0.378916
+            }
+          }
+        }
+      }
+    }
+  },
+  "poorRunExamples": []
+}
