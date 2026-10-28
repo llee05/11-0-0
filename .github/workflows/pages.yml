@@ -34,9 +34,40 @@ jobs:
         with:
           path: release/pages
 
+  browser-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Install Playwright
+        run: |
+          npm install --no-save --package-lock=false playwright-core
+          npx playwright install --with-deps chromium
+      - name: Build static releases for QA
+        run: |
+          npm run build:pages
+          npm run build:cloudflare
+      - name: Run browser QA
+        run: |
+          PORT=4173 DATABASE_PATH=$(mktemp) node scripts/serve.mjs &
+          SERVER_PID=$!
+          timeout 30 bash -c 'until curl -s http://127.0.0.1:4173/api/catalog >/dev/null; do sleep 0.2; done'
+          node scripts/browser-qa.mjs
+          node scripts/browser-improvements-qa.mjs
+          node scripts/browser-offline-qa.mjs
+          kill $SERVER_PID
+          PORT=4174 PAGES_BASE_PATH=/11-0-0/ node scripts/preview-pages.mjs &
+          PREVIEW_PID=$!
+          timeout 30 bash -c 'until curl -s http://127.0.0.1:4174/11-0-0/ >/dev/null; do sleep 0.2; done'
+          QA_URL=http://localhost:4174/11-0-0/ node scripts/browser-pages-qa.mjs
+          kill $PREVIEW_PID
+
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: build
+    needs: [build, browser-qa]
     runs-on: ubuntu-latest
     permissions:
       pages: write

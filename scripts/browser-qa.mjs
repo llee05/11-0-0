@@ -2,8 +2,14 @@
 // Use an existing Chromium installation; no browser download is required.
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
-const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright-core');
-const browser=await chromium.launch({executablePath:process.env.PLAYWRIGHT_CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+import {existsSync} from 'node:fs';
+const pw=await import(process.env.PLAYWRIGHT_MODULE||'playwright-core');
+const chromium=pw.chromium||pw.default?.chromium;
+const executablePath=process.env.PLAYWRIGHT_CHROMIUM_PATH||['/usr/bin/chromium','/usr/bin/google-chrome','/usr/bin/chromium-browser'].find(p=>existsSync(p));
+const browser=await chromium.launch({...(executablePath?{executablePath}:{}),headless:true,args:['--no-sandbox']});
+const waitForSavedSquad=async(targetPage,expected)=>{
+  await targetPage.waitForFunction(expected=>JSON.stringify(JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.tournament?.squad)===JSON.stringify(expected),expected);
+};
 const artifacts=process.env.QA_ARTIFACTS||'/tmp/eleven-zero-zero-qa/screenshots';
 await mkdir(artifacts,{recursive:true});
 const url=process.env.QA_URL||'http://localhost:4173';
@@ -159,8 +165,9 @@ try {
   await page.getByRole('button',{name:'Select reserve for your next pick'}).click();
   await page.getByRole('button',{name:'Spin a nation'}).click();
   await page.locator('.candidate').first().waitFor();
+  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.offer?.profiles);
   const firstOffer=await page.locator('.nation-code').textContent();
-  assert.ok(firstOffer.length===3);
+  assert.match(firstOffer,/^[A-Z0-9]{3,4}$/);
   assert.equal(await page.locator('.candidate').count(),5);
   assert.equal(await page.locator('.price,.slot-cost').count(),0);
   assert.equal(await page.locator('.candidate .trait-badge').count(),5);
@@ -181,6 +188,7 @@ try {
   const selectedTrait=await page.evaluate(id=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).offer.traits[id],selectedId);
   await page.locator('.candidate:not([disabled])').first().click();
   assert.ok(await page.locator('.reserve-slot').evaluate(el=>el.classList.contains('filled')));
+  await page.waitForFunction(id=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.squad?.[4]===id,selectedId);
   await page.reload();
   await page.locator('.squad-slot.filled').first().waitFor();
   assert.equal(await page.locator('.squad-slot.filled').count(),1);
@@ -192,6 +200,7 @@ try {
     await page.locator('.candidate:not([disabled])').first().click();
   }
   assert.equal(await page.locator('.squad-slot.filled').count(),5);
+  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.squad?.filter(Boolean).length===5);
   await page.getByRole('button',{name:'Team profiles'}).click();
   assert.equal(await page.locator('.team-profiles>article').count(),5);
   assert.equal(await page.locator('.team-profiles .profile-levels').count(),5);
@@ -200,6 +209,7 @@ try {
   assert.equal(await page.locator('[data-action="captain"],[data-action="captain-pick"],.captain-marker').count(),0);
   assert.equal(await page.evaluate(()=>Object.hasOwn(JSON.parse(localStorage.getItem('11-0-0:save:v4')),'captain')),false);
   await page.getByRole('button',{name:'Enter the Olympiad'}).click();
+  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.phase==='tournament');
   const beforeOrdering=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
   const originalOrder=beforeOrdering.tournament.squad;
   const initialFixtures=await page.evaluate(async()=>{const {roundFixtures}=await import('/engine.js');return roundFixtures(JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament);});
@@ -212,18 +222,22 @@ try {
   assert.equal(await page.getByLabel('Board 2',{exact:true}).inputValue(),originalOrder[0]);
   assert.equal(await page.getByLabel('Board 2',{exact:true}).evaluate(el=>el===document.activeElement),true);
   await page.getByRole('button',{name:`Move ${firstPlayer} up one board`,exact:true}).click();
+  await waitForSavedSquad(page,originalOrder);
   assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.squad),originalOrder);
   assert.equal(await page.locator('.board-order-opponent').count(),4);
   await page.getByLabel('Board 1',{exact:true}).selectOption(originalOrder[3]);
   const customOrder=[originalOrder[3],originalOrder[1],originalOrder[2],originalOrder[0],originalOrder[4]];
   assert.equal(await page.getByLabel('Board 1',{exact:true}).evaluate(el=>el===document.activeElement),true);
+  await waitForSavedSquad(page,customOrder);
   assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.squad),customOrder);
   await page.getByLabel('Board 1',{exact:true}).press('Home');
   await page.getByLabel('Board 1',{exact:true}).press('ArrowDown');
   await page.getByLabel('Board 1',{exact:true}).press('ArrowDown');
   assert.equal(await page.getByLabel('Board 1',{exact:true}).inputValue(),originalOrder[2]);
   await page.getByRole('button',{name:'Order by rating',exact:true}).click();
+  await waitForSavedSquad(page,originalOrder);
   await page.getByLabel('Board 1',{exact:true}).selectOption(originalOrder[3]);
+  await waitForSavedSquad(page,customOrder);
   assert.deepEqual(await page.evaluate(async()=>{const {roundFixtures}=await import('/engine.js');return roundFixtures(JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament);}),initialFixtures);
   await page.screenshot({path:`${artifacts}/desktop-board-order.png`,fullPage:true});
   await page.keyboard.press('Escape');
@@ -241,8 +255,10 @@ try {
   }
   await page.screenshot({path:`${artifacts}/mobile-board-order.png`,fullPage:true});
   await page.getByRole('button',{name:'Order by rating',exact:true}).click();
+  await waitForSavedSquad(page,originalOrder);
   assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.squad),originalOrder);
   await page.getByLabel('Board 1',{exact:true}).selectOption(originalOrder[3]);
+  await waitForSavedSquad(page,customOrder);
   assert.equal(await page.locator('.preparation-summary').count(),1);
   assert.equal(await page.locator('.lineup-advice').count(),1);
   assert.equal(await page.locator('.match-forecast article').count(),4);
@@ -304,7 +320,9 @@ try {
   const lineupBeforeReserve=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.squad);
   await page.getByLabel('REST THIS ROUND').selectOption((await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.squad))[0]);
   await page.keyboard.press('Escape');
-  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.squad),[lineupBeforeReserve[4],...lineupBeforeReserve.slice(1,4),lineupBeforeReserve[0]]);
+  const expectedRestOrder=[lineupBeforeReserve[4],...lineupBeforeReserve.slice(1,4),lineupBeforeReserve[0]];
+  await waitForSavedSquad(page,expectedRestOrder);
+  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.squad),expectedRestOrder);
   assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.loads),loadsBefore);
   await page.getByRole('button',{name:'Play round 2'}).click();
   await page.getByRole('button',{name:'Play round 3'}).waitFor();
@@ -320,6 +338,7 @@ try {
   assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')).tournament.teams.slice(1).map(t=>t.profiles)),aiProfiles);
   await page.getByRole('button',{name:'Auto-rotate & finish'}).click();
   await page.getByRole('button',{name:'Copy result'}).waitFor();
+  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.phase==='results'&&JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')||'{}')?.runs?.length===1);
   assert.equal(await page.locator('.round-tabs button:not([disabled])').count(),11);
   const completedSave=await page.evaluate(()=>localStorage.getItem('11-0-0:save:v4'));
   const firstRecord=await page.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs[0]);
@@ -386,6 +405,7 @@ try {
   await page.getByRole('button',{name:'Expert Trust your instincts'}).click();
   await page.getByRole('button',{name:'Spin a nation'}).click();
   await page.locator('.candidate').first().waitFor();
+  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.offer?.profiles);
   assert.ok((await page.locator('.candidate-rating').first().textContent()).includes('????'));
   await page.screenshot({path:`${artifacts}/mobile-draft.png`,fullPage:true});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
@@ -413,6 +433,7 @@ try {
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Auto-rotate & finish'}).click();
   await page.getByRole('button',{name:'Copy result'}).waitFor();
+  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.phase==='results');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
   await page.getByRole('button',{name:'Full standings',exact:true}).click();
   assert.equal(await page.locator('.standings-row.full').count(),50);
@@ -469,6 +490,7 @@ try {
   await quickPage.goto(url);await quickPage.locator('[data-action="quick-sim"]').waitFor();
   await quickPage.locator('[data-action="quick-sim"]').click();
   await quickPage.getByRole('button',{name:'Copy result'}).waitFor();
+  await quickPage.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.phase==='results'&&JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')||'{}')?.runs?.length===1);
   let quickSave=await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
   assert.equal(await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs.length),1);
   assert.equal(quickSave.phase,'results');assert.equal(quickSave.tournament.round,11);
@@ -485,10 +507,12 @@ try {
   assert.ok(await quickPage.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
   await quickPage.getByRole('button',{name:'Spin a nation'}).click();
   await quickPage.locator('.candidate:not([disabled])').first().click();
+  await quickPage.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.squad?.some(Boolean));
   const partial=await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
   await quickPage.screenshot({path:`${artifacts}/mobile-quick-sim-draft.png`,fullPage:true});
   await quickPage.locator('[data-action="quick-sim"]').click();
   await quickPage.getByRole('button',{name:'Copy result'}).waitFor();
+  await quickPage.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.phase==='results');
   quickSave=await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
   for(const id of partial.squad.filter(Boolean)){
     assert.ok(quickSave.squad.includes(id));
@@ -499,18 +523,22 @@ try {
   await quickPage.getByRole('button',{name:'Build another team'}).click();
   await quickPage.getByRole('button',{name:'Start a new draft'}).click();
   await quickPage.getByRole('button',{name:'Quick draft'}).click();
+  await quickPage.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.squad?.filter(Boolean).length===5);
   const full=await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
   await quickPage.locator('[data-action="quick-sim"]').click();
   await quickPage.getByRole('button',{name:'Copy result'}).waitFor();
+  await quickPage.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.phase==='results');
   quickSave=await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')));
   assert.deepEqual(quickSave.squad,full.squad);
   assert.deepEqual(quickSave.traits,full.traits);assert.deepEqual(quickSave.profiles,full.profiles);
   assert.equal(quickSave.tournament.rounds.length,11);
+  await quickPage.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')||'{}')?.runs?.length===3);
   assert.equal(await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs.length),3);
   await quickPage.getByRole('button',{name:'Build another team'}).click();
   await quickPage.getByRole('button',{name:'Start a new draft'}).click();
   await quickPage.locator('[data-action="quick-sim"]').click();
   await quickPage.getByRole('button',{name:'Copy result'}).waitFor();
+  await quickPage.waitForFunction(()=>JSON.parse(localStorage.getItem('11-0-0:save:v4')||'{}')?.phase==='results');
   const topThree=await quickPage.evaluate(()=>JSON.parse(localStorage.getItem('11-0-0:best-runs:v1')).runs);
   assert.equal(topThree.length,3);assert.equal(new Set(topThree.map(r=>r.id)).size,3);
   await quickPage.reload();await quickPage.getByRole('button',{name:'Copy result'}).waitFor();

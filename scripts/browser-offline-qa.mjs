@@ -1,7 +1,10 @@
 // Run against local SQL hosting or either static release, at root or a subpath.
 import assert from 'node:assert/strict';
-const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright-core');
-const browser=await chromium.launch({executablePath:process.env.PLAYWRIGHT_CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+import {existsSync} from 'node:fs';
+const pw=await import(process.env.PLAYWRIGHT_MODULE||'playwright-core');
+const chromium=pw.chromium||pw.default?.chromium;
+const executablePath=process.env.PLAYWRIGHT_CHROMIUM_PATH||['/usr/bin/chromium','/usr/bin/google-chrome','/usr/bin/chromium-browser'].find(p=>existsSync(p));
+const browser=await chromium.launch({...(executablePath?{executablePath}:{}),headless:true,args:['--no-sandbox']});
 try{
   const context=await browser.newContext({viewport:{width:390,height:844}}),page=await context.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.message));

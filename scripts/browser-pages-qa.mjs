@@ -1,9 +1,12 @@
 // Focused hosting checks; use browser-qa.mjs for the complete gameplay flow.
 import assert from 'node:assert/strict';
-const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright-core');
+import {existsSync} from 'node:fs';
 const home=new URL(process.env.QA_URL||'http://localhost:4174/11-0-0/');
 assert.ok(home.pathname.endsWith('/'),'QA_URL must end with /');
-const browser=await chromium.launch({executablePath:process.env.PLAYWRIGHT_CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+const pw=await import(process.env.PLAYWRIGHT_MODULE||'playwright-core');
+const chromium=pw.chromium||pw.default?.chromium;
+const executablePath=process.env.PLAYWRIGHT_CHROMIUM_PATH||['/usr/bin/chromium','/usr/bin/google-chrome','/usr/bin/chromium-browser'].find(p=>existsSync(p));
+const browser=await chromium.launch({...(executablePath?{executablePath}:{}),headless:true,args:['--no-sandbox']});
 try{
   const context=await browser.newContext({viewport:{width:390,height:844}});
   const page=await context.newPage(),requests=[],responses=[],errors=[];
