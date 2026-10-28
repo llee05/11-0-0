@@ -65,9 +65,22 @@ jobs:
           QA_URL=http://localhost:4174/11-0-0/ node scripts/browser-pages-qa.mjs
           kill $PREVIEW_PID
 
+  hosted-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Install backend dependencies
+        run: npm --prefix backend ci
+      - name: Build hosted Sites adapter
+        run: npm run build
+
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: [build, browser-qa]
+    needs: [build, browser-qa, hosted-build]
     runs-on: ubuntu-latest
     permissions:
       pages: write
