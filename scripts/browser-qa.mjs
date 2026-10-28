@@ -70,7 +70,7 @@ try {
   assert.equal(await page.locator('.profile-guide').count(),1);
   assert.equal(await page.locator('.style-guide article').count(),4);
   assert.equal(await page.locator('.trait-guide article').count(),25);
-  assert.equal(await page.locator('.career-list article').count(),115);
+  assert.equal(await page.locator('.career-list article').count(),116);
   const profileGuide=await page.locator('.profile-guide').textContent();
   assert.ok(profileGuide.includes('0.5 effective Elo per point'));
   assert.ok(profileGuide.includes('6 Elo per level'));
@@ -83,8 +83,8 @@ try {
   assert.ok((await page.getByRole('dialog').textContent()).includes('source rating above 2650'));
   const catalogue=await page.evaluate(async()=>await (await fetch(document.querySelector('meta[name="catalogue-url"]')?.content||'/api/catalog')).json());
   assert.ok(catalogue.players.every(p=>!Object.hasOwn(p,'cost')));
-  assert.equal(catalogue.metadata.snapshotCount,442);
-  assert.equal(catalogue.metadata.countryCount,49);
+  assert.equal(catalogue.metadata.snapshotCount,474);
+  assert.equal(catalogue.metadata.countryCount,52);
   assert.equal(catalogue.metadata.legendCount,8);
   assert.equal(catalogue.metadata.normalization,'era-balanced-1');
   assert.equal(await page.locator('.legends-grid button').count(),8);

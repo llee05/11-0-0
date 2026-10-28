@@ -1,5 +1,5 @@
 // Career-inspired labels; the numerical effects are fictional game rules.
-export const TRAIT_RULESET = 'career-traits-5';
+export const TRAIT_RULESET = 'career-traits-6';
 export const TRAIT_BONUS_CAP = 80;
 export const TRAITS = [
   ['attacker', 'Initiative hunter', 'Sharp: +64. Quiet: −16. Draw chance −6 points.'],
@@ -143,6 +143,7 @@ export const CAREER_PROFILES = [
   ['fide:1000012', 'Jan Timman', 'dynamic', 'https://www.newinchess.com/my-best-games', 'GM Daniel King describes strategic foundations plus initiative and sacrificial attacks across Timman’s own career collection.'],
   ['fide:400033', 'Jonathan Speelman', 'endgame', 'https://www.newinchess.com/media/wysiwyg/product_pdf/8369.pdf', 'GM Keith Arkell recalls repeatedly seeing Speelman outplay leading grandmasters through subtle endings in the preface, pp. 10–11.'],
   ['historical:reshevsky samuel h', 'Samuel Reshevsky', 'positional', 'https://www.uschess.org/index.php/October/Ask-GM-Larry-Evans.html', 'GM Larry Evans recommends Reshevsky’s collected games for his repeated extraction of small advantages from quiet positions.'],
+  ['chessmetrics:91045', 'Miguel Najdorf', 'attacker', 'https://www.chess.com/players/miguel-najdorf', 'Chess.com’s biography cites The New York Times obituary on his imaginative attacking games and presents his early four-piece sacrifice as an example of that attacking strength.'],
   ['chessmetrics:14127', 'Isaak Boleslavsky', 'preparation', 'https://www.ruchess.ru/en/persons_of_day/isaac_boleslavsky/', 'The federation’s career profile describes broad, lasting opening research across the Sicilian, King’s Indian and several other defenses.'],
   ['chessmetrics:68293', 'Alexander Kotov', 'attacker', 'https://ruchess.ru/en/persons_of_day/alexander_kotov/', 'The federation’s career profile describes imaginative attacking play and repeated prizes for beautiful games.'],
   ['fide:13300016', 'Rafael Vaganian', 'unorthodox', 'https://ruchess.ru/en/persons_of_day/rafael_vaganian/', 'GM Genna Sosonko’s quoted career assessment emphasizes originality and unconventional judgments across Vaganian’s play.'],
