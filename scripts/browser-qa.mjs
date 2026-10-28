@@ -83,8 +83,8 @@ try {
   assert.ok((await page.getByRole('dialog').textContent()).includes('source rating above 2650'));
   const catalogue=await page.evaluate(async()=>await (await fetch(document.querySelector('meta[name="catalogue-url"]')?.content||'/api/catalog')).json());
   assert.ok(catalogue.players.every(p=>!Object.hasOwn(p,'cost')));
-  assert.equal(catalogue.metadata.snapshotCount,442);
-  assert.equal(catalogue.metadata.countryCount,49);
+  assert.equal(catalogue.metadata.snapshotCount,474);
+  assert.equal(catalogue.metadata.countryCount,52);
   assert.equal(catalogue.metadata.legendCount,8);
   assert.equal(catalogue.metadata.normalization,'era-balanced-1');
   assert.equal(await page.locator('.legends-grid button').count(),8);
