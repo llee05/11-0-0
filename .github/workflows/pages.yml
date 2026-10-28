@@ -26,7 +26,7 @@ jobs:
       - name: Check JavaScript
         run: npm run check
       - name: Test catalogue and game rules
-        run: npm test
+        run: npm run test:full
       - name: Build static release
         run: npm run build:pages
       - name: Upload Pages artifact
