@@ -258,7 +258,7 @@ footer{margin-top:auto;display:flex;align-items:center;gap:22px;padding:20px max
 .round-tabs button>span{font:700 8px var(--sans);color:var(--success-text)}.round-tabs button.lost>span{color:var(--danger-text)}.round-tabs button.drawn>span{color:var(--gold)}
 .round-tabs button:disabled{color:var(--muted);border-color:var(--line);background:transparent}.round-tabs button:disabled>span{visibility:hidden}
 .round-tabs button.active{background:var(--forest);border-color:var(--emphasis);color:var(--on-forest)}.round-tabs button.active>span{color:var(--mint)}
-.match-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:19px 22px 0;font-size:9px;letter-spacing:1px;color:var(--muted)}
+.match-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:19px 22px 0;font-size:9px;letter-spacing:1px;color:var(--muted)}.match-heading-title{margin:0;font:inherit;display:inline}
 .result-pill{border:1px solid var(--success-line);background:var(--success-surface);color:var(--success-text);padding:4px 9px;letter-spacing:.3px;font-size:10px}
 .result-pill.defeat{background:var(--danger-surface);border-color:var(--danger-line);color:var(--danger-text)}.result-pill.draw{background:var(--warm-surface);border-color:var(--warm-line);color:var(--warm-text)}
 .match-score{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:15px;text-align:center;padding:24px 24px 27px}
